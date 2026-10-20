@@ -1,0 +1,21 @@
+{
+  "id": "el-renacer-del-pintor",
+  "version": "1.0.0",
+  "title": "El Renacer del Pintor",
+  "author": "Creador",
+  "description": "Proyecto en blanco preparado para nuevos escenarios.",
+  "coverImageUrl": "",
+  "createdAt": "2026-10-13T00:00:00.000Z",
+  "updatedAt": "2026-10-13T17:03:16.418Z",
+  "textBoxConfig": {
+    "theme": "classified",
+    "opacity": 0.9,
+    "borderColor": "#b91c1c",
+    "fontSize": "base",
+    "typewriterSpeedMs": 25,
+    "showAvatar": true,
+    "soundBlipEnabled": true,
+    "position": "bottom"
+  },
+  "variables": []
+}

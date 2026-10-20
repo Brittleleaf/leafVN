@@ -1,0 +1,14 @@
+{
+  "id": "chap-1",
+  "number": 1,
+  "title": "Capítulo 1",
+  "summary": "",
+  "loadingScreen": {
+    "enabled": false,
+    "title": "Capítulo 1"
+  },
+  "startSceneId": "scene-1",
+  "sceneIds": [
+    "scene-1791910985341"
+  ]
+}

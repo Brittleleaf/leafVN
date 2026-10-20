@@ -1,0 +1,20 @@
+{
+  "id": "test",
+  "version": "1.0.0",
+  "title": "Test",
+  "author": "Leafviet",
+  "description": "",
+  "createdAt": "2026-10-13T17:19:08.236Z",
+  "updatedAt": "2026-10-20T01:10:06.511Z",
+  "textBoxConfig": {
+    "theme": "classified",
+    "opacity": 0.9,
+    "borderColor": "#b91c1c",
+    "fontSize": "base",
+    "typewriterSpeedMs": 25,
+    "showAvatar": true,
+    "soundBlipEnabled": true,
+    "position": "bottom"
+  },
+  "variables": []
+}

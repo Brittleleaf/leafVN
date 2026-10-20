@@ -1,0 +1,885 @@
+@import "tailwindcss";
+
+@theme {
+  --font-typewriter: var(--font-typewriter);
+  --font-title: var(--font-title);
+  --font-barlow: var(--font-barlow);
+}
+
+@custom-variant dark (&:where([data-vn-theme="default_dark"], [data-vn-theme="default_dark"] *, [data-vn-theme="rotp"], [data-vn-theme="rotp"] *, .dark, .dark *));
+
+/* ========================================================
+   VN ENGINE THEME TOKENS (Glass / Acrylic Design System)
+   - default_dark: Twilight Slate Purple & Onyx (#3D3A58 & #111116)
+   - default_light: Soft Lilac & Pastel Glass (#EEE1FA & #F9F8FD)
+   - rotp: Classic Rebirth of the Painter Crimson/VHS Theme
+   ======================================================== */
+
+@keyframes vn-ambient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+[data-vn-theme="default_dark"],
+:root {
+  --bg: #010103;
+  --bg-gradient: linear-gradient(135deg, #010103 0%, #2E1256 50%, #010103 100%);
+  --panel: rgba(46, 18, 86, 0.20);
+  --panel2: rgba(46, 18, 86, 0.35);
+  --panel-hover: rgba(177, 91, 228, 0.15);
+  --border: rgba(177, 91, 228, 0.25);
+  --border2: rgba(209, 123, 248, 0.40);
+  --border-hover: rgba(209, 123, 248, 0.60);
+  --text: #F7F6FE;
+  --muted: #d8b4fe;
+  --muted2: #a855f7;
+  --accent: #D17BF8;
+  --accent2: #B15BE4;
+  --accent-glow: rgba(209, 123, 248, 0.45);
+  --accent-surface: rgba(209, 123, 248, 0.18);
+  --accent-border: rgba(209, 123, 248, 0.50);
+  --danger: #ff4d5e;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.60);
+  --focus: 0 0 0 3px rgba(209, 123, 248, 0.30);
+  --radius: 14px;
+  --radius2: 18px;
+  --font: var(--font-barlow), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --card-bg: linear-gradient(135deg, rgba(46, 18, 86, 0.55) 0%, rgba(1, 1, 3, 0.75) 100%);
+  --btn-bg: rgba(46, 18, 86, 0.55);
+  --btn-hover-bg: rgba(209, 123, 248, 0.25);
+  --btn-ghost-bg: rgba(255, 255, 255, 0.06);
+  --well-bg: rgba(1, 1, 3, 0.65);
+  --well-focus-bg: rgba(46, 18, 86, 0.85);
+  --header-bg: rgba(1, 1, 3, 0.85);
+  --modal-bg: linear-gradient(180deg, rgba(35, 14, 60, 0.96), rgba(1, 1, 3, 0.98));
+  --dropdown-bg: rgba(18, 8, 32, 0.88);
+  --icon-color: #F7F6FE;
+
+  /* Backward compatibility aliases */
+  --vn-canvas: var(--bg);
+  --vn-surface: var(--panel2);
+  --vn-surface-solid: #0F0503;
+  --vn-surface-hover: var(--panel-hover);
+  --vn-card: var(--panel);
+  --vn-card-solid: #12081d;
+  --vn-border: var(--border);
+  --vn-border-subtle: rgba(177, 91, 228, 0.15);
+  --vn-border-hover: var(--border-hover);
+  --vn-border-active: var(--accent);
+  --vn-text-main: var(--text);
+  --vn-text-muted: var(--muted);
+  --vn-text-dim: var(--muted2);
+  --vn-font-editor: var(--font);
+  --vn-header-bg: var(--header-bg);
+  --vn-active-tab-bg: var(--accent-surface);
+  --vn-active-tab-border: var(--accent-border);
+  --vn-active-tab-text: #F7F6FE;
+  --vn-accent-primary: var(--accent);
+  --vn-accent-gradient: linear-gradient(135deg, #D17BF8 0%, #B15BE4 100%);
+  --vn-card-shadow: var(--shadow);
+}
+
+[data-vn-theme="default_light"] {
+  --bg: #F5F2FF;
+  --bg-gradient: linear-gradient(135deg, #DDD7FF 0%, #F5F2FF 45%, #EADBFA 80%, #FAF9FE 100%);
+  --panel: rgba(255, 255, 255, 0.45);
+  --panel2: rgba(221, 215, 255, 0.40);
+  --panel-hover: rgba(255, 255, 255, 0.75);
+  --border: rgba(104, 81, 223, 0.18);
+  --border2: rgba(104, 81, 223, 0.30);
+  --border-hover: rgba(104, 81, 223, 0.45);
+  --text: #0F0503;
+  --muted: #2d1832;
+  --muted2: #5b4b66;
+  --accent: #6851DF;
+  --accent2: #523bc7;
+  --accent-glow: rgba(104, 81, 223, 0.30);
+  --accent-surface: rgba(104, 81, 223, 0.12);
+  --accent-border: rgba(104, 81, 223, 0.40);
+  --danger: #dc2626;
+  --shadow: 0 10px 30px rgba(104, 81, 223, 0.08);
+  --focus: 0 0 0 3px rgba(104, 81, 223, 0.25);
+  --radius: 14px;
+  --radius2: 18px;
+  --font: var(--font-barlow), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.80) 0%, rgba(245, 242, 255, 0.55) 100%);
+  --btn-bg: rgba(255, 255, 255, 0.70);
+  --btn-hover-bg: rgba(255, 255, 255, 0.95);
+  --btn-ghost-bg: rgba(221, 215, 255, 0.45);
+  --well-bg: rgba(221, 215, 255, 0.45);
+  --well-focus-bg: rgba(255, 255, 255, 0.90);
+  --header-bg: rgba(245, 242, 255, 0.80);
+  --modal-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 242, 255, 0.98));
+  --dropdown-bg: rgba(250, 248, 255, 0.92);
+  --icon-color: #0F0503;
+
+  /* Backward compatibility aliases */
+  --vn-canvas: var(--bg);
+  --vn-surface: var(--panel2);
+  --vn-surface-solid: rgba(255, 255, 255, 0.90);
+  --vn-surface-hover: var(--panel-hover);
+  --vn-card: var(--panel);
+  --vn-card-solid: rgba(255, 255, 255, 0.90);
+  --vn-border: var(--border);
+  --vn-border-subtle: rgba(104, 81, 223, 0.10);
+  --vn-border-hover: var(--border-hover);
+  --vn-border-active: var(--accent);
+  --vn-text-main: var(--text);
+  --vn-text-muted: var(--muted);
+  --vn-text-dim: var(--muted2);
+  --vn-font-editor: var(--font);
+  --vn-header-bg: var(--header-bg);
+  --vn-active-tab-bg: rgba(255, 255, 255, 0.90);
+  --vn-active-tab-border: var(--accent-border);
+  --vn-active-tab-text: #0F0503;
+  --vn-accent-primary: var(--accent);
+  --vn-accent-gradient: linear-gradient(135deg, rgba(104, 81, 223, 0.18), rgba(221, 215, 255, 0.25));
+  --vn-card-shadow: var(--shadow);
+}
+
+[data-vn-theme="rotp"] {
+  --bg: #07070a;
+  --bg-gradient: linear-gradient(135deg, #07070a 0%, #28080d 45%, #0d0406 75%, #22060a 100%);
+  --panel: rgba(255, 255, 255, 0.02);
+  --panel2: rgba(220, 38, 38, 0.05);
+  --panel-hover: rgba(220, 38, 38, 0.10);
+  --border: rgba(153, 27, 27, 0.35);
+  --border2: rgba(220, 38, 38, 0.50);
+  --border-hover: rgba(239, 68, 68, 0.70);
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --muted2: #6b7280;
+  --accent: #dc2626;
+  --accent2: #b91c1c;
+  --accent-glow: rgba(220, 38, 38, 0.50);
+  --accent-surface: rgba(220, 38, 38, 0.15);
+  --accent-border: rgba(220, 38, 38, 0.50);
+  --danger: #ef4444;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.60);
+  --focus: 0 0 0 3px rgba(220, 38, 38, 0.35);
+  --radius: 14px;
+  --radius2: 18px;
+  --font: var(--font-typewriter), monospace;
+  --card-bg: linear-gradient(180deg, rgba(22, 7, 10, 0.85), rgba(12, 4, 6, 0.85));
+  --btn-bg: rgba(220, 38, 38, 0.16);
+  --btn-hover-bg: rgba(220, 38, 38, 0.28);
+  --btn-ghost-bg: rgba(220, 38, 38, 0.06);
+  --well-bg: rgba(0, 0, 0, 0.70);
+  --well-focus-bg: rgba(0, 0, 0, 0.85);
+  --header-bg: rgba(10, 5, 7, 0.92);
+  --modal-bg: linear-gradient(180deg, rgba(16, 6, 8, 0.97), rgba(10, 4, 6, 0.97));
+  --dropdown-bg: rgba(14, 5, 8, 0.95);
+
+  /* Backward compatibility aliases */
+  --vn-canvas: var(--bg);
+  --vn-surface: var(--panel2);
+  --vn-surface-solid: #0c0608;
+  --vn-surface-hover: var(--panel-hover);
+  --vn-card: var(--panel);
+  --vn-card-solid: #15070a;
+  --vn-border: var(--border);
+  --vn-border-subtle: rgba(153, 27, 27, 0.2);
+  --vn-border-hover: var(--border-hover);
+  --vn-border-active: var(--accent);
+  --vn-text-main: var(--text);
+  --vn-text-muted: var(--muted);
+  --vn-text-dim: var(--muted2);
+  --vn-font-editor: var(--font);
+  --vn-header-bg: var(--header-bg);
+  --vn-active-tab-bg: var(--accent-surface);
+  --vn-active-tab-border: var(--accent-border);
+  --vn-active-tab-text: #ffffff;
+  --vn-accent-primary: var(--accent);
+  --vn-accent-gradient: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(147, 51, 234, 0.15));
+  --vn-card-shadow: var(--shadow);
+}
+
+:root {
+  --background: #050508;
+  --foreground: #e5e7eb;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Ocultar el efecto CRT/VHS global cuando el motor VN Maker esté activo para mantener la UI 100% limpia */
+body:has([data-vn-engine]) #global-vhs-overlay,
+body:has([data-vn-theme]) #global-vhs-overlay,
+body:has(.vn-engine-root) #global-vhs-overlay {
+  display: none !important;
+}
+
+/* Nuevos Efectos VHS (Scanlines y Tracking) */
+.vhs-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.15) 0px,
+      rgba(0,0,0,0.15) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  animation: vhs-scan-drift 8s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes vhs-scan-drift {
+  from { background-position: 0 0; }
+  to { background-position: 0 60px; }
+}
+
+.vhs-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  /* Colores adaptados al terror analógico (blancos fantasmales) */
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.1) 80%, transparent 100%);
+  filter: blur(1px);
+  animation: vhs-track-move 5s linear infinite;
+  z-index: 6;
+  pointer-events: none;
+}
+
+@keyframes vhs-track-move {
+  from { top: 110%; }
+  to { top: -10%; }
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 0.7; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes blink-fast {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Nuevo Glitch Elegido por el Usuario (Corregido: Cortes finos) */
+.glitch {
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  animation: fadeWhite 2s ease-in forwards;
+  animation-delay: 0.5s;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: inherit;
+  color: inherit;
+  pointer-events: none; /* Evita que el texto duplicado interfiera */
+  animation: glitch-slice 3s infinite alternate-reverse;
+  animation-delay: 2.5s;
+}
+
+.glitch::before {
+  left: 2px;
+}
+
+.glitch::after {
+  left: -2px;
+  animation-duration: 2.5s;
+}
+
+@keyframes fadeWhite {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Franjas muy delgadas para no duplicar todo el texto */
+@keyframes glitch-slice {
+  0% { clip-path: inset(10% 0 85% 0); }
+  5% { clip-path: inset(75% 0 20% 0); }
+  10% { clip-path: inset(30% 0 65% 0); }
+  15% { clip-path: inset(85% 0 10% 0); }
+  20% { clip-path: inset(45% 0 50% 0); }
+  25% { clip-path: inset(20% 0 75% 0); }
+  30% { clip-path: inset(60% 0 35% 0); }
+  35% { clip-path: inset(15% 0 80% 0); }
+  40% { clip-path: inset(50% 0 45% 0); }
+  45% { clip-path: inset(8% 0 88% 0); }
+  50% { clip-path: inset(40% 0 55% 0); }
+  55% { clip-path: inset(90% 0 5% 0); }
+  60% { clip-path: inset(18% 0 78% 0); }
+  65% { clip-path: inset(65% 0 30% 0); }
+  70% { clip-path: inset(42% 0 53% 0); }
+  75% { clip-path: inset(5% 0 90% 0); }
+  80% { clip-path: inset(80% 0 15% 0); }
+  85% { clip-path: inset(25% 0 70% 0); }
+  90% { clip-path: inset(55% 0 40% 0); }
+  95% { clip-path: inset(2% 0 95% 0); }
+  100% { clip-path: inset(85% 0 10% 0); }
+}
+
+/* ========================================================
+   GLASS / ACRYLIC UI UTILITIES (VN ENGINE)
+   ======================================================== */
+.vn-engine-root {
+  background: var(--bg-gradient) !important;
+  background-size: 250% 250% !important;
+  animation: vn-ambient-shift 20s ease infinite !important;
+  color: var(--text) !important;
+  font-family: var(--font) !important;
+}
+
+.vn-engine-root .card,
+.vn-engine-root .vn-card,
+.vn-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border-radius: var(--radius2);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.vn-engine-root .btn,
+.vn-engine-root .vn-btn,
+.vn-btn {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--btn-bg);
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  font-family: inherit;
+}
+
+.vn-engine-root button:not([data-raw-btn]):not(.vn-btn-action) {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.vn-engine-root .btn:hover,
+.vn-engine-root .vn-btn:hover,
+.vn-btn:hover {
+  transform: translateY(-1px);
+  background: var(--btn-hover-bg);
+  border-color: var(--border2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.vn-engine-root .btn:active,
+.vn-engine-root .vn-btn:active,
+.vn-btn:active {
+  transform: translateY(0px);
+}
+
+.vn-engine-root .btn:focus-visible,
+.vn-engine-root .vn-btn:focus-visible,
+.vn-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.vn-engine-root .btn.ghost,
+.vn-btn.ghost {
+  background: var(--btn-ghost-bg);
+  box-shadow: none;
+}
+
+.vn-engine-root .btn.danger,
+.vn-btn.danger {
+  border-color: rgba(255, 77, 94, 0.28);
+  background: rgba(255, 77, 94, 0.12);
+  color: #ff8b99;
+}
+.vn-engine-root .btn.danger:hover,
+.vn-btn.danger:hover {
+  border-color: rgba(255, 77, 94, 0.45);
+  background: rgba(255, 77, 94, 0.20);
+}
+
+.vn-engine-root .btn.primary,
+.vn-btn.primary,
+.vn-btn-action {
+  background: linear-gradient(135deg, #D17BF8 0%, #B15BE4 100%) !important;
+  border-color: #D17BF8 !important;
+  color: #0F0503 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 16px rgba(209, 123, 248, 0.45) !important;
+}
+.vn-engine-root .btn.primary:hover,
+.vn-btn.primary:hover,
+.vn-btn-action:hover {
+  box-shadow: 0 8px 24px rgba(209, 123, 248, 0.65) !important;
+  transform: translateY(-1px);
+}
+
+/* Default SVG icons color per theme */
+[data-vn-theme="default_light"] .vn-gui-icon {
+  color: #0F0503;
+}
+[data-vn-theme="default_dark"] .vn-gui-icon {
+  color: #F7F6FE;
+}
+
+.vn-engine-root .badge,
+.vn-badge {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  color: var(--muted);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.vn-engine-root .pill,
+.vn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--well-bg);
+  color: var(--muted);
+  font-size: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.vn-engine-root .timelineBlock,
+.vn-timeline-block {
+  border: 1px solid var(--border);
+  background: var(--well-bg);
+  border-radius: 16px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.vn-engine-root .timelineShell,
+.vn-timeline-shell {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--well-bg);
+  overflow: auto;
+}
+
+.vn-engine-root .modalCard,
+.vn-modal-card {
+  position: relative;
+  border-radius: var(--radius2);
+  border: 1px solid var(--border2);
+  background: var(--modal-bg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Dossier / Folder style dropdown cards */
+.vn-dossier-card {
+  background: var(--dropdown-bg) !important;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--border2) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 1px 1px var(--border);
+}
+
+.vn-dossier-tab {
+  background: var(--header-bg) !important;
+  border-top: 1px solid var(--border2) !important;
+  border-left: 1px solid var(--border2) !important;
+  border-right: 1px solid var(--border2) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.vn-glass-header {
+  background: var(--header-bg) !important;
+  border-color: var(--border) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.vn-glass-panel {
+  background: var(--panel) !important;
+  border-color: var(--border) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.vn-glass-well {
+  background: var(--well-bg) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Apple/Win11 Specular Rim Highlights for Light Mode Glass */
+[data-vn-theme="default_light"] .card,
+[data-vn-theme="default_light"] .vn-card,
+[data-vn-theme="default_light"] .vn-glass-panel,
+[data-vn-theme="default_light"] .vn-glass-header {
+  box-shadow: 0 10px 30px rgba(61, 58, 88, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-vn-theme="default_light"] .btn,
+[data-vn-theme="default_light"] .vn-btn {
+  box-shadow: 0 4px 14px rgba(61, 58, 88, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Glass Inputs, Selects, and Textareas inside engine */
+.vn-engine-root input[type="text"]:not([data-raw-input]),
+.vn-engine-root input[type="number"]:not([data-raw-input]),
+.vn-engine-root select:not([data-raw-input]),
+.vn-engine-root textarea:not([data-raw-input]) {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--well-bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.vn-engine-root input[type="text"]:not([data-raw-input]):focus,
+.vn-engine-root input[type="number"]:not([data-raw-input]):focus,
+.vn-engine-root select:not([data-raw-input]):focus,
+.vn-engine-root textarea:not([data-raw-input]):focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus);
+  background: var(--well-focus-bg);
+}
+
+.vn-engine-root select option {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.vn-engine-root input::placeholder,
+.vn-engine-root textarea::placeholder {
+  color: var(--muted2);
+  opacity: 0.8;
+}
+
+/* Modal Acrylic Backdrop */
+.vn-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+[data-vn-theme="default_dark"] .vn-modal-backdrop {
+  background-color: rgba(1, 1, 3, 0.65);
+}
+[data-vn-theme="default_light"] .vn-modal-backdrop {
+  background-color: rgba(221, 215, 255, 0.40);
+}
+[data-vn-theme="rotp"] .vn-modal-backdrop {
+  background-color: rgba(7, 7, 10, 0.85);
+}
+
+/* Glass Scrollbars */
+.vn-engine-root ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.vn-engine-root ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.vn-engine-root ::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 999px;
+}
+.vn-engine-root ::-webkit-scrollbar-thumb:hover {
+  background: var(--muted2);
+}
+
+/* ========================================================
+   VN BUTTON HOVER TEXT EFFECTS (Underline, Box, Shine)
+   ======================================================== */
+
+.vn-btn-effect-underline {
+  position: relative;
+  display: inline-block;
+}
+.vn-btn-effect-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  display: inline-block;
+  height: 2px;
+  width: 100%;
+  border-bottom: 2px solid currentColor;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(0, 1);
+  transform-origin: center;
+  pointer-events: none;
+}
+.group:hover .vn-btn-effect-underline::after,
+.vn-btn-effect-underline:hover::after {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+.vn-btn-effect-box {
+  position: relative;
+  display: inline-block;
+  padding: 0.25em 0.75em;
+}
+.vn-btn-effect-box::before,
+.vn-btn-effect-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+.vn-btn-effect-box::before {
+  border-left: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: scale(1, 0);
+  transform-origin: center;
+}
+.vn-btn-effect-box::after {
+  border-top: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: scale(0, 1);
+  transform-origin: center;
+}
+.group:hover .vn-btn-effect-box::before,
+.group:hover .vn-btn-effect-box::after,
+.vn-btn-effect-box:hover::before,
+.vn-btn-effect-box:hover::after {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+.vn-btn-effect-shine {
+  position: relative;
+  display: inline-block;
+  transition: filter 0.3s ease;
+}
+.group:hover .vn-btn-effect-shine,
+.vn-btn-effect-shine:hover {
+  -webkit-mask-image: linear-gradient(-75deg, rgba(0, 0, 0, 0.5) 30%, #000000 50%, rgba(0, 0, 0, 0.5) 70%);
+  mask-image: linear-gradient(-75deg, rgba(0, 0, 0, 0.5) 30%, #000000 50%, rgba(0, 0, 0, 0.5) 70%);
+  -webkit-mask-size: 200%;
+  mask-size: 200%;
+  animation: vn-btn-shine 1.8s infinite linear;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+@keyframes vn-btn-shine {
+  from {
+    -webkit-mask-position: 150%;
+    mask-position: 150%;
+  }
+  to {
+    -webkit-mask-position: -50%;
+    mask-position: -50%;
+  }
+}
+
+/* ========================================================
+   VN TYPOGRAPHY TEXT EFFECTS (Loading Wave, Smoky Dissolve, Glitch, Neon, Blood, Shimmer)
+   ======================================================== */
+
+@keyframes vn-text-glitch {
+  0% {
+    text-shadow: 2px 0 #00ffff, -2px 0 #ff007f;
+    transform: translate(0, 0);
+  }
+  20% {
+    text-shadow: -2px 0 #00ffff, 2px 0 #ff007f;
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    text-shadow: 2px 0 #ff007f, -2px 0 #00ffff;
+    transform: translate(1px, -1px);
+  }
+  60% {
+    text-shadow: -1px 0 #00ffff, 1px 0 #ff007f;
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    text-shadow: 3px 0 #ff007f, -3px 0 #00ffff;
+    transform: translate(2px, 1px);
+  }
+  100% {
+    text-shadow: 2px 0 #00ffff, -2px 0 #ff007f;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes vn-neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 0 0 7px currentColor, 0 0 15px currentColor, 0 0 30px currentColor, 0 0 50px currentColor;
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.35;
+  }
+}
+
+@keyframes vn-blood-drip {
+  0% {
+    text-shadow: 0 0 2px rgba(220, 38, 38, 0.6);
+    transform: scaleY(1);
+  }
+  50% {
+    text-shadow: 0 10px 18px rgba(220, 38, 38, 0.95), 0 20px 30px rgba(153, 27, 27, 0.85);
+    transform: scaleY(1.08);
+  }
+  100% {
+    text-shadow: 0 0 2px rgba(220, 38, 38, 0.6);
+    transform: scaleY(1);
+  }
+}
+
+@keyframes vn-gold-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes vn-text-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-3px, -2px) rotate(-1deg); }
+  20% { transform: translate(3px, 2px) rotate(1deg); }
+  30% { transform: translate(-4px, 1px) rotate(-1.5deg); }
+  40% { transform: translate(4px, -1px) rotate(1.5deg); }
+  50% { transform: translate(-2px, 3px) rotate(-0.5deg); }
+  60% { transform: translate(3px, -2px) rotate(0.5deg); }
+  70% { transform: translate(-3px, 1px) rotate(-1deg); }
+  80% { transform: translate(2px, -2px) rotate(1deg); }
+  90% { transform: translate(-1px, 2px) rotate(0deg); }
+}
+
+@keyframes vn-text-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes vn-clean-glitch {
+  2%, 64% {
+    transform: translate(2px, 0) skew(0deg);
+  }
+  4%, 60% {
+    transform: translate(-2px, 0) skew(0deg);
+  }
+  62% {
+    transform: translate(0, 0) skew(5deg);
+  }
+}
+
+@keyframes vn-clean-glitch-top {
+  2%, 64% {
+    transform: translate(2px, -2px);
+  }
+  4%, 60% {
+    transform: translate(-2px, 2px);
+  }
+  62% {
+    transform: translate(13px, -1px) skew(-13deg);
+  }
+}
+
+@keyframes vn-clean-glitch-bottom {
+  2%, 64% {
+    transform: translate(-2px, 0);
+  }
+  4%, 60% {
+    transform: translate(-2px, 0);
+  }
+  62% {
+    transform: translate(-22px, 5px) skew(21deg);
+  }
+}
+
+/* ========================================================
+   PALIMPSEST TYPOGRAPHY EFFECT (Temporal Memory & Anticipation Echoes)
+   ======================================================== */
+
+@keyframes vn-palimpsest-past {
+  0% {
+    transform: translate(-0.05em, -0.035em) skewX(-1deg);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translate(-0.075em, -0.055em) skewX(-1.5deg);
+    opacity: 0.28;
+  }
+  100% {
+    transform: translate(-0.05em, -0.035em) skewX(-1deg);
+    opacity: 0.18;
+  }
+}
+
+@keyframes vn-palimpsest-future {
+  0% {
+    transform: translate(0.05em, 0.035em) skewX(1deg);
+    opacity: 0.14;
+  }
+  50% {
+    transform: translate(0.075em, 0.055em) skewX(1.5deg);
+    opacity: 0.22;
+  }
+  100% {
+    transform: translate(0.05em, 0.035em) skewX(1deg);
+    opacity: 0.14;
+  }
+}
+
+@keyframes vn-palimpsest-breathe {
+  0% {
+    filter: drop-shadow(0 0 10px rgba(200, 169, 110, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(212, 180, 131, 0.45));
+  }
+  100% {
+    filter: drop-shadow(0 0 10px rgba(200, 169, 110, 0.2));
+  }
+}
+

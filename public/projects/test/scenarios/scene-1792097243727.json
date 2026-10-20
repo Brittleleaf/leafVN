@@ -1,0 +1,114 @@
+{
+  "id": "scene-1792097243727",
+  "name": "Cinematic #5",
+  "backgroundUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
+  "sceneType": "event",
+  "eventSubtype": "cinematic",
+  "cinematicConfig": {
+    "durationSeconds": 12,
+    "autoAdvanceOnEnd": true,
+    "backgroundTracks": [
+      {
+        "id": "bg-1",
+        "url": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
+        "startSec": 0,
+        "endSec": 12,
+        "transition": "fade"
+      }
+    ],
+    "textTracks": [
+      {
+        "id": "txt-1",
+        "text": "In the stillness before the breach...",
+        "startSec": 1,
+        "endSec": 4.5,
+        "position": "center",
+        "fontSize": "xl",
+        "textColor": "#ffffff"
+      },
+      {
+        "id": "txt-2",
+        "text": "Nobody predicted what would emerge from Sector 4.",
+        "startSec": 5.5,
+        "endSec": 10.5,
+        "position": "bottom",
+        "fontSize": "lg",
+        "textColor": "#d17bf8"
+      }
+    ],
+    "audioTracks": [
+      {
+        "id": "aud-1",
+        "name": "Cinematic Intro",
+        "url": "/assets/sfx/start after click intro.mp3",
+        "startSec": 0.5,
+        "endSec": 4,
+        "volume": 0.8
+      },
+      {
+        "id": "aud-2",
+        "name": "Ambient Hum",
+        "url": "/assets/sfx/bg-tvnoise.mp3",
+        "startSec": 0,
+        "endSec": 12,
+        "volume": 0.3,
+        "loop": true
+      }
+    ],
+    "fxTracks": [
+      {
+        "id": "fx-1",
+        "fxType": "vignette",
+        "startSec": 0,
+        "endSec": 12,
+        "intensity": "medium"
+      },
+      {
+        "id": "fx-2",
+        "fxType": "red_alert",
+        "startSec": 7,
+        "endSec": 11.5,
+        "intensity": "heavy"
+      }
+    ],
+    "tracks": [
+      {
+        "id": "track-bg-1",
+        "section": "background",
+        "index": 1,
+        "name": "Background 1",
+        "kind": "visual",
+        "visible": true,
+        "clips": [
+          {
+            "id": "bg-1",
+            "trackId": "track-bg-1",
+            "name": "Fondo 1",
+            "startSec": 0,
+            "endSec": 12,
+            "mediaUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
+            "mediaType": "image",
+            "xPercent": 50,
+            "yPercent": 50,
+            "scale": 1,
+            "opacity": 1,
+            "transition": "fade"
+          }
+        ]
+      }
+    ]
+  },
+  "timeline": [
+    {
+      "id": "ev-1792097243727",
+      "type": "dialogue",
+      "characterId": "char-1791911965690",
+      "text": "Cinematic sequence ready...",
+      "characterScale": 0.76
+    }
+  ],
+  "mapPosition": {
+    "x": 313,
+    "y": 433
+  }
+}

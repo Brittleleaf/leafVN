@@ -1,0 +1,14 @@
+{
+  "id": "scene-1791910985341",
+  "name": "Escenario #1",
+  "backgroundUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
+  "timeline": [
+    {
+      "id": "ev-1791910985341",
+      "type": "dialogue",
+      "text": "Entrando a una nueva localización..."
+    }
+  ],
+  "hotspots": [],
+  "chapterId": "chap-1"
+}
