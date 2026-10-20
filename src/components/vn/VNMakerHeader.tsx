@@ -61,8 +61,20 @@ export default function VNMakerHeader({
         </div>
       )}
 
-      {/* ZONA IZQUIERDA: MARCA & EXPEDIENTE + UNDO/REDO */}
+      {/* ZONA IZQUIERDA: HOME (PHOTOSHOP STYLE) & MARCA & EXPEDIENTE + UNDO/REDO */}
       <div className="flex items-center gap-2 md:gap-3 shrink-0 min-w-0">
+        {/* Photoshop-style Home button to return to Launcher */}
+        <button
+          onClick={onExit}
+          className="h-8 w-8 rounded-xl flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] active:scale-95 transition-all cursor-pointer border border-[var(--border)] hover:border-[var(--border2)] shrink-0 shadow-sm"
+          title="Return to Home / Projects"
+          aria-label="Return to Home / Projects"
+        >
+          <GuiIconRenderer icon={GUI_ICONS.general.home} className="w-4 h-4 text-[var(--accent)]" />
+        </button>
+
+        <div className="h-4 w-[1px] bg-[var(--border2)]" />
+
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent-glow)] animate-pulse" />
           <span className="text-xs md:text-sm font-extrabold tracking-widest text-[var(--accent)] font-mono hidden sm:inline">

@@ -112,6 +112,7 @@ export const GUI_ICONS = {
 
   // 5. Interfaz General
   general: {
+    home: '/assets/image/GUI%20ICONS/home.svg',
     folder: '/assets/image/GUI%20ICONS/open-folder.svg',
     files: '/assets/image/GUI%20ICONS/files.svg',
     scenario: '/assets/image/GUI%20ICONS/scenario.svg',
@@ -196,6 +197,7 @@ export const GUI_ICONS = {
  */
 export const GUI_ICON_MAP: Record<string, string> = {
   // Aliases por palabra clave
+  home: GUI_ICONS.general.home,
   folder: GUI_ICONS.general.folder,
   files: GUI_ICONS.general.files,
   scenario: GUI_ICONS.general.scenario,

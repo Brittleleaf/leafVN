@@ -22,6 +22,8 @@ const headstone = localFont({
   display: "swap",
 });
 
+import I18nInitializer from "@/components/i18n/I18nInitializer";
+
 export const metadata: Metadata = {
   title: "Leaf VN Studio - Visual Novel Engine",
   description: "Next-Gen Visual Novel Engine & Creative Authoring Studio",
@@ -33,11 +35,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className={`${specialElite.variable} ${headstone.variable} ${barlow.variable} font-sans antialiased min-h-screen relative bg-[#0b0b10] text-gray-100 overflow-x-hidden selection:bg-purple-900 selection:text-white`}
       >
+        <I18nInitializer />
         {children}
       </body>
     </html>
