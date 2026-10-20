@@ -6,6 +6,7 @@ import { playSfx } from '@/lib/audioSettings';
 import { exportStoryToJson, importStoryFromJson } from '@/lib/vn/storage';
 import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
+import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme } from '@/lib/vn/themeManager';
 import VNMaker from '@/components/vn/VNMaker';
 import VNPlayer from '@/components/vn/VNPlayer';
 
@@ -17,6 +18,22 @@ export default function LeafVNLauncher() {
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeTab, setActiveTab] = useState<'home' | 'templates'>('home');
+
+  // Tema visual del motor (Modern Dark, Modern Light, ROTP)
+  const [editorTheme, setEditorTheme] = useState<VNEditorTheme>(() => getStoredTheme());
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
+
+  useEffect(() => {
+    const currentTheme = getStoredTheme();
+    setEditorTheme(currentTheme);
+    document.documentElement.setAttribute('data-vn-theme', currentTheme);
+  }, []);
+
+  const handleSelectTheme = (theme: VNEditorTheme) => {
+    setEditorTheme(theme);
+    setStoredTheme(theme);
+    playSfx('/assets/sfx/click intro.mp3', false, 0.4);
+  };
 
   // Estado del editor/reproductor activo
   const [activeStory, setActiveStory] = useState<VNStory | null>(null);
@@ -559,7 +576,7 @@ export default function LeafVNLauncher() {
   // RENDER: MODO EDITOR (VNMaker)
   if (engineMode === 'editor' && activeStory) {
     return (
-      <div className="w-screen h-screen overflow-hidden bg-[#0a0a0f]">
+      <div className="w-screen h-screen overflow-hidden">
         <VNMaker
           initialStory={activeStory}
           onPlayStory={(updated) => {
@@ -567,6 +584,8 @@ export default function LeafVNLauncher() {
             setEngineMode('player');
           }}
           onExit={() => {
+            // Sincronizar tema seleccionado dentro del editor al volver al launcher
+            setEditorTheme(getStoredTheme());
             fetchProjects();
             setEngineMode('launcher');
           }}
@@ -592,49 +611,161 @@ export default function LeafVNLauncher() {
     );
   }
 
-  // RENDER: PANTALLA PRINCIPAL DE INICIO (PHOTOSHOP STYLE)
+  // RENDER: PANTALLA PRINCIPAL DE INICIO (PHOTOSHOP STYLE CON SOPORTE DE TEMAS DEL MOTOR)
   return (
-    <div className="min-h-screen bg-[#1e1e1e] text-gray-200 flex flex-col font-sans select-none antialiased">
+    <div
+      data-vn-engine="true"
+      data-vn-theme={editorTheme}
+      className={`min-h-screen flex flex-col select-none antialiased transition-colors duration-200 text-[var(--text)] ${
+        editorTheme === 'rotp' ? 'font-typewriter' : 'font-barlow'
+      }`}
+      style={{ background: 'var(--bg-gradient, var(--bg))' }}
+    >
       {/* 1. BARRA SUPERIOR DE LA APLICACIÓN (MENU BAR) */}
-      <header className="h-11 bg-[#181818] border-b border-[#2d2d2d] flex items-center justify-between px-4 text-xs text-gray-300">
+      <header className="h-11 border-b border-[var(--border)] bg-[var(--header-bg)] backdrop-blur-md flex items-center justify-between px-4 text-xs shadow-sm z-30">
         <div className="flex items-center gap-4">
-          {/* Logo Estilo Photoshop */}
+          {/* Logo Estilo Photoshop Adaptativo */}
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 rounded-md flex items-center justify-center font-bold text-white text-sm shadow-md">
+            <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] rounded-md flex items-center justify-center font-bold text-white text-sm shadow-[0_0_12px_var(--accent-glow)]">
               Lv
             </div>
-            <span className="font-semibold text-gray-100 tracking-wide">Leaf VN Studio</span>
-            <span className="text-[10px] text-gray-500 font-mono bg-[#282828] px-1.5 py-0.5 rounded">v2.1</span>
+            <span className="font-semibold tracking-wide text-[var(--text)]">Leaf VN Studio</span>
+            <span className="text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted2)] px-1.5 py-0.5 rounded">
+              v2.1
+            </span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-3 text-gray-400 pl-4 border-l border-[#333]">
-            <span className="hover:text-gray-100 cursor-pointer transition-colors" onClick={() => setShowNewModal(true)}>
+          <nav className="hidden md:flex items-center gap-3 text-[var(--muted)] pl-4 border-l border-[var(--border)]">
+            <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={() => setShowNewModal(true)}>
               Archivo
             </span>
-            <span className="hover:text-gray-100 cursor-pointer transition-colors" onClick={() => fileInputRef.current?.click()}>
+            <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={() => fileInputRef.current?.click()}>
               Abrir
             </span>
-            <span className="hover:text-gray-100 cursor-pointer transition-colors" onClick={fetchProjects}>
+            <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={fetchProjects}>
               Actualizar
             </span>
-            <span className="hover:text-gray-100 cursor-pointer transition-colors" onClick={() => setActiveTab(activeTab === 'home' ? 'templates' : 'home')}>
+            <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={() => setActiveTab(activeTab === 'home' ? 'templates' : 'home')}>
               {activeTab === 'home' ? 'Plantillas' : 'Inicio'}
             </span>
           </nav>
         </div>
 
-        {/* Buscador Rápido y Acciones */}
+        {/* Buscador Rápido, Selector de Temas del Motor y Acciones */}
         <div className="flex items-center gap-3">
           <div className="relative flex items-center">
-            <span className="absolute left-2.5 text-gray-500 text-xs">🔍</span>
+            <span className="absolute left-2.5 text-[var(--muted2)] text-xs">🔍</span>
             <input
               type="text"
               placeholder="Buscar proyectos..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-[#2a2a2a] hover:bg-[#323232] focus:bg-[#323232] text-xs text-gray-200 pl-7 pr-3 py-1 rounded-full border border-transparent focus:border-cyan-500/50 outline-none w-44 sm:w-56 transition-all"
+              className="bg-[var(--well-bg)] hover:bg-[var(--well-focus-bg)] text-xs text-[var(--text)] pl-7 pr-3 py-1 rounded-full border border-[var(--border)] focus:border-[var(--accent)] outline-none w-44 sm:w-56 transition-all placeholder:text-[var(--muted2)]"
             />
           </div>
+
+          {/* Selector de Tema UI & Motor */}
+          <div className="relative">
+            <button
+              onClick={() => setShowThemeMenu(!showThemeMenu)}
+              className="h-7 px-2.5 rounded-lg text-xs font-semibold cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border-hover)] text-[var(--text)] shadow-sm backdrop-blur-sm"
+              title="Cambiar tema de apariencia (Modern Dark / Light / ROTP Theme)"
+            >
+              <GuiIconRenderer
+                icon={
+                  editorTheme === 'default_light'
+                    ? GUI_ICONS.general.lightBulb
+                    : editorTheme === 'rotp'
+                    ? GUI_ICONS.general.hazard
+                    : GUI_ICONS.general.circle
+                }
+                className="w-3.5 h-3.5 text-[var(--accent)]"
+              />
+              <span className="hidden sm:inline text-[11px] font-mono font-medium">
+                {editorTheme === 'default_light' ? 'Light' : editorTheme === 'rotp' ? 'ROTP' : 'Dark'}
+              </span>
+              <span className="text-[9px] text-[var(--muted2)]">▼</span>
+            </button>
+
+            {showThemeMenu && (
+              <>
+                <div className="fixed inset-0 z-[60]" onClick={() => setShowThemeMenu(false)} />
+                <div
+                  className="absolute right-0 top-9 w-80 z-[70] flex flex-col animate-in fade-in zoom-in-95 duration-150 select-none drop-shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Pestaña superior estilo carpeta / expediente */}
+                  <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-xl vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
+                    <span className="flex items-center gap-1.5">
+                      <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--accent)]" />
+                      <span>DOSSIER // THEME SELECTOR</span>
+                    </span>
+                    <span className="text-[9px] font-mono text-[var(--muted2)]">CLASSIFIED</span>
+                  </div>
+
+                  {/* Cuerpo redondeado estilo carpeta */}
+                  <div className="rounded-b-2xl rounded-tl-2xl p-2.5 vn-dossier-card flex flex-col gap-1.5">
+                    <div className="px-2 py-0.5 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)]">
+                      <span>SELECT ENGINE APPEARANCE</span>
+                      <span className="text-[var(--muted2)] font-mono text-[9px]">ENGINE & FONTS</span>
+                    </div>
+                    {VN_THEMES.map((th) => {
+                      const isCurrent = editorTheme === th.id;
+                      return (
+                        <button
+                          key={th.id}
+                          onClick={() => {
+                            handleSelectTheme(th.id);
+                            setShowThemeMenu(false);
+                          }}
+                          className={`flex items-start gap-2.5 p-2 rounded-xl text-left transition-all cursor-pointer border backdrop-blur-md ${
+                            isCurrent
+                              ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
+                              : 'bg-[var(--btn-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)] text-[var(--muted)] hover:text-[var(--text)]'
+                          }`}
+                        >
+                          <div
+                            className="w-7 h-7 rounded-lg mt-0.5 shrink-0 border flex items-center justify-center shadow-inner"
+                            style={{
+                              backgroundColor: th.previewBg,
+                              borderColor: th.previewBorder,
+                              color: th.previewAccent,
+                            }}
+                          >
+                            <GuiIconRenderer
+                              icon={
+                                th.id === 'default_light'
+                                  ? GUI_ICONS.general.lightBulb
+                                  : th.id === 'rotp'
+                                  ? GUI_ICONS.general.hazard
+                                  : GUI_ICONS.general.circle
+                              }
+                              className="w-3.5 h-3.5"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-[var(--text)] flex items-center gap-1.5">
+                                <span>{th.name}</span>
+                                {th.isHorror && <span className="text-[10px] text-red-500 font-bold">☠</span>}
+                              </span>
+                              <span className="text-[9px] px-1.5 py-0.2 rounded font-mono uppercase bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted2)]">
+                                {th.badge}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-[var(--muted2)] mt-0.5 line-clamp-1">
+                              {th.description}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           <button
             onClick={() => {
               if (document.fullscreenElement) {
@@ -644,7 +775,7 @@ export default function LeafVNLauncher() {
               }
             }}
             title="Pantalla completa"
-            className="w-7 h-7 rounded hover:bg-[#333] flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+            className="w-7 h-7 rounded hover:bg-[var(--btn-hover-bg)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] transition-colors"
           >
             ⛶
           </button>
@@ -653,16 +784,16 @@ export default function LeafVNLauncher() {
 
       {/* 2. CUERPO PRINCIPAL (SIDEBAR + MAIN CANVAS) */}
       <div className="flex-1 flex overflow-hidden">
-        {/* BARRA LATERAL IZQUIERDA (PHOTOSHOP SIDEBAR) */}
-        <aside className="w-56 bg-[#181818] border-r border-[#2d2d2d] flex flex-col justify-between p-4 flex-shrink-0">
+        {/* BARRA LATERAL IZQUIERDA (PHOTOSHOP SIDEBAR TEMATIZADA) */}
+        <aside className="w-56 bg-[var(--panel)] border-r border-[var(--border)] backdrop-blur-md flex flex-col justify-between p-4 flex-shrink-0">
           <div className="space-y-4">
-            {/* Botón Píldora: Archivo nuevo */}
+            {/* Botón Píldora: Archivo nuevo con brillo de acento del tema */}
             <button
               onClick={() => {
                 playSfx('/assets/sfx/click interface.mp3', false, 0.4);
                 setShowNewModal(true);
               }}
-              className="w-full py-2 px-4 bg-[#0d6efd] hover:bg-[#0b5ed7] active:bg-[#0a58ca] text-white font-medium text-xs rounded-full shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 active:brightness-95 text-white font-bold text-xs rounded-full shadow-[0_4px_16px_var(--accent-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="text-sm font-bold">+</span>
               <span>Archivo nuevo</span>
@@ -674,7 +805,7 @@ export default function LeafVNLauncher() {
                 playSfx('/assets/sfx/click interface.mp3', false, 0.4);
                 fileInputRef.current?.click();
               }}
-              className="w-full py-2 px-4 bg-transparent hover:bg-[#282828] text-gray-300 hover:text-white font-medium text-xs rounded-full border border-gray-600 hover:border-gray-400 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2 px-4 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] font-medium text-xs rounded-full border border-[var(--border)] hover:border-[var(--border-hover)] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Abrir</span>
             </button>
@@ -687,13 +818,13 @@ export default function LeafVNLauncher() {
             />
 
             {/* Navegación lateral */}
-            <div className="pt-4 border-t border-[#2d2d2d] space-y-1">
+            <div className="pt-4 border-t border-[var(--border)] space-y-1">
               <button
                 onClick={() => setActiveTab('home')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
                   activeTab === 'home'
-                    ? 'bg-[#2b2b2b] text-white shadow-sm'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-[#222]'
+                    ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent-border)] font-bold shadow-sm'
+                    : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--panel-hover)]'
                 }`}
               >
                 <span>🏠</span>
@@ -702,10 +833,10 @@ export default function LeafVNLauncher() {
 
               <button
                 onClick={() => setActiveTab('templates')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
                   activeTab === 'templates'
-                    ? 'bg-[#2b2b2b] text-white shadow-sm'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-[#222]'
+                    ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent-border)] font-bold shadow-sm'
+                    : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--panel-hover)]'
                 }`}
               >
                 <span>🎨</span>
@@ -715,42 +846,42 @@ export default function LeafVNLauncher() {
           </div>
 
           {/* Información del sistema en la parte inferior */}
-          <div className="text-[11px] text-gray-500 border-t border-[#2d2d2d] pt-3 space-y-1">
-            <p className="font-semibold text-gray-400">Leaf VN Studio</p>
-            <p className="truncate">Motor Autónomo de Visual Novels</p>
-            <div className="flex items-center gap-1.5 pt-1 text-[10px] text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Motor listo</span>
+          <div className="text-[11px] text-[var(--muted2)] border-t border-[var(--border)] pt-3 space-y-1">
+            <p className="font-semibold text-[var(--text)]">Leaf VN Studio</p>
+            <p className="truncate text-[10px]">Motor Autónomo de Visual Novels</p>
+            <div className="flex items-center gap-1.5 pt-1 text-[10px] text-[var(--accent)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]"></span>
+              <span className="font-mono">Tema: {editorTheme === 'rotp' ? 'ROTP' : editorTheme === 'default_light' ? 'Light' : 'Dark'}</span>
             </div>
           </div>
         </aside>
 
         {/* CONTENIDO CENTRAL */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-10 bg-[#1e1e1e]">
+        <main className="flex-1 overflow-y-auto p-6 md:p-10">
           {activeTab === 'home' ? (
             <div className="max-w-7xl mx-auto space-y-8">
               {/* Saludo de Bienvenida */}
               <div className="text-center md:text-left">
-                <h1 className="text-2xl md:text-3xl font-light text-gray-100 tracking-tight">
-                  Bienvenido a <span className="font-semibold text-emerald-400">Leaf VN</span>
+                <h1 className="text-2xl md:text-3xl font-light text-[var(--text)] tracking-tight">
+                  Bienvenido a <span className="font-semibold text-[var(--accent)]">Leaf VN</span>
                 </h1>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-[var(--muted)] mt-1">
                   Gestiona tus proyectos, diseña guiones interactivos y produce novelas visuales sin límites.
                 </p>
               </div>
 
               {/* Barra de Herramientas de Proyectos Recientes */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#2d2d2d] pb-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-base font-semibold text-gray-100">Recientes</h2>
+                  <h2 className="text-base font-semibold text-[var(--text)]">Recientes</h2>
 
                   {/* Selector de Ordenación */}
-                  <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                  <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
                     <label>Ordenar:</label>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as any)}
-                      className="bg-[#282828] text-gray-200 text-xs px-2 py-1 rounded border border-[#3a3a3a] outline-none cursor-pointer"
+                      className="bg-[var(--btn-bg)] text-[var(--text)] text-xs px-2 py-1 rounded-lg border border-[var(--border)] outline-none cursor-pointer"
                     >
                       <option value="updated">Recientes</option>
                       <option value="title">Nombre</option>
@@ -760,7 +891,7 @@ export default function LeafVNLauncher() {
                     <button
                       onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
                       title={sortOrder === 'desc' ? 'Descendente' : 'Ascendente'}
-                      className="p-1 hover:bg-[#282828] rounded text-gray-300 cursor-pointer"
+                      className="p-1 hover:bg-[var(--btn-hover-bg)] rounded text-[var(--text)] cursor-pointer"
                     >
                       {sortOrder === 'desc' ? '↓' : '↑'}
                     </button>
@@ -775,12 +906,12 @@ export default function LeafVNLauncher() {
                       placeholder="Filtrar archivos recientes"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-transparent border-b border-gray-600 focus:border-cyan-400 text-xs text-gray-200 py-1 pr-6 pl-1 outline-none w-44 sm:w-52 transition-colors placeholder:text-gray-500"
+                      className="bg-transparent border-b border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--text)] py-1 pr-6 pl-1 outline-none w-44 sm:w-52 transition-colors placeholder:text-[var(--muted2)]"
                     />
                     {searchQuery && (
                       <button
                         onClick={() => setSearchQuery('')}
-                        className="absolute right-1 top-1 text-gray-500 hover:text-gray-300 text-xs"
+                        className="absolute right-1 top-1 text-[var(--muted2)] hover:text-[var(--text)] text-xs"
                       >
                         ✕
                       </button>
@@ -788,12 +919,14 @@ export default function LeafVNLauncher() {
                   </div>
 
                   {/* Iconos de conmutador de vista */}
-                  <div className="flex items-center bg-[#282828] rounded p-0.5 border border-[#3a3a3a]">
+                  <div className="flex items-center bg-[var(--well-bg)] rounded-lg p-0.5 border border-[var(--border)]">
                     <button
                       onClick={() => setViewMode('list')}
                       title="Vista de lista"
-                      className={`p-1.5 rounded text-xs cursor-pointer ${
-                        viewMode === 'list' ? 'bg-[#3a3a3a] text-white' : 'text-gray-400 hover:text-gray-200'
+                      className={`p-1.5 rounded-md text-xs cursor-pointer transition-colors ${
+                        viewMode === 'list'
+                          ? 'bg-[var(--accent-surface)] text-[var(--accent)] font-bold shadow-sm'
+                          : 'text-[var(--muted2)] hover:text-[var(--text)]'
                       }`}
                     >
                       ≡
@@ -801,8 +934,10 @@ export default function LeafVNLauncher() {
                     <button
                       onClick={() => setViewMode('grid')}
                       title="Vista de cuadrícula"
-                      className={`p-1.5 rounded text-xs cursor-pointer ${
-                        viewMode === 'grid' ? 'bg-[#3a3a3a] text-white' : 'text-gray-400 hover:text-gray-200'
+                      className={`p-1.5 rounded-md text-xs cursor-pointer transition-colors ${
+                        viewMode === 'grid'
+                          ? 'bg-[var(--accent-surface)] text-[var(--accent)] font-bold shadow-sm'
+                          : 'text-[var(--muted2)] hover:text-[var(--text)]'
                       }`}
                     >
                       ⊞
@@ -813,60 +948,60 @@ export default function LeafVNLauncher() {
 
               {/* LISTA / GRID DE PROYECTOS */}
               {loading ? (
-                <div className="py-20 flex flex-col items-center justify-center text-gray-500 gap-3">
-                  <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="py-20 flex flex-col items-center justify-center text-[var(--muted)] gap-3">
+                  <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin"></div>
                   <span className="text-xs">Cargando proyectos en disco...</span>
                 </div>
               ) : filteredProjects.length === 0 ? (
-                <div className="py-16 border-2 border-dashed border-[#2d2d2d] rounded-xl flex flex-col items-center justify-center text-center p-6 space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-[#282828] flex items-center justify-center text-2xl text-gray-500">
+                <div className="py-16 border-2 border-dashed border-[var(--border)] rounded-xl flex flex-col items-center justify-center text-center p-6 space-y-3 bg-[var(--panel)]">
+                  <div className="w-12 h-12 rounded-full bg-[var(--btn-bg)] flex items-center justify-center text-2xl text-[var(--muted)]">
                     📂
                   </div>
-                  <h3 className="text-sm font-semibold text-gray-300">No se encontraron proyectos</h3>
-                  <p className="text-xs text-gray-500 max-w-sm">
+                  <h3 className="text-sm font-semibold text-[var(--text)]">No se encontraron proyectos</h3>
+                  <p className="text-xs text-[var(--muted)] max-w-sm">
                     {searchQuery
                       ? 'Ningún proyecto coincide con el filtro de búsqueda actual.'
                       : 'Crea tu primera novela visual o abre un archivo existente para comenzar.'}
                   </p>
                   <button
                     onClick={() => setShowNewModal(true)}
-                    className="mt-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
+                    className="mt-2 px-4 py-2 bg-[var(--accent)] hover:brightness-110 text-white text-xs font-medium rounded-lg shadow transition-all cursor-pointer"
                   >
                     Crear Proyecto Nuevo
                   </button>
                 </div>
               ) : viewMode === 'grid' ? (
-                /* VISTA EN CUADRÍCULA ESTILO PHOTOSHOP */
+                /* VISTA EN CUADRÍCULA ESTILO PHOTOSHOP ADAPTADA AL TEMA */
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                   {filteredProjects.map((proj) => (
                     <div
                       key={proj.id}
-                      className="group bg-[#252525] hover:bg-[#2c2c2c] border border-[#333] hover:border-gray-500 rounded-lg overflow-hidden flex flex-col transition-all duration-200 cursor-pointer shadow-md hover:shadow-xl relative"
+                      className="group bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-xl overflow-hidden flex flex-col transition-all duration-200 cursor-pointer shadow-md hover:shadow-xl hover:shadow-[var(--accent-glow)] relative backdrop-blur-sm"
                       onClick={() => handleOpenProject(proj.id, 'editor')}
                     >
                       {/* Miniatura Panorámica 16:9 */}
-                      <div className="w-full aspect-video bg-[#181818] relative overflow-hidden flex items-center justify-center">
+                      <div className="w-full aspect-video bg-[var(--well-bg)] relative overflow-hidden flex items-center justify-center border-b border-[var(--border)]/50">
                         {proj.coverImageUrl ? (
                           <div
                             className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
                             style={{ backgroundImage: `url('${proj.coverImageUrl}')` }}
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-[#1e1e24] to-[#121216] flex flex-col items-center justify-center text-gray-600 gap-1">
+                          <div className="w-full h-full bg-gradient-to-br from-[var(--well-bg)] to-[var(--panel)] flex flex-col items-center justify-center text-[var(--muted2)] gap-1">
                             <span className="text-2xl opacity-60">🍃</span>
-                            <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500">Leaf VN</span>
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted2)]">Leaf VN</span>
                           </div>
                         )}
 
                         {/* Overlay con botones rápidos al pasar el cursor */}
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2 backdrop-blur-[2px]">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleOpenProject(proj.id, 'editor');
                             }}
                             title="Editar en Studio"
-                            className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[11px] font-medium shadow transition-transform hover:scale-105 cursor-pointer"
+                            className="px-2.5 py-1 bg-[var(--accent)] hover:brightness-110 text-white rounded text-[11px] font-medium shadow transition-transform hover:scale-105 cursor-pointer"
                           >
                             Editar
                           </button>
@@ -886,16 +1021,16 @@ export default function LeafVNLauncher() {
                       {/* Información de la Tarjeta */}
                       <div className="p-3 flex-1 flex flex-col justify-between">
                         <div>
-                          <h3 className="text-xs font-semibold text-gray-200 truncate group-hover:text-emerald-400 transition-colors" title={proj.title}>
+                          <h3 className="text-xs font-semibold text-[var(--text)] truncate group-hover:text-[var(--accent)] transition-colors" title={proj.title}>
                             {proj.title}
                           </h3>
-                          <p className="text-[11px] text-gray-500 mt-0.5 truncate">
+                          <p className="text-[11px] text-[var(--muted2)] mt-0.5 truncate">
                             {formatRelativeDate(proj.updatedAt || proj.createdAt)}
                           </p>
                         </div>
 
                         {/* Metadatos y Menú de Opciones */}
-                        <div className="mt-3 pt-2 border-t border-[#333] flex items-center justify-between text-[10px] text-gray-400">
+                        <div className="mt-3 pt-2 border-t border-[var(--border)] flex items-center justify-between text-[10px] text-[var(--muted)]">
                           <span>{proj.scenarioCount || 1} Escenas</span>
                           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
@@ -904,7 +1039,7 @@ export default function LeafVNLauncher() {
                                 handleDuplicateProject(proj.id, proj.title);
                               }}
                               title="Duplicar"
-                              className="p-1 hover:text-white hover:bg-[#383838] rounded"
+                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded"
                             >
                               📋
                             </button>
@@ -914,7 +1049,7 @@ export default function LeafVNLauncher() {
                                 handleExportProject(proj.id);
                               }}
                               title="Exportar JSON para web"
-                              className="p-1 hover:text-white hover:bg-[#383838] rounded"
+                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded"
                             >
                               ⬇️
                             </button>
@@ -924,7 +1059,7 @@ export default function LeafVNLauncher() {
                                 handleDeleteProject(proj.id, proj.title);
                               }}
                               title="Eliminar"
-                              className="p-1 hover:text-red-400 hover:bg-[#383838] rounded"
+                              className="p-1 hover:text-red-400 hover:bg-[var(--btn-hover-bg)] rounded"
                             >
                               ✕
                             </button>
@@ -935,10 +1070,10 @@ export default function LeafVNLauncher() {
                   ))}
                 </div>
               ) : (
-                /* VISTA DE LISTA COMPACTA */
-                <div className="bg-[#252525] border border-[#333] rounded-lg overflow-hidden shadow">
-                  <table className="w-full text-left text-xs text-gray-300">
-                    <thead className="bg-[#1c1c1c] text-gray-400 uppercase text-[10px] tracking-wider border-b border-[#333]">
+                /* VISTA DE LISTA COMPACTA ADAPTADA AL TEMA */
+                <div className="bg-[var(--panel)] border border-[var(--border)] rounded-xl overflow-hidden shadow backdrop-blur-md">
+                  <table className="w-full text-left text-xs text-[var(--text)]">
+                    <thead className="bg-[var(--panel2)] text-[var(--muted2)] uppercase text-[10px] tracking-wider border-b border-[var(--border)]">
                       <tr>
                         <th className="py-2.5 px-4">Nombre</th>
                         <th className="py-2.5 px-4 hidden sm:table-cell">Autor</th>
@@ -947,37 +1082,37 @@ export default function LeafVNLauncher() {
                         <th className="py-2.5 px-4 text-right">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#333]">
+                    <tbody className="divide-y divide-[var(--border)]/60">
                       {filteredProjects.map((proj) => (
                         <tr
                           key={proj.id}
-                          className="hover:bg-[#2c2c2c] transition-colors cursor-pointer"
+                          className="hover:bg-[var(--panel-hover)] transition-colors cursor-pointer"
                           onClick={() => handleOpenProject(proj.id, 'editor')}
                         >
                           <td className="py-3 px-4 flex items-center gap-3">
-                            <div className="w-10 h-6 bg-[#181818] rounded overflow-hidden flex-shrink-0">
+                            <div className="w-10 h-6 bg-[var(--well-bg)] rounded overflow-hidden flex-shrink-0 border border-[var(--border)]">
                               {proj.coverImageUrl ? (
                                 <div
                                   className="w-full h-full bg-cover bg-center"
                                   style={{ backgroundImage: `url('${proj.coverImageUrl}')` }}
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-xs text-gray-600">
+                                <div className="w-full h-full flex items-center justify-center text-xs text-[var(--muted2)]">
                                   🍃
                                 </div>
                               )}
                             </div>
-                            <span className="font-semibold text-gray-100 hover:text-emerald-400 truncate max-w-xs">
+                            <span className="font-semibold text-[var(--text)] hover:text-[var(--accent)] truncate max-w-xs">
                               {proj.title}
                             </span>
                           </td>
-                          <td className="py-3 px-4 hidden sm:table-cell text-gray-400 truncate">
+                          <td className="py-3 px-4 hidden sm:table-cell text-[var(--muted)] truncate">
                             {proj.author || 'Leaf VN'}
                           </td>
-                          <td className="py-3 px-4 text-gray-400 whitespace-nowrap">
+                          <td className="py-3 px-4 text-[var(--muted)] whitespace-nowrap">
                             {formatRelativeDate(proj.updatedAt || proj.createdAt)}
                           </td>
-                          <td className="py-3 px-4 hidden md:table-cell text-gray-400">
+                          <td className="py-3 px-4 hidden md:table-cell text-[var(--muted)]">
                             {proj.scenarioCount || 1}
                           </td>
                           <td className="py-3 px-4 text-right whitespace-nowrap">
@@ -991,14 +1126,14 @@ export default function LeafVNLauncher() {
                               <button
                                 onClick={() => handleExportProject(proj.id)}
                                 title="Exportar JSON"
-                                className="p-1 hover:text-white hover:bg-[#333] rounded"
+                                className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded"
                               >
                                 ⬇️
                               </button>
                               <button
                                 onClick={() => handleDeleteProject(proj.id, proj.title)}
                                 title="Eliminar"
-                                className="p-1 hover:text-red-400 hover:bg-[#333] rounded"
+                                className="p-1 hover:text-red-400 hover:bg-[var(--btn-hover-bg)] rounded"
                               >
                                 ✕
                               </button>
@@ -1012,11 +1147,11 @@ export default function LeafVNLauncher() {
               )}
             </div>
           ) : (
-            /* PESTAÑA DE PLANTILLAS */
+            /* PESTAÑA DE PLANTILLAS ADAPTADA AL TEMA */
             <div className="max-w-5xl mx-auto space-y-6">
               <div>
-                <h2 className="text-xl font-light text-gray-100">Plantillas de Proyecto</h2>
-                <p className="text-xs text-gray-400 mt-1">
+                <h2 className="text-xl font-light text-[var(--text)]">Plantillas de Proyecto</h2>
+                <p className="text-xs text-[var(--muted)] mt-1">
                   Comienza rápidamente con configuraciones preparadas para diversos géneros narrativos.
                 </p>
               </div>
@@ -1028,20 +1163,20 @@ export default function LeafVNLauncher() {
                     setNewTemplate('blank');
                     setShowNewModal(true);
                   }}
-                  className="bg-[#252525] hover:bg-[#2a2a2a] border border-[#333] hover:border-emerald-500 rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all group shadow"
+                  className="bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all group shadow-md backdrop-blur-md"
                 >
                   <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-lg bg-emerald-950/60 border border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--accent-surface)] border border-[var(--accent-border)] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                       📄
                     </div>
-                    <h3 className="text-sm font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                    <h3 className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                       Proyecto Limpio (En Blanco)
                     </h3>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[var(--muted)]">
                       Un lienzo vacío con un solo escenario inicial para estructurar tu historia desde cero.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-1.5 bg-[#333] group-hover:bg-emerald-600 text-white rounded text-xs font-medium transition-colors">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)]">
                     Usar Plantilla
                   </button>
                 </div>
@@ -1052,20 +1187,20 @@ export default function LeafVNLauncher() {
                     setNewTemplate('sample');
                     setShowNewModal(true);
                   }}
-                  className="bg-[#252525] hover:bg-[#2a2a2a] border border-[#333] hover:border-purple-500 rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all group shadow"
+                  className="bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all group shadow-md backdrop-blur-md"
                 >
                   <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-lg bg-purple-950/60 border border-purple-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--accent-surface)] border border-[var(--accent-border)] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                       🎭
                     </div>
-                    <h3 className="text-sm font-semibold text-white group-hover:text-purple-400 transition-colors">
+                    <h3 className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                       Aventura Narrativa Completa
                     </h3>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[var(--muted)]">
                       Incluye personajes preconfigurados, emociones, efectos de pantalla, música de fondo y ramas de decisión.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-1.5 bg-[#333] group-hover:bg-purple-600 text-white rounded text-xs font-medium transition-colors">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)]">
                     Usar Plantilla
                   </button>
                 </div>
@@ -1076,20 +1211,20 @@ export default function LeafVNLauncher() {
                     setNewTemplate('cinematic');
                     setShowNewModal(true);
                   }}
-                  className="bg-[#252525] hover:bg-[#2a2a2a] border border-[#333] hover:border-sky-500 rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all group shadow"
+                  className="bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition-all group shadow-md backdrop-blur-md"
                 >
                   <div className="space-y-3">
-                    <div className="w-12 h-12 rounded-lg bg-sky-950/60 border border-sky-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--accent-surface)] border border-[var(--accent-border)] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                       🎬
                     </div>
-                    <h3 className="text-sm font-semibold text-white group-hover:text-sky-400 transition-colors">
+                    <h3 className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                       Secuencia Cinemática / Tráiler
                     </h3>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[var(--muted)]">
                       Enfocada en pistas de video de fondo, subtítulos animados y transiciones de audio sincronizadas.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-1.5 bg-[#333] group-hover:bg-sky-600 text-white rounded text-xs font-medium transition-colors">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)]">
                     Usar Plantilla
                   </button>
                 </div>
@@ -1099,18 +1234,18 @@ export default function LeafVNLauncher() {
         </main>
       </div>
 
-      {/* 3. MODAL DE NUEVO PROYECTO (NEW DOCUMENT DIALOG) */}
+      {/* 3. MODAL DE NUEVO PROYECTO TEMATIZADO */}
       {showNewModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#252525] border border-[#3a3a3a] rounded-xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in flex flex-col">
-            <div className="p-4 border-b border-[#333] flex items-center justify-between">
+        <div className="fixed inset-0 z-50 vn-modal-backdrop flex items-center justify-center p-4">
+          <div className="bg-[var(--modal-bg)] border border-[var(--border2)] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col backdrop-blur-xl">
+            <div className="p-4 border-b border-[var(--border)] flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-bold">📄</span>
-                <h3 className="text-sm font-semibold text-white">Nuevo Proyecto de Novela Visual</h3>
+                <span className="text-[var(--accent)] font-bold">📄</span>
+                <h3 className="text-sm font-semibold text-[var(--text)]">Nuevo Proyecto de Novela Visual</h3>
               </div>
               <button
                 onClick={() => setShowNewModal(false)}
-                className="text-gray-400 hover:text-white text-xs px-2 py-1 rounded"
+                className="text-[var(--muted2)] hover:text-[var(--text)] text-xs px-2 py-1 rounded cursor-pointer"
               >
                 ✕
               </button>
@@ -1118,35 +1253,35 @@ export default function LeafVNLauncher() {
 
             <form onSubmit={handleCreateProject} className="p-5 space-y-4 text-xs">
               <div>
-                <label className="block text-gray-300 font-medium mb-1">Nombre del Proyecto *</label>
+                <label className="block text-[var(--text)] font-medium mb-1">Nombre del Proyecto *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ej: Las Crónicas del Sector 4"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full bg-[#1a1a1a] border border-[#3a3a3a] focus:border-emerald-500 rounded-lg px-3 py-2 text-white outline-none"
+                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none placeholder:text-[var(--muted2)]"
                   autoFocus
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-gray-300 font-medium mb-1">Autor / Estudio</label>
+                  <label className="block text-[var(--text)] font-medium mb-1">Autor / Estudio</label>
                   <input
                     type="text"
                     placeholder="Tu nombre o estudio"
                     value={newAuthor}
                     onChange={(e) => setNewAuthor(e.target.value)}
-                    className="w-full bg-[#1a1a1a] border border-[#3a3a3a] focus:border-emerald-500 rounded-lg px-3 py-2 text-white outline-none"
+                    className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none placeholder:text-[var(--muted2)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-300 font-medium mb-1">Plantilla Base</label>
+                  <label className="block text-[var(--text)] font-medium mb-1">Plantilla Base</label>
                   <select
                     value={newTemplate}
                     onChange={(e) => setNewTemplate(e.target.value as any)}
-                    className="w-full bg-[#1a1a1a] border border-[#3a3a3a] focus:border-emerald-500 rounded-lg px-3 py-2 text-white outline-none cursor-pointer"
+                    className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none cursor-pointer"
                   >
                     <option value="sample">Aventura Completa</option>
                     <option value="blank">Proyecto en Blanco</option>
@@ -1156,28 +1291,28 @@ export default function LeafVNLauncher() {
               </div>
 
               <div>
-                <label className="block text-gray-300 font-medium mb-1">Descripción Breve</label>
+                <label className="block text-[var(--text)] font-medium mb-1">Descripción Breve</label>
                 <textarea
                   rows={2}
                   placeholder="Sinopsis o notas del proyecto..."
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full bg-[#1a1a1a] border border-[#3a3a3a] focus:border-emerald-500 rounded-lg px-3 py-2 text-white outline-none resize-none"
+                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none resize-none placeholder:text-[var(--muted2)]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-[#333] flex items-center justify-end gap-2">
+              <div className="pt-3 border-t border-[var(--border)] flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowNewModal(false)}
-                  className="px-4 py-2 bg-[#333] hover:bg-[#3d3d3d] text-gray-300 hover:text-white rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] border border-[var(--border)] rounded-lg transition-colors cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating || !newTitle.trim()}
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 text-white font-medium rounded-lg shadow transition-colors cursor-pointer"
+                  className="px-5 py-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 disabled:opacity-50 text-white font-bold rounded-lg shadow-[0_0_15px_var(--accent-glow)] transition-all cursor-pointer"
                 >
                   {isCreating ? 'Creando...' : 'Crear Proyecto'}
                 </button>

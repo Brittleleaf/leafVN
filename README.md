@@ -21,7 +21,7 @@ Leaf VN es una aplicación autónoma construida con **Next.js (App Router)** y *
    ```
 3. Entra a [Vercel](https://vercel.com/dashboard) y haz clic en **"Add New Project"**.
 4. Importa tu repositorio `leaf-vn`. Vercel detectará automáticamente Next.js.
-5. Haz clic en **"Deploy"**. En 1 minuto tendrás tu URL lista (ej. `https://leaf-vn.vercel.app`).
+5. Haz clic en **"Deploy"**. En 1 minuto tendrás tu URL lista (ej. `https://leafvn.vercel.app`).
 
 ### Opción 2: Despliegue directo mediante Vercel CLI
 ```bash
@@ -38,7 +38,7 @@ En tu sitio web (`justin-site`), la novela visual se ejecuta en `/lore` usando e
 Para conectar el botón de acceso al editor desde la web:
 1. En el archivo `.env.local` de `justin-site`, añade:
    ```env
-   NEXT_PUBLIC_LEAF_VN_URL=https://leaf-vn.vercel.app
+   NEXT_PUBLIC_LEAF_VN_URL=https://leafvn.vercel.app
    ```
 2. Cuando hagas clic en **"OPEN LEAF VN STUDIO ↗"** en la web, abrirá directamente este estudio.
 3. Para jugar tus historias creadas en la web:
