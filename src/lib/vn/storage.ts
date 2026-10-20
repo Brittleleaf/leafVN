@@ -232,7 +232,7 @@ export function exportStoryToJson(story: VNStory): void {
 export async function importStoryFromJson(file: File): Promise<VNStory> {
   return new Promise((resolve, reject) => {
     if (!file || !(file instanceof Blob)) {
-      return reject(new Error('Archivo inválido para importación.'));
+      return reject(new Error('Invalid file for import.'));
     }
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -240,10 +240,10 @@ export async function importStoryFromJson(file: File): Promise<VNStory> {
         const text = e.target?.result as string;
         const parsed = JSON.parse(text);
         if (!parsed || typeof parsed !== 'object') {
-          throw new Error('El archivo no contiene un objeto JSON válido.');
+          throw new Error('File does not contain a valid JSON object.');
         }
         if (!parsed.chapters && !parsed.scenarios && !parsed.title) {
-          throw new Error('El archivo no tiene el formato válido de una historia Visual Novel');
+          throw new Error('File does not match valid Visual Novel story format.');
         }
         const cleanStory = sanitizeStory(parsed);
         resolve(cleanStory);
@@ -251,7 +251,7 @@ export async function importStoryFromJson(file: File): Promise<VNStory> {
         reject(err);
       }
     };
-    reader.onerror = () => reject(new Error('Error al leer el archivo'));
+    reader.onerror = () => reject(new Error('Error reading file.'));
     reader.readAsText(file);
   });
 }
@@ -310,8 +310,8 @@ export function saveGameStateToSlot(slotNumber: number, story: VNStory, state: V
     slotNumber: safeSlotNumber,
     savedAt: new Date().toLocaleString(),
     storyTitle: story?.title || 'Visual Novel',
-    chapterTitle: currentChapter?.title || 'Capítulo desconocido',
-    sceneName: currentScene?.name || 'Escenario desconocido',
+    chapterTitle: currentChapter?.title || 'Unknown Chapter',
+    sceneName: currentScene?.name || 'Unknown Scene',
     previewBg: previewBg || currentScene?.backgroundUrl,
     gameState: state,
   };

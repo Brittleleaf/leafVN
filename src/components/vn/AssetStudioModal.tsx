@@ -54,7 +54,7 @@ export default function AssetStudioModal({
 
   // Font Sample state
   const [customFontSample, setCustomFontSample] = useState<string>(
-    initialFontSample?.trim() ? initialFontSample.trim() : 'El veloz murciélago hindú comía feliz cardillo y kiwi. 0123456789'
+    initialFontSample?.trim() ? initialFontSample.trim() : 'The quick brown fox jumps over the lazy dog. 0123456789'
   );
 
   useEffect(() => {

@@ -127,7 +127,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                         ? 'bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm'
                         : 'bg-[var(--card-bg)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:border-[var(--border2)]'
                     }`}
-                    title={`Preset ${label}: Acoplar personaje al borde ${pos} del diálogo`}
+                    title={`Preset ${label}: Snap character to ${pos} dialogue edge`}
                   >
                     {label}
                   </button>

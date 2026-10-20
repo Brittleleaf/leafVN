@@ -358,7 +358,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
       {/* Quick Presets */}
       <div className="space-y-1">
         <span className="text-[10px] text-[var(--muted)] font-bold uppercase block">
-          Cargar Vocabulario Predeterminado:
+          Load Default Vocabulary:
         </span>
         <div className="grid grid-cols-2 gap-1.5">
           {presets.map((p) => (
@@ -368,7 +368,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
               onClick={() => {
                 onChange({ words: p.words, customWords: p.words });
                 playSfx?.('/assets/sfx/click intro.mp3', false, 0.2);
-                notify?.(`Preset cargado: ${p.label}`);
+                notify?.(`Preset loaded: ${p.label}`);
               }}
               className="px-2 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] hover:border-emerald-500 hover:text-emerald-500 text-[10px] font-bold text-left truncate transition-colors cursor-pointer"
             >
@@ -382,7 +382,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="text-[10px] text-[var(--muted)] font-bold uppercase">
-            Palabras personalizadas (separadas por comas o líneas):
+            Custom Words (separated by commas or lines):
           </span>
           {(params.words || params.customWords) && (
             <button
@@ -390,7 +390,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
               onClick={() => onChange({ words: undefined, customWords: undefined })}
               className="text-[9px] text-[var(--muted2)] hover:text-red-400 cursor-pointer"
             >
-              Restaurar defecto
+              Restore default
             </button>
           )}
         </div>
@@ -416,7 +416,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
       {/* Color Picker & Matrix Presets */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] text-[var(--muted)] font-bold uppercase">Color de Texto:</span>
+          <span className="text-[10px] text-[var(--muted)] font-bold uppercase">Text Color:</span>
           <div className="flex items-center gap-1.5">
             <input
               type="color"

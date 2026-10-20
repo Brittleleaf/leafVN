@@ -260,10 +260,10 @@ export const FlashlightComponent: React.FC<ScreenFxProps> = ({
             </div>
 
             <h3 className="text-sm font-bold uppercase tracking-widest text-amber-300 mb-1">
-              ¡Linterna Apagada!
+              Flashlight Off!
             </h3>
             <p className="text-xs text-gray-400 mb-4">
-              La linterna ha fallado. Golpéala para encenderla de nuevo.
+              Flashlight failed. Hit it to turn it back on.
             </p>
 
             {/* Hit progress dots */}
@@ -326,7 +326,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
       <div className="flex items-center justify-between">
         <label className="text-[10px] text-amber-600 dark:text-amber-400 uppercase font-bold flex items-center gap-1.5">
           <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-3.5 h-3.5" />
-          <span>Linterna Interactiva (Opciones)</span>
+          <span>Interactive Flashlight (Settings)</span>
         </label>
       </div>
 
@@ -338,7 +338,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
             type="button"
             onClick={() => {
               onChange({ mode: 'normal' });
-              notify?.('Modo linterna: Normal');
+              notify?.('Flashlight mode: Normal');
             }}
             className={`p-2 rounded-lg border text-left cursor-pointer transition-all flex items-center gap-2 ${
               currentMode === 'normal'
@@ -349,7 +349,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
             <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-5 h-5 text-amber-500 shrink-0" />
             <div>
               <div className="text-xs">Normal</div>
-              <div className="text-[9px] text-[var(--muted2)]">Luz estable y continua</div>
+              <div className="text-[9px] text-[var(--muted2)]">Steady continuous beam</div>
             </div>
           </button>
 
@@ -357,7 +357,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
             type="button"
             onClick={() => {
               onChange({ mode: 'broken' });
-              notify?.('Modo linterna: Broken (Parpadeos)');
+              notify?.('Flashlight mode: Broken (Flickering)');
             }}
             className={`p-2 rounded-lg border text-left cursor-pointer transition-all flex items-center gap-2 ${
               currentMode === 'broken'
@@ -368,7 +368,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
             <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-5 h-5 text-amber-500 shrink-0" />
             <div>
               <div className="text-xs">Broken</div>
-              <div className="text-[9px] text-[var(--muted2)]">Parpadeos aleatorios</div>
+              <div className="text-[9px] text-[var(--muted2)]">Random flickering</div>
             </div>
           </button>
         </div>
@@ -376,12 +376,12 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
 
       {/* Beam Radius / Size */}
       <div className="space-y-1.5 pt-1">
-        <span className="text-[10px] text-[var(--muted)] font-bold uppercase block">Beam Size (Radio de luz):</span>
+        <span className="text-[10px] text-[var(--muted)] font-bold uppercase block">Beam Radius / Size:</span>
         <div className="grid grid-cols-3 gap-1.5">
           {[
-            { label: 'Estrecho (110px)', radius: 110 },
-            { label: 'Mediano (170px)', radius: 170 },
-            { label: 'Amplio (240px)', radius: 240 },
+            { label: 'Narrow (110px)', radius: 110 },
+            { label: 'Medium (170px)', radius: 170 },
+            { label: 'Wide (240px)', radius: 240 },
           ].map((sz) => {
             const isSelected = currentRadius === sz.radius;
             return (
@@ -430,10 +430,10 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
 
         <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
           {[
-            { label: 'Cálido', hex: '#fffbe8', bg: 'bg-amber-100 text-black' },
-            { label: 'Blanco', hex: '#ffffff', bg: 'bg-white text-black' },
-            { label: 'Forense UV', hex: '#c084fc', bg: 'bg-purple-900 text-purple-200' },
-            { label: 'Alarma', hex: '#fda4af', bg: 'bg-red-900 text-red-200' },
+            { label: 'Warm', hex: '#fffbe8', bg: 'bg-amber-100 text-black' },
+            { label: 'White', hex: '#ffffff', bg: 'bg-white text-black' },
+            { label: 'Forensic UV', hex: '#c084fc', bg: 'bg-purple-900 text-purple-200' },
+            { label: 'Alarm Red', hex: '#fda4af', bg: 'bg-red-900 text-red-200' },
           ].map((p) => (
             <button
               key={p.hex}
@@ -465,10 +465,10 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
           />
           <div>
             <span className="text-xs font-bold text-amber-600 dark:text-amber-300 uppercase block">
-              Activar Apagón Interactivo (Shutdown)
+              Enable Interactive Blackout (Shutdown)
             </span>
             <span className="text-[10px] text-[var(--muted2)] block leading-tight">
-              La linterna fallará al entrar a este evento, dejando la pantalla a oscuras y bloqueando el diálogo hasta que el jugador la golpee.
+              The flashlight fails upon entering this event, plunging the screen into darkness and locking dialogue until the player taps it back on.
             </span>
           </div>
         </label>
@@ -476,7 +476,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
         {isShutdown && (
           <div className="pl-6 space-y-1.5 pt-1">
             <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase block">
-              Golpes requeridos para encender:
+              Hits required to turn back on:
             </span>
             <div className="flex items-center gap-2">
               {[1, 2, 3, 5].map((cnt) => (
@@ -490,7 +490,7 @@ export const FlashlightInspector: React.FC<ScreenFxInspectorProps> = ({
                       : 'border-[var(--border)] bg-[var(--card-bg)] text-[var(--muted)] hover:text-[var(--text)]'
                   }`}
                 >
-                  {cnt === 3 ? '3 golpes (Recomendado)' : `${cnt} ${cnt === 1 ? 'golpe' : 'golpes'}`}
+                  {cnt === 3 ? '3 hits (Recommended)' : `${cnt} ${cnt === 1 ? 'hit' : 'hits'}`}
                 </button>
               ))}
             </div>

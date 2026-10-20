@@ -131,12 +131,7 @@ export default function SceneStudioModal({
           id: `ev-${Date.now()}`,
           type: 'dialogue',
           characterId: story.characters[0]?.id,
-          text:
-            sceneType === 'event'
-              ? eventSubtype === 'cinematic'
-                ? 'Cinematic sequence ready...'
-                : 'Static screen ready...'
-              : 'Entering a new location...',
+          text: '',
         },
       ],
       hotspots: [],

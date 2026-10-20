@@ -135,7 +135,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       if (mergedMap.size === 0) {
         mergedMap.set(SAMPLE_STORY.id || 'el-renacer-del-pintor', {
           id: SAMPLE_STORY.id || 'el-renacer-del-pintor',
-          title: SAMPLE_STORY.title || 'El Renacer del Pintor',
+          title: SAMPLE_STORY.title || 'The Rebirth of the Painter',
           author: SAMPLE_STORY.author || 'Justin',
           description: SAMPLE_STORY.description || 'Story project.',
           version: SAMPLE_STORY.version || '1.0.0',
@@ -222,7 +222,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                         id: `ev-init-${Date.now()}`,
                         type: 'dialogue' as const,
                         customSpeakerName: 'Narrator',
-                        text: 'Enter dialogue text here...',
+                        text: '',
                       },
                     ],
                   },

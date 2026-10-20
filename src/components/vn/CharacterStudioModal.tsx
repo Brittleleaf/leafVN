@@ -76,11 +76,11 @@ export default function CharacterStudioModal({
     const defaultTemplateUrl = '/assets/image/characters/SUBJECT-TEMPLATE.png';
     const newChar: VNCharacter = {
       id: newId,
-      name: `New Character #${story.characters.length + 1}`,
+      name: `Character #${story.characters.length + 1}`,
       color: '#38bdf8',
-      badgeTitle: 'OPERATOR',
+      badgeTitle: '',
       shortcut: `${story.characters.length + 1}`,
-      description: 'Write the backstory, personality, and motivations for this character here...',
+      description: '',
       avatarUrl: defaultTemplateUrl,
       expressions: {
         neutral: defaultTemplateUrl,

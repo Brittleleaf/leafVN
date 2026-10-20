@@ -15,14 +15,14 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const rawId = body.id || body.title || 'nuevo-proyecto';
+    const rawId = body.id || body.title || 'new-project';
     const safeId = sanitizeProjectId(rawId);
 
-    const title = body.title?.trim() || 'Nuevo Proyecto';
-    const author = body.author?.trim() || 'Autor';
+    const title = body.title?.trim() || 'New Project';
+    const author = body.author?.trim() || 'Author';
     const description = body.description?.trim() || '';
 
-    // Si se solicita plantilla de muestra o proyecto en blanco
+    // If sample template or blank project requested
     const useSample = body.template === 'sample';
 
     const newStory = {
@@ -39,9 +39,9 @@ export async function POST(req: NextRequest) {
             {
               id: `chap-01-${Date.now()}`,
               number: 1,
-              title: 'Capítulo 1: Comienzo',
-              summary: 'Inicio de la historia.',
-              loadingScreen: { enabled: false, title: 'Capítulo 1' },
+              title: 'Chapter 1: Start',
+              summary: 'Beginning of the story.',
+              loadingScreen: { enabled: false, title: 'Chapter 1' },
               startSceneId: `scene-01-${Date.now()}`,
               scenes: [
                 {
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
                       id: `ev-init-${Date.now()}`,
                       type: 'dialogue' as const,
                       customSpeakerName: 'Narrator',
-                      text: 'Enter dialogue text here...',
+                      text: '',
                     },
                   ],
                 },
@@ -65,12 +65,12 @@ export async function POST(req: NextRequest) {
 
     const saved = saveProject(safeId, newStory);
     if (!saved) {
-      return NextResponse.json({ error: 'No se pudo crear el proyecto en disco.' }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to create project on disk.' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, projectId: safeId, story: newStory });
   } catch (error: any) {
-    console.error('Error al crear proyecto:', error);
-    return NextResponse.json({ error: error?.message || 'Error al crear proyecto' }, { status: 500 });
+    console.error('Error creating project:', error);
+    return NextResponse.json({ error: error?.message || 'Error creating project' }, { status: 500 });
   }
 }

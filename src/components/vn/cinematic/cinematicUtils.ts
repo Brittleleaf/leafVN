@@ -54,7 +54,7 @@ export function normalizeCinematicTracks(
   const backgroundClips: VNCinematicClip[] = (config?.backgroundTracks || []).map((bg, idx) => ({
     id: bg.id || `clip-bg-${idx}-${Date.now()}`,
     trackId: 'track-bg-1',
-    name: `Fondo ${idx + 1}`,
+    name: `Background ${idx + 1}`,
     startSec: bg.startSec ?? 0,
     endSec: bg.endSec ?? duration,
     mediaUrl: bg.url || defaultBgUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
@@ -501,7 +501,7 @@ export function findOrCreateFreeTrack(
   const sectionNameMap: Record<VNCinematicSection, string> = {
     media: 'Media',
     audio: 'Audio',
-    background: 'Fondo',
+    background: 'Background',
     dialog: 'Media',
   };
 

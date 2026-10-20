@@ -19,7 +19,7 @@ export const VN_FONT_CATALOG: VNFontDefinition[] = [
     googleFontFamily: 'Barlow',
     googleUrl: 'https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap',
     description: 'Clean, technical, and low-contrast grotesque sans-serif. Modern and highly legible.',
-    previewSample: 'El rápido murciélago hindú comía feliz cardillo y kiwi. 1234567890',
+    previewSample: 'The quick brown fox jumps over the lazy dog. 1234567890',
     isBuiltIn: true,
   },
   {
@@ -30,7 +30,7 @@ export const VN_FONT_CATALOG: VNFontDefinition[] = [
     googleFontFamily: 'Special Elite',
     googleUrl: 'https://fonts.googleapis.com/css2?family=Special+Elite&display=swap',
     description: 'Vintage mimicked Remington typewriter font. The official ROTP horror style.',
-    previewSample: 'INFORME CLASIFICADO: El sujeto no responde al estímulo lumínico.',
+    previewSample: 'CLASSIFIED REPORT: Subject does not respond to light stimulus.',
     isBuiltIn: true,
   },
   {
@@ -50,7 +50,7 @@ export const VN_FONT_CATALOG: VNFontDefinition[] = [
     googleFontFamily: 'Inter',
     googleUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap',
     description: 'Carefully crafted for computer screens. Highly readable at small and large sizes.',
-    previewSample: 'Los registros del sistema indican una discrepancia en la frecuencia cardíaca.',
+    previewSample: 'System logs indicate a discrepancy in vital sign frequency.',
   },
   {
     id: 'cinzel',
@@ -60,7 +60,7 @@ export const VN_FONT_CATALOG: VNFontDefinition[] = [
     googleFontFamily: 'Cinzel',
     googleUrl: 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap',
     description: 'Classical Roman proportions. Gives scenes a formal, mythological, or dramatic weight.',
-    previewSample: 'EL DESTINO DE QUIENES SE ATREVIERON A MIRAR MÁS ALLÁ DEL VELO.',
+    previewSample: 'THE FATE OF THOSE WHO DARED LOOK BEYOND THE VEIL.',
   },
   {
     id: 'merriweather',
@@ -70,7 +70,7 @@ export const VN_FONT_CATALOG: VNFontDefinition[] = [
     googleFontFamily: 'Merriweather',
     googleUrl: 'https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap',
     description: 'Designed to be pleasant to read on screens. Classic novel and literary immersion.',
-    previewSample: 'La lluvia golpeaba suavemente contra los cristales de la vieja biblioteca.',
+    previewSample: 'Rain gently tapped against the old library windows as shadows crept across the room.',
   },
   {
     id: 'playfair-display',
@@ -80,7 +80,7 @@ export const VN_FONT_CATALOG: VNFontDefinition[] = [
     googleFontFamily: 'Playfair Display',
     googleUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap',
     description: 'High-contrast transitional serif with dramatic style. Great for elegance or dark mystery.',
-    previewSample: '«No hay secretos que el tiempo no termine por desenterrar.»',
+    previewSample: '"There are no secrets that time does not eventually uncover."',
   },
   {
     id: 'courier-prime',

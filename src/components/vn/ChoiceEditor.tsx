@@ -220,7 +220,7 @@ export default function ChoiceEditor({
                       ? 'bg-purple-600 text-white shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--text)]'
                   }`}
-                  title="Con contenedor (fondo oscuro y borde)"
+                  title="With container (dark background and border)"
                 >
                   Classic Card
                 </button>
@@ -235,7 +235,7 @@ export default function ChoiceEditor({
                       ? 'bg-purple-600 text-white shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--text)]'
                   }`}
-                  title="Sin contenedor (texto flotante transparente)"
+                  title="Without container (transparent floating text)"
                 >
                   Frameless
                 </button>
@@ -461,10 +461,10 @@ export default function ChoiceEditor({
               <span className="text-[var(--muted)] font-mono">
                 {activeOption.xPercent !== undefined
                   ? `X: ${Math.round(activeOption.xPercent)}% | Y: ${Math.round(activeOption.yPercent ?? 50)}%`
-                  : 'Posición: Centrado automático (Arrastra en el canvas para mover)'}
+                  : 'Position: Auto centered (Drag on canvas to reposition)'}
               </span>
               {activeOption.scale !== undefined && activeOption.scale !== 1 && (
-                <span className="text-cyan-300 font-mono font-bold">Escala: {Math.round(activeOption.scale * 100)}%</span>
+                <span className="text-cyan-300 font-mono font-bold">Scale: {Math.round(activeOption.scale * 100)}%</span>
               )}
               {((activeOption.scaleX !== undefined && activeOption.scaleX !== 1) || (activeOption.scaleY !== undefined && activeOption.scaleY !== 1)) && (
                 <span className="text-cyan-200 font-mono font-bold">
@@ -489,10 +489,10 @@ export default function ChoiceEditor({
                     widthPercent: undefined,
                   });
                   playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  notify('Posición y escala de botón reseteadas');
+                  notify('Button position and scale reset');
                 }}
                 className="text-red-400 hover:underline font-bold cursor-pointer shrink-0 ml-2"
-                title="Restablecer posición, escala y rotación por defecto"
+                title="Reset default position, scale, and rotation"
               >
                 Reset Transform
               </button>

@@ -342,7 +342,7 @@ export function useVNMakerState(
     });
 
     const targetChar = story.characters.find((c) => c.id === characterId);
-    notify(`Escala ${Math.round(scale * 100) / 100}x aplicada a todos los diálogos de ${targetChar?.name || 'personaje'}`);
+    notify(`Scale ${Math.round(scale * 100) / 100}x applied to all dialogues of ${targetChar?.name || 'character'}`);
     playSfx('/assets/sfx/click intro.mp3', false, 0.2);
   }, [story.characters, recordHistorySnapshot, notify]);
 
@@ -720,12 +720,7 @@ export function useVNMakerState(
           id: `ev-${Date.now()}`,
           type: 'dialogue',
           characterId: story.characters[0]?.id,
-          text:
-            sceneType === 'event'
-              ? eventSubtype === 'cinematic'
-                ? 'Enter cinematic text here...'
-                : 'Enter static screen text here...'
-              : 'Enter dialogue text here...',
+          text: '',
         },
       ],
     };
@@ -921,8 +916,8 @@ export function useVNMakerState(
       characterId: chosenCharId,
       characterPosition: customPayload?.characterPosition || speakerChar?.side || story.characters[0]?.side || 'left',
       characterScale: customPayload?.characterScale ?? speakerChar?.defaultScale ?? story.characters[0]?.defaultScale ?? 1.0,
-      text: type === 'dialogue' ? (customPayload?.text || 'Enter dialogue text here...') : undefined,
-      prompt: type === 'choice' ? (customPayload?.prompt || 'Enter prompt here...') : undefined,
+      text: type === 'dialogue' ? (customPayload?.text ?? '') : undefined,
+      prompt: type === 'choice' ? (customPayload?.prompt ?? '') : undefined,
       options:
         type === 'choice'
           ? (customPayload?.options || [
@@ -931,7 +926,7 @@ export function useVNMakerState(
                 label: 'Option 1',
                 reaction: {
                   characterId: story.characters[0]?.id,
-                  text: 'Enter reaction text here...',
+                  text: '',
                 },
               },
               {
@@ -939,7 +934,7 @@ export function useVNMakerState(
                 label: 'Option 2',
                 reaction: {
                   characterId: story.characters[1]?.id || story.characters[0]?.id,
-                  text: 'Enter reaction text here...',
+                  text: '',
                 },
               },
             ])

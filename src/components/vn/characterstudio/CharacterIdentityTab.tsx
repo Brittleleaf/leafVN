@@ -184,7 +184,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
       <div className="space-y-1.5 pt-2 border-t border-[var(--border)]">
         <div className="flex items-center justify-between">
           <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-wider block">
-            Default Scale / Escala base del personaje:
+            Default Character Scale:
           </label>
           <span className="text-xs font-mono font-bold text-[var(--accent)]">
             {(activeChar.defaultScale ?? 1.0).toFixed(2)}x
@@ -280,14 +280,14 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
                 chapters: updatedChapters,
                 scenarios: updatedScenarios,
               });
-              notify(`Escala ${scale}x aplicada a todos los diálogos de ${activeChar.name} (${count} líneas)`);
+              notify(`Scale ${scale}x applied to all dialogues of ${activeChar.name} (${count} lines)`);
               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
             }}
             className="px-2.5 py-1 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-            title="Copia esta escala universal a todos los diálogos ya escritos de este personaje en todos los capítulos"
+            title="Apply this universal scale to all existing dialogues of this character across all chapters"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.copy} className="w-3.5 h-3.5 text-[var(--accent)]" />
-            <span>Copiar escala a los demás diálogos</span>
+            <span>Copy scale to existing dialogues</span>
           </button>
         </div>
       </div>

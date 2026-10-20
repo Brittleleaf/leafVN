@@ -378,7 +378,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   characterXPercent: undefined,
                   characterYPercent: undefined,
                 });
-                notify?.('Personaje anclado a la caja de diálogo');
+                notify?.('Character pinned to dialogue box');
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
               className="px-2 py-0.5 bg-cyan-950/90 text-[10px] font-bold text-cyan-300 border border-cyan-500/70 rounded-full hover:bg-cyan-900 transition-colors shadow-lg cursor-pointer flex items-center gap-1"
@@ -575,7 +575,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                     promptScale: 1,
                   });
                   if (recordHistorySnapshot) recordHistorySnapshot();
-                  notify?.("Disposición cambiada a centrado en columna");
+                  notify?.("Layout changed to stacked column");
                 } else {
                   const total = currentLine.options?.length || 1;
                   const freeOpts = (currentLine.options || []).map((o, idx) => ({
@@ -585,11 +585,11 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   }));
                   handlePatchCurrentLine?.({ choiceLayout: 'free', options: freeOpts });
                   if (recordHistorySnapshot) recordHistorySnapshot();
-                  notify?.("Disposición cambiada a modo libre (Transformable)");
+                  notify?.("Layout changed to free transformable mode");
                 }
               }}
               className="px-3 py-1 rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border border-purple-500/50 bg-purple-950/40 text-purple-200 hover:bg-purple-900/60"
-              title="Alternar entre lista apilada centrada o modo libre transformable"
+              title="Toggle between stacked column or free transformable mode"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
               <span>
@@ -627,14 +627,14 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 openAssetPicker('background', (url) => {
                   handleUpdateCurrentScene('backgroundUrl', url);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  notify?.('Fondo de escenario actualizado');
+                  notify?.('Scenario background updated');
                 });
               } else if (setActiveGlobalModal) {
                 setActiveGlobalModal('scenes');
               }
             }}
             className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
-            title="Seleccionar fondo de escenario desde la Galería"
+            title="Select scenario background from Gallery"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
             <span>Background</span>
@@ -967,13 +967,13 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                             }}
                             className="px-2.5 py-1.5 rounded-xl bg-cyan-950/95 hover:bg-cyan-900 border border-cyan-400/80 hover:border-cyan-300 text-cyan-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.7)] cursor-pointer whitespace-nowrap transition-all group"
-                            title="Editar texto de la pregunta (o presiona Enter / Doble Clic)"
+                            title="Edit question text on screen (or press Enter / Double Click)"
                           >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform">
                               <path d="M12 20h9" />
                               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                             </svg>
-                            <span>Editar Pregunta</span>
+                            <span>Edit Question</span>
                             <span className="opacity-50 text-[9px] font-sans font-normal">(Enter)</span>
                           </button>
                         ) : (
@@ -982,11 +982,11 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                             onClick={(e) => {
                               e.stopPropagation();
                               setIsEditingPromptText(false);
-                              notify?.("Pregunta actualizada");
+                              notify?.("Question updated");
                               if (recordHistorySnapshot) recordHistorySnapshot();
                             }}
                             className="px-2.5 py-1.5 rounded-xl bg-emerald-950/95 hover:bg-emerald-900 border border-emerald-400/80 hover:border-emerald-300 text-emerald-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer whitespace-nowrap transition-all"
-                            title="Confirmar cambios (Enter)"
+                            title="Confirm changes (Enter)"
                           >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-emerald-400">
                               <polyline points="20 6 9 17 4 12" />
@@ -1092,7 +1092,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                         handleTransformChoiceOption(i, { text: newText });
                         setIsEditingChoiceText(false);
                         playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                        notify?.(`Texto de opción #${i + 1} actualizado`);
+                        notify?.(`Option #${i + 1} text updated`);
                         if (recordHistorySnapshot) recordHistorySnapshot();
                       }}
                       onCancelEditText={() => {
@@ -1112,7 +1112,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                         }
                         setSelectedElement('choice_button');
                         setSelectedChoiceIndex(i);
-                        notify(`Botón de opción #${i + 1} seleccionado`);
+                        notify(`Option #${i + 1} button selected`);
                       }}
                     >
                       {/* Universal Gizmo attached when Choice Button is Selected (Hidden during text editing) */}
@@ -1355,7 +1355,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 });
                 setSelectedElement(null);
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                notify?.("Personaje retirado de esta línea");
+                notify?.("Character removed from this line");
                 if (recordHistorySnapshot) recordHistorySnapshot();
               }}
             />
@@ -1393,7 +1393,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 setSelectedElement(null);
                 setSelectedHotspotId(null);
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                notify?.("Botón / Hotspot eliminado del escenario");
+                notify?.("Hotspot button removed from scenario");
               }}
               capabilities={{
                 allowCrop: false,
@@ -1446,7 +1446,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   setSelectedElement(null);
                   setSelectedChoiceIndex(null);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  notify?.("Opción eliminada");
+                  notify?.("Option deleted");
                   if (recordHistorySnapshot) recordHistorySnapshot();
                 }}
                 capabilities={{

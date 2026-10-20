@@ -77,7 +77,7 @@ export function FontShowcaseTab({
               <button
                 type="button"
                 onClick={() =>
-                  setCustomFontSample('El veloz murciélago hindú comía feliz cardillo y kiwi. 0123456789')
+                  setCustomFontSample('The quick brown fox jumps over the lazy dog. 0123456789')
                 }
                 className="text-[var(--muted)] hover:text-[var(--text)] text-[10px] underline cursor-pointer"
               >
@@ -86,7 +86,7 @@ export function FontShowcaseTab({
               <button
                 type="button"
                 onClick={() =>
-                  setCustomFontSample('INFORME CLASIFICADO: El sujeto no responde al estímulo lumínico.')
+                  setCustomFontSample('CLASSIFIED REPORT: Subject does not respond to light stimulus.')
                 }
                 className="text-[var(--muted)] hover:text-[var(--text)] text-[10px] underline cursor-pointer"
               >
@@ -95,7 +95,7 @@ export function FontShowcaseTab({
               <button
                 type="button"
                 onClick={() =>
-                  setCustomFontSample('«No hay secretos que el tiempo no termine por desenterrar.»')
+                  setCustomFontSample('"There are no secrets that time does not eventually uncover."')
                 }
                 className="text-[var(--muted)] hover:text-[var(--text)] text-[10px] underline cursor-pointer"
               >

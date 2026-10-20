@@ -78,8 +78,8 @@ export default function ChapterStudioModal({
     const newChapter: VNChapter = {
       id: newId,
       number: newNumber,
-      title: `Chapter #${newNumber}: New Transmission`,
-      summary: 'Summary and introductory notes for this narrative chapter.',
+      title: `Chapter #${newNumber}`,
+      summary: '',
       startSceneId: initialSceneId,
       loadingScreen: {
         enabled: false,
@@ -99,7 +99,7 @@ export default function ChapterStudioModal({
               id: `ev-${Date.now()}`,
               type: 'dialogue',
               characterId: story.characters[0]?.id,
-              text: `Starting sequence for Chapter #${newNumber}...`,
+              text: '',
             },
           ],
         },

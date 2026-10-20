@@ -41,11 +41,11 @@ export interface VNCharacter {
   id: string;
   name: string;
   color: string; // Hex color for nameplate and borders
-  badgeTitle?: string; // e.g. "INVESTIGADOR JEFE", "AGENTE DE CAMPO"
+  badgeTitle?: string; // e.g. "LEAD INVESTIGATOR", "FIELD AGENT"
   avatarUrl?: string; // Default bust image (URL or Base64 data URL)
   description?: string; // Lore / Character backstory / Notes for writer & creator
   shortcut?: string; // Shortcut key (e.g. "1", "2") for quick keyboard reference
-  expressions?: Record<string, string>; // emotion name (e.g. 'neutral', 'feliz', 'enojado', 'sorprendido') -> URL/Base64
+  expressions?: Record<string, string>; // emotion name (e.g. 'neutral', 'happy', 'angry', 'surprised') -> URL/Base64
   side?: VNPosition;
   blipSound?: string;
   fontFamily?: string; // Custom font for this character's dialogues (e.g. 'cinzel', 'caveat', 'barlow')
