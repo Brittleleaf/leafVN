@@ -299,7 +299,7 @@ export default function AddActionModal(props: AddActionModalProps) {
             className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
             title="Close modal (Esc)"
           >
-            ✕
+            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -350,9 +350,9 @@ export default function AddActionModal(props: AddActionModalProps) {
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-xs"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-xs flex items-center justify-center"
                   >
-                    ✕
+                    <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
                   </button>
                 )}
               </div>
@@ -394,7 +394,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                           </span>
                           {card.hasPicker && (
                             <span className="text-[9px] px-1.5 py-0.2 rounded font-mono bg-[var(--well-bg)] border border-[var(--border)] text-[var(--muted2)] group-hover:text-[var(--accent)] shrink-0">
-                              Options ➔
+                              Options
                             </span>
                           )}
                         </div>

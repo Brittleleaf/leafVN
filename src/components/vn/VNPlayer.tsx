@@ -521,7 +521,9 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
         <div className="absolute top-14 right-4 z-40 bg-black/90 border border-amber-600/60 p-4 rounded-lg shadow-2xl text-xs max-w-sm w-full">
           <div className="flex items-center justify-between border-b border-amber-900 pb-2 mb-3">
             <span className="font-bold text-amber-400 uppercase tracking-wider">Variables / Flags State</span>
-            <button onClick={() => setShowVariablesHud(false)} className="text-gray-400 hover:text-white">✕</button>
+            <button onClick={() => setShowVariablesHud(false)} className="text-gray-400 hover:text-white p-1 cursor-pointer">
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
+            </button>
           </div>
           <div className="space-y-2">
             {Object.keys(variablesState).length === 0 ? (
@@ -794,7 +796,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     className="text-xs animate-bounce tracking-widest hidden sm:inline"
                     style={{ color: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444' }}
                   >
-                    {activeInspection ? '[ SPACE / CLICK TO CLOSE ✕ ]' : '[ SPACE / CLICK TO CONTINUE ▼ ]'}
+                    {activeInspection ? '[ SPACE / CLICK TO CLOSE ]' : '[ SPACE / CLICK TO CONTINUE ]'}
                   </span>
                 )}
                 <button
@@ -805,7 +807,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                   className="p-1 px-2.5 hover:bg-white/10 rounded text-gray-400 hover:text-white transition-colors cursor-pointer text-xs flex items-center gap-1.5 border border-white/10 hover:border-white/30"
                   title="Close dialogue box"
                 >
-                  <span className="font-mono text-sm leading-none">✕</span>
+                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
                   <span className="text-[10px] uppercase tracking-wider hidden md:inline">Close</span>
                 </button>
               </div>
@@ -1000,9 +1002,10 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             </h3>
             <button
               onClick={() => setShowHistoryModal(false)}
-              className="px-4 py-1 bg-red-900/40 hover:bg-red-800 text-white rounded text-xs uppercase tracking-widest cursor-pointer"
+              className="px-3 py-1 bg-red-900/40 hover:bg-red-800 text-white rounded text-xs uppercase tracking-widest cursor-pointer flex items-center gap-1.5"
             >
-              CLOSE ✕
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
+              <span>CLOSE</span>
             </button>
           </div>
 
@@ -1033,9 +1036,10 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             </h3>
             <button
               onClick={() => setShowSaveLoadModal(null)}
-              className="px-4 py-1 bg-red-900/40 hover:bg-red-800 text-white rounded text-xs uppercase tracking-widest cursor-pointer"
+              className="px-3 py-1 bg-red-900/40 hover:bg-red-800 text-white rounded text-xs uppercase tracking-widest cursor-pointer flex items-center gap-1.5"
             >
-              CLOSE ✕
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
+              <span>CLOSE</span>
             </button>
           </div>
 
@@ -1054,10 +1058,10 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                       {existingSlot && (
                         <button
                           onClick={() => handleDeleteSlot(slotNum)}
-                          className="text-red-500 hover:text-red-300 text-xs px-1"
+                          className="text-red-500 hover:text-red-300 p-1 cursor-pointer flex items-center justify-center"
                           title="Delete save"
                         >
-                          ✕
+                          <GuiIconRenderer icon={GUI_ICONS.general.trash} className="w-3.5 h-3.5" />
                         </button>
                       )}
                     </div>

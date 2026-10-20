@@ -28,6 +28,7 @@ import { useCinematicClock } from './cinematic/hooks/useCinematicClock';
 import { CinematicContextMenu, ContextMenuState } from './cinematic/CinematicContextMenu';
 import AssetStudioModal from './AssetStudioModal';
 import { VNTransformToolbar } from './transform';
+import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 import { saveActiveStory } from '@/lib/vn/storage';
 
@@ -205,7 +206,7 @@ export default function CinematicSequencerStudio({
         });
       }
       playSfx('/assets/sfx/success.mp3', false, 0.5);
-      setSaveSuccessMsg('Cinematic Saved! ✓');
+      setSaveSuccessMsg('Cinematic Saved!');
       setTimeout(() => setSaveSuccessMsg(null), 2500);
     } catch (err) {
       console.error('Error saving cinematic:', err);
@@ -593,7 +594,7 @@ export default function CinematicSequencerStudio({
       {saveSuccessMsg && (
         <div className="absolute top-3 right-4 z-50 pointer-events-none animate-fade-in">
           <div className="bg-emerald-950/95 border border-emerald-500/90 text-emerald-200 text-xs px-4 py-1.5 rounded-full shadow-[0_0_25px_rgba(16,185,129,0.5)] font-mono font-bold flex items-center gap-2 backdrop-blur-md">
-            <span className="text-emerald-400 text-sm">✓</span>
+            <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5 text-emerald-400" />
             <span>{saveSuccessMsg}</span>
           </div>
         </div>

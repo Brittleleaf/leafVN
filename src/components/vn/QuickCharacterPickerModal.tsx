@@ -45,7 +45,7 @@ export default function QuickCharacterPickerModal({
             className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
             title="Close modal (Esc)"
           >
-            ✕
+            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -69,7 +69,7 @@ export default function QuickCharacterPickerModal({
               </div>
             </div>
             <span className="text-xs text-[var(--muted)] group-hover:text-[var(--accent)] font-bold uppercase transition-colors shrink-0">
-              Select ➔
+              Select
             </span>
           </div>
 

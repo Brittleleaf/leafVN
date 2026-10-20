@@ -47,7 +47,7 @@ export const CinematicTimelineToolbar: React.FC<CinematicTimelineToolbarProps> =
     <div className="h-9 px-3 border-b border-[var(--border)] bg-[var(--well-bg)] flex items-center justify-between text-xs shrink-0 select-none">
       {/* LEFT: History (Undo/Redo) & Selected Clip Deletion */}
       <div className="flex items-center gap-1.5 min-w-[140px]">
-        {/* ↺ Undo */}
+        {/* Undo */}
         <button
           onClick={onUndo}
           disabled={!canUndo}
@@ -62,7 +62,7 @@ export const CinematicTimelineToolbar: React.FC<CinematicTimelineToolbarProps> =
           <span className="hidden sm:inline">Undo</span>
         </button>
 
-        {/* ↻ Redo */}
+        {/* Redo */}
         <button
           onClick={onRedo}
           disabled={!canRedo}
@@ -119,7 +119,7 @@ export const CinematicTimelineToolbar: React.FC<CinematicTimelineToolbarProps> =
           }`}
           title="Magnetic snap to playhead, clip boundaries and time markers"
         >
-          <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3 h-3" />
+          <GuiIconRenderer icon={GUI_ICONS.general.snap} className="w-3 h-3" />
           <span>Snap {snapEnabled ? 'ON' : 'OFF'}</span>
         </button>
 

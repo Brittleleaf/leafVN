@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { VNCinematicClip } from '@/types/vn';
+import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 interface MediaClipInspectorSectionProps {
   clip: VNCinematicClip;
@@ -83,10 +84,11 @@ export const MediaClipInspectorSection: React.FC<MediaClipInspectorSectionProps>
               <button
                 type="button"
                 onClick={() => onUpdateClip(clip.id, { scale: 1, xPercent: 50, yPercent: 50, rotation: 0 })}
-                className="text-[9px] text-cyan-400 hover:underline cursor-pointer font-bold"
+                className="text-[9px] text-cyan-400 hover:underline cursor-pointer font-bold inline-flex items-center gap-1"
                 title="Reset scale and position to default 100% fit"
               >
-                ↺ 100%
+                <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
+                <span>100% Fit</span>
               </button>
             )}
           </div>

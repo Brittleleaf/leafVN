@@ -55,7 +55,7 @@ export default function VNMakerHeader({
       {feedbackMsg && (
         <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-50 pointer-events-none animate-fade-in">
           <div className="bg-emerald-950/90 border border-emerald-500/80 text-emerald-200 text-xs px-3.5 py-1 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.35)] font-mono font-bold flex items-center gap-1.5 backdrop-blur-md">
-            <span className="text-emerald-400">✓</span>
+            <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5 text-emerald-400" />
             <span>{feedbackMsg}</span>
           </div>
         </div>

@@ -98,9 +98,9 @@ export function TextEffectShowcaseTab({
                 setTextEffectReplayKeys(next);
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 cursor-pointer"
+              className="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1.5 cursor-pointer text-xs"
             >
-              <span>↺</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.refresh} className="w-3 h-3" />
               <span>Replay All Effects</span>
             </button>
           </div>

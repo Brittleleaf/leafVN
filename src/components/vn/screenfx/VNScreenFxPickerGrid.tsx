@@ -165,7 +165,7 @@ export const VNScreenFxPickerGrid: React.FC<VNScreenFxPickerGridProps> = ({
           <div>
             <h4 className={`font-bold text-[11px] text-[var(--text)] group-hover:${themeStyles.activeText} transition-colors flex items-center justify-between`}>
               <span>View More...</span>
-              <span className={`text-[10px] ${themeStyles.viewMoreIcon} font-bold group-hover:translate-x-0.5 transition-transform`}>➔</span>
+              <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className={`w-3 h-3 ${themeStyles.viewMoreIcon} group-hover:translate-x-0.5 transition-transform`} />
             </h4>
             <p className="text-[9px] text-[var(--muted2)] line-clamp-1 leading-normal mt-0.5">
               Explore all 13 atmosphere presets in gallery.

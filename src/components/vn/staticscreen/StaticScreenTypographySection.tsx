@@ -77,10 +77,11 @@ export function StaticScreenTypographySection({
                 updateConfig({ titleXPercent: 50 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-300 border border-white/10 hover:border-cyan-400 hover:text-cyan-200 cursor-pointer"
+              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-300 border border-white/10 hover:border-cyan-400 hover:text-cyan-200 cursor-pointer flex items-center gap-1"
               title="Center Title horizontally (X: 50%)"
             >
-              ⌖ Center X
+              <GuiIconRenderer icon={GUI_ICONS.general.circle} className="w-2.5 h-2.5" />
+              <span>Center X</span>
             </button>
             <button
               type="button"
@@ -88,10 +89,11 @@ export function StaticScreenTypographySection({
                 updateConfig({ titleXPercent: 50, titleYPercent: 28, titleScale: 1.0 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-400 border border-white/10 hover:text-red-300 cursor-pointer"
+              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-400 border border-white/10 hover:text-red-300 cursor-pointer flex items-center gap-1"
               title="Reset Title position and scale"
             >
-              ↺ Reset
+              <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
+              <span>Reset</span>
             </button>
           </div>
         </div>
@@ -155,10 +157,10 @@ export function StaticScreenTypographySection({
                 <button
                   type="button"
                   onClick={() => updateConfig({ titleFontFamily: undefined })}
-                  className="px-2 py-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0"
+                  className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                   title="Reset font to default"
                 >
-                  ✕
+                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
                 </button>
               )}
             </div>
@@ -223,10 +225,10 @@ export function StaticScreenTypographySection({
               <button
                 type="button"
                 onClick={() => updateConfig({ titleAnimation: 'none' })}
-                className="px-2 py-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0"
+                className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                 title="Remove text effect"
               >
-                ✕
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
               </button>
             )}
           </div>
@@ -275,10 +277,11 @@ export function StaticScreenTypographySection({
                 updateConfig({ subtitleXPercent: 50 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-300 border border-white/10 hover:border-purple-400 hover:text-purple-200 cursor-pointer"
+              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-300 border border-white/10 hover:border-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-1"
               title="Center Subtitle horizontally (X: 50%)"
             >
-              ⌖ Center X
+              <GuiIconRenderer icon={GUI_ICONS.general.circle} className="w-2.5 h-2.5" />
+              <span>Center X</span>
             </button>
             <button
               type="button"
@@ -286,10 +289,11 @@ export function StaticScreenTypographySection({
                 updateConfig({ subtitleXPercent: 50, subtitleYPercent: 40, subtitleScale: 1.0 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-400 border border-white/10 hover:text-red-300 cursor-pointer"
+              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-400 border border-white/10 hover:text-red-300 cursor-pointer flex items-center gap-1"
               title="Reset Subtitle position and scale"
             >
-              ↺ Reset
+              <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
+              <span>Reset</span>
             </button>
           </div>
         </div>
@@ -353,10 +357,10 @@ export function StaticScreenTypographySection({
                 <button
                   type="button"
                   onClick={() => updateConfig({ subtitleFontFamily: undefined })}
-                  className="px-2 py-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0"
+                  className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                   title="Reset font to default"
                 >
-                  ✕
+                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
                 </button>
               )}
             </div>

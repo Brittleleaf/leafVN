@@ -151,10 +151,11 @@ export function StaticScreenVisualSection({
                     }
                     updateConfig({ sfxUrl: undefined });
                   }}
-                  className="text-[10px] text-red-400 hover:text-red-300 cursor-pointer"
+                  className="text-[10px] text-red-400 hover:text-red-300 cursor-pointer flex items-center gap-1"
                   title="Remove SFX"
                 >
-                  ✕ Clear
+                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+                  <span>Clear</span>
                 </button>
               )}
             </div>
@@ -244,10 +245,11 @@ export function StaticScreenVisualSection({
                     }
                     updateConfig({ bgmUrl: undefined });
                   }}
-                  className="text-[10px] text-red-400 hover:text-red-300 cursor-pointer"
+                  className="text-[10px] text-red-400 hover:text-red-300 cursor-pointer flex items-center gap-1"
                   title="Remove BGM"
                 >
-                  ✕ Clear
+                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+                  <span>Clear</span>
                 </button>
               )}
             </div>
@@ -331,10 +333,11 @@ export function StaticScreenVisualSection({
                 <button
                   type="button"
                   onClick={handleClearFx}
-                  className="text-[10px] text-red-400 hover:text-red-300 font-bold cursor-pointer transition-colors"
+                  className="text-[10px] text-red-400 hover:text-red-300 font-bold cursor-pointer transition-colors flex items-center gap-1"
                   title="Remove active Screen FX"
                 >
-                  ✕ Clear FX
+                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+                  <span>Clear FX</span>
                 </button>
               )}
               <button

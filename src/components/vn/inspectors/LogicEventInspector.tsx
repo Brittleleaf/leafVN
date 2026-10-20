@@ -25,7 +25,7 @@ export const LogicEventInspector: React.FC<EventInspectorSubProps> = ({
               onClick={() => onOpenGlobalModal('variables')}
               className="text-[10px] text-[var(--accent)] hover:underline cursor-pointer"
             >
-              Open Variable Studio ➔
+              Open Variable Studio
             </button>
           </div>
 
@@ -197,7 +197,7 @@ export const LogicEventInspector: React.FC<EventInspectorSubProps> = ({
         <div className="space-y-3 p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl backdrop-blur-sm shadow-sm">
           <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-              <GuiIconRenderer icon={GUI_ICONS.general.folder} size={14} className="text-amber-500" />
+              <GuiIconRenderer icon={GUI_ICONS.general.transform} size={14} className="text-amber-500" />
               <span>Mutate Variable State</span>
             </span>
             <button
@@ -205,7 +205,7 @@ export const LogicEventInspector: React.FC<EventInspectorSubProps> = ({
               onClick={() => onOpenGlobalModal('variables')}
               className="text-[10px] text-[var(--accent)] hover:underline cursor-pointer"
             >
-              Open Variable Studio ➔
+              Open Variable Studio
             </button>
           </div>
 

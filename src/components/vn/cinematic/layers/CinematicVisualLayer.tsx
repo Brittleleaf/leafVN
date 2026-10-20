@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import { VNCinematicClip } from '@/types/vn';
 import { VNUniversalTransformGizmo } from '../../transform';
+import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 export interface VisualClipWithIndex {
   clip: VNCinematicClip;
@@ -278,10 +279,11 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
                           onUpdateClip(clip.id, { scale: 1, xPercent: 50, yPercent: 50, rotation: 0 });
                         }
                       }}
-                      className="px-2.5 py-1 rounded bg-cyan-950/90 border border-cyan-500 text-cyan-200 text-[9px] font-bold uppercase hover:bg-cyan-900 transition-colors shadow-lg cursor-pointer"
+                      className="px-2.5 py-1 rounded bg-cyan-950/90 border border-cyan-500 text-cyan-200 text-[9px] font-bold uppercase hover:bg-cyan-900 transition-colors shadow-lg cursor-pointer flex items-center gap-1"
                       title="Reset background to 100% full screen fit"
                     >
-                      ↺ Reset Fit
+                      <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
+                      <span>Reset Fit</span>
                     </button>
                   )}
                 </div>

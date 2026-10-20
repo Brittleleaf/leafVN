@@ -366,7 +366,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
           >
             <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-2.5 h-2.5 text-amber-400" />
             <span>{currentSpeaker?.name || 'Character'}: {currentLine?.emotion || 'neutral'}</span>
-            {charLocked && <span className="ml-1 text-[9px] text-amber-300">🔒</span>}
+            {charLocked && <GuiIconRenderer icon={GUI_ICONS.security.lockClosed} className="w-2.5 h-2.5 text-amber-300 ml-1 inline" />}
           </span>
 
           {isCustomPlaced && (
@@ -382,9 +382,10 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
               className="px-2 py-0.5 bg-cyan-950/90 text-[10px] font-bold text-cyan-300 border border-cyan-500/70 rounded-full hover:bg-cyan-900 transition-colors shadow-lg cursor-pointer flex items-center gap-1"
-              title="Restaurar anclaje automático a la caja de diálogo"
+              title="Restore automatic anchor to dialogue box"
             >
-              <span>⚓ Re-dock</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-2.5 h-2.5" />
+              <span>Re-dock</span>
             </button>
           )}
         </div>
@@ -485,7 +486,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)]'
             }`}
           >
-            {isPlacingButton ? 'Click on canvas ➔' : '+ Place Button'}
+            {isPlacingButton ? 'Click on canvas...' : '+ Place Button'}
           </button>
 
           <button
@@ -750,7 +751,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               <div className="mt-1 flex flex-col items-center pointer-events-none transition-opacity duration-150 opacity-90 group-hover:opacity-100">
                 <span className="text-[10px] font-bold tracking-wider text-white uppercase filter drop-shadow-[0_2px_5px_rgba(0,0,0,1)] group-hover:text-sky-300 transition-colors flex items-center justify-center gap-1 max-w-[140px]">
                   <span className="truncate">{hs.label}</span>
-                  {hsLocked && <span className="text-[9px] text-sky-300 shrink-0">🔒</span>}
+                  {hsLocked && <GuiIconRenderer icon={GUI_ICONS.security.lockClosed} className="w-2.5 h-2.5 text-sky-300 shrink-0 inline" />}
                 </span>
               </div>
 
@@ -1072,8 +1073,8 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                       placeholder={`Enter option #${i + 1} here...`}
                       sublabel={`#${i + 1}`}
                       actionIcon={
-                        <span className="text-purple-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                          ➔
+                        <span className="text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
+                          <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className="w-3.5 h-3.5" />
                         </span>
                       }
                       style={opt.style || 'cyber'}

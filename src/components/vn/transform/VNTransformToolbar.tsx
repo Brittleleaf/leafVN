@@ -13,6 +13,7 @@ import {
   subscribeTransformClipboard,
   VNTransformStateSnapshot,
 } from './transformClipboard';
+import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 export interface VNTransformToolbarProps {
   target: VNTransformableTarget;
@@ -270,10 +271,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${btnActiveClass}`}
             title="Edit element text (Enter)"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-            </svg>
+            <GuiIconRenderer icon={GUI_ICONS.general.texts} className="w-4 h-4" />
           </button>
           <span className={tooltipClass}>
             Edit Text (Enter)
@@ -290,17 +288,10 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${target.locked ? btnActiveClass : btnInactiveClass}`}
             title={target.locked ? 'Unlock Element' : 'Lock Element'}
           >
-            {target.locked ? (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 9.9-1" />
-              </svg>
-            )}
+            <GuiIconRenderer
+              icon={target.locked ? GUI_ICONS.security.lockClosed : GUI_ICONS.security.lockOpen}
+              className="w-4 h-4"
+            />
           </button>
           <span className={tooltipClass}>
             {target.locked ? 'Unlock Element' : 'Lock Element'}
@@ -317,10 +308,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${btnInactiveClass}`}
             title="Configure Element Properties"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
+            <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4" />
           </button>
           <span className={tooltipClass}>
             Configure Properties
@@ -344,12 +332,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
           className={`${btnBaseClass} ${!target.disableSnap ? btnActiveClass : btnInactiveClass}`}
           title={target.disableSnap ? 'Enable Snap' : 'Disable Snap'}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-            <path d="m6 15-3-3 6-6 3 3" />
-            <path d="m15 6 3 3-6 6-3-3" />
-            <path d="M9 3a4.24 4.24 0 0 0-6 6" />
-            <path d="M15 9a4.24 4.24 0 0 0 6 6" />
-          </svg>
+          <GuiIconRenderer icon={GUI_ICONS.general.snap} className="w-4 h-4" />
         </button>
         <span className={tooltipClass}>
           {!target.disableSnap ? 'Magnetic Snap: ON' : 'Magnetic Snap: OFF'}
@@ -366,11 +349,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
               className={`${btnBaseClass} ${target.flipX ? btnActiveClass : btnInactiveClass}`}
               title="Flip Horizontal"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <path d="m3 7 5 5-5 5V7z" />
-                <path d="m21 7-5 5 5 5V7z" />
-                <path d="M12 4v16" />
-              </svg>
+              <GuiIconRenderer icon={GUI_ICONS.general.reflectHorizontal} className="w-4 h-4" />
             </button>
             <span className={tooltipClass}>
               Flip Horizontal
@@ -384,11 +363,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
               className={`${btnBaseClass} ${target.flipY ? btnActiveClass : btnInactiveClass}`}
               title="Flip Vertical"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <path d="m7 3 5 5 5-5H7z" />
-                <path d="m7 21 5-5 5 5H7z" />
-                <path d="M4 12h16" />
-              </svg>
+              <GuiIconRenderer icon={GUI_ICONS.general.reflectVertical} className="w-4 h-4" />
             </button>
             <span className={tooltipClass}>
               Flip Vertical
@@ -406,10 +381,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${btnInactiveClass}`}
             title="Rotate +90° Clockwise"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-              <path d="M3 3v5h5" />
-            </svg>
+            <GuiIconRenderer icon={GUI_ICONS.general.refresh} className="w-4 h-4" />
           </button>
           <span className={tooltipClass}>
             Rotate +90° CW
@@ -426,10 +398,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${btnActiveClass}`}
             title="Reset Pivot to Center"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
-            </svg>
+            <GuiIconRenderer icon={GUI_ICONS.general.positionMarker} className="w-4 h-4" />
           </button>
           <span className={tooltipClass}>
             Reset Pivot to Center
@@ -446,12 +415,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${is3DMode ? btnActiveClass : btnInactiveClass}`}
             title="Toggle 3D Perspective Orbit"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3z" />
-              <path d="M12 12v9" />
-              <path d="m12 12 8-4.5" />
-              <path d="M12 12 4 7.5" />
-            </svg>
+            <GuiIconRenderer icon={GUI_ICONS.general.transform} className="w-4 h-4" />
           </button>
           <span className={tooltipClass}>
             {is3DMode ? 'Disable 3D Orbit' : 'Enable 3D Orbit'}
@@ -468,10 +432,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             className={`${btnBaseClass} ${isCropMode ? btnActiveClass : btnInactiveClass}`}
             title="Toggle Crop Mode"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M6 2v14a2 2 0 0 0 2 2h14" />
-              <path d="M18 22V8a2 2 0 0 0-2-2H2" />
-            </svg>
+            <GuiIconRenderer icon={GUI_ICONS.general.cut} className="w-4 h-4" />
           </button>
           <span className={tooltipClass}>
             {isCropMode ? 'Exit Crop Mode' : 'Crop Insets'}
@@ -497,11 +458,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
               className={`${btnBaseClass} ${btnActiveClass}`}
               title="Reset Crop"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <path d="m3 3 18 18" />
-                <path d="M6 2v14a2 2 0 0 0 2 2h14" />
-                <path d="M18 22V8a2 2 0 0 0-2-2H2" />
-              </svg>
+              <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-4 h-4" />
             </button>
             <span className={tooltipClass}>
               Reset Crop (Uncrop 100%)
@@ -519,16 +476,10 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
           className={`${btnBaseClass} ${justCopied ? btnActiveClass : btnInactiveClass}`}
           title="Copy State (Scale & Rotation)"
         >
-          {justCopied ? (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-[var(--accent)]">
-              <path d="m5 12 5 5L20 7" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <rect width="13" height="13" x="9" y="9" rx="2" ry="2" />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-            </svg>
-          )}
+          <GuiIconRenderer
+            icon={justCopied ? GUI_ICONS.general.check : GUI_ICONS.general.files}
+            className={`w-4 h-4 ${justCopied ? 'text-[var(--accent)]' : ''}`}
+          />
         </button>
         <span className={tooltipClass}>
           {justCopied ? 'State Copied!' : `Copy State (Scale: ${Math.round(scale * 100)}%, Rot: ${rotation}°)`}
@@ -552,11 +503,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
               : 'Paste State (Empty Clipboard)'
           }
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-            <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-            <path d="m9 14 2 2 4-4" />
-          </svg>
+          <GuiIconRenderer icon={GUI_ICONS.general.load} className="w-4 h-4" />
         </button>
         <span className={tooltipClass}>
           {clipboardState
@@ -575,10 +522,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
           className={`${btnBaseClass} ${btnInactiveClass}`}
           title="Center on Canvas"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-            <circle cx="12" cy="12" r="7" />
-            <path d="M12 2v3m0 14v3M2 12h3m14 0h3" />
-          </svg>
+          <GuiIconRenderer icon={GUI_ICONS.general.circle} className="w-4 h-4" />
         </button>
         <span className={tooltipClass}>
           Center on Canvas (50%, 50%)
@@ -593,10 +537,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
           className={`${btnBaseClass} ${btnInactiveClass} hover:text-red-400 hover:border-red-500/50 hover:bg-red-500/10`}
           title="Reset All Transforms"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-            <path d="M3 3v5h5" />
-          </svg>
+          <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-4 h-4" />
         </button>
         <span className={tooltipClass}>
           Reset All Transforms
@@ -614,13 +555,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
               className={`${btnBaseClass} bg-red-500/10 border-red-500/30 text-red-400 hover:text-white hover:bg-red-600 hover:border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.25)]`}
               title="Delete Element from Canvas"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <path d="M3 6h18" />
-                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                <line x1="10" x2="10" y1="11" y2="17" />
-                <line x1="14" x2="14" y1="11" y2="17" />
-              </svg>
+              <GuiIconRenderer icon={GUI_ICONS.general.trash} className="w-4 h-4" />
             </button>
             <span className={tooltipClass}>
               Delete Element

@@ -750,13 +750,16 @@ export default function VNMakerTimeline(props: VNMakerTimelineProps) {
                         IF {line.condition?.variableKey || 'var'} {line.condition?.operator || '=='} {String(line.condition?.value ?? true)}
                       </span>
                       {line.conditionalTargetSceneId && (
-                        <span className="text-emerald-600 dark:text-emerald-400 text-[10px]">
-                          ➔ {allAvailableScenes.find((s) => s.id === line.conditionalTargetSceneId)?.name || line.conditionalTargetSceneId}
+                        <span className="text-emerald-600 dark:text-emerald-400 text-[10px] inline-flex items-center gap-1">
+                          <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className="w-2.5 h-2.5" />
+                          <span>{allAvailableScenes.find((s) => s.id === line.conditionalTargetSceneId)?.name || line.conditionalTargetSceneId}</span>
                         </span>
                       )}
                       {line.elseTargetSceneId && (
-                        <span className="text-amber-600 dark:text-amber-400 text-[10px]">
-                          ELSE ➔ {allAvailableScenes.find((s) => s.id === line.elseTargetSceneId)?.name || line.elseTargetSceneId}
+                        <span className="text-amber-600 dark:text-amber-400 text-[10px] inline-flex items-center gap-1">
+                          <span>ELSE</span>
+                          <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className="w-2.5 h-2.5" />
+                          <span>{allAvailableScenes.find((s) => s.id === line.elseTargetSceneId)?.name || line.elseTargetSceneId}</span>
                         </span>
                       )}
                     </div>
@@ -855,8 +858,9 @@ export default function VNMakerTimeline(props: VNMakerTimelineProps) {
                           >
                             <span className="font-bold uppercase text-[8px] opacity-75">#{optIdx + 1}</span>
                             <span className="truncate max-w-[90px]">{opt.label || `Opt ${optIdx + 1}`}</span>
-                            <span className="font-bold text-purple-400">
-                              {targetIdx !== null && targetIdx >= 0 ? `➔ #${targetIdx + 1}` : '➔ Next'}
+                            <span className="font-bold text-purple-400 inline-flex items-center gap-0.5">
+                              <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className="w-2.5 h-2.5" />
+                              <span>{targetIdx !== null && targetIdx >= 0 ? `#${targetIdx + 1}` : 'Next'}</span>
                             </span>
                           </button>
                         );

@@ -383,10 +383,11 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             <button
               type="button"
               onClick={() => onUpdateClip(clip.id, { fontFamily: undefined })}
-              className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1"
+              className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1 flex items-center gap-1"
               title="Reset to default font"
             >
-              ✕ Reset
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+              <span>Reset</span>
             </button>
           )}
         </div>
@@ -562,10 +563,10 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             <button
               type="button"
               onClick={() => onUpdateClip(clip.id, { cursorType: undefined })}
-              className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1"
+              className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1 flex items-center justify-center"
               title="Reset cursor"
             >
-              ✕
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
             </button>
           )}
         </div>

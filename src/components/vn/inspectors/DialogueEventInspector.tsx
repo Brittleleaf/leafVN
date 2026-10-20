@@ -149,9 +149,10 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                 ? 'bg-pink-500/20 border-pink-500 text-pink-300 shadow-sm'
                 : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
             }`}
-            title={currentLine.characterDisableSnap ? 'Snap magnético desactivado (Mover libre)' : 'Snap magnético activo'}
+            title={currentLine.characterDisableSnap ? 'Magnetic snap disabled (Free move)' : 'Magnetic snap enabled'}
           >
-            <span>{currentLine.characterDisableSnap ? '🧲 Snap: OFF' : '🧲 Snap: ON'}</span>
+            <GuiIconRenderer icon={GUI_ICONS.general.snap} className="w-3.5 h-3.5" />
+            <span>Snap: {currentLine.characterDisableSnap ? 'OFF' : 'ON'}</span>
           </button>
 
           {/* Lock Element toggle */}
@@ -167,9 +168,10 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                 ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-sm'
                 : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
             }`}
-            title={currentLine.characterLocked ? 'Desbloquear personaje' : 'Bloquear personaje para congelar su posición'}
+            title={currentLine.characterLocked ? 'Unlock character' : 'Lock character to freeze placement'}
           >
-            <span>{currentLine.characterLocked ? '🔒 Locked' : '🔓 Lock'}</span>
+            <GuiIconRenderer icon={currentLine.characterLocked ? GUI_ICONS.security.lockClosed : GUI_ICONS.security.lockOpen} className="w-3.5 h-3.5" />
+            <span>{currentLine.characterLocked ? 'Locked' : 'Lock'}</span>
           </button>
 
           {/* Reset custom staging button */}
@@ -187,10 +189,11 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-2 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] hover:bg-red-500/20 hover:text-red-300 text-[var(--muted)] text-xs font-bold cursor-pointer transition-colors"
-              title="Restablecer a posición por defecto"
+              className="px-2 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] hover:bg-red-500/20 hover:text-red-300 text-[var(--muted)] text-xs font-bold cursor-pointer transition-colors flex items-center gap-1"
+              title="Reset to default transform"
             >
-              ↺ Reset
+              <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-3 h-3" />
+              <span>Reset</span>
             </button>
           )}
         </div>
@@ -263,9 +266,10 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                   ? 'bg-purple-500/20 border-purple-400 text-purple-300'
                   : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
               }`}
-              title={isFlipped ? 'Voltear horizontal activo (Espejo)' : 'Voltear horizontalmente (Espejo)'}
+              title={isFlipped ? 'Horizontal flip active (Mirror)' : 'Flip horizontally (Mirror)'}
             >
-              <span>🪞 Voltear</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.reflectHorizontal} className="w-3.5 h-3.5" />
+              <span>Flip</span>
             </button>
 
             {/* Button: Copiar escala a los demás diálogos */}
@@ -277,10 +281,11 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                     context.handleApplyScaleToAllDialogues(currentSpeaker.id, currentEffectiveScale);
                   }
                 }}
-                className="px-2.5 py-1 rounded-lg border border-[var(--accent)] bg-[var(--accent)] hover:opacity-90 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shadow-sm"
-                title={`Aplica ${currentEffectiveScale}x a todos los diálogos de ${currentSpeaker.name} en la historia`}
+                className="px-2.5 py-1 rounded-lg border border-[var(--accent)] bg-[var(--accent)] hover:opacity-90 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                title={`Apply ${currentEffectiveScale}x to all dialogues of ${currentSpeaker.name} across the story`}
               >
-                <span>📋 Copiar escala a los demás diálogos</span>
+                <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
+                <span>Apply Scale to All Dialogues</span>
               </button>
             )}
           </div>
@@ -335,10 +340,10 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
             <button
               type="button"
               onClick={() => onUpdateCurrentLine('fontFamily', undefined)}
-              className="p-1 rounded hover:bg-red-500/20 text-red-400 text-xs cursor-pointer transition-colors"
+              className="p-1 rounded hover:bg-red-500/20 text-red-400 text-xs cursor-pointer transition-colors flex items-center justify-center"
               title="Remove font override"
             >
-              ✕
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
             </button>
           )}
         </div>
@@ -398,10 +403,10 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                 onClick={() => {
                   onPatchCurrentLine({ cursorType: undefined, cursorMode: undefined });
                 }}
-                className="p-1 rounded hover:bg-red-500/20 text-red-400 text-xs cursor-pointer transition-colors"
+                className="p-1 rounded hover:bg-red-500/20 text-red-400 text-xs cursor-pointer transition-colors flex items-center justify-center"
                 title="Remove cursor override"
               >
-                ✕
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
               </button>
             </>
           )}

@@ -110,7 +110,7 @@ export default function GlobalTextBoxModal({
             className="w-7 h-7 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
             title="Close window"
           >
-            ✕
+            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -250,10 +250,10 @@ export default function GlobalTextBoxModal({
                     <button
                       type="button"
                       onClick={() => onUpdateStory({ ...story, defaultFontFamily: undefined })}
-                      className="p-2 bg-[var(--card-bg)] hover:bg-red-500/20 text-red-400 border border-[var(--border)] rounded-xl cursor-pointer transition-colors text-xs shrink-0"
+                      className="p-2 bg-[var(--card-bg)] hover:bg-red-500/20 text-red-400 border border-[var(--border)] rounded-xl cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                       title="Reset font"
                     >
-                      ✕
+                      <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>

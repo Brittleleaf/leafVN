@@ -23,7 +23,7 @@ export const MediaEventInspector: React.FC<EventInspectorSubProps> = ({
           onClick={() => onOpenGlobalModal('scenes')}
           className="text-[10px] text-[var(--accent)] hover:underline cursor-pointer"
         >
-          Background Gallery ➔
+          Background Gallery
         </button>
       </div>
 

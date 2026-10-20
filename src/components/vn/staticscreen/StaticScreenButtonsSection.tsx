@@ -133,10 +133,10 @@ export function StaticScreenButtonsSection({
                     e.stopPropagation();
                     handleDeleteButton(btn.id);
                   }}
-                  className="text-red-400 hover:text-red-300 px-1 cursor-pointer"
+                  className="text-red-400 hover:text-red-300 p-1 cursor-pointer flex items-center justify-center"
                   title="Delete Button"
                 >
-                  ✕
+                  <GuiIconRenderer icon={GUI_ICONS.general.trash} className="w-3.5 h-3.5" />
                 </button>
               </div>
 
@@ -151,11 +151,11 @@ export function StaticScreenButtonsSection({
                         onChange={(e) => handleUpdateButton(btn.id, { action: e.target.value as any })}
                         className="w-full px-1.5 py-1 rounded border border-[var(--border)] bg-[var(--btn-bg)] text-[var(--text)] text-[11px] cursor-pointer"
                       >
-                        <option value="next_scene">➔ Next Scenario / Continue</option>
-                        <option value="retry_previous">↺ Retry Previous (Smart)</option>
+                        <option value="next_scene">Next Scenario / Continue</option>
+                        <option value="retry_previous">Retry Previous (Smart)</option>
                         <option value="load_game">Open Load Game</option>
-                        <option value="main_menu">⌂ Return to Title</option>
-                        <option value="jump_scene">➔ Jump to Scene</option>
+                        <option value="main_menu">Return to Title</option>
+                        <option value="jump_scene">Jump to Scene</option>
                       </select>
                     </div>
 
@@ -226,10 +226,10 @@ export function StaticScreenButtonsSection({
                           <button
                             type="button"
                             onClick={() => handleUpdateButton(btn.id, { fontFamily: undefined })}
-                            className="px-1.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0"
+                            className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-red-500/20 text-red-400 cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                             title="Reset font to inherit"
                           >
-                            ✕
+                            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
                           </button>
                         )}
                       </div>
@@ -261,7 +261,7 @@ export function StaticScreenButtonsSection({
                           onChange={(e) => handleUpdateButton(btn.id, { hideContainer: e.target.checked })}
                           className="rounded border-[var(--border)] text-[var(--accent)] focus:ring-[var(--accent)] cursor-pointer"
                         />
-                        <span>Sin Contenedor (Texto Flotante)</span>
+                        <span>No Container (Floating Text)</span>
                       </label>
                     </div>
                   </div>
@@ -269,8 +269,8 @@ export function StaticScreenButtonsSection({
                   {/* Direct Canvas Manipulation Badge */}
                   <div className="p-2.5 rounded-lg border border-[#D17BF8]/40 bg-[#D17BF8]/10 text-xs space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#D17BF8] flex items-center gap-1">
-                        <span>✥</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#D17BF8] flex items-center gap-1.5">
+                        <GuiIconRenderer icon={GUI_ICONS.general.transform} className="w-3.5 h-3.5" />
                         <span>Direct Canvas Transform</span>
                       </span>
                       <span className="text-[9px] font-mono text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">

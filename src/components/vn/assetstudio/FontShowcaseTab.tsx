@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { VNStory, VNAssetItem } from '@/types/vn';
 import { VN_FONT_CATALOG, ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
 import { playSfx } from '@/lib/audioSettings';
+import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 interface FontShowcaseTabProps {
   story: VNStory;
@@ -61,7 +62,8 @@ export function FontShowcaseTab({
 
           {story.defaultFontFamily && (
             <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-xs text-emerald-700 dark:text-emerald-300 font-mono">
-              <span>✓ Current Project Font:</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Current Project Font:</span>
               <strong className="text-[var(--text)] uppercase">{story.defaultFontFamily}</strong>
             </div>
           )}
@@ -157,8 +159,9 @@ export function FontShowcaseTab({
                 </div>
 
                 {isCurrentDefault && (
-                  <span className="px-2 py-0.5 rounded-xl text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 shrink-0">
-                    ✓ ACTIVE
+                  <span className="px-2 py-0.5 rounded-xl text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 shrink-0 flex items-center gap-1">
+                    <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3 h-3 text-emerald-500" />
+                    <span>ACTIVE</span>
                   </span>
                 )}
               </div>

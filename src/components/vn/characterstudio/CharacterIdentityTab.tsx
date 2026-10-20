@@ -121,10 +121,10 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
               <button
                 type="button"
                 onClick={() => handleUpdateChar(activeChar.id, { fontFamily: undefined })}
-                className="p-2 bg-[var(--well-bg)] hover:bg-red-500/20 text-red-400 border border-[var(--border)] rounded-xl cursor-pointer transition-colors text-xs shrink-0"
+                className="p-2 bg-[var(--well-bg)] hover:bg-red-500/20 text-red-400 border border-[var(--border)] rounded-xl cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                 title="Reset to inherited font"
               >
-                ✕
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
               </button>
             )}
           </div>

@@ -259,7 +259,7 @@ export default function StaticScreenStudio({
         {/* Header & Quick Presets */}
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <GuiIconRenderer icon={GUI_ICONS.general.dead} className="w-5 h-5 text-red-500" />
+            <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-5 h-5 text-[var(--accent)]" />
             <h3 className="font-bold text-sm tracking-wide uppercase text-[var(--text)]">
               Static Screen Studio
             </h3>
@@ -273,28 +273,28 @@ export default function StaticScreenStudio({
               onClick={() => handleApplyPreset('title')}
               className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-emerald-500/60 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5" />
+              <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-3.5 h-3.5" />
               <span>Title / Menu</span>
             </button>
             <button
               onClick={() => handleApplyPreset('death')}
               className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-red-500/60 bg-red-950/40 hover:bg-red-900/60 text-red-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.dead} className="w-3.5 h-3.5" />
+              <GuiIconRenderer icon={GUI_ICONS.general.skullDeath} className="w-3.5 h-3.5" />
               <span>Death Preset</span>
             </button>
             <button
               onClick={() => handleApplyPreset('ending')}
               className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-purple-500/60 bg-purple-950/40 hover:bg-purple-900/60 text-purple-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.confirmed} className="w-3.5 h-3.5" />
+              <GuiIconRenderer icon={GUI_ICONS.general.end} className="w-3.5 h-3.5" />
               <span>Ending Preset</span>
             </button>
             <button
               onClick={() => handleApplyPreset('intro')}
               className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-sky-500/60 bg-sky-950/40 hover:bg-sky-900/60 text-sky-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
+              <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5" />
               <span>Intro Preset</span>
             </button>
           </div>

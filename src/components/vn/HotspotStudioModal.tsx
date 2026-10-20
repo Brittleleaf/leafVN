@@ -320,7 +320,10 @@ export default function HotspotStudioModal({
                           </span>
                           <span className="text-[10px] text-[var(--muted)] font-mono block truncate">
                             {hs.actionType === 'jump_scene' ? (
-                              `➔ Scene: ${targetSc?.name || 'Unassigned'}`
+                              <span className="inline-flex items-center gap-1">
+                                <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className="w-2.5 h-2.5 text-[var(--accent)] inline" />
+                                <span>Scene: {targetSc?.name || 'Unassigned'}</span>
+                              </span>
                             ) : hs.actionType === 'inspect' ? (
                               <span className="inline-flex items-center gap-1">
                                 <GuiIconRenderer icon={GUI_ICONS.general.search} className="w-3 h-3 text-[var(--accent)] inline" />
@@ -1010,7 +1013,10 @@ export default function HotspotStudioModal({
                               : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
                           }`}
                         >
-                          {activeHs.locked ? '🔒 Locked (Frozen)' : '🔓 Lock Element'}
+                          <span className="flex items-center justify-center gap-1.5">
+                            <GuiIconRenderer icon={activeHs.locked ? GUI_ICONS.security.lockClosed : GUI_ICONS.security.lockOpen} className="w-3.5 h-3.5" />
+                            <span>{activeHs.locked ? 'Locked (Frozen)' : 'Lock Element'}</span>
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -1167,9 +1173,10 @@ export default function HotspotStudioModal({
             <button
               type="button"
               onClick={() => setShowScenePreview(false)}
-              className="px-4 py-1.5 bg-red-950/80 hover:bg-red-800 border border-red-600 text-red-200 rounded-xl text-xs font-bold uppercase cursor-pointer transition-all shadow"
+              className="px-4 py-1.5 bg-red-950/80 hover:bg-red-800 border border-red-600 text-red-200 rounded-xl text-xs font-bold uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
             >
-              ✕ Close Preview
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
+              <span>Close Preview</span>
             </button>
           </div>
 

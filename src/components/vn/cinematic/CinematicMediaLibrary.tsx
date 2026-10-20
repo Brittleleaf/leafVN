@@ -303,9 +303,9 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)] text-xs cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)] text-xs cursor-pointer flex items-center justify-center"
             >
-              ✕
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
             </button>
           )}
         </div>
@@ -313,10 +313,10 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
         {/* TABS (5 SECTIONS) */}
         <div className="grid grid-cols-5 gap-1 p-1 bg-[var(--well-bg)] rounded-xl border border-[var(--border)] text-[10px] font-bold">
           {[
-            { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.masks, count: characters.length },
+            { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.group, count: characters.length },
             { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.general.screenFx, count: Object.keys(SCREEN_FX_REGISTRY).length },
-            { id: 'media', label: 'Media', icon: GUI_ICONS.general.background, count: mediaItems.length },
-            { id: 'text', label: 'Titles', icon: GUI_ICONS.general.conversation, count: 6 },
+            { id: 'media', label: 'Media', icon: GUI_ICONS.general.gallery, count: mediaItems.length },
+            { id: 'text', label: 'Titles', icon: GUI_ICONS.general.texts, count: 6 },
             { id: 'audio', label: 'Audio', icon: GUI_ICONS.general.sound, count: audioAssets.length },
           ].map((tab) => (
             <button

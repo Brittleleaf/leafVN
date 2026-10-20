@@ -656,7 +656,8 @@ export default function SceneMapModal({
             onClick={onClose}
             className="px-3.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
           >
-            <span>✕</span> Return to Editor
+            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
+            <span>Return to Editor</span>
           </button>
         </div>
       </header>
@@ -861,8 +862,9 @@ export default function SceneMapModal({
                 >
                   <div className="flex items-center gap-1.5 truncate">
                     {isStart ? (
-                      <span className="text-[10px] bg-amber-500 text-black font-extrabold px-1.5 py-0.2 rounded shadow">
-                        ★ START
+                      <span className="text-[10px] bg-amber-500 text-black font-extrabold px-1.5 py-0.5 rounded shadow flex items-center gap-1">
+                        <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-3 h-3 text-black" />
+                        <span>START</span>
                       </span>
                     ) : (
                       <GuiIconRenderer icon={GUI_ICONS.general.image} size={12} className="text-[var(--accent)]" />
@@ -942,10 +944,11 @@ export default function SceneMapModal({
                   {!isStart && (
                     <button
                       onClick={() => handleSetStartScene(sc.id)}
-                      className="px-2 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-amber-500 rounded-lg text-[11px] transition-colors cursor-pointer"
+                      className="px-2 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-amber-500 rounded-lg text-[11px] transition-colors cursor-pointer flex items-center gap-1"
                       title="Set as start scene for this chapter"
                     >
-                      ★ Start
+                      <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-3 h-3" />
+                      <span>Start</span>
                     </button>
                   )}
 
@@ -1096,7 +1099,7 @@ export default function SceneMapModal({
                 onClick={() => setShowLibraryModal(false)}
                 className="w-7 h-7 flex items-center justify-center rounded-lg text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] text-base font-bold cursor-pointer transition-colors"
               >
-                ✕
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
               </button>
             </div>
 

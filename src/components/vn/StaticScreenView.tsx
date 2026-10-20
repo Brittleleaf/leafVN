@@ -58,7 +58,7 @@ export const DEFAULT_DEATH_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-retry',
-      label: '↺ RETRY FROM LAST CHECKPOINT',
+      label: 'RETRY FROM LAST CHECKPOINT',
       action: 'retry_previous',
       style: 'danger',
       size: 'md',
@@ -76,7 +76,7 @@ export const DEFAULT_DEATH_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-title',
-      label: '⌂ RETURN TO MAIN MENU',
+      label: 'RETURN TO MAIN MENU',
       action: 'main_menu',
       style: 'ghost',
       size: 'md',
@@ -103,7 +103,7 @@ export const DEFAULT_ENDING_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-retry',
-      label: '↺ REPLAY PREVIOUS SCENARIO',
+      label: 'REPLAY PREVIOUS SCENARIO',
       action: 'retry_previous',
       style: 'primary',
       size: 'lg',
@@ -112,7 +112,7 @@ export const DEFAULT_ENDING_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-title',
-      label: '⌂ MAIN MENU',
+      label: 'MAIN MENU',
       action: 'main_menu',
       style: 'ghost',
       size: 'md',
@@ -139,7 +139,7 @@ export const DEFAULT_INTRO_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-begin',
-      label: 'ENTER SCENARIO »',
+      label: 'ENTER SCENARIO',
       action: 'next_scene',
       style: 'primary',
       size: 'lg',
@@ -152,7 +152,7 @@ export const DEFAULT_INTRO_CONFIG: VNStaticScreenConfig = {
 export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
   purpose: 'title',
   title: 'LEAF VISUAL NOVEL',
-  subtitle: 'Una experiencia interactiva creada en Leaf VN Studio',
+  subtitle: 'An interactive story created with Leaf VN Studio',
   titleColor: '#ffffff',
   subtitleColor: '#d4d4d8',
   titleAnimation: 'glow',
@@ -166,7 +166,7 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-new-game',
-      label: '▶ NUEVA PARTIDA',
+      label: 'NEW GAME',
       action: 'next_scene',
       style: 'cyber',
       size: 'lg',
@@ -175,7 +175,7 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-load-game',
-      label: '📁 CARGAR PARTIDA',
+      label: 'LOAD GAME',
       action: 'load_game',
       style: 'glass',
       size: 'md',
@@ -184,7 +184,7 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-credits',
-      label: '★ CRÉDITOS & EXTRAS',
+      label: 'CREDITS',
       action: 'main_menu',
       style: 'ghost',
       size: 'sm',
@@ -396,28 +396,6 @@ export default function StaticScreenView({
         />
       )}
 
-      {/* Purpose Badge (Death / End / Intro) */}
-      <div className="absolute top-5 left-1/2 -translate-x-1/2 z-30 inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono tracking-widest uppercase border border-white/10 bg-black/60 backdrop-blur-md text-gray-300 shadow-md pointer-events-none">
-        {config.purpose === 'death' && (
-          <span className="text-red-500 flex items-center gap-1.5">
-            <GuiIconRenderer icon={GUI_ICONS.general.dead} className="w-3.5 h-3.5" />
-            <span>CASUALTY SCREEN</span>
-          </span>
-        )}
-        {config.purpose === 'ending' && (
-          <span className="text-purple-400 flex items-center gap-1.5">
-            <GuiIconRenderer icon={GUI_ICONS.general.confirmed} className="w-3.5 h-3.5" />
-            <span>STORY CONCLUSION</span>
-          </span>
-        )}
-        {config.purpose === 'intro' && (
-          <span className="text-cyan-400 flex items-center gap-1.5">
-            <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
-            <span>ACT INTRO CARD</span>
-          </span>
-        )}
-        {config.purpose === 'custom' && <span className="text-amber-400">✦ STATIC EVENT</span>}
-      </div>
 
       {/* Title with customizable typography, size, animation & canvas transform */}
       {config.title && (() => {
