@@ -33,7 +33,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
           <input
             type="text"
             value={activeChar.name}
-            placeholder="Name or alias..."
+            placeholder="Enter character name here..."
             onChange={(e) => handleUpdateChar(activeChar.id, { name: e.target.value })}
             className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-[var(--text)] font-bold text-sm outline-none focus:border-[var(--accent)] transition-colors"
           />
@@ -47,7 +47,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
           <input
             type="text"
             value={activeChar.badgeTitle || ''}
-            placeholder="e.g. LEAD RESEARCHER, SCIENTIST..."
+            placeholder="Enter badge or title here..."
             onChange={(e) => handleUpdateChar(activeChar.id, { badgeTitle: e.target.value })}
             className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-[var(--text)] text-xs outline-none focus:border-[var(--accent)] transition-colors"
           />
@@ -301,7 +301,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
         <textarea
           rows={4}
           value={activeChar.description || ''}
-          placeholder="Write the backstory, personality, flaws, and motivations for this character..."
+          placeholder="Enter character description here..."
           onChange={(e) => handleUpdateChar(activeChar.id, { description: e.target.value })}
           className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-3 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] leading-relaxed font-sans transition-colors"
         />

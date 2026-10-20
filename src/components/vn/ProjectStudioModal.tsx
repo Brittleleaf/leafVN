@@ -236,7 +236,7 @@ export default function ProjectStudioModal({
                   type="text"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="e.g. Chronicles of the Void"
+                  placeholder="Enter project title here..."
                   className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                   required
                 />
@@ -248,7 +248,7 @@ export default function ProjectStudioModal({
                   type="text"
                   value={newAuthor}
                   onChange={(e) => setNewAuthor(e.target.value)}
-                  placeholder="e.g. Studio Alpha"
+                  placeholder="Enter author name here..."
                   className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                 />
               </div>
@@ -271,7 +271,7 @@ export default function ProjectStudioModal({
                   type="text"
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="Story description..."
+                  placeholder="Enter story description here..."
                   className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                 />
               </div>

@@ -78,7 +78,7 @@ export function AssetRenameModal({
             type="text"
             value={renameInputName}
             onChange={(e) => setRenameInputName(e.target.value)}
-            placeholder="New file name"
+            placeholder="Enter new file name here..."
             className="bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-amber-400 w-full sm:w-64"
           />
           <button

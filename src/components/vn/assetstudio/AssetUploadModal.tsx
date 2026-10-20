@@ -340,7 +340,7 @@ export function AssetUploadModal({
                 type="text"
                 value={newAssetName}
                 onChange={(e) => setNewAssetName(e.target.value)}
-                placeholder="e.g. Cyberpunk Alley / Laser Blast"
+                placeholder="Enter asset name here..."
                 className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-cyan-400"
               />
             </div>
@@ -352,7 +352,7 @@ export function AssetUploadModal({
                 type="text"
                 value={newAssetCategory}
                 onChange={(e) => setNewAssetCategory(e.target.value)}
-                placeholder="e.g. Scenery, Futuristic, Combat"
+                placeholder="Enter category or tag here..."
                 className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-cyan-400"
               />
             </div>
@@ -476,7 +476,7 @@ export function AssetUploadModal({
                 type="text"
                 value={newAssetName}
                 onChange={(e) => setNewAssetName(e.target.value)}
-                placeholder="e.g. Metallic Slam / Dark Hallway"
+                placeholder="Enter asset name here..."
                 className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-emerald-500"
               />
             </div>

@@ -126,7 +126,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             type="text"
             value={clip.speaker || ''}
             onChange={(e) => onUpdateClip(clip.id, { speaker: e.target.value })}
-            placeholder="Speaker display name (e.g. Justin / Commander / Narrator)"
+            placeholder="Enter speaker name here..."
             className="w-full px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-xs outline-none focus:border-[var(--accent)] font-semibold"
           />
         </div>
@@ -139,7 +139,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
               type="text"
               value={clip.speakerBadge || ''}
               onChange={(e) => onUpdateClip(clip.id, { speakerBadge: e.target.value })}
-              placeholder="e.g. AGENTE DE CAMPO"
+              placeholder="Enter badge title here..."
               className="w-full px-2 py-1 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-[11px] font-mono outline-none"
             />
           </div>
@@ -242,7 +242,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
           value={clip.text || ''}
           onChange={(e) => onUpdateClip(clip.id, { text: e.target.value })}
           className="w-full px-3 py-2 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] text-[var(--text)] text-xs resize-none outline-none focus:border-[var(--accent)] leading-relaxed"
-          placeholder="Type what the character says in this cinematic scene..."
+          placeholder="Enter dialogue text here..."
         />
         {/* Quick presets */}
         <div className="flex flex-wrap gap-1 pt-0.5">

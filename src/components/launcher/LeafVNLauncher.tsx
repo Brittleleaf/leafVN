@@ -10,6 +10,172 @@ import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme } from '@/lib/
 import VNMaker from '@/components/vn/VNMaker';
 import VNPlayer from '@/components/vn/VNPlayer';
 
+// Diccionario de traducción para el Launcher (Inglés por defecto, Español configurable)
+const LAUNCHER_I18N = {
+  en: {
+    menuFile: 'File',
+    menuOpen: 'Open',
+    menuRefresh: 'Refresh',
+    menuTemplates: 'Templates',
+    menuSettings: 'Settings',
+    menuHome: 'Home',
+    searchPlaceholder: 'Search projects...',
+    filterPlaceholder: 'Filter recent files',
+    newProject: '+ New Project',
+    openProject: 'Open',
+    home: 'Home',
+    templates: 'Templates',
+    settings: 'Settings',
+    subtitle: 'Manage your projects, craft interactive stories, and produce visual novels without limits.',
+    welcomeTo: 'Welcome to',
+    recent: 'Recent',
+    sort: 'Sort:',
+    sortByRecent: 'Recent',
+    sortByTitle: 'Title',
+    sortByScenes: 'Scenes',
+    sortDesc: 'Descending',
+    sortAsc: 'Ascending',
+    gridView: 'Grid view',
+    listView: 'List view',
+    loadingProjects: 'Loading disk projects...',
+    noProjectsFound: 'No projects found',
+    noProjectsMatch: 'No projects match your current search filter.',
+    noProjectsSubtitle: 'Create your first visual novel or open an existing file to get started.',
+    createFirstProject: 'Create New Project',
+    thProject: 'Project',
+    thAuthor: 'Author',
+    thModified: 'Last Modified',
+    thScenes: 'Scenes',
+    thActions: 'Actions',
+    btnPlay: 'Play ▶',
+    btnExport: 'Export JSON',
+    btnDuplicate: 'Duplicate',
+    btnDelete: 'Delete',
+    btnEdit: 'Edit',
+    systemEngine: 'Leaf VN Studio',
+    systemDesc: 'Autonomous Visual Novel Engine',
+    themeLabel: 'Theme:',
+    langLabel: 'Language:',
+    // Templates
+    templatesTitle: 'Project Templates',
+    templatesSubtitle: 'Start quickly with pre-configured setups for different narrative genres.',
+    tmplBlankTitle: 'Blank Project',
+    tmplBlankDesc: 'An empty canvas with a single initial scene to structure your story from scratch.',
+    tmplSampleTitle: 'Complete Narrative Adventure',
+    tmplSampleDesc: 'Includes pre-configured characters, emotions, screen effects, background music, and decision branches.',
+    tmplCinematicTitle: 'Cinematic Sequence / Trailer',
+    tmplCinematicDesc: 'Focused on background video tracks, animated subtitles, and synchronized audio transitions.',
+    useTemplate: 'Use Template',
+    // Settings
+    settingsTitle: 'Studio Settings',
+    settingsSubtitle: 'Configure your workspace language, visual theme, and engine preferences.',
+    languageSectionTitle: 'Interface Language',
+    languageSectionDesc: 'Choose the display language for the launcher and studio interface.',
+    themeSectionTitle: 'Engine Appearance & Visual Theme',
+    themeSectionDesc: 'Switch the design system tokens, colors, and typography across the editor and launcher.',
+    engineSectionTitle: 'Engine Architecture & Storage',
+    engineSectionDesc: 'Current storage adapters, filesystem status, and deployment metadata.',
+    engineStatusReady: 'Operational / Local & Cloud Sync',
+    engineVercelUrl: 'Production URL: leafvn.vercel.app',
+    // Modal
+    modalTitle: 'New Visual Novel Project',
+    modalProjectName: 'Project Title *',
+    modalProjectNamePlaceholder: 'Enter project name here...',
+    modalAuthor: 'Author / Studio',
+    modalAuthorPlaceholder: 'Enter author name here...',
+    modalTemplate: 'Base Template',
+    modalDescription: 'Short Description',
+    modalDescriptionPlaceholder: 'Enter description here...',
+    modalCancel: 'Cancel',
+    modalCreate: 'Create Project',
+    modalCreating: 'Creating...',
+    confirmDelete: 'Permanently delete project "{title}"?\n\nThis action will erase its data.',
+    copySuffix: 'Copy',
+    scenesCountSuffix: 'scenes',
+  },
+  es: {
+    menuFile: 'Archivo',
+    menuOpen: 'Abrir',
+    menuRefresh: 'Actualizar',
+    menuTemplates: 'Plantillas',
+    menuSettings: 'Ajustes',
+    menuHome: 'Inicio',
+    searchPlaceholder: 'Buscar proyectos...',
+    filterPlaceholder: 'Filtrar archivos recientes',
+    newProject: '+ Archivo nuevo',
+    openProject: 'Abrir',
+    home: 'Inicio',
+    templates: 'Plantillas',
+    settings: 'Ajustes',
+    subtitle: 'Gestiona tus proyectos, diseña guiones interactivos y produce novelas visuales sin límites.',
+    welcomeTo: 'Bienvenido a',
+    recent: 'Recientes',
+    sort: 'Ordenar:',
+    sortByRecent: 'Recientes',
+    sortByTitle: 'Nombre',
+    sortByScenes: 'Escenarios',
+    sortDesc: 'Descendente',
+    sortAsc: 'Ascendente',
+    gridView: 'Vista cuadrícula',
+    listView: 'Vista lista',
+    loadingProjects: 'Cargando proyectos en disco...',
+    noProjectsFound: 'No se encontraron proyectos',
+    noProjectsMatch: 'Ningún proyecto coincide con el filtro de búsqueda actual.',
+    noProjectsSubtitle: 'Crea tu primera novela visual o abre un archivo existente para comenzar.',
+    createFirstProject: 'Crear Proyecto Nuevo',
+    thProject: 'Proyecto',
+    thAuthor: 'Autor',
+    thModified: 'Última modificación',
+    thScenes: 'Escenarios',
+    thActions: 'Acciones',
+    btnPlay: 'Jugar ▶',
+    btnExport: 'Exportar JSON',
+    btnDuplicate: 'Duplicar',
+    btnDelete: 'Eliminar',
+    btnEdit: 'Editar',
+    systemEngine: 'Leaf VN Studio',
+    systemDesc: 'Motor Autónomo de Visual Novels',
+    themeLabel: 'Tema:',
+    langLabel: 'Idioma:',
+    // Templates
+    templatesTitle: 'Plantillas de Proyecto',
+    templatesSubtitle: 'Comienza rápidamente con configuraciones preparadas para diversos géneros narrativos.',
+    tmplBlankTitle: 'Proyecto Limpio (En Blanco)',
+    tmplBlankDesc: 'Un lienzo vacío con un solo escenario inicial para estructurar tu historia desde cero.',
+    tmplSampleTitle: 'Aventura Narrativa Completa',
+    tmplSampleDesc: 'Incluye personajes preconfigurados, emociones, efectos de pantalla, música de fondo y ramas de decisión.',
+    tmplCinematicTitle: 'Secuencia Cinemática / Tráiler',
+    tmplCinematicDesc: 'Enfocada en pistas de video de fondo, subtítulos animados y transiciones de audio sincronizadas.',
+    useTemplate: 'Usar Plantilla',
+    // Settings
+    settingsTitle: 'Ajustes del Estudio',
+    settingsSubtitle: 'Configura el idioma de tu espacio de trabajo, tema visual y preferencias del motor.',
+    languageSectionTitle: 'Idioma de la Interfaz',
+    languageSectionDesc: 'Selecciona el idioma para el launcher y la interfaz del estudio.',
+    themeSectionTitle: 'Apariencia y Tema Visual del Motor',
+    themeSectionDesc: 'Cambia las variables de diseño, colores y tipografía en el editor y el launcher.',
+    engineSectionTitle: 'Arquitectura y Almacenamiento',
+    engineSectionDesc: 'Adaptadores de guardado, estado de sistema de archivos y metadatos de despliegue.',
+    engineStatusReady: 'Operativo / Sincronización Local y Nube',
+    engineVercelUrl: 'URL de Producción: leafvn.vercel.app',
+    // Modal
+    modalTitle: 'Nuevo Proyecto de Novela Visual',
+    modalProjectName: 'Nombre del Proyecto *',
+    modalProjectNamePlaceholder: 'Enter project name here...',
+    modalAuthor: 'Autor / Estudio',
+    modalAuthorPlaceholder: 'Enter author name here...',
+    modalTemplate: 'Plantilla Base',
+    modalDescription: 'Descripción Breve',
+    modalDescriptionPlaceholder: 'Enter description here...',
+    modalCancel: 'Cancelar',
+    modalCreate: 'Crear Proyecto',
+    modalCreating: 'Creando...',
+    confirmDelete: '¿Eliminar definitivamente el proyecto "{title}"?\n\nEsta acción borrará sus datos.',
+    copySuffix: 'Copia',
+    scenesCountSuffix: 'escenarios',
+  },
+};
+
 export default function LeafVNLauncher() {
   const [projects, setProjects] = useState<VNProjectSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +183,26 @@ export default function LeafVNLauncher() {
   const [sortBy, setSortBy] = useState<'updated' | 'title' | 'scenes'>('updated');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [activeTab, setActiveTab] = useState<'home' | 'templates'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'templates' | 'settings'>('home');
+
+  // Idioma de la interfaz (Inglés por defecto, persistente)
+  const [language, setLanguage] = useState<'en' | 'es'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('leafvn_language');
+      if (saved === 'es' || saved === 'en') return saved;
+    }
+    return 'en';
+  });
+
+  const handleSetLanguage = (lang: 'en' | 'es') => {
+    setLanguage(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('leafvn_language', lang);
+    }
+    playSfx('/assets/sfx/click intro.mp3', false, 0.4);
+  };
+
+  const t = LAUNCHER_I18N[language];
 
   // Tema visual del motor (Modern Dark, Modern Light, ROTP)
   const [editorTheme, setEditorTheme] = useState<VNEditorTheme>(() => getStoredTheme());
@@ -89,7 +274,7 @@ export default function LeafVNLauncher() {
           id: SAMPLE_STORY.id || 'el-renacer-del-pintor',
           title: SAMPLE_STORY.title || 'El Renacer del Pintor',
           author: SAMPLE_STORY.author || 'Justin',
-          description: SAMPLE_STORY.description || 'Historia principal.',
+          description: SAMPLE_STORY.description || 'Story project.',
           version: SAMPLE_STORY.version || '1.0.0',
           coverImageUrl: SAMPLE_STORY.coverImageUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
           updatedAt: SAMPLE_STORY.updatedAt || new Date().toISOString(),
@@ -155,7 +340,7 @@ export default function LeafVNLauncher() {
       return;
     }
 
-    alert('No se pudo abrir el proyecto. Comprueba si fue exportado o eliminado.');
+    alert(language === 'en' ? 'Could not open project. Check if it was exported or deleted.' : 'No se pudo abrir el proyecto. Comprueba si fue exportado o eliminado.');
   };
 
   // Crear nuevo proyecto
@@ -172,7 +357,7 @@ export default function LeafVNLauncher() {
         .trim()
         .replace(/[^a-z0-9_-]/g, '-')
         .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '') || `proyecto-${Date.now()}`;
+        .replace(/^-|-$/g, '') || `project-${Date.now()}`;
 
     const newStory: VNStory = {
       ...SAMPLE_STORY,
@@ -189,22 +374,22 @@ export default function LeafVNLauncher() {
               {
                 id: `chap-01-${Date.now()}`,
                 number: 1,
-                title: 'Capítulo 1: Comienzo',
-                summary: 'Inicio de la historia.',
-                loadingScreen: { enabled: false, title: 'Capítulo 1' },
+                title: 'Chapter 1: Start',
+                summary: 'Beginning of the story.',
+                loadingScreen: { enabled: false, title: 'Chapter 1' },
                 startSceneId: `scene-01-${Date.now()}`,
                 scenes: [
                   {
                     id: `scene-01-${Date.now()}`,
-                    name: 'Escenario Inicial',
-                    description: 'Primera escena del proyecto.',
+                    name: 'Initial Scene',
+                    description: 'First scene of the project.',
                     backgroundUrl: '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
                     timeline: [
                       {
                         id: `ev-init-${Date.now()}`,
                         type: 'dialogue' as const,
-                        customSpeakerName: 'Narrador',
-                        text: 'La historia comienza aquí...',
+                        customSpeakerName: 'Narrator',
+                        text: 'Enter dialogue text here...',
                       },
                     ],
                   },
@@ -228,7 +413,7 @@ export default function LeafVNLauncher() {
       assetCount: 0,
     };
 
-    // 1. Guardar inmediatamente en localStorage como capa de seguridad infalible
+    // 1. Guardar inmediatamente en localStorage
     try {
       const stored = localStorage.getItem('leafvn_local_projects_registry');
       const list: VNProjectSummary[] = stored ? JSON.parse(stored) : [];
@@ -240,7 +425,7 @@ export default function LeafVNLauncher() {
       console.warn('Aviso guardando en localStorage:', storageErr);
     }
 
-    // 2. Intentar guardar en disco vía API (si el filesystem es escribible en local)
+    // 2. Intentar guardar en disco vía API
     try {
       await fetch('/api/projects', {
         method: 'POST',
@@ -318,7 +503,7 @@ export default function LeafVNLauncher() {
       setEngineMode('editor');
       playSfx('/assets/sfx/success.mp3', false, 0.6);
     } catch (err: any) {
-      alert(`Error importando proyecto: ${err?.message || err}`);
+      alert(`Error importing project: ${err?.message || err}`);
     } finally {
       if (e.target) e.target.value = '';
     }
@@ -326,7 +511,8 @@ export default function LeafVNLauncher() {
 
   // Eliminar proyecto
   const handleDeleteProject = async (id: string, title: string) => {
-    if (!confirm(`¿Eliminar definitivamente el proyecto "${title}"?\n\nEsta acción borrará sus datos.`)) {
+    const confirmMessage = t.confirmDelete.replace('{title}', title);
+    if (!confirm(confirmMessage)) {
       return;
     }
     playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
@@ -383,11 +569,11 @@ export default function LeafVNLauncher() {
       }
 
       if (sourceStory) {
-        const cloneId = `${sourceStory.id}-copia-${Date.now().toString().slice(-4)}`;
+        const cloneId = `${sourceStory.id}-copy-${Date.now().toString().slice(-4)}`;
         const cloneStory: VNStory = {
           ...sourceStory,
           id: cloneId,
-          title: `${originalTitle} (Copia)`,
+          title: `${originalTitle} (${t.copySuffix})`,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -448,7 +634,7 @@ export default function LeafVNLauncher() {
           if (data.story) storyToExport = data.story;
         }
       } catch {
-        // Ignorar
+        // Fallback a localStorage
       }
 
       if (!storyToExport) {
@@ -465,46 +651,39 @@ export default function LeafVNLauncher() {
         playSfx('/assets/sfx/success.mp3', false, 0.5);
       }
     } catch (err) {
-      console.error('Error exportando:', err);
+      console.error('Error exportando proyecto:', err);
     }
   };
 
-  // Guardado desde el editor hacia disco y localStorage
+  // Guardar proyecto editado desde VNMaker
   const handleStoryUpdateFromEditor = (updatedStory: VNStory) => {
     setActiveStory(updatedStory);
 
-    // Guardar en localStorage
+    // Actualizar resumen en localStorage
     try {
-      localStorage.setItem(`leafvn_project_${updatedStory.id}`, JSON.stringify(updatedStory));
+      const summary: VNProjectSummary = {
+        id: updatedStory.id,
+        title: updatedStory.title,
+        author: updatedStory.author,
+        description: updatedStory.description,
+        version: updatedStory.version || '1.0.0',
+        coverImageUrl: updatedStory.chapters[0]?.scenes[0]?.backgroundUrl,
+        updatedAt: new Date().toISOString(),
+        createdAt: updatedStory.createdAt || new Date().toISOString(),
+        chapterCount: updatedStory.chapters.length,
+        characterCount: updatedStory.characters.length,
+        scenarioCount: updatedStory.scenarios?.length || 1,
+        assetCount: 0,
+      };
 
-      // Actualizar registro local de sumarios
       const stored = localStorage.getItem('leafvn_local_projects_registry');
-      if (stored) {
-        const list: VNProjectSummary[] = JSON.parse(stored);
-        const idx = list.findIndex((p) => p.id === updatedStory.id);
-        const updatedSummary: VNProjectSummary = {
-          id: updatedStory.id,
-          title: updatedStory.title,
-          author: updatedStory.author,
-          description: updatedStory.description,
-          version: updatedStory.version || '1.0.0',
-          coverImageUrl: updatedStory.coverImageUrl || updatedStory.chapters[0]?.scenes[0]?.backgroundUrl,
-          updatedAt: new Date().toISOString(),
-          createdAt: updatedStory.createdAt || new Date().toISOString(),
-          chapterCount: updatedStory.chapters.length,
-          characterCount: updatedStory.characters.length,
-          scenarioCount: updatedStory.scenarios?.length || 1,
-          assetCount: 0,
-        };
-        if (idx >= 0) {
-          list[idx] = updatedSummary;
-        } else {
-          list.unshift(updatedSummary);
-        }
-        localStorage.setItem('leafvn_local_projects_registry', JSON.stringify(list));
-      }
+      const list: VNProjectSummary[] = stored ? JSON.parse(stored) : [];
+      const filtered = list.filter((p) => p.id !== updatedStory.id);
+      filtered.unshift(summary);
+      localStorage.setItem('leafvn_local_projects_registry', JSON.stringify(filtered));
+      localStorage.setItem(`leafvn_project_${updatedStory.id}`, JSON.stringify(updatedStory));
     } catch (e) {
-      console.warn('Error guardando en localStorage:', e);
+      console.warn('Aviso guardando en localStorage:', e);
     }
 
     // Asíncronamente intentar guardar en disco
@@ -515,12 +694,12 @@ export default function LeafVNLauncher() {
     }).catch((err) => console.warn('Aviso guardando en disco (puede ser Vercel read-only):', err));
   };
 
-  // Formato de fecha relativa estilo Photoshop ("hace 2 horas", "hace 3 días")
+  // Formato de fecha relativa
   const formatRelativeDate = (dateStr?: string) => {
-    if (!dateStr) return 'Reciente';
+    if (!dateStr) return language === 'en' ? 'Recent' : 'Reciente';
     try {
       const date = new Date(dateStr);
-      if (isNaN(date.getTime())) return 'Reciente';
+      if (isNaN(date.getTime())) return language === 'en' ? 'Recent' : 'Reciente';
       const now = new Date();
       const diffMs = now.getTime() - date.getTime();
       const diffSec = Math.floor(diffMs / 1000);
@@ -528,17 +707,29 @@ export default function LeafVNLauncher() {
       const diffHours = Math.floor(diffMin / 60);
       const diffDays = Math.floor(diffHours / 24);
 
-      if (diffSec < 60) return 'hace un momento';
-      if (diffMin < 60) return `hace ${diffMin} ${diffMin === 1 ? 'minuto' : 'minutos'}`;
-      if (diffHours < 24) return `hace ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
-      if (diffDays < 7) return `hace ${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
-      if (diffDays < 30) {
-        const weeks = Math.floor(diffDays / 7);
-        return `hace ${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`;
+      if (language === 'en') {
+        if (diffSec < 60) return 'just now';
+        if (diffMin < 60) return `${diffMin}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        if (diffDays < 30) {
+          const weeks = Math.floor(diffDays / 7);
+          return `${weeks}w ago`;
+        }
+        return date.toLocaleDateString('en-US');
+      } else {
+        if (diffSec < 60) return 'hace un momento';
+        if (diffMin < 60) return `hace ${diffMin} ${diffMin === 1 ? 'minuto' : 'minutos'}`;
+        if (diffHours < 24) return `hace ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
+        if (diffDays < 7) return `hace ${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
+        if (diffDays < 30) {
+          const weeks = Math.floor(diffDays / 7);
+          return `hace ${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`;
+        }
+        return date.toLocaleDateString();
       }
-      return date.toLocaleDateString();
     } catch {
-      return 'Reciente';
+      return language === 'en' ? 'Recent' : 'Reciente';
     }
   };
 
@@ -584,7 +775,6 @@ export default function LeafVNLauncher() {
             setEngineMode('player');
           }}
           onExit={() => {
-            // Sincronizar tema seleccionado dentro del editor al volver al launcher
             setEditorTheme(getStoredTheme());
             fetchProjects();
             setEngineMode('launcher');
@@ -611,7 +801,7 @@ export default function LeafVNLauncher() {
     );
   }
 
-  // RENDER: PANTALLA PRINCIPAL DE INICIO (PHOTOSHOP STYLE CON SOPORTE DE TEMAS DEL MOTOR)
+  // RENDER: PANTALLA PRINCIPAL DE INICIO
   return (
     <div
       data-vn-engine="true"
@@ -637,31 +827,72 @@ export default function LeafVNLauncher() {
 
           <nav className="hidden md:flex items-center gap-3 text-[var(--muted)] pl-4 border-l border-[var(--border)]">
             <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={() => setShowNewModal(true)}>
-              Archivo
+              {t.menuFile}
             </span>
             <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={() => fileInputRef.current?.click()}>
-              Abrir
+              {t.menuOpen}
             </span>
             <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={fetchProjects}>
-              Actualizar
+              {t.menuRefresh}
             </span>
-            <span className="hover:text-[var(--text)] cursor-pointer transition-colors" onClick={() => setActiveTab(activeTab === 'home' ? 'templates' : 'home')}>
-              {activeTab === 'home' ? 'Plantillas' : 'Inicio'}
+            <span
+              className={`hover:text-[var(--text)] cursor-pointer transition-colors ${activeTab === 'home' ? 'text-[var(--text)] font-semibold' : ''}`}
+              onClick={() => setActiveTab('home')}
+            >
+              {t.menuHome}
+            </span>
+            <span
+              className={`hover:text-[var(--text)] cursor-pointer transition-colors ${activeTab === 'templates' ? 'text-[var(--text)] font-semibold' : ''}`}
+              onClick={() => setActiveTab('templates')}
+            >
+              {t.menuTemplates}
+            </span>
+            <span
+              className={`hover:text-[var(--text)] cursor-pointer transition-colors ${activeTab === 'settings' ? 'text-[var(--text)] font-semibold' : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              {t.menuSettings}
             </span>
           </nav>
         </div>
 
-        {/* Buscador Rápido, Selector de Temas del Motor y Acciones */}
+        {/* Buscador Rápido, Selector de Idioma / Tema y Acciones */}
         <div className="flex items-center gap-3">
           <div className="relative flex items-center">
             <span className="absolute left-2.5 text-[var(--muted2)] text-xs">🔍</span>
             <input
               type="text"
-              placeholder="Buscar proyectos..."
+              placeholder={t.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-[var(--well-bg)] hover:bg-[var(--well-focus-bg)] text-xs text-[var(--text)] pl-7 pr-3 py-1 rounded-full border border-[var(--border)] focus:border-[var(--accent)] outline-none w-44 sm:w-56 transition-all placeholder:text-[var(--muted2)]"
             />
+          </div>
+
+          {/* Selector Rápido de Idioma */}
+          <div className="flex items-center bg-[var(--btn-bg)] border border-[var(--border)] rounded-lg p-0.5 text-[11px] font-mono">
+            <button
+              onClick={() => handleSetLanguage('en')}
+              className={`px-2 py-0.5 rounded transition-all cursor-pointer font-bold ${
+                language === 'en'
+                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
+              title="English (Default)"
+            >
+              EN
+            </button>
+            <button
+              onClick={() => handleSetLanguage('es')}
+              className={`px-2 py-0.5 rounded transition-all cursor-pointer font-bold ${
+                language === 'es'
+                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
+              title="Español"
+            >
+              ES
+            </button>
           </div>
 
           {/* Selector de Tema UI & Motor */}
@@ -669,7 +900,7 @@ export default function LeafVNLauncher() {
             <button
               onClick={() => setShowThemeMenu(!showThemeMenu)}
               className="h-7 px-2.5 rounded-lg text-xs font-semibold cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border-hover)] text-[var(--text)] shadow-sm backdrop-blur-sm"
-              title="Cambiar tema de apariencia (Modern Dark / Light / ROTP Theme)"
+              title="Change visual theme (Modern Dark / Light / ROTP Theme)"
             >
               <GuiIconRenderer
                 icon={
@@ -694,7 +925,6 @@ export default function LeafVNLauncher() {
                   className="absolute right-0 top-9 w-80 z-[70] flex flex-col animate-in fade-in zoom-in-95 duration-150 select-none drop-shadow-2xl"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {/* Pestaña superior estilo carpeta / expediente */}
                   <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-xl vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
                     <span className="flex items-center gap-1.5">
                       <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -703,7 +933,6 @@ export default function LeafVNLauncher() {
                     <span className="text-[9px] font-mono text-[var(--muted2)]">CLASSIFIED</span>
                   </div>
 
-                  {/* Cuerpo redondeado estilo carpeta */}
                   <div className="rounded-b-2xl rounded-tl-2xl p-2.5 vn-dossier-card flex flex-col gap-1.5">
                     <div className="px-2 py-0.5 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)]">
                       <span>SELECT ENGINE APPEARANCE</span>
@@ -774,7 +1003,7 @@ export default function LeafVNLauncher() {
                 document.documentElement.requestFullscreen();
               }
             }}
-            title="Pantalla completa"
+            title="Fullscreen"
             className="w-7 h-7 rounded hover:bg-[var(--btn-hover-bg)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] transition-colors"
           >
             ⛶
@@ -787,7 +1016,7 @@ export default function LeafVNLauncher() {
         {/* BARRA LATERAL IZQUIERDA (PHOTOSHOP SIDEBAR TEMATIZADA) */}
         <aside className="w-56 bg-[var(--panel)] border-r border-[var(--border)] backdrop-blur-md flex flex-col justify-between p-4 flex-shrink-0">
           <div className="space-y-4">
-            {/* Botón Píldora: Archivo nuevo con brillo de acento del tema */}
+            {/* Botón Píldora: Nuevo Proyecto */}
             <button
               onClick={() => {
                 playSfx('/assets/sfx/click interface.mp3', false, 0.4);
@@ -796,7 +1025,7 @@ export default function LeafVNLauncher() {
               className="w-full py-2 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 active:brightness-95 text-white font-bold text-xs rounded-full shadow-[0_4px_16px_var(--accent-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="text-sm font-bold">+</span>
-              <span>Archivo nuevo</span>
+              <span>{t.newProject}</span>
             </button>
 
             {/* Botón: Abrir */}
@@ -807,7 +1036,7 @@ export default function LeafVNLauncher() {
               }}
               className="w-full py-2 px-4 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] font-medium text-xs rounded-full border border-[var(--border)] hover:border-[var(--border-hover)] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Abrir</span>
+              <span>{t.openProject}</span>
             </button>
             <input
               ref={fileInputRef}
@@ -828,7 +1057,7 @@ export default function LeafVNLauncher() {
                 }`}
               >
                 <span>🏠</span>
-                <span>Inicio</span>
+                <span>{t.home}</span>
               </button>
 
               <button
@@ -840,18 +1069,34 @@ export default function LeafVNLauncher() {
                 }`}
               >
                 <span>🎨</span>
-                <span>Plantillas</span>
+                <span>{t.templates}</span>
+              </button>
+
+              {/* Botón de Ajustes al lado de Plantillas con selector de idiomas */}
+              <button
+                onClick={() => setActiveTab('settings')}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+                  activeTab === 'settings'
+                    ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent-border)] font-bold shadow-sm'
+                    : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--panel-hover)]'
+                }`}
+              >
+                <span>⚙️</span>
+                <span>{t.settings}</span>
               </button>
             </div>
           </div>
 
           {/* Información del sistema en la parte inferior */}
           <div className="text-[11px] text-[var(--muted2)] border-t border-[var(--border)] pt-3 space-y-1">
-            <p className="font-semibold text-[var(--text)]">Leaf VN Studio</p>
-            <p className="truncate text-[10px]">Motor Autónomo de Visual Novels</p>
+            <p className="font-semibold text-[var(--text)]">{t.systemEngine}</p>
+            <p className="truncate text-[10px]">{t.systemDesc}</p>
             <div className="flex items-center gap-1.5 pt-1 text-[10px] text-[var(--accent)]">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]"></span>
-              <span className="font-mono">Tema: {editorTheme === 'rotp' ? 'ROTP' : editorTheme === 'default_light' ? 'Light' : 'Dark'}</span>
+              <span className="font-mono">{t.themeLabel} {editorTheme === 'rotp' ? 'ROTP' : editorTheme === 'default_light' ? 'Light' : 'Dark'}</span>
+            </div>
+            <div className="text-[10px] text-[var(--muted)] font-mono">
+              {t.langLabel} {language.toUpperCase()}
             </div>
           </div>
         </aside>
@@ -863,34 +1108,34 @@ export default function LeafVNLauncher() {
               {/* Saludo de Bienvenida */}
               <div className="text-center md:text-left">
                 <h1 className="text-2xl md:text-3xl font-light text-[var(--text)] tracking-tight">
-                  Bienvenido a <span className="font-semibold text-[var(--accent)]">Leaf VN</span>
+                  {t.welcomeTo} <span className="font-semibold text-[var(--accent)]">Leaf VN</span>
                 </h1>
                 <p className="text-xs text-[var(--muted)] mt-1">
-                  Gestiona tus proyectos, diseña guiones interactivos y produce novelas visuales sin límites.
+                  {t.subtitle}
                 </p>
               </div>
 
               {/* Barra de Herramientas de Proyectos Recientes */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-base font-semibold text-[var(--text)]">Recientes</h2>
+                  <h2 className="text-base font-semibold text-[var(--text)]">{t.recent}</h2>
 
                   {/* Selector de Ordenación */}
                   <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
-                    <label>Ordenar:</label>
+                    <label>{t.sort}</label>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as any)}
                       className="bg-[var(--btn-bg)] text-[var(--text)] text-xs px-2 py-1 rounded-lg border border-[var(--border)] outline-none cursor-pointer"
                     >
-                      <option value="updated">Recientes</option>
-                      <option value="title">Nombre</option>
-                      <option value="scenes">Escenarios</option>
+                      <option value="updated">{t.sortByRecent}</option>
+                      <option value="title">{t.sortByTitle}</option>
+                      <option value="scenes">{t.sortByScenes}</option>
                     </select>
 
                     <button
                       onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-                      title={sortOrder === 'desc' ? 'Descendente' : 'Ascendente'}
+                      title={sortOrder === 'desc' ? t.sortDesc : t.sortAsc}
                       className="p-1 hover:bg-[var(--btn-hover-bg)] rounded text-[var(--text)] cursor-pointer"
                     >
                       {sortOrder === 'desc' ? '↓' : '↑'}
@@ -903,7 +1148,7 @@ export default function LeafVNLauncher() {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Filtrar archivos recientes"
+                      placeholder={t.filterPlaceholder}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="bg-transparent border-b border-[var(--border)] focus:border-[var(--accent)] text-xs text-[var(--text)] py-1 pr-6 pl-1 outline-none w-44 sm:w-52 transition-colors placeholder:text-[var(--muted2)]"
@@ -922,7 +1167,7 @@ export default function LeafVNLauncher() {
                   <div className="flex items-center bg-[var(--well-bg)] rounded-lg p-0.5 border border-[var(--border)]">
                     <button
                       onClick={() => setViewMode('list')}
-                      title="Vista de lista"
+                      title={t.listView}
                       className={`p-1.5 rounded-md text-xs cursor-pointer transition-colors ${
                         viewMode === 'list'
                           ? 'bg-[var(--accent-surface)] text-[var(--accent)] font-bold shadow-sm'
@@ -933,7 +1178,7 @@ export default function LeafVNLauncher() {
                     </button>
                     <button
                       onClick={() => setViewMode('grid')}
-                      title="Vista de cuadrícula"
+                      title={t.gridView}
                       className={`p-1.5 rounded-md text-xs cursor-pointer transition-colors ${
                         viewMode === 'grid'
                           ? 'bg-[var(--accent-surface)] text-[var(--accent)] font-bold shadow-sm'
@@ -950,24 +1195,22 @@ export default function LeafVNLauncher() {
               {loading ? (
                 <div className="py-20 flex flex-col items-center justify-center text-[var(--muted)] gap-3">
                   <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-xs">Cargando proyectos en disco...</span>
+                  <span className="text-xs">{t.loadingProjects}</span>
                 </div>
               ) : filteredProjects.length === 0 ? (
                 <div className="py-16 border-2 border-dashed border-[var(--border)] rounded-xl flex flex-col items-center justify-center text-center p-6 space-y-3 bg-[var(--panel)]">
                   <div className="w-12 h-12 rounded-full bg-[var(--btn-bg)] flex items-center justify-center text-2xl text-[var(--muted)]">
                     📂
                   </div>
-                  <h3 className="text-sm font-semibold text-[var(--text)]">No se encontraron proyectos</h3>
+                  <h3 className="text-sm font-semibold text-[var(--text)]">{t.noProjectsFound}</h3>
                   <p className="text-xs text-[var(--muted)] max-w-sm">
-                    {searchQuery
-                      ? 'Ningún proyecto coincide con el filtro de búsqueda actual.'
-                      : 'Crea tu primera novela visual o abre un archivo existente para comenzar.'}
+                    {searchQuery ? t.noProjectsMatch : t.noProjectsSubtitle}
                   </p>
                   <button
                     onClick={() => setShowNewModal(true)}
                     className="mt-2 px-4 py-2 bg-[var(--accent)] hover:brightness-110 text-white text-xs font-medium rounded-lg shadow transition-all cursor-pointer"
                   >
-                    Crear Proyecto Nuevo
+                    {t.createFirstProject}
                   </button>
                 </div>
               ) : viewMode === 'grid' ? (
@@ -1000,20 +1243,20 @@ export default function LeafVNLauncher() {
                               e.stopPropagation();
                               handleOpenProject(proj.id, 'editor');
                             }}
-                            title="Editar en Studio"
+                            title={t.btnEdit}
                             className="px-2.5 py-1 bg-[var(--accent)] hover:brightness-110 text-white rounded text-[11px] font-medium shadow transition-transform hover:scale-105 cursor-pointer"
                           >
-                            Editar
+                            {t.btnEdit}
                           </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleOpenProject(proj.id, 'player');
                             }}
-                            title="Probar Novela"
+                            title={t.btnPlay}
                             className="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded text-[11px] font-medium shadow transition-transform hover:scale-105 cursor-pointer"
                           >
-                            Jugar ▶
+                            {t.btnPlay}
                           </button>
                         </div>
                       </div>
@@ -1031,15 +1274,15 @@ export default function LeafVNLauncher() {
 
                         {/* Metadatos y Menú de Opciones */}
                         <div className="mt-3 pt-2 border-t border-[var(--border)] flex items-center justify-between text-[10px] text-[var(--muted)]">
-                          <span>{proj.scenarioCount || 1} Escenas</span>
+                          <span>{proj.scenarioCount || 1} {t.scenesCountSuffix}</span>
                           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDuplicateProject(proj.id, proj.title);
                               }}
-                              title="Duplicar"
-                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded"
+                              title={t.btnDuplicate}
+                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                             >
                               📋
                             </button>
@@ -1048,8 +1291,8 @@ export default function LeafVNLauncher() {
                                 e.stopPropagation();
                                 handleExportProject(proj.id);
                               }}
-                              title="Exportar JSON para web"
-                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded"
+                              title={t.btnExport}
+                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                             >
                               ⬇️
                             </button>
@@ -1058,8 +1301,8 @@ export default function LeafVNLauncher() {
                                 e.stopPropagation();
                                 handleDeleteProject(proj.id, proj.title);
                               }}
-                              title="Eliminar"
-                              className="p-1 hover:text-red-400 hover:bg-[var(--btn-hover-bg)] rounded"
+                              title={t.btnDelete}
+                              className="p-1 hover:text-red-400 hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                             >
                               ✕
                             </button>
@@ -1075,11 +1318,11 @@ export default function LeafVNLauncher() {
                   <table className="w-full text-left text-xs text-[var(--text)]">
                     <thead className="bg-[var(--panel2)] text-[var(--muted2)] uppercase text-[10px] tracking-wider border-b border-[var(--border)]">
                       <tr>
-                        <th className="py-2.5 px-4">Nombre</th>
-                        <th className="py-2.5 px-4 hidden sm:table-cell">Autor</th>
-                        <th className="py-2.5 px-4">Última Modificación</th>
-                        <th className="py-2.5 px-4 hidden md:table-cell">Escenas</th>
-                        <th className="py-2.5 px-4 text-right">Acciones</th>
+                        <th className="py-2.5 px-4">{t.thProject}</th>
+                        <th className="py-2.5 px-4 hidden sm:table-cell">{t.thAuthor}</th>
+                        <th className="py-2.5 px-4">{t.thModified}</th>
+                        <th className="py-2.5 px-4 hidden md:table-cell">{t.thScenes}</th>
+                        <th className="py-2.5 px-4 text-right">{t.thActions}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--border)]/60">
@@ -1119,21 +1362,21 @@ export default function LeafVNLauncher() {
                             <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
                               <button
                                 onClick={() => handleOpenProject(proj.id, 'player')}
-                                className="px-2 py-1 bg-sky-950/70 hover:bg-sky-700 text-sky-300 hover:text-white rounded text-[11px] font-medium"
+                                className="px-2 py-1 bg-sky-950/70 hover:bg-sky-700 text-sky-300 hover:text-white rounded text-[11px] font-medium cursor-pointer"
                               >
-                                Jugar ▶
+                                {t.btnPlay}
                               </button>
                               <button
                                 onClick={() => handleExportProject(proj.id)}
-                                title="Exportar JSON"
-                                className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded"
+                                title={t.btnExport}
+                                className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                               >
                                 ⬇️
                               </button>
                               <button
                                 onClick={() => handleDeleteProject(proj.id, proj.title)}
-                                title="Eliminar"
-                                className="p-1 hover:text-red-400 hover:bg-[var(--btn-hover-bg)] rounded"
+                                title={t.btnDelete}
+                                className="p-1 hover:text-red-400 hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                               >
                                 ✕
                               </button>
@@ -1146,13 +1389,13 @@ export default function LeafVNLauncher() {
                 </div>
               )}
             </div>
-          ) : (
+          ) : activeTab === 'templates' ? (
             /* PESTAÑA DE PLANTILLAS ADAPTADA AL TEMA */
             <div className="max-w-5xl mx-auto space-y-6">
               <div>
-                <h2 className="text-xl font-light text-[var(--text)]">Plantillas de Proyecto</h2>
+                <h2 className="text-xl font-light text-[var(--text)]">{t.templatesTitle}</h2>
                 <p className="text-xs text-[var(--muted)] mt-1">
-                  Comienza rápidamente con configuraciones preparadas para diversos géneros narrativos.
+                  {t.templatesSubtitle}
                 </p>
               </div>
 
@@ -1170,14 +1413,14 @@ export default function LeafVNLauncher() {
                       📄
                     </div>
                     <h3 className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                      Proyecto Limpio (En Blanco)
+                      {t.tmplBlankTitle}
                     </h3>
                     <p className="text-xs text-[var(--muted)]">
-                      Un lienzo vacío con un solo escenario inicial para estructurar tu historia desde cero.
+                      {t.tmplBlankDesc}
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)]">
-                    Usar Plantilla
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                    {t.useTemplate}
                   </button>
                 </div>
 
@@ -1194,14 +1437,14 @@ export default function LeafVNLauncher() {
                       🎭
                     </div>
                     <h3 className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                      Aventura Narrativa Completa
+                      {t.tmplSampleTitle}
                     </h3>
                     <p className="text-xs text-[var(--muted)]">
-                      Incluye personajes preconfigurados, emociones, efectos de pantalla, música de fondo y ramas de decisión.
+                      {t.tmplSampleDesc}
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)]">
-                    Usar Plantilla
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                    {t.useTemplate}
                   </button>
                 </div>
 
@@ -1218,15 +1461,187 @@ export default function LeafVNLauncher() {
                       🎬
                     </div>
                     <h3 className="text-sm font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                      Secuencia Cinemática / Tráiler
+                      {t.tmplCinematicTitle}
                     </h3>
                     <p className="text-xs text-[var(--muted)]">
-                      Enfocada en pistas de video de fondo, subtítulos animados y transiciones de audio sincronizadas.
+                      {t.tmplCinematicDesc}
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)]">
-                    Usar Plantilla
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                    {t.useTemplate}
                   </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* PESTAÑA DE AJUSTES CON SELECTOR DE IDIOMAS Y TEMAS */
+            <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-200">
+              <div>
+                <h2 className="text-2xl font-light text-[var(--text)] tracking-tight">
+                  {t.settingsTitle}
+                </h2>
+                <p className="text-xs text-[var(--muted)] mt-1">
+                  {t.settingsSubtitle}
+                </p>
+              </div>
+
+              {/* 1. SECTOR DE IDIOMA */}
+              <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-md backdrop-blur-md">
+                <div className="border-b border-[var(--border)] pb-3">
+                  <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">
+                    <span>🌐</span>
+                    <span>{t.languageSectionTitle}</span>
+                  </h3>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">
+                    {t.languageSectionDesc}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* English (Default) */}
+                  <button
+                    onClick={() => handleSetLanguage('en')}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                      language === 'en'
+                        ? 'bg-[var(--accent-surface)] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-md'
+                        : 'bg-[var(--well-bg)] border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--btn-hover-bg)]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">🇺🇸</span>
+                      <div>
+                        <div className="font-bold text-xs text-[var(--text)]">English</div>
+                        <div className="text-[10px] text-[var(--muted2)]">Default studio language</div>
+                      </div>
+                    </div>
+                    {language === 'en' && (
+                      <span className="text-[10px] font-mono font-bold text-[var(--accent)] px-2 py-0.5 rounded-full bg-[var(--btn-bg)] border border-[var(--border)]">
+                        ACTIVE
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Español */}
+                  <button
+                    onClick={() => handleSetLanguage('es')}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between ${
+                      language === 'es'
+                        ? 'bg-[var(--accent-surface)] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-md'
+                        : 'bg-[var(--well-bg)] border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--btn-hover-bg)]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">🇪🇸</span>
+                      <div>
+                        <div className="font-bold text-xs text-[var(--text)]">Español</div>
+                        <div className="text-[10px] text-[var(--muted2)]">Idioma secundario</div>
+                      </div>
+                    </div>
+                    {language === 'es' && (
+                      <span className="text-[10px] font-mono font-bold text-[var(--accent)] px-2 py-0.5 rounded-full bg-[var(--btn-bg)] border border-[var(--border)]">
+                        ACTIVO
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. SECTOR DE TEMA VISUAL */}
+              <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-md backdrop-blur-md">
+                <div className="border-b border-[var(--border)] pb-3">
+                  <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">
+                    <span>🎨</span>
+                    <span>{t.themeSectionTitle}</span>
+                  </h3>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">
+                    {t.themeSectionDesc}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {VN_THEMES.map((th) => {
+                    const isCurrent = editorTheme === th.id;
+                    return (
+                      <button
+                        key={th.id}
+                        onClick={() => handleSelectTheme(th.id)}
+                        className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 ${
+                          isCurrent
+                            ? 'bg-[var(--accent-surface)] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-md'
+                            : 'bg-[var(--well-bg)] border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--btn-hover-bg)]'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div
+                            className="w-8 h-8 rounded-lg border flex items-center justify-center shadow-inner"
+                            style={{
+                              backgroundColor: th.previewBg,
+                              borderColor: th.previewBorder,
+                              color: th.previewAccent,
+                            }}
+                          >
+                            <GuiIconRenderer
+                              icon={
+                                th.id === 'default_light'
+                                  ? GUI_ICONS.general.lightBulb
+                                  : th.id === 'rotp'
+                                  ? GUI_ICONS.general.hazard
+                                  : GUI_ICONS.general.circle
+                              }
+                              className="w-4 h-4"
+                            />
+                          </div>
+                          {isCurrent && (
+                            <span className="text-[10px] font-mono font-bold text-[var(--accent)] uppercase">
+                              Active
+                            </span>
+                          )}
+                        </div>
+
+                        <div>
+                          <div className="font-bold text-xs text-[var(--text)] flex items-center gap-1.5">
+                            <span>{th.name}</span>
+                            {th.isHorror && <span className="text-[10px] text-red-500 font-bold">☠</span>}
+                          </div>
+                          <div className="text-[10px] text-[var(--muted2)] mt-0.5 line-clamp-2">
+                            {th.description}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. SECTOR DE INFORMACIÓN Y ALMACENAMIENTO */}
+              <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-md backdrop-blur-md">
+                <div className="border-b border-[var(--border)] pb-3">
+                  <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">
+                    <span>⚡</span>
+                    <span>{t.engineSectionTitle}</span>
+                  </h3>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">
+                    {t.engineSectionDesc}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="p-3.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] space-y-1">
+                    <div className="text-[10px] font-mono uppercase text-[var(--muted2)]">Engine Version</div>
+                    <div className="font-bold text-[var(--text)]">Leaf VN Studio v2.1 (Standalone)</div>
+                    <div className="text-[10px] text-emerald-500 font-medium flex items-center gap-1.5 pt-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span>{t.engineStatusReady}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] space-y-1">
+                    <div className="text-[10px] font-mono uppercase text-[var(--muted2)]">Deployment Target</div>
+                    <div className="font-bold text-[var(--accent)] font-mono">https://leafvn.vercel.app</div>
+                    <div className="text-[10px] text-[var(--muted)] pt-1">
+                      Independent Next.js 14 App on Vercel
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1241,7 +1656,7 @@ export default function LeafVNLauncher() {
             <div className="p-4 border-b border-[var(--border)] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-[var(--accent)] font-bold">📄</span>
-                <h3 className="text-sm font-semibold text-[var(--text)]">Nuevo Proyecto de Novela Visual</h3>
+                <h3 className="text-sm font-semibold text-[var(--text)]">{t.modalTitle}</h3>
               </div>
               <button
                 onClick={() => setShowNewModal(false)}
@@ -1253,11 +1668,11 @@ export default function LeafVNLauncher() {
 
             <form onSubmit={handleCreateProject} className="p-5 space-y-4 text-xs">
               <div>
-                <label className="block text-[var(--text)] font-medium mb-1">Nombre del Proyecto *</label>
+                <label className="block text-[var(--text)] font-medium mb-1">{t.modalProjectName}</label>
                 <input
                   type="text"
                   required
-                  placeholder="Ej: Las Crónicas del Sector 4"
+                  placeholder={t.modalProjectNamePlaceholder}
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none placeholder:text-[var(--muted2)]"
@@ -1267,34 +1682,34 @@ export default function LeafVNLauncher() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[var(--text)] font-medium mb-1">Autor / Estudio</label>
+                  <label className="block text-[var(--text)] font-medium mb-1">{t.modalAuthor}</label>
                   <input
                     type="text"
-                    placeholder="Tu nombre o estudio"
+                    placeholder={t.modalAuthorPlaceholder}
                     value={newAuthor}
                     onChange={(e) => setNewAuthor(e.target.value)}
                     className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none placeholder:text-[var(--muted2)]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[var(--text)] font-medium mb-1">Plantilla Base</label>
+                  <label className="block text-[var(--text)] font-medium mb-1">{t.modalTemplate}</label>
                   <select
                     value={newTemplate}
                     onChange={(e) => setNewTemplate(e.target.value as any)}
                     className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none cursor-pointer"
                   >
-                    <option value="sample">Aventura Completa</option>
-                    <option value="blank">Proyecto en Blanco</option>
-                    <option value="cinematic">Cinemática</option>
+                    <option value="sample">{t.tmplSampleTitle}</option>
+                    <option value="blank">{t.tmplBlankTitle}</option>
+                    <option value="cinematic">{t.tmplCinematicTitle}</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[var(--text)] font-medium mb-1">Descripción Breve</label>
+                <label className="block text-[var(--text)] font-medium mb-1">{t.modalDescription}</label>
                 <textarea
                   rows={2}
-                  placeholder="Sinopsis o notas del proyecto..."
+                  placeholder={t.modalDescriptionPlaceholder}
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
                   className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-[var(--text)] outline-none resize-none placeholder:text-[var(--muted2)]"
@@ -1307,14 +1722,14 @@ export default function LeafVNLauncher() {
                   onClick={() => setShowNewModal(false)}
                   className="px-4 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] border border-[var(--border)] rounded-lg transition-colors cursor-pointer"
                 >
-                  Cancelar
+                  {t.modalCancel}
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating || !newTitle.trim()}
                   className="px-5 py-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 disabled:opacity-50 text-white font-bold rounded-lg shadow-[0_0_15px_var(--accent-glow)] transition-all cursor-pointer"
                 >
-                  {isCreating ? 'Creando...' : 'Crear Proyecto'}
+                  {isCreating ? t.modalCreating : t.modalCreate}
                 </button>
               </div>
             </form>

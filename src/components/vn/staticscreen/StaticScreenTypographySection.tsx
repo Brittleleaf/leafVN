@@ -115,7 +115,7 @@ export function StaticScreenTypographySection({
           type="text"
           value={config.title || ''}
           onChange={(e) => updateConfig({ title: e.target.value })}
-          placeholder="e.g. SIGNAL TERMINATED / YOU DIED"
+          placeholder="Enter screen title here..."
           className="w-full text-xs font-bold px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:border-[var(--accent)]"
         />
 
@@ -313,7 +313,7 @@ export function StaticScreenTypographySection({
           rows={2}
           value={config.subtitle || ''}
           onChange={(e) => updateConfig({ subtitle: e.target.value })}
-          placeholder="e.g. Neurological signatures have ceased..."
+          placeholder="Enter screen subtitle or message here..."
           className="w-full text-xs px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] focus:outline-none focus:border-[var(--accent)] resize-none"
         />
 

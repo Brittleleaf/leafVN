@@ -46,15 +46,15 @@ export async function POST(req: NextRequest) {
               scenes: [
                 {
                   id: `scene-01-${Date.now()}`,
-                  name: 'Escenario Inicial',
-                  description: 'Primera escena del proyecto.',
+                  name: 'Initial Scene',
+                  description: 'First scene of the project.',
                   backgroundUrl: '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
                   timeline: [
                     {
                       id: `ev-init-${Date.now()}`,
                       type: 'dialogue' as const,
-                      customSpeakerName: 'Narrador',
-                      text: 'La historia comienza aquí...',
+                      customSpeakerName: 'Narrator',
+                      text: 'Enter dialogue text here...',
                     },
                   ],
                 },

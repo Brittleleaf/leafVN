@@ -173,7 +173,7 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
                   rows={2}
                   value={characterDialogueText}
                   onChange={(e) => setCharacterDialogueText(e.target.value)}
-                  placeholder="Type what the character says in this cinematic..."
+                  placeholder="Enter dialogue text here..."
                   className="w-full px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] text-[var(--text)] text-xs resize-none focus:outline-none focus:border-[#E21345] transition-all placeholder-[var(--muted2)]"
                 />
               </div>

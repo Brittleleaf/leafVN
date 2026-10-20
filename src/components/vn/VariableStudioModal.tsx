@@ -427,7 +427,7 @@ export default function VariableStudioModal({
                       required
                       value={formKey}
                       onChange={(e) => setFormKey(e.target.value)}
-                      placeholder="e.g. has_key, justin_affinity, gold"
+                      placeholder="Enter variable key here..."
                       className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-mono font-bold outline-none transition-colors"
                     />
                     <p className="text-[10px] text-[var(--muted2)]">
@@ -444,7 +444,7 @@ export default function VariableStudioModal({
                       required
                       value={formLabel}
                       onChange={(e) => setFormLabel(e.target.value)}
-                      placeholder="e.g. Sector 9 Key, Affinity, Credit Coins"
+                      placeholder="Enter variable label here..."
                       className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none transition-colors"
                     />
                   </div>
@@ -543,7 +543,7 @@ export default function VariableStudioModal({
                         type="text"
                         value={formDefaultVal}
                         onChange={(e) => setFormDefaultVal(e.target.value)}
-                        placeholder="Initial text (e.g. Justin, Normal, etc.)..."
+                        placeholder="Enter initial value here..."
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none transition-colors"
                       />
                     )}

@@ -139,7 +139,7 @@ export default function ChoiceEditor({
           type="text"
           value={currentLine.prompt || ''}
           onChange={(e) => onUpdateLine('prompt', e.target.value)}
-          placeholder="e.g. Which path do we take?"
+          placeholder="Enter choice prompt here..."
           className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-purple-500 rounded-lg p-2.5 text-xs text-[var(--text)] font-bold outline-none"
         />
 
@@ -387,7 +387,7 @@ export default function ChoiceEditor({
               type="text"
               value={activeOption.label}
               onChange={(e) => handleUpdateChoiceOption(selectedOptIndex, { label: e.target.value })}
-              placeholder="e.g. Investigate the underground laboratory..."
+              placeholder="Enter option text here..."
               className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-purple-500 rounded-xl p-2.5 text-xs text-[var(--text)] font-bold outline-none"
             />
           </div>
@@ -824,7 +824,7 @@ export default function ChoiceEditor({
 
                 <input
                   type="text"
-                  placeholder="What does the character say right upon clicking this option?..."
+                  placeholder="Enter character reaction here..."
                   value={activeOption.reaction.text}
                   onChange={(e) =>
                     handleUpdateChoiceOption(selectedOptIndex, {

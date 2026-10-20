@@ -92,7 +92,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
             </label>
             <input
               type="text"
-              placeholder="e.g. angry, happy, serious..."
+              placeholder="Enter expression name here..."
               value={newMoodName}
               onChange={(e) => setNewMoodName(e.target.value)}
               className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-3 py-2 text-xs text-[var(--text)] font-bold outline-none focus:border-[var(--accent)] transition-colors"

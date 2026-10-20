@@ -723,9 +723,9 @@ export function useVNMakerState(
           text:
             sceneType === 'event'
               ? eventSubtype === 'cinematic'
-                ? 'Cinematic sequence ready...'
-                : 'Static screen ready...'
-              : 'Entering a new location...',
+                ? 'Enter cinematic text here...'
+                : 'Enter static screen text here...'
+              : 'Enter dialogue text here...',
         },
       ],
     };
@@ -921,25 +921,25 @@ export function useVNMakerState(
       characterId: chosenCharId,
       characterPosition: customPayload?.characterPosition || speakerChar?.side || story.characters[0]?.side || 'left',
       characterScale: customPayload?.characterScale ?? speakerChar?.defaultScale ?? story.characters[0]?.defaultScale ?? 1.0,
-      text: type === 'dialogue' ? (customPayload?.text || 'Write what the character says here...') : undefined,
-      prompt: type === 'choice' ? (customPayload?.prompt || 'What decision do you make?') : undefined,
+      text: type === 'dialogue' ? (customPayload?.text || 'Enter dialogue text here...') : undefined,
+      prompt: type === 'choice' ? (customPayload?.prompt || 'Enter prompt here...') : undefined,
       options:
         type === 'choice'
           ? (customPayload?.options || [
               {
                 id: `opt-1-${Date.now()}`,
-                label: 'Option 1: Investigate the area',
+                label: 'Option 1',
                 reaction: {
                   characterId: story.characters[0]?.id,
-                  text: "Let's check carefully before proceeding.",
+                  text: 'Enter reaction text here...',
                 },
               },
               {
                 id: `opt-2-${Date.now()}`,
-                label: 'Option 2: Move quickly',
+                label: 'Option 2',
                 reaction: {
                   characterId: story.characters[1]?.id || story.characters[0]?.id,
-                  text: 'No time to lose, let\'s move!',
+                  text: 'Enter reaction text here...',
                 },
               },
             ])
@@ -1303,7 +1303,7 @@ export function useVNMakerState(
       yPercent: Math.max(5, Math.min(85, yPercent - 5)),
       icon: icons[pendingButtonType] || GUI_ICONS.action.search,
       actionType: pendingButtonType === 'door' ? 'jump_scene' : 'inspect',
-      inspectText: 'You examine this spot carefully...',
+      inspectText: 'Enter inspection text here...',
     };
 
     const currentHotspots = currentScene.hotspots || [];

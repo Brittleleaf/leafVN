@@ -295,7 +295,7 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
               outline: 'none',
               boxShadow: 'none',
             }}
-            placeholder={placeholder || 'Escribe el texto...'}
+            placeholder={placeholder || 'Enter button text here...'}
             autoFocus
           />
         ) : (

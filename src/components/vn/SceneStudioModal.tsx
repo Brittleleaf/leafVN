@@ -1011,7 +1011,7 @@ export default function SceneStudioModal({
                                         handleUpdateHotspotInScene(hs.id, { label: e.target.value })
                                       }
                                       className="bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] font-bold outline-none transition-colors"
-                                      placeholder="Button text..."
+                                      placeholder="Enter hotspot button text here..."
                                     />
                                   </div>
 
@@ -1080,7 +1080,7 @@ export default function SceneStudioModal({
                                             inspectText: e.target.value,
                                           })
                                         }
-                                        placeholder="Description or clue upon inspection..."
+                                        placeholder="Enter inspection text here..."
                                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                                       />
                                     </div>

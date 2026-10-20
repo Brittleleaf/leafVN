@@ -375,7 +375,7 @@ export default function HotspotStudioModal({
                         type="text"
                         value={activeHs.label}
                         onChange={(e) => handleUpdateActiveHs({ label: e.target.value })}
-                        placeholder="e.g. Open Door, Quantum Terminal..."
+                        placeholder="Enter hotspot label here..."
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] font-bold outline-none transition-colors"
                       />
                     </div>
@@ -613,7 +613,7 @@ export default function HotspotStudioModal({
                         rows={3}
                         value={activeHs.inspectText || ''}
                         onChange={(e) => handleUpdateActiveHs({ inspectText: e.target.value })}
-                        placeholder="e.g. You approach the blast door. It seems locked by a quantum reader..."
+                        placeholder="Enter inspection text here..."
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none resize-none transition-colors"
                       />
                     </div>
@@ -1064,7 +1064,7 @@ export default function HotspotStudioModal({
                                 condition: { ...activeHs.condition!, variableKey: e.target.value },
                               })
                             }
-                            placeholder="e.g. access_key"
+                            placeholder="Enter variable key here..."
                             className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none"
                           />
                         </div>

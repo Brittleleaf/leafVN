@@ -568,7 +568,7 @@ export default function ChapterStudioModal({
                           type="text"
                           value={selectedChapter.title}
                           onChange={(e) => handleUpdateCurrentChapter({ title: e.target.value })}
-                          placeholder="e.g. Chapter II: Echo of the Canvas..."
+                          placeholder="Enter chapter title here..."
                           className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-[var(--accent)] transition-colors"
                         />
                       </div>
@@ -582,7 +582,7 @@ export default function ChapterStudioModal({
                         rows={3}
                         value={selectedChapter.summary || ''}
                         onChange={(e) => handleUpdateCurrentChapter({ summary: e.target.value })}
-                        placeholder="Describe the narrative goals, key plot twists, or writer notes for this story arc..."
+                        placeholder="Enter chapter synopsis here..."
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] resize-none transition-colors"
                       />
                     </div>
@@ -683,7 +683,7 @@ export default function ChapterStudioModal({
                             type="text"
                             value={selectedChapter.loadingScreen.title || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ title: e.target.value })}
-                            placeholder="e.g. CHAPTER II // DECRYPTING FILE"
+                            placeholder="Enter loading title here..."
                             className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] font-mono font-bold outline-none focus:border-[var(--accent)] transition-colors"
                           />
                         </div>
@@ -696,7 +696,7 @@ export default function ChapterStudioModal({
                             type="text"
                             value={selectedChapter.loadingScreen.subtitle || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ subtitle: e.target.value })}
-                            placeholder="e.g. CLASSIFIED ACCESS • OMEGA PROTOCOL"
+                            placeholder="Enter loading subtitle here..."
                             className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                           />
                         </div>
@@ -713,7 +713,7 @@ export default function ChapterStudioModal({
                             rows={2}
                             value={selectedChapter.loadingScreen.loreTip || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ loreTip: e.target.value })}
-                            placeholder="e.g. Every alternate ending reveals a piece of the lost file..."
+                            placeholder="Enter lore quote or text here..."
                             className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] italic outline-none focus:border-[var(--accent)] resize-none transition-colors"
                           />
 

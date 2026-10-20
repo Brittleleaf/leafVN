@@ -408,7 +408,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
               customWords: parsed.length > 0 ? parsed : undefined,
             });
           }}
-          placeholder="Escribe palabras separadas por comas..."
+          placeholder="Enter words separated by commas..."
           className="w-full bg-[var(--card-bg)] border border-[var(--border)] focus:border-emerald-500 rounded-lg p-2 text-xs text-[var(--text)] font-mono resize-y outline-none"
         />
       </div>

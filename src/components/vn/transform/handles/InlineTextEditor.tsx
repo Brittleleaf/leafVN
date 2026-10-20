@@ -56,7 +56,7 @@ export const InlineTextEditor: React.FC<InlineTextEditorProps> = ({
               ? '1.125rem'
               : '1rem',
         }}
-        placeholder="Type text..."
+        placeholder="Enter text here..."
       />
     </div>
   );

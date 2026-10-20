@@ -295,7 +295,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
           rows={3}
           value={currentLine.text || ''}
           onChange={(e) => onUpdateCurrentLine('text', e.target.value)}
-          placeholder="Type what the character says in this line..."
+          placeholder="Enter dialogue text here..."
           className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2.5 text-xs text-[var(--text)] outline-none resize-none leading-relaxed"
         />
       </div>

@@ -934,14 +934,14 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                             outline: 'none',
                             boxShadow: 'none',
                           }}
-                          placeholder="Type your question..."
+                          placeholder="Enter prompt here..."
                           autoFocus
                         />
                       ) : (
                         <span className={`text-xs md:text-sm font-medium tracking-wide ${
                           currentLine.prompt ? 'text-gray-200' : 'text-gray-400 italic'
                         }`}>
-                          {currentLine.prompt || '(Click to type question...)'}
+                          {currentLine.prompt || '(Enter prompt here...)'}
                         </span>
                       )}
                     </div>
@@ -1069,7 +1069,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                       key={opt.id}
                       id={opt.id}
                       label={opt.label || ''}
-                      placeholder={`(Escribe opción #${i + 1})`}
+                      placeholder={`Enter option #${i + 1} here...`}
                       sublabel={`#${i + 1}`}
                       actionIcon={
                         <span className="text-purple-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
@@ -1252,7 +1252,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                       rows={2}
                       value={isPlayingPreview ? animatedPreviewText : (currentLine.text || '')}
                       onChange={(e) => handleUpdateCurrentLine('text', e.target.value)}
-                      placeholder="Click here and type directly what the character says..."
+                      placeholder="Enter dialogue text here..."
                       className={`w-full bg-transparent ${
                         activeFontSize === 'sm' ? 'text-xs' : activeFontSize === 'lg' ? 'text-sm sm:text-base' : 'text-xs sm:text-sm'
                       } leading-relaxed focus:bg-[var(--well-bg)] rounded-lg p-1 outline-none resize-none placeholder-[var(--muted2)] transition-colors min-h-[50px]`}

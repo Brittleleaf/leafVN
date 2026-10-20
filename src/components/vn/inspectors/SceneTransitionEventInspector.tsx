@@ -62,21 +62,21 @@ export const SceneTransitionEventInspector: React.FC<EventInspectorSubProps> = (
             type="text"
             value={currentLine.loadingTitle || ''}
             onChange={(e) => onUpdateCurrentLine('loadingTitle', e.target.value)}
-            placeholder="Main title (e.g. ACCESSING ARCHIVES...)"
+            placeholder="Enter loading title here..."
             className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2 text-xs text-[var(--text)] outline-none"
           />
           <input
             type="text"
             value={currentLine.loadingSubtitle || ''}
             onChange={(e) => onUpdateCurrentLine('loadingSubtitle', e.target.value)}
-            placeholder="Classified subtitle..."
+            placeholder="Enter loading subtitle here..."
             className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2 text-xs text-[var(--muted)] outline-none"
           />
           <input
             type="text"
             value={currentLine.loadingTip || ''}
             onChange={(e) => onUpdateCurrentLine('loadingTip', e.target.value)}
-            placeholder="Classified tip or lore..."
+            placeholder="Enter loading tip or lore here..."
             className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2 text-xs text-[var(--muted2)] outline-none"
           />
         </div>
