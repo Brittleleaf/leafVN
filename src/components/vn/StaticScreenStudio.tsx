@@ -387,15 +387,15 @@ export default function StaticScreenStudio({
 
             {/* Top Canvas Bar with Guides Toggle & Snapping Controls */}
             <div className="absolute top-3 left-3 right-3 z-40 flex items-center justify-between pointer-events-none">
-              <div className="bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[10px] font-mono text-gray-300 flex items-center gap-2 shadow-lg pointer-events-auto">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="bg-[var(--well-bg)] backdrop-blur-md px-3 py-1.5 rounded-full border border-[var(--border)] text-[10px] font-mono text-[var(--text)] flex items-center gap-2 shadow-lg pointer-events-auto">
+                <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]" />
                 <span className="font-bold">WYSIWYG CANVAS</span>
                 {selectedTarget === 'title' ? (
-                  <span className="text-cyan-400 font-bold ml-1">• TITLE TRANSFORM</span>
+                  <span className="text-[var(--accent)] font-bold ml-1">• TITLE TRANSFORM</span>
                 ) : selectedTarget === 'subtitle' ? (
-                  <span className="text-purple-400 font-bold ml-1">• SUBTITLE TRANSFORM</span>
+                  <span className="text-[var(--accent)] font-bold ml-1">• SUBTITLE TRANSFORM</span>
                 ) : config.buttonsLayout === 'free' ? (
-                  <span className="text-cyan-400 font-bold ml-1">• BUTTON TRANSFORM</span>
+                  <span className="text-[var(--accent)] font-bold ml-1">• BUTTON TRANSFORM</span>
                 ) : null}
               </div>
 
@@ -409,13 +409,13 @@ export default function StaticScreenStudio({
                   }}
                   className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer shadow-md flex items-center gap-1.5 backdrop-blur-md ${
                     showGuides
-                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.3)]'
-                      : 'bg-black/70 border-white/15 text-gray-400 hover:text-white'
+                      ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)]'
+                      : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
                   }`}
-                  title="Mostrar u ocultar guías de centrado y tercios en el canvas"
+                  title="Toggle grid and centering guides"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.general.ruler} className="w-3.5 h-3.5" />
-                  <span>{showGuides ? 'Guías: ON' : 'Mostrar Guías'}</span>
+                  <span>{showGuides ? 'Guides: ON' : 'Guides: OFF'}</span>
                 </button>
 
                 {/* Toggle Ajustar a Guías (Snap) */}
@@ -427,13 +427,13 @@ export default function StaticScreenStudio({
                   }}
                   className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer shadow-md flex items-center gap-1.5 backdrop-blur-md ${
                     snapToGuides
-                      ? 'bg-[#ff007f]/20 border-[#ff007f] text-pink-200 shadow-[0_0_12px_rgba(255,0,127,0.3)]'
-                      : 'bg-black/70 border-white/15 text-gray-400 hover:text-white'
+                      ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)]'
+                      : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
                   }`}
-                  title="Activar o desactivar el ajuste magnético al centro y alineaciones (Ajustar a)"
+                  title="Toggle magnetic snapping"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3.5 h-3.5" />
-                  <span>{snapToGuides ? 'Ajustar a: ON' : 'Ajustar: OFF'}</span>
+                  <span>{snapToGuides ? 'Snap: ON' : 'Snap: OFF'}</span>
                 </button>
               </div>
             </div>
