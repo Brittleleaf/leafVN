@@ -85,6 +85,16 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
     playSfx('/assets/sfx/click intro.mp3', false, 0.4);
   };
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
   // Estado del editor/reproductor activo en modo launcher directo
   const [activeStory, setActiveStory] = useState<VNStory | null>(null);
   const [engineMode, setEngineMode] = useState<'launcher' | 'editor' | 'player'>('launcher');
@@ -764,10 +774,13 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 document.documentElement.requestFullscreen();
               }
             }}
-            title="Toggle Fullscreen"
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
             className="w-7 h-7 rounded hover:bg-[var(--btn-hover-bg)] flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] transition-colors cursor-pointer"
           >
-            <GuiIconRenderer icon={GUI_ICONS.general.resize} className="w-3.5 h-3.5" />
+            <GuiIconRenderer
+              icon={isFullscreen ? GUI_ICONS.general.exitFullscreen : GUI_ICONS.general.fullscreen}
+              className="w-3.5 h-3.5"
+            />
           </button>
         </div>
       </header>

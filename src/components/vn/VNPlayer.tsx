@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   VNStory,
   VNChapter,
@@ -92,6 +92,16 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     playerContainerRef,
     historyBottomRef,
   } = useVNPlayer({ story, initialSaveState, onExit });
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   // Computed character staging & docking in player
   const isPlayerCustomPlaced =
@@ -505,6 +515,22 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               <span>EDITOR MODE</span>
             </button>
           )}
+          <button
+            onClick={() => {
+              if (document.fullscreenElement) {
+                document.exitFullscreen();
+              } else {
+                playerContainerRef.current?.requestFullscreen?.() || document.documentElement.requestFullscreen();
+              }
+            }}
+            title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+            className="p-1.5 bg-gray-900 hover:bg-gray-800 border border-gray-700 text-gray-300 hover:text-white rounded transition-colors text-xs cursor-pointer flex items-center justify-center"
+          >
+            <GuiIconRenderer
+              icon={isFullscreen ? GUI_ICONS.general.exitFullscreen : GUI_ICONS.general.fullscreen}
+              className="w-3.5 h-3.5"
+            />
+          </button>
           {onExit && (
             <button
               onClick={onExit}

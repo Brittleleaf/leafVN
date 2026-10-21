@@ -215,6 +215,9 @@ export const GUI_ICONS = {
     resizeHorizontal: '/assets/image/GUI%20ICONS/gui-resize-horizontal.svg',
     resizeVertical: '/assets/image/GUI%20ICONS/gui-resize-vertical.svg',
     folderStructure: '/assets/image/GUI%20ICONS/folder-structure.svg',
+    fullscreen: '/assets/image/GUI%20ICONS/full-screen.svg',
+    exitFullscreen: '/assets/image/GUI%20ICONS/full-screen-exit.svg',
+    fullscreenExit: '/assets/image/GUI%20ICONS/full-screen-exit.svg',
   },
 };
 
@@ -227,6 +230,10 @@ export const GUI_ICON_MAP: Record<string, string> = {
   folder: GUI_ICONS.general.folder,
   closedFolder: GUI_ICONS.general.closedFolder,
   openFolder: GUI_ICONS.general.openFolder,
+  fullscreen: GUI_ICONS.general.fullscreen,
+  fullScreen: GUI_ICONS.general.fullscreen,
+  exitFullscreen: GUI_ICONS.general.exitFullscreen,
+  fullscreenExit: GUI_ICONS.general.fullscreenExit,
   files: GUI_ICONS.general.files,
   scenario: GUI_ICONS.general.scenario,
   scene: GUI_ICONS.general.scenario,

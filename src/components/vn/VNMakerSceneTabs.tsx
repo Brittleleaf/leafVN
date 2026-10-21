@@ -282,7 +282,10 @@ export default function VNMakerSceneTabs() {
               : "Fullscreen Workspace: Hide top window for maximum editing space"
           }
         >
-          <GuiIconRenderer icon={GUI_ICONS.general.resize} className="w-3.5 h-3.5" />
+          <GuiIconRenderer
+            icon={isFullscreenWorkspace ? GUI_ICONS.general.exitFullscreen : GUI_ICONS.general.fullscreen}
+            className="w-3.5 h-3.5"
+          />
           <span className="hidden sm:inline">
             {isFullscreenWorkspace ? 'Exit Full' : 'Fullscreen'}
           </span>
