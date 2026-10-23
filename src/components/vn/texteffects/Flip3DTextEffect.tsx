@@ -11,7 +11,7 @@ export const Flip3DTextEffectComponent: React.FC<TextEffectProps> = ({
   style = {},
   keySeed,
 }) => {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
 
   const fontStyle = fontFamily
     ? `var(--font-${fontFamily}), ${fontFamily}, sans-serif`
@@ -19,10 +19,10 @@ export const Flip3DTextEffectComponent: React.FC<TextEffectProps> = ({
 
   useEffect(() => {
     setActive(false);
-    const raf = requestAnimationFrame(() => {
+    const timer = setTimeout(() => {
       setActive(true);
-    });
-    return () => cancelAnimationFrame(raf);
+    }, 60);
+    return () => clearTimeout(timer);
   }, [text, keySeed]);
 
   const chars = [...(text || '')];

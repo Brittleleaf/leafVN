@@ -971,4 +971,40 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   }
 }
 
+/* ========================================================
+   LOADING WAVE TEXT KEYFRAMES
+   ======================================================== */
+
+@keyframes vn-loading-letter {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes vn-loading-letter-glow {
+  0%, 100% {
+    opacity: 0.1;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes vn-loading-letter-color {
+  0%, 100% {
+    color: var(--loading-dim-color, #777777);
+  }
+  50% {
+    color: var(--loading-bright-color, #ffffff);
+  }
+}
+
+
 

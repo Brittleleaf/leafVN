@@ -11,7 +11,7 @@ export const CurtainWipeTextEffectComponent: React.FC<TextEffectProps> = ({
   style = {},
   keySeed,
 }) => {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
 
   const fontStyle = fontFamily
     ? `var(--font-${fontFamily}), ${fontFamily}, sans-serif`
@@ -19,10 +19,10 @@ export const CurtainWipeTextEffectComponent: React.FC<TextEffectProps> = ({
 
   useEffect(() => {
     setActive(false);
-    const raf = requestAnimationFrame(() => {
+    const timer = setTimeout(() => {
       setActive(true);
-    });
-    return () => cancelAnimationFrame(raf);
+    }, 60);
+    return () => clearTimeout(timer);
   }, [text, keySeed]);
 
   return (
@@ -48,7 +48,7 @@ export const CurtainWipeTextEffectComponent: React.FC<TextEffectProps> = ({
 
       {/* High-energy specular curtain wipe bar */}
       <span
-        className="absolute inset-0 z-20 pointer-events-none transition-transform duration-800 ease-[cubic-bezier(0.7,0,0.2,1)]"
+        className="absolute inset-0 z-20 pointer-events-none transition-transform duration-700 ease-[cubic-bezier(0.7,0,0.2,1)]"
         style={{
           backgroundColor: color || '#38bdf8',
           transformOrigin: 'right center',

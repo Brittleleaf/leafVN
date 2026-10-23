@@ -95,7 +95,7 @@ export const SplitFlapTextEffectComponent: React.FC<TextEffectProps> = ({
 
   return (
     <span
-      className={`inline-flex flex-wrap items-center gap-1 select-none font-mono ${className}`}
+      className={`inline-flex flex-wrap items-center justify-center gap-1 select-none font-mono text-xs sm:text-sm md:text-base ${className}`}
       style={{
         fontFamily: fontStyle,
         color: color || '#facc15',

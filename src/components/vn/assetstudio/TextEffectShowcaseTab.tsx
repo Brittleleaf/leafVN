@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VNAssetItem } from '@/types/vn';
 import { VN_TEXT_EFFECTS_CATALOG, VNTextEffectRenderer } from '@/lib/vn/textEffects';
 import { playSfx } from '@/lib/audioSettings';
@@ -23,6 +23,24 @@ export function TextEffectShowcaseTab({
   const [textEffectCategory, setTextEffectCategory] = useState<string>('all');
   const [textEffectColor, setTextEffectColor] = useState<string>('#ffffff');
   const [textEffectReplayKeys, setTextEffectReplayKeys] = useState<Record<string, number>>({});
+  const [autoCycle, setAutoCycle] = useState<boolean>(true);
+
+  // Auto-cycle reveal animations every 5.5s so gallery cards remain continuously dynamic
+  useEffect(() => {
+    if (!autoCycle) return;
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setTextEffectReplayKeys((prev) => {
+        const next: Record<string, number> = { ...prev };
+        VN_TEXT_EFFECTS_CATALOG.forEach((fx) => {
+          next[fx.id] = now;
+        });
+        return next;
+      });
+    }, 5500);
+
+    return () => clearInterval(interval);
+  }, [autoCycle]);
 
   return (
     <div className="space-y-4">
@@ -83,26 +101,44 @@ export function TextEffectShowcaseTab({
 
         {/* Custom Sample Input Bar */}
         <div className="space-y-1">
-          <div className="flex items-center justify-between text-[10px] text-[var(--muted)]">
+          <div className="flex items-center justify-between text-[10px] text-[var(--muted)] flex-wrap gap-2">
             <span className="font-bold uppercase tracking-wider">
               Audition Sample Sentence:
             </span>
-            <button
-              type="button"
-              onClick={() => {
-                const now = Date.now();
-                const next: Record<string, number> = {};
-                VN_TEXT_EFFECTS_CATALOG.forEach((fx) => {
-                  next[fx.id] = now;
-                });
-                setTextEffectReplayKeys(next);
-                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-              }}
-              className="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1.5 cursor-pointer text-xs"
-            >
-              <GuiIconRenderer icon={GUI_ICONS.general.refresh} className="w-3 h-3" />
-              <span>Replay All Effects</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Auto-Cycle Toggle */}
+              <button
+                type="button"
+                onClick={() => setAutoCycle((prev) => !prev)}
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition-all border cursor-pointer flex items-center gap-1 ${
+                  autoCycle
+                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                    : 'bg-white/5 border-white/20 text-gray-400 hover:text-white'
+                }`}
+                title="Toggle automatic periodic replay of reveal animations"
+              >
+                <span className={`w-1.5 h-1.5 rounded-full ${autoCycle ? 'bg-emerald-400 animate-ping' : 'bg-gray-500'}`} />
+                <span>Auto-Cycle: {autoCycle ? 'ON' : 'OFF'}</span>
+              </button>
+
+              {/* Replay All */}
+              <button
+                type="button"
+                onClick={() => {
+                  const now = Date.now();
+                  const next: Record<string, number> = {};
+                  VN_TEXT_EFFECTS_CATALOG.forEach((fx) => {
+                    next[fx.id] = now;
+                  });
+                  setTextEffectReplayKeys(next);
+                  playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+                }}
+                className="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1.5 cursor-pointer text-xs"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.general.refresh} className="w-3 h-3" />
+                <span>Replay All Effects</span>
+              </button>
+            </div>
           </div>
           <input
             type="text"
@@ -132,7 +168,17 @@ export function TextEffectShowcaseTab({
                 className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
               >
                 {/* Interactive Dark Stage for Text Animation */}
-                <div className="relative w-full h-44 bg-[#050508] border-b border-[var(--border)] flex items-center justify-center p-4 overflow-hidden select-none">
+                <div
+                  className="relative w-full h-44 bg-[#050508] border-b border-[var(--border)] flex items-center justify-center p-4 overflow-hidden select-none cursor-pointer"
+                  onClick={() => {
+                    setTextEffectReplayKeys((prev) => ({ ...prev, [fx.id]: Date.now() }));
+                    playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+                  }}
+                  onMouseEnter={() => {
+                    setTextEffectReplayKeys((prev) => ({ ...prev, [fx.id]: Date.now() }));
+                  }}
+                  title="Click or hover stage to replay animation"
+                >
                   <div className="absolute inset-0 bg-radial from-white/5 to-transparent pointer-events-none" />
 
                   {/* Top Badges */}
@@ -151,7 +197,8 @@ export function TextEffectShowcaseTab({
                   {/* Replay Button */}
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setTextEffectReplayKeys((prev) => ({ ...prev, [fx.id]: Date.now() }));
                       playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                     }}

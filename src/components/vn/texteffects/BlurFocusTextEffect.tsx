@@ -11,7 +11,7 @@ export const BlurFocusTextEffectComponent: React.FC<TextEffectProps> = ({
   style = {},
   keySeed,
 }) => {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
 
   const fontStyle = fontFamily
     ? `var(--font-${fontFamily}), ${fontFamily}, sans-serif`
@@ -19,10 +19,10 @@ export const BlurFocusTextEffectComponent: React.FC<TextEffectProps> = ({
 
   useEffect(() => {
     setActive(false);
-    const raf = requestAnimationFrame(() => {
+    const timer = setTimeout(() => {
       setActive(true);
-    });
-    return () => cancelAnimationFrame(raf);
+    }, 60);
+    return () => clearTimeout(timer);
   }, [text, keySeed]);
 
   const chars = [...(text || '')];
@@ -51,7 +51,6 @@ export const BlurFocusTextEffectComponent: React.FC<TextEffectProps> = ({
               opacity: active ? 1 : 0,
               filter: active ? 'blur(0px)' : 'blur(16px)',
               transform: active ? 'scale(1) translateZ(0)' : 'scale(1.15) translateZ(0)',
-              // Anamorphic optical chromatic aberration: split RGB shadows converge as focus locks
               textShadow: active
                 ? color
                   ? `0 0 14px ${color}60`

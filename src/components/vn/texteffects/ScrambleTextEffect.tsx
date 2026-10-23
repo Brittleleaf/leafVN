@@ -25,7 +25,8 @@ export const ScrambleTextEffectComponent: React.FC<TextEffectProps> = ({
     const el = containerRef.current;
     if (!el) return;
 
-    const oldText = oldTextRef.current;
+    oldTextRef.current = '';
+    const oldText = '';
     const newText = text || '';
     const length = Math.max(oldText.length, newText.length);
     
