@@ -837,6 +837,34 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   }
 }
 
+@keyframes vn-beacon-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px currentColor);
+    opacity: 0.85;
+  }
+  14% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 24px currentColor) drop-shadow(0 0 45px currentColor);
+    opacity: 1;
+  }
+  28% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 10px currentColor);
+    opacity: 0.9;
+  }
+  42% {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 32px currentColor) drop-shadow(0 0 60px currentColor);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px currentColor);
+    opacity: 0.8;
+  }
+}
+
 /* ========================================================
    PALIMPSEST TYPOGRAPHY EFFECT (Temporal Memory & Anticipation Echoes)
    ======================================================== */
@@ -889,10 +917,12 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 
 @keyframes vn-kinetic-wave {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: brightness(0.95);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-12px) scale(1.08);
+    filter: brightness(1.35) drop-shadow(0 0 12px currentColor);
   }
 }
 
@@ -914,18 +944,21 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 @keyframes vn-gravity-drop {
   0% {
     opacity: 0;
-    transform: translateY(-140px);
+    transform: translateY(-160px) scale(0.9, 1.25);
   }
-  60% {
+  62% {
     opacity: 1;
-    transform: translateY(8px);
+    transform: translateY(0) scale(1.24, 0.76);
   }
-  80% {
-    transform: translateY(-4px);
+  78% {
+    transform: translateY(-10px) scale(0.94, 1.08);
+  }
+  90% {
+    transform: translateY(2px) scale(1.05, 0.95);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1, 1);
   }
 }
 

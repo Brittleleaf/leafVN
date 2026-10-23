@@ -5,6 +5,7 @@ import { GUI_ICONS } from '@/lib/vn/guiIcons';
 
 export const ShimmerTextEffectComponent: React.FC<TextEffectProps> = ({
   text,
+  color,
   fontFamily,
   className = '',
   style = {},
@@ -14,16 +15,18 @@ export const ShimmerTextEffectComponent: React.FC<TextEffectProps> = ({
     ? `var(--font-${fontFamily}), ${fontFamily}, sans-serif`
     : undefined;
 
+  const baseColor = color || '#fbbf24';
+
   return (
     <span
       key={keySeed}
-      className={`inline-block bg-clip-text text-transparent ${className}`}
+      className={`inline-block bg-clip-text text-transparent select-none font-bold tracking-wider ${className}`}
       style={{
         fontFamily: fontStyle,
-        backgroundImage:
-          'linear-gradient(90deg, #f59e0b 0%, #fef08a 25%, #fbbf24 50%, #f59e0b 75%, #fef08a 100%)',
-        backgroundSize: '200% auto',
-        animation: 'vn-gold-shimmer 3s linear infinite',
+        backgroundImage: `linear-gradient(100deg, ${baseColor} 20%, #ffffff 48%, ${baseColor} 70%)`,
+        backgroundSize: '220% 100%',
+        animation: 'vn-gold-shimmer 2.8s linear infinite',
+        filter: `drop-shadow(0 0 10px ${baseColor}40)`,
         ...style,
       }}
     >
@@ -34,11 +37,12 @@ export const ShimmerTextEffectComponent: React.FC<TextEffectProps> = ({
 
 export const shimmerTextEffect: TextEffectDefinition = {
   id: 'shimmer',
-  name: 'Golden Shimmer',
+  name: 'Luminous Shimmer',
   category: 'cinematic',
   icon: GUI_ICONS.general.screenFx,
+  tag: 'PRO',
   defaultColor: '#fbbf24',
   defaultSample: 'THE DAWN OF A NEW EMPIRE',
-  description: 'A sweeping band of specular light and reflective luster traveling across letterforms.',
+  description: 'Sweeping band of specular gleam and reflective brilliance adapting dynamically to custom palette hues.',
   component: ShimmerTextEffectComponent,
 };

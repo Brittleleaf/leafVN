@@ -163,13 +163,13 @@ export function TextEffectShowcaseTab({
                   </button>
 
                   {/* Live Animated Text */}
-                  <div className="relative z-10 text-center max-w-full overflow-hidden px-2">
+                  <div className="relative z-10 text-center max-w-full overflow-hidden px-3 flex items-center justify-center">
                     <VNTextEffectRenderer
                       keySeed={replayKey}
                       effectId={fx.id}
                       text={customFontSample || fx.defaultSample || 'SIGNAL IN THE FOG'}
                       color={textEffectColor || fx.defaultColor}
-                      className="text-lg sm:text-xl font-black uppercase tracking-wider"
+                      className="text-base sm:text-lg font-black uppercase tracking-wider"
                     />
                   </div>
                 </div>

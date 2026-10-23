@@ -5,7 +5,7 @@ import { GUI_ICONS } from '@/lib/vn/guiIcons';
 
 export const WaveTextEffectComponent: React.FC<TextEffectProps> = ({
   text,
-  color,
+  color = '#38bdf8',
   fontFamily,
   className = '',
   style = {},
@@ -20,7 +20,7 @@ export const WaveTextEffectComponent: React.FC<TextEffectProps> = ({
   return (
     <span
       key={keySeed}
-      className={`inline-block select-none ${className}`}
+      className={`inline-block select-none tracking-wide py-2 ${className}`}
       style={{
         fontFamily: fontStyle,
         color: color || '#38bdf8',
@@ -32,8 +32,8 @@ export const WaveTextEffectComponent: React.FC<TextEffectProps> = ({
           key={idx}
           className="inline-block will-change-transform"
           style={{
-            animation: 'vn-kinetic-wave 1.8s ease-in-out infinite',
-            animationDelay: `${idx * 65}ms`,
+            animation: 'vn-kinetic-wave 2.2s ease-in-out infinite',
+            animationDelay: `${idx * 75}ms`,
           }}
         >
           {ch === ' ' ? '\u00A0' : ch}
@@ -48,9 +48,9 @@ export const waveTextEffect: TextEffectDefinition = {
   name: 'Kinetic Wave',
   category: 'ambient',
   icon: GUI_ICONS.general.screenFx,
-  tag: 'NEW',
+  tag: 'PRO',
   defaultColor: '#38bdf8',
   defaultSample: 'WHISPERS ACROSS THE OBSIDIAN OCEAN',
-  description: 'Continuous harmonic vertical oscillation rolling rhythmically through characters.',
+  description: 'Bioluminescent undulating wave with synchronous crest luminance and vertical sine kinematics.',
   component: WaveTextEffectComponent,
 };

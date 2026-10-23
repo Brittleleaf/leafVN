@@ -5,7 +5,7 @@ import { GUI_ICONS } from '@/lib/vn/guiIcons';
 
 export const PulseTextEffectComponent: React.FC<TextEffectProps> = ({
   text,
-  color,
+  color = '#ef4444',
   fontFamily,
   className = '',
   style = {},
@@ -18,11 +18,11 @@ export const PulseTextEffectComponent: React.FC<TextEffectProps> = ({
   return (
     <span
       key={keySeed}
-      className={`inline-block animate-pulse ${className}`}
+      className={`inline-block select-none will-change-transform ${className}`}
       style={{
         fontFamily: fontStyle,
         color: color || '#ef4444',
-        filter: 'drop-shadow(0 0 16px rgba(239, 68, 68, 0.8))',
+        animation: 'vn-beacon-pulse 1.8s ease-in-out infinite',
         ...style,
       }}
     >
@@ -36,8 +36,9 @@ export const pulseTextEffect: TextEffectDefinition = {
   name: 'Red Alert Pulse',
   category: 'dramatic',
   icon: GUI_ICONS.general.hazard,
+  tag: 'PRO',
   defaultColor: '#ff2a2a',
   defaultSample: 'CRITICAL PRESSURE WARNING',
-  description: 'Urgent rhythmic luminescence swelling and throbbing like an emergency beacon.',
+  description: 'Double-beat cardiac beacon surge with expanding luminous shockwave halo and rhythmic adrenaline strobe.',
   component: PulseTextEffectComponent,
 };

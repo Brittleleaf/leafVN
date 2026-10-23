@@ -38,7 +38,7 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
 
   // Extract clean keyword/phrase for trailing cursor echoes if text is long
   const echoWord = useMemo(() => {
-    if (!text) return 'MEMORIA';
+    if (!text) return 'MEMORY';
     const trimmed = text.trim();
     if (trimmed.length <= 25) return trimmed;
     const words = trimmed.split(/\s+/);
