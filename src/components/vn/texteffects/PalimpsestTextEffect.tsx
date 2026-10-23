@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { TextEffectProps, TextEffectDefinition } from './types';
 import { GUI_ICONS } from '@/lib/vn/guiIcons';
 
-interface ScreenMemoryEcho {
+interface StageMemoryEcho {
   id: number;
   x: number;
   y: number;
@@ -23,8 +23,8 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
   style = {},
   keySeed,
 }) => {
-  const [mounted, setMounted] = useState(false);
-  const [screenEchoes, setScreenEchoes] = useState<ScreenMemoryEcho[]>([]);
+  const [hostEl, setHostEl] = useState<HTMLElement | null>(null);
+  const [screenEchoes, setScreenEchoes] = useState<StageMemoryEcho[]>([]);
   const nextEchoId = useRef(0);
   const textContainerRef = useRef<HTMLSpanElement>(null);
 
@@ -45,13 +45,22 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
     return words.slice(0, 3).join(' ');
   }, [text]);
 
+  // Find the containing stage or preview window
   useEffect(() => {
-    setMounted(true);
+    const el = textContainerRef.current;
+    if (!el) return;
+
+    const stage = (el.closest('[data-text-stage="true"]') ||
+      el.closest('[data-stage="true"]') ||
+      el.closest('.palimpsest-stage') ||
+      el.parentElement) as HTMLElement | null;
+
+    setHostEl(stage);
   }, []);
 
-  // Full-screen mouse tracking & trailing echo generation across the entire viewport
+  // Stage-constrained pointer tracking: echoes only spawn and live INSIDE hostEl
   useEffect(() => {
-    if (!mounted) return;
+    if (!hostEl) return;
 
     let lastX = -1000;
     let lastY = -1000;
@@ -59,43 +68,55 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
     let spawnCount = 0;
 
     const onPointerMove = (e: PointerEvent) => {
+      const rect = hostEl.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // Strictly ignore events outside host stage boundaries
+      if (
+        mouseX < 0 ||
+        mouseX > rect.width ||
+        mouseY < 0 ||
+        mouseY > rect.height
+      ) {
+        return;
+      }
+
       const now = performance.now();
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
+      const dx = mouseX - lastX;
+      const dy = mouseY - lastY;
       const dist = Math.hypot(dx, dy);
 
-      // Throttle spawning: require 32px movement or 85ms interval to keep GPU buttery smooth
-      if (dist < 32 && now - lastTime < 85) return;
+      // Throttle spawning: require 24px movement or 90ms interval
+      if (dist < 24 && now - lastTime < 90) return;
 
-      lastX = e.clientX;
-      lastY = e.clientY;
+      lastX = mouseX;
+      lastY = mouseY;
       lastTime = now;
       spawnCount++;
 
       const type: 'past' | 'future' = spawnCount % 2 === 0 ? 'past' : 'future';
-      const jitterX = (Math.random() - 0.5) * 16;
-      const jitterY = (Math.random() - 0.5) * 12;
-      const driftX = (Math.random() - 0.5) * 36;
-      const driftY = -12 - Math.random() * 20; // gentle ethereal float upwards
+      const jitterX = (Math.random() - 0.5) * 14;
+      const jitterY = (Math.random() - 0.5) * 10;
+      const driftX = (Math.random() - 0.5) * 24;
+      const driftY = -8 - Math.random() * 16;
       const echoId = nextEchoId.current++;
 
-      // Spawn new temporal echo behind the cursor anywhere on screen
       setScreenEchoes((prev) => {
-        const newEcho: ScreenMemoryEcho = {
+        const newEcho: StageMemoryEcho = {
           id: echoId,
-          x: e.clientX + jitterX,
-          y: e.clientY + jitterY,
-          scale: 0.95,
+          x: mouseX + jitterX,
+          y: mouseY + jitterY,
+          scale: 0.92,
           type,
-          opacity: type === 'past' ? 0.32 : 0.24,
+          opacity: type === 'past' ? 0.38 : 0.3,
           blur: type === 'past' ? 1.5 : 2.5,
           text: echoWord,
         };
-        // Cap max active screen echoes to 10 for performance
-        return [...prev.slice(-9), newEcho];
+        // Cap active echoes to 6 within stage for performance
+        return [...prev.slice(-5), newEcho];
       });
 
-      // Trigger drift, scale up and fade out to temporal mist
       const driftRaf = requestAnimationFrame(() => {
         activeRafs.delete(driftRaf);
         const driftTimer = setTimeout(() => {
@@ -107,9 +128,9 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
                     ...item,
                     x: item.x + driftX,
                     y: item.y + driftY,
-                    scale: 1.1,
+                    scale: 1.08,
                     opacity: 0,
-                    blur: item.type === 'past' ? 7 : 10,
+                    blur: item.type === 'past' ? 6 : 9,
                   }
                 : item
             )
@@ -119,41 +140,48 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
       });
       activeRafs.add(driftRaf);
 
-      // Remove after transition finishes
       const removeTimer = setTimeout(() => {
         activeTimeouts.delete(removeTimer);
         setScreenEchoes((prev) => prev.filter((item) => item.id !== echoId));
-      }, 1600);
+      }, 1400);
       activeTimeouts.add(removeTimer);
+    };
+
+    const onPointerLeave = () => {
+      lastX = -1000;
+      lastY = -1000;
     };
 
     const activeTimeouts = new Set<ReturnType<typeof setTimeout>>();
     const activeRafs = new Set<number>();
 
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    hostEl.addEventListener('pointermove', onPointerMove, { passive: true });
+    hostEl.addEventListener('pointerleave', onPointerLeave);
+
     return () => {
-      window.removeEventListener('pointermove', onPointerMove);
+      hostEl.removeEventListener('pointermove', onPointerMove);
+      hostEl.removeEventListener('pointerleave', onPointerLeave);
       activeTimeouts.forEach((t) => clearTimeout(t));
       activeTimeouts.clear();
       activeRafs.forEach((r) => cancelAnimationFrame(r));
       activeRafs.clear();
     };
-  }, [mounted, echoWord]);
+  }, [hostEl, echoWord]);
 
   return (
     <>
-      {/* 1. Global Viewport Echo Layer (renders directly in body to follow cursor across the whole screen) */}
-      {mounted &&
+      {/* 1. Stage-Constrained Echo Layer (contained strictly within the preview stage) */}
+      {hostEl &&
         createPortal(
           <div
-            className="vn-palimpsest-global-echo-layer pointer-events-none select-none"
+            className="vn-palimpsest-stage-echo-layer pointer-events-none select-none"
             aria-hidden="true"
             style={{
-              position: 'fixed',
+              position: 'absolute',
               inset: 0,
-              zIndex: 9998,
               overflow: 'hidden',
               pointerEvents: 'none',
+              zIndex: 15,
             }}
           >
             {screenEchoes.map((echo) => (
@@ -165,24 +193,28 @@ export const PalimpsestTextEffectComponent: React.FC<TextEffectProps> = ({
                   top: 0,
                   transform: `translate3d(${echo.x}px, ${echo.y}px, 0) translate(-50%, -50%) scale(${echo.scale})`,
                   fontFamily: fontStyle,
-                  fontSize: 'clamp(1.2rem, 3.2vw, 3rem)',
-                  letterSpacing: '0.16em',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 1.5rem)',
+                  letterSpacing: '0.14em',
                   fontWeight: 300,
                   color: echo.type === 'past' ? pastColor : futureColor,
                   opacity: echo.opacity,
                   filter: `blur(${echo.blur}px)`,
                   whiteSpace: 'nowrap',
-                  transition: 'transform 1.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease-out, filter 1.5s ease-out',
+                  transition:
+                    'transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.3s ease-out, filter 1.3s ease-out',
                   willChange: 'transform, opacity, filter',
                   userSelect: 'none',
-                  textShadow: echo.type === 'past' ? '0 0 12px rgba(200, 169, 110, 0.6)' : '0 0 12px rgba(122, 175, 200, 0.6)',
+                  textShadow:
+                    echo.type === 'past'
+                      ? '0 0 10px rgba(200, 169, 110, 0.6)'
+                      : '0 0 10px rgba(122, 175, 200, 0.6)',
                 }}
               >
                 {echo.text}
               </span>
             ))}
           </div>,
-          document.body
+          hostEl
         )}
 
       {/* 2. Anchor Word in Text Box with Layered Chromatic Past/Future Shadows */}
@@ -240,10 +272,10 @@ export const palimpsestTextEffect: TextEffectDefinition = {
   id: 'palimpsest',
   name: 'Palimpsest Temporal Echo',
   category: 'cinematic',
-  icon: GUI_ICONS.state.backwardTime,
+  icon: GUI_ICONS.general.screenFx,
   tag: 'NEW',
   defaultColor: '#ede0c8',
-  defaultSample: 'BEFORE ◆ AFTER',
-  description: 'Full-screen temporal memory ghosts trailing the mouse pointer across the entire screen, with past amber & future cyan chromatic layers.',
+  defaultSample: 'TIME IS A PALIMPSEST',
+  description: 'Stage-constrained temporal memory ghosts trailing the pointer with past amber and future cyan chromatic layers.',
   component: PalimpsestTextEffectComponent,
 };

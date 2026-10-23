@@ -169,6 +169,7 @@ export function TextEffectShowcaseTab({
               >
                 {/* Interactive Dark Stage for Text Animation */}
                 <div
+                  data-text-stage="true"
                   className="relative w-full h-44 bg-[#050508] border-b border-[var(--border)] flex items-center justify-center p-4 overflow-hidden select-none cursor-pointer"
                   onClick={() => {
                     setTextEffectReplayKeys((prev) => ({ ...prev, [fx.id]: Date.now() }));
