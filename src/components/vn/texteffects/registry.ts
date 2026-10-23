@@ -12,6 +12,15 @@ import { shimmerTextEffect } from './ShimmerTextEffect';
 import { fadeInTextEffect } from './FadeInTextEffect';
 import { typewriterTextEffect } from './TypewriterTextEffect';
 import { loadingTextEffect } from './LoadingTextEffect';
+import { splitFlapTextEffect } from './SplitFlapTextEffect';
+import { blurFocusTextEffect } from './BlurFocusTextEffect';
+import { flip3DTextEffect } from './Flip3DTextEffect';
+import { waveTextEffect } from './WaveTextEffect';
+import { liquidWobbleTextEffect } from './LiquidWobbleTextEffect';
+import { shatterTextEffect } from './ShatterTextEffect';
+import { matrixRainTextEffect } from './MatrixRainTextEffect';
+import { gravityDropTextEffect } from './GravityDropTextEffect';
+import { curtainWipeTextEffect } from './CurtainWipeTextEffect';
 
 export const TEXT_EFFECTS_REGISTRY: Record<string, TextEffectDefinition> = {
   loading: loadingTextEffect,
@@ -27,6 +36,15 @@ export const TEXT_EFFECTS_REGISTRY: Record<string, TextEffectDefinition> = {
   shimmer: shimmerTextEffect,
   fade_in: fadeInTextEffect,
   typewriter: typewriterTextEffect,
+  split_flap: splitFlapTextEffect,
+  blur_focus: blurFocusTextEffect,
+  flip_3d: flip3DTextEffect,
+  wave: waveTextEffect,
+  liquid_wobble: liquidWobbleTextEffect,
+  shatter: shatterTextEffect,
+  matrix_rain: matrixRainTextEffect,
+  gravity_drop: gravityDropTextEffect,
+  curtain_wipe: curtainWipeTextEffect,
 };
 
 /**
@@ -75,4 +93,13 @@ export const VN_TEXT_EFFECTS_CATALOG: TextEffectDefinition[] = [
   shimmerTextEffect,
   fadeInTextEffect,
   typewriterTextEffect,
+  splitFlapTextEffect,
+  blurFocusTextEffect,
+  flip3DTextEffect,
+  waveTextEffect,
+  liquidWobbleTextEffect,
+  shatterTextEffect,
+  matrixRainTextEffect,
+  gravityDropTextEffect,
+  curtainWipeTextEffect,
 ];
