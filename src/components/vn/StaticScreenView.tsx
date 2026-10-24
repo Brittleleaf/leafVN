@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VNScene, VNStaticScreenConfig, VNStaticScreenButton } from '@/types/vn';
 import { VNScreenFxOverlay } from './VNScreenFxOverlay';
+import { ScreenFxSvgDefs, getSceneElementFxFilter } from './screenfx';
 import { playSfx } from '@/lib/audioSettings';
 import { ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
 import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
@@ -345,6 +346,11 @@ export default function StaticScreenView({
   const isTitleSelected = !isInteractive && selectedTarget === 'title';
   const isSubtitleSelected = !isInteractive && selectedTarget === 'subtitle';
 
+  const staticScreenFxFilter = getSceneElementFxFilter({
+    fxType: config.screenFx,
+    intensity: config.fxIntensity || 'heavy',
+  });
+
   return (
     <div
       ref={stageRef}
@@ -352,30 +358,37 @@ export default function StaticScreenView({
         config.cursorType && config.cursorType !== 'default' ? 'cursor-none' : ''
       }`}
     >
+      {/* SVG Filter Definitions for Static Screen Camera FX */}
+      <ScreenFxSvgDefs activeFx={{ fxType: config.screenFx, intensity: config.fxIntensity || 'heavy' }} />
+
       {/* Custom Engine Cursor */}
       <VNCursorLayer cursorType={config.cursorType} containerRef={stageRef} />
 
-      {/* Background with custom overlay color & video support */}
+      {/* Background photo with custom overlay color & video support */}
       {(() => {
         const bgUrl = scene.backgroundUrl;
         const isVideo = isVideoMedia(bgUrl);
         return (
-          <div
-            className="absolute inset-0 bg-cover bg-center overflow-hidden transition-all duration-700"
-            style={{
-              backgroundImage: (!isVideo && bgUrl) ? `url("${bgUrl.replace(/"/g, '\\"')}")` : 'none',
-            }}
-          >
-            {isVideo && bgUrl && (
+          <div className="absolute inset-0 bg-cover bg-center overflow-hidden transition-all duration-700">
+            {isVideo && bgUrl ? (
               <video
                 src={bgUrl}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                style={{ filter: staticScreenFxFilter }}
               />
-            )}
+            ) : bgUrl ? (
+              <img
+                src={bgUrl}
+                alt="Static Background"
+                crossOrigin="anonymous"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                style={{ filter: staticScreenFxFilter }}
+              />
+            ) : null}
           </div>
         );
       })()}
