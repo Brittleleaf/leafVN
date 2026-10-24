@@ -155,6 +155,7 @@ export type VNScreenFxType =
   | 'flashlight'
   | 'code_flythrough'
   | 'liquid_distortion'
+  | 'retro_pixelate'
   | (string & {});
 
 export type VNCursorType =

@@ -22,6 +22,8 @@ export function ScreenFxShowcaseTab({
   const [fxMultipliers, setFxMultipliers] = useState<Record<string, number>>({});
   const [fxHueRotates, setFxHueRotates] = useState<Record<string, number>>({});
   const [fxTintColors, setFxTintColors] = useState<Record<string, string>>({});
+  const [fxPixelSizes, setFxPixelSizes] = useState<Record<string, number>>({});
+  const [fxColorSteps, setFxColorSteps] = useState<Record<string, number>>({});
 
   const effectiveBg = previewBackgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg';
   const isCustomSceneBg = Boolean(previewBackgroundUrl);
@@ -67,6 +69,8 @@ export function ScreenFxShowcaseTab({
               fxMultipliers[fx.id] ?? (currentIntensity === 'light' ? 0.6 : currentIntensity === 'heavy' ? 1.4 : 1.0);
             const currentHue = fxHueRotates[fx.id] ?? 0;
             const currentTintColor = fxTintColors[fx.id] || (fx.id === 'liquid_distortion' ? '#06b6d4' : undefined);
+            const currentPixelSize = fxPixelSizes[fx.id] ?? (currentIntensity === 'light' ? 1 : currentIntensity === 'heavy' ? 4 : 2);
+            const currentColorSteps = fxColorSteps[fx.id] ?? (currentIntensity === 'heavy' ? 3 : currentIntensity === 'light' ? 8 : 5);
 
             const cardParams = {
               ...(fx.defaultParams || {}),
@@ -74,6 +78,8 @@ export function ScreenFxShowcaseTab({
               hueRotate: currentHue,
               tintColor: currentTintColor,
               tintEnabled: Boolean(currentTintColor || currentHue > 0),
+              pixelSize: currentPixelSize,
+              colorSteps: currentColorSteps,
             };
 
             return (
@@ -87,7 +93,12 @@ export function ScreenFxShowcaseTab({
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
                       backgroundImage: `url(${effectiveBg})`,
-                      filter: fx.id === 'liquid_distortion' ? 'url(#liquid)' : undefined,
+                      filter:
+                        fx.id === 'liquid_distortion'
+                          ? 'url(#liquid)'
+                          : fx.id === 'retro_pixelate'
+                          ? (currentPixelSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)')
+                          : undefined,
                     }}
                   />
                   {/* Live FX Overlay */}
@@ -221,6 +232,56 @@ export function ScreenFxShowcaseTab({
                               0°
                             </button>
                           )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Independent Sliders for Retro Pixelate */}
+                    {fx.id === 'retro_pixelate' && (
+                      <div className="space-y-2 pt-1.5 border-t border-[var(--border)] text-[10px]">
+                        {/* Pixel Size Slider */}
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold uppercase text-[var(--muted)] flex items-center gap-1">
+                              <GuiIconRenderer icon={GUI_ICONS.asset.box} size={11} className="text-amber-400" />
+                              <span>Pixel Grid Size:</span>
+                            </span>
+                            <span className="font-mono text-amber-300 font-bold">
+                              {currentPixelSize === 0 ? 'Smooth (0)' : `${1 + currentPixelSize * 4}×${1 + currentPixelSize * 4} px`}
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="11"
+                            step="1"
+                            value={currentPixelSize}
+                            onChange={(e) =>
+                              setFxPixelSizes((prev) => ({ ...prev, [fx.id]: parseInt(e.target.value, 10) }))
+                            }
+                            className="w-full accent-amber-400 cursor-ew-resize h-1.5 bg-[var(--well-bg)] rounded"
+                          />
+                        </div>
+
+                        {/* Color Reduction Slider */}
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold uppercase text-[var(--muted)]">Reduced Palette:</span>
+                            <span className="font-mono text-amber-300 font-bold">
+                              {Math.pow(currentColorSteps + 1, 3)} Colors
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min="2"
+                            max="15"
+                            step="1"
+                            value={currentColorSteps}
+                            onChange={(e) =>
+                              setFxColorSteps((prev) => ({ ...prev, [fx.id]: parseInt(e.target.value, 10) }))
+                            }
+                            className="w-full accent-amber-400 cursor-ew-resize h-1.5 bg-[var(--well-bg)] rounded"
+                          />
                         </div>
                       </div>
                     )}
