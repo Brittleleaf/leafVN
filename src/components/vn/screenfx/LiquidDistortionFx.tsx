@@ -4,9 +4,24 @@ import React from 'react';
 import { ScreenFxDefinition, ScreenFxProps, ScreenFxInspectorProps } from './types';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 
-export const LiquidDistortionComponent: React.FC<ScreenFxProps> = () => {
-  // Directly applied as SVG filter on character sprite and background photo
-  return null;
+export const LiquidDistortionComponent: React.FC<ScreenFxProps> = ({ params, color }) => {
+  const isTintEnabled = params?.tintEnabled ?? Boolean(params?.tintColor);
+  const tintColor = params?.tintColor || color;
+  const opacity = params?.tintOpacity ?? 0.35;
+  const blendMode = (params?.tintBlendMode as any) || 'color';
+
+  if (!isTintEnabled || !tintColor || opacity <= 0) return null;
+
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none z-30"
+      style={{
+        backgroundColor: tintColor,
+        opacity,
+        mixBlendMode: blendMode,
+      }}
+    />
+  );
 };
 
 export const LiquidDistortionInspector: React.FC<ScreenFxInspectorProps> = ({

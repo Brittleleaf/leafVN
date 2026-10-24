@@ -28,6 +28,7 @@ import { VNCursorLayer } from './cursors';
 import { useVNPlayer } from '@/lib/vn/useVNPlayer';
 import VNUniversalButton from './ui/VNUniversalButton';
 import { isVideoMedia } from './cinematic/layers/CinematicVisualLayer';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 interface VNPlayerProps {
   story: VNStory;
@@ -215,7 +216,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 >
                   {isVideo && bgUrl ? (
                     <video
-                      src={bgUrl}
+                      src={getProxiedImageUrl(bgUrl)}
+                      crossOrigin="anonymous"
                       autoPlay
                       loop
                       muted
@@ -225,7 +227,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     />
                   ) : bgUrl ? (
                     <img
-                      src={bgUrl}
+                      src={getProxiedImageUrl(bgUrl)}
+                      crossOrigin="anonymous"
                       alt="Scene Background"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                       style={{ filter: playerFxFilter }}
@@ -385,7 +388,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               }}
             >
               <img
-                src={activeAvatarUrl}
+                src={getProxiedImageUrl(activeAvatarUrl)}
+                crossOrigin="anonymous"
                 alt={currentSpeaker?.name || 'Character'}
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444',
@@ -422,7 +426,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     }`}
                   >
                     <img
-                      src={avatar}
+                      src={getProxiedImageUrl(avatar)}
+                      crossOrigin="anonymous"
                       alt={char.name}
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#ef4444',
@@ -462,7 +467,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     }`}
                   >
                     <img
-                      src={avatar}
+                      src={getProxiedImageUrl(avatar)}
+                      crossOrigin="anonymous"
                       alt={char.name}
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#a855f7',
@@ -502,7 +508,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     }`}
                   >
                     <img
-                      src={avatar}
+                      src={getProxiedImageUrl(avatar)}
+                      crossOrigin="anonymous"
                       alt={char.name}
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#0284c7',
@@ -793,7 +800,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               className="pointer-events-none select-none"
             >
               <img
-                src={activeAvatarUrl}
+                src={getProxiedImageUrl(activeAvatarUrl)}
+                crossOrigin="anonymous"
                 alt={currentSpeaker?.name || 'Character'}
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444',

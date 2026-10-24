@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import { VNCinematicClip } from '@/types/vn';
 import { VNUniversalTransformGizmo } from '../../transform';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 export interface VisualClipWithIndex {
   clip: VNCinematicClip;
@@ -226,7 +227,7 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
                 ) : (
                   <div
                     style={{
-                      backgroundImage: clip.mediaUrl ? `url("${clip.mediaUrl.replace(/"/g, '\\"')}")` : 'none',
+                      backgroundImage: clip.mediaUrl ? `url("${getProxiedImageUrl(clip.mediaUrl).replace(/"/g, '\\"')}")` : 'none',
                     }}
                     className="w-full h-full bg-cover bg-center"
                   />
@@ -353,7 +354,8 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
                   />
                 ) : (
                   <img
-                    src={clip.mediaUrl}
+                    src={getProxiedImageUrl(clip.mediaUrl)}
+                    crossOrigin="anonymous"
                     alt={clip.name || 'Visual Media'}
                     className="max-w-[260px] md:max-w-[340px] max-h-[300px] object-contain pointer-events-none rounded"
                     draggable={false}

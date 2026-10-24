@@ -21,6 +21,7 @@ import {
   VNSnapTarget,
 } from './transform';
 import VNUniversalButton from './ui/VNUniversalButton';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 export interface VNMakerStageProps {
   currentLine?: VNEvent;
@@ -394,7 +395,8 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         </div>
 
         <img
-          src={currentSpeakerAvatar}
+          src={getProxiedImageUrl(currentSpeakerAvatar)}
+          crossOrigin="anonymous"
           alt={currentSpeaker?.name || 'avatar'}
           draggable={false}
           style={{
@@ -695,7 +697,8 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
             {effectiveBgUrl ? (
               effectiveBgUrl.endsWith('.mp4') || effectiveBgUrl.endsWith('.webm') || effectiveBgUrl.startsWith('data:video/') ? (
                 <video
-                  src={effectiveBgUrl}
+                  src={getProxiedImageUrl(effectiveBgUrl)}
+                  crossOrigin="anonymous"
                   autoPlay
                   loop
                   muted
@@ -705,7 +708,8 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 />
               ) : (
                 <img
-                  src={effectiveBgUrl}
+                  src={getProxiedImageUrl(effectiveBgUrl)}
+                  crossOrigin="anonymous"
                   alt="Scene Background"
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                   style={{ filter: stageFxFilter }}

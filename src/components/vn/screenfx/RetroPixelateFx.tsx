@@ -4,9 +4,21 @@ import React from 'react';
 import { ScreenFxDefinition, ScreenFxProps, ScreenFxInspectorProps } from './types';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 
-export const RetroPixelateComponent: React.FC<ScreenFxProps> = () => {
-  // Directly applied as SVG filter on character sprite and background photo
-  return null;
+export const RetroPixelateComponent: React.FC<ScreenFxProps> = ({ params }) => {
+  const scanlines = params?.scanlines ?? true;
+  const opacity = params?.scanlineOpacity ?? 0.22;
+  if (!scanlines || opacity <= 0) return null;
+
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none z-30"
+      style={{
+        backgroundImage: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%)',
+        backgroundSize: '100% 4px',
+        opacity,
+      }}
+    />
+  );
 };
 
 export const RetroPixelateInspector: React.FC<ScreenFxInspectorProps> = ({

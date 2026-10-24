@@ -12,6 +12,7 @@ import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { VNUniversalTransformGizmo } from './transform';
 import VNUniversalButton from './ui/VNUniversalButton';
 import { isVideoMedia } from './cinematic/layers/CinematicVisualLayer';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 interface StaticScreenViewProps {
   scene: VNScene;
@@ -372,7 +373,8 @@ export default function StaticScreenView({
           <div className="absolute inset-0 bg-cover bg-center overflow-hidden transition-all duration-700">
             {isVideo && bgUrl ? (
               <video
-                src={bgUrl}
+                src={getProxiedImageUrl(bgUrl)}
+                crossOrigin="anonymous"
                 autoPlay
                 loop
                 muted
@@ -382,7 +384,8 @@ export default function StaticScreenView({
               />
             ) : bgUrl ? (
               <img
-                src={bgUrl}
+                src={getProxiedImageUrl(bgUrl)}
+                crossOrigin="anonymous"
                 alt="Static Background"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                 style={{ filter: staticScreenFxFilter }}
