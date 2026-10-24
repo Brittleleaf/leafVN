@@ -263,11 +263,18 @@ export default function ChoiceEditor({
                       : 'border-[var(--border)] bg-[var(--well-bg)] hover:border-[var(--border2)]'
                   }`}
                 >
-                  <div className="flex items-center gap-1.5 font-bold text-xs">
-                    <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3 h-3 text-purple-400" />
-                    <span className={isSelected ? 'text-purple-600 dark:text-purple-300' : 'text-[var(--text)]'}>
-                      {eff.label}
-                    </span>
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="flex items-center gap-1.5 font-bold text-xs truncate">
+                      <GuiIconRenderer icon={eff.icon || GUI_ICONS.general.screenFx} className="w-3 h-3 text-purple-400 shrink-0" />
+                      <span className={`truncate ${isSelected ? 'text-purple-600 dark:text-purple-300' : 'text-[var(--text)]'}`}>
+                        {eff.label}
+                      </span>
+                    </div>
+                    {eff.tag && (
+                      <span className="text-[8px] font-mono font-black px-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
+                        {eff.tag}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-1 flex items-center justify-center py-0.5 text-[10px] font-semibold text-[var(--muted2)]">
                     <span className={previewClass || undefined}>

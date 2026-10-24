@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
+import { getButtonHoverEffectClass, getButtonHoverContainerClass } from '@/lib/vn/buttonHoverEffects';
 import { VNButtonHoverEffect } from '@/types/vn';
 
 export type VNButtonStylePreset =
@@ -200,7 +200,7 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
   const effectiveScaleX = safeScale * safeScaleX;
   const effectiveScaleY = safeScale * safeScaleY;
 
-  const containerHoverClass = hoverEffect && hoverEffect !== 'none' ? `vn-btn-container-${hoverEffect}` : '';
+  const containerHoverClass = hoverEffect && hoverEffect !== 'none' ? getButtonHoverContainerClass(hoverEffect) : '';
 
   const RootInteractive = (isEditingText ? 'div' : 'button') as React.ElementType;
 
