@@ -200,6 +200,8 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
   const effectiveScaleX = safeScale * safeScaleX;
   const effectiveScaleY = safeScale * safeScaleY;
 
+  const containerHoverClass = hoverEffect && hoverEffect !== 'none' ? `vn-btn-container-${hoverEffect}` : '';
+
   const RootInteractive = (isEditingText ? 'div' : 'button') as React.ElementType;
 
   return (
@@ -250,7 +252,7 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
             : 'cursor-pointer'
         } ${
           hideContainer ? '' : 'overflow-hidden'
-        } ${containerStyleClass} ${sizeClass}`}
+        } ${containerStyleClass} ${sizeClass} ${containerHoverClass}`}
       >
         {/* Sublabel or Prefix (e.g. #1 or key shortcut) */}
         {sublabel ? (

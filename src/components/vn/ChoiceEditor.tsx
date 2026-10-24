@@ -244,7 +244,7 @@ export default function ChoiceEditor({
           </div>
 
           {/* Hover effects options */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {getAllButtonHoverEffects().map((eff) => {
               const isSelected = (currentLine.choiceHoverEffect || 'none') === eff.id;
               const previewClass = getButtonHoverEffectClass(eff.id);

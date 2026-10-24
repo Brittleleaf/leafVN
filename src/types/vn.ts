@@ -89,7 +89,17 @@ export interface VNChoiceReaction {
   sfx?: string;
 }
 
-export type VNButtonHoverEffect = 'none' | 'underline' | 'box' | 'shine' | (string & {});
+export type VNButtonHoverEffect =
+  | 'none'
+  | 'underline'
+  | 'box'
+  | 'shine'
+  | 'vector_trace'
+  | 'tracking_lines'
+  | 'tactile'
+  | 'flare'
+  | 'aura'
+  | (string & {});
 
 export interface VNChoiceOption {
   id: string;

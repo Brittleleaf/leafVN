@@ -17,11 +17,41 @@ export const VN_HOVER_EFFECTS_REGISTRY: Record<string, VNHoverEffectDefinition> 
     className: '',
     description: 'No text animation on hover',
   },
-  underline: {
-    id: 'underline',
-    label: 'Underline Expand',
-    className: 'vn-btn-effect-underline',
-    description: 'Subtle expanding bottom border with opacity transition',
+  flare: {
+    id: 'flare',
+    label: 'Specular Light Flare',
+    className: 'vn-btn-effect-flare',
+    description: '35-degree diagonal specular light blade sweeping rapidly across button',
+  },
+  tracking_lines: {
+    id: 'tracking_lines',
+    label: 'Tracking & Flank Lines',
+    className: 'vn-btn-effect-tracking-lines',
+    description: 'Kinetic letter-spacing expansion with symmetric top & bottom expanding lines',
+  },
+  tactile: {
+    id: 'tactile',
+    label: 'Tactile 3D Press',
+    className: 'vn-btn-effect-tactile',
+    description: 'Physical depth press with bevel shadows and mechanical displacement',
+  },
+  aura: {
+    id: 'aura',
+    label: 'Expanding Aura',
+    className: 'vn-btn-effect-aura',
+    description: 'Expanding ghost perimeter shockwave with luminous internal glow',
+  },
+  vector_trace: {
+    id: 'vector_trace',
+    label: 'Vector Circuit Trace',
+    className: 'vn-btn-effect-vector-trace',
+    description: 'Animated vector border contour tracing across perimeter lines',
+  },
+  shine: {
+    id: 'shine',
+    label: 'Mask Sweep Shine',
+    className: 'vn-btn-effect-shine',
+    description: 'Infinite diagonal gradient sweep mask',
   },
   box: {
     id: 'box',
@@ -29,11 +59,11 @@ export const VN_HOVER_EFFECTS_REGISTRY: Record<string, VNHoverEffectDefinition> 
     className: 'vn-btn-effect-box',
     description: 'Four-sided enclosing line frame animation on hover',
   },
-  shine: {
-    id: 'shine',
-    label: 'Mask Sweep Shine',
-    className: 'vn-btn-effect-shine',
-    description: 'Infinite diagonal gradient sweep mask',
+  underline: {
+    id: 'underline',
+    label: 'Underline Expand',
+    className: 'vn-btn-effect-underline',
+    description: 'Subtle expanding bottom border with opacity transition',
   },
 };
 

@@ -710,6 +710,199 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 }
 
 /* ========================================================
+   MODULAR BUTTON HOVER EFFECTS (Flare, Tracking Lines, Tactile, Aura, Vector Trace)
+   ======================================================== */
+
+/* 1. Specular Light Flare (35° Diagonal Sheen Sweep) */
+.vn-btn-effect-flare {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.15em 0.5em;
+}
+.vn-btn-effect-flare::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -90px;
+  width: 45px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.7);
+  transform: rotate(35deg);
+  transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(2px);
+}
+.group:hover .vn-btn-effect-flare::after,
+.vn-btn-effect-flare:hover::after {
+  left: 140%;
+  opacity: 0.75;
+  transition: all 650ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.vn-btn-container-flare {
+  position: relative;
+  overflow: hidden;
+}
+.vn-btn-container-flare::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: -120px;
+  width: 60px;
+  height: 250px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: rotate(35deg);
+  transition: all 650ms cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
+  opacity: 0;
+}
+.vn-btn-container-flare:hover::after {
+  left: 140%;
+  opacity: 1;
+}
+
+/* 2. Tracking & Flank Lines (Kinetic Letter-Spacing + Symmetric Dual Lines) */
+.vn-btn-effect-tracking-lines {
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.04em;
+  transition: letter-spacing 300ms ease-in-out;
+  padding: 0.25em 0.6em;
+}
+.vn-btn-effect-tracking-lines::before,
+.vn-btn-effect-tracking-lines::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  width: 0%;
+  border-top: 1.5px solid currentColor;
+  opacity: 0;
+  transition: width 350ms ease-in-out, opacity 350ms ease-in-out;
+  pointer-events: none;
+}
+.vn-btn-effect-tracking-lines::before {
+  top: 0;
+}
+.vn-btn-effect-tracking-lines::after {
+  bottom: 0;
+}
+.group:hover .vn-btn-effect-tracking-lines,
+.vn-btn-effect-tracking-lines:hover {
+  letter-spacing: 0.22em;
+}
+.group:hover .vn-btn-effect-tracking-lines::before,
+.group:hover .vn-btn-effect-tracking-lines::after,
+.vn-btn-effect-tracking-lines:hover::before,
+.vn-btn-effect-tracking-lines:hover::after {
+  width: 80%;
+  opacity: 1;
+}
+
+/* 3. Tactile 3D Depth (Physical Bevel Press) */
+.vn-btn-effect-tactile {
+  position: relative;
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  border-radius: 6px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.6), 0 5px 8px rgba(0, 0, 0, 0.35);
+  transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.05em;
+}
+.group:hover .vn-btn-effect-tactile,
+.vn-btn-effect-tactile:hover {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.15);
+  text-shadow: 0 0 8px currentColor;
+}
+
+.vn-btn-container-tactile {
+  transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.7), 0 10px 18px rgba(0, 0, 0, 0.5) !important;
+}
+.vn-btn-container-tactile:hover {
+  transform: translateY(3px) !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 4. Aura Shockwave (Expanding Ghost Perimeter Ripple) */
+.vn-btn-effect-aura {
+  position: relative;
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  outline: 1px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 0px;
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0);
+  text-shadow: none;
+  transition: all 650ms cubic-bezier(0.19, 1, 0.22, 1);
+  border-radius: 4px;
+}
+.group:hover .vn-btn-effect-aura,
+.vn-btn-effect-aura:hover {
+  outline: 1.5px solid rgba(255, 255, 255, 0);
+  outline-offset: 14px;
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.45), 0 0 16px currentColor;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.vn-btn-container-aura {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 0px;
+  transition: all 650ms cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+.vn-btn-container-aura:hover {
+  outline: 1.5px solid rgba(255, 255, 255, 0);
+  outline-offset: 12px;
+  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.25), 0 0 25px rgba(209, 123, 248, 0.4) !important;
+}
+
+/* 5. Vector Circuit Trace (Perimeter Border Contour Draw) */
+.vn-btn-effect-vector-trace {
+  position: relative;
+  display: inline-block;
+  padding: 0.25em 0.8em;
+  letter-spacing: 0.04em;
+  transition: letter-spacing 0.35s ease, text-shadow 0.35s ease;
+}
+.vn-btn-effect-vector-trace::before,
+.vn-btn-effect-vector-trace::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid transparent;
+  pointer-events: none;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.vn-btn-effect-vector-trace::before {
+  border-top-color: currentColor;
+  border-bottom-color: currentColor;
+  transform: scaleX(0);
+}
+.vn-btn-effect-vector-trace::after {
+  border-left-color: currentColor;
+  border-right-color: currentColor;
+  transform: scaleY(0);
+}
+.group:hover .vn-btn-effect-vector-trace,
+.vn-btn-effect-vector-trace:hover {
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 10px currentColor;
+}
+.group:hover .vn-btn-effect-vector-trace::before,
+.vn-btn-effect-vector-trace:hover::before {
+  transform: scaleX(1);
+}
+.group:hover .vn-btn-effect-vector-trace::after,
+.vn-btn-effect-vector-trace:hover::after {
+  transform: scaleY(1);
+}
+
+
+/* ========================================================
    VN TYPOGRAPHY TEXT EFFECTS (Loading Wave, Smoky Dissolve, Glitch, Neon, Blood, Shimmer)
    ======================================================== */
 
