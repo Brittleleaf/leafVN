@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { EventInspectorSubProps } from './types';
+import { getAllTransitions } from '../transitions';
 
 export const SceneTransitionEventInspector: React.FC<EventInspectorSubProps> = ({
   currentLine,
@@ -48,6 +49,21 @@ export const SceneTransitionEventInspector: React.FC<EventInspectorSubProps> = (
                   ))}
               </optgroup>
             )}
+          </select>
+
+          <label className="text-[10px] text-[var(--muted)] uppercase block font-bold pt-1">
+            Scene Transition Effect:
+          </label>
+          <select
+            value={currentLine.transition || 'instant'}
+            onChange={(e) => onUpdateCurrentLine('transition', e.target.value === 'instant' ? undefined : (e.target.value as any))}
+            className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2 text-xs text-[var(--text)] outline-none"
+          >
+            {getAllTransitions().map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
           </select>
         </div>
       )}

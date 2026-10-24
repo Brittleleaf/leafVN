@@ -4,6 +4,7 @@ import { VNStory, VNTextBoxConfig } from '@/types/vn';
 import { VN_FONT_CATALOG, ensureGoogleFontLoaded, resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { playSfx } from '@/lib/audioSettings';
+import { VNTextBoxRenderer, getAllTextBoxSkins } from './textboxes';
 import AssetStudioModal from './AssetStudioModal';
 
 interface GlobalTextBoxModalProps {
@@ -155,61 +156,27 @@ export default function GlobalTextBoxModal({
 
             {/* PREVIEW CONTAINER STYLED EXACTLY AS IN-GAME */}
             <div className="p-4 bg-black/60 rounded-2xl border border-[var(--border)] shadow-inner flex flex-col justify-center min-h-[140px] relative overflow-hidden">
-              <div
-                className="relative w-full border-2 rounded-xl p-3.5 shadow-2xl transition-all"
-                style={{
-                  borderColor: effectiveBorderColor,
-                  backgroundColor: effectiveBgColor,
-                }}
-              >
-                {/* Cyber corners */}
-                <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2" style={{ borderColor: effectiveBorderColor }} />
-                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2" style={{ borderColor: effectiveBorderColor }} />
-                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: effectiveBorderColor }} />
-                <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: effectiveBorderColor }} />
-
-                {/* Header / Nameplate */}
-                <div
-                  className="flex items-center justify-between mb-2 border-b pb-1.5"
-                  style={{ borderColor: `${effectiveBorderColor}40` }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="font-bold tracking-widest uppercase text-xs sm:text-sm"
-                      style={{ color: effectiveNameColor }}
-                    >
-                      NARRATOR / SYSTEM LOG
-                    </span>
-                    <span
-                      className="px-1.5 py-0.5 border text-[9px] uppercase tracking-widest rounded"
-                      style={{
-                        backgroundColor: `${effectiveNameColor}20`,
-                        borderColor: `${effectiveNameColor}60`,
-                        color: effectiveNameColor,
-                      }}
-                    >
-                      GLOBAL
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono opacity-50" style={{ color: effectiveBorderColor }}>
-                    [ CLICK / SPACE ]
+              <VNTextBoxRenderer
+                skinId={tb.theme || 'classified'}
+                speakerName="NARRATOR / SYSTEM LOG"
+                speakerColor={effectiveBorderColor}
+                borderColor={effectiveBorderColor}
+                backgroundColor={effectiveBgColor}
+                textColor={effectiveTextColor}
+                nameplateColor={effectiveNameColor}
+                badge="GLOBAL"
+                badgeColor={effectiveNameColor}
+                fontSizeClass={fontSizeClass}
+                fontFamily={resolveEffectiveFontFamily({
+                  storyFont: story.defaultFontFamily,
+                  editorTheme: story.editorTheme,
+                })}
+                dialogueText={
+                  <span className="whitespace-pre-wrap">
+                    {isPlayingPreview ? animatedPreviewText : previewSampleText}
                   </span>
-                </div>
-
-                {/* Text Body */}
-                <p
-                  className={`${fontSizeClass} leading-relaxed min-h-[48px] tracking-wide whitespace-pre-wrap`}
-                  style={{
-                    color: effectiveTextColor,
-                    fontFamily: resolveEffectiveFontFamily({
-                      storyFont: story.defaultFontFamily,
-                      editorTheme: story.editorTheme,
-                    }),
-                  }}
-                >
-                  {isPlayingPreview ? animatedPreviewText : previewSampleText}
-                </p>
-              </div>
+                }
+              />
             </div>
           </div>
 
@@ -296,12 +263,14 @@ export default function GlobalTextBoxModal({
                 <label className="block text-[10px] text-[var(--muted)] font-bold uppercase mb-1.5">
                   Theme Preset Style:
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {[
                     { id: 'classified', label: 'Classified Red', border: '#b91c1c', name: '#ef4444', bg: '#08080c' },
                     { id: 'cyberpunk', label: 'Cyber Yellow', border: '#eab308', name: '#facc15', bg: '#0b0f19' },
                     { id: 'neon', label: 'Neon Cyan', border: '#06b6d4', name: '#22d3ee', bg: '#08080c' },
                     { id: 'minimal', label: 'Monochrome Glass', border: '#4b5563', name: '#f3f4f6', bg: '#111827' },
+                    { id: 'parchment', label: 'Parchment Antique', border: '#854d0e', name: '#78350f', bg: '#fef3c7' },
+                    { id: 'nvl', label: 'NVL Fullscreen', border: '#374151', name: '#f3f4f6', bg: 'rgba(0, 0, 0, 0.88)' },
                   ].map((preset) => (
                     <button
                       key={preset.id}

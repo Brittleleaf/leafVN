@@ -18,6 +18,8 @@ import { playSfx } from '@/lib/audioSettings';
 import { evaluateCondition, getCharacterAvatar, interpolateText } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { VNScreenFxOverlay } from './VNScreenFxOverlay';
+import { VNTransitionOverlay } from './transitions';
+import { VNTextBoxRenderer } from './textboxes';
 import { resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
 import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
 import StaticScreenView from './StaticScreenView';
@@ -102,6 +104,19 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
+
+  // Active Scene & Event Transition Animation
+  const [activeTransition, setActiveTransition] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (currentEvent?.transition && currentEvent.transition !== 'instant') {
+      setActiveTransition(currentEvent.transition);
+      const timer = setTimeout(() => {
+        setActiveTransition(null);
+      }, 850);
+      return () => clearTimeout(timer);
+    }
+  }, [currentEvent?.id, currentScene?.id, currentEvent?.transition]);
 
   // Computed character staging & docking in player
   const isPlayerCustomPlaced =
@@ -211,6 +226,14 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 </div>
               );
             })()}
+
+            {/* 1.1 CAPA DE TRANSICIÓN MODULAR DE ESCENA */}
+            {activeTransition && (
+              <VNTransitionOverlay
+                transitionId={activeTransition}
+                isActive={true}
+              />
+            )}
 
             {/* 2. CAPA DE EFECTOS DE FLASH / IMPACTO */}
             {flashColor && (
@@ -768,103 +791,51 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             </div>
           )}
 
-          <div
-            onClick={advanceEvent}
-            className="relative w-full border-2 rounded-xl p-3 cursor-pointer shadow-[0_0_40px_rgba(0,0,0,0.9)] transition-all"
-            style={{
-              borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#b91c1c',
-              backgroundColor: currentSpeaker?.textBoxConfig?.backgroundColor || story.textBoxConfig.backgroundColor || `rgba(8, 8, 12, ${currentSpeaker?.textBoxConfig?.opacity ?? story.textBoxConfig.opacity ?? 0.92})`,
-            }}
-          >
-            {/* Esquinas estilizadas con el color característico del personaje */}
-            <div
-              className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2"
-              style={{ borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444' }}
-            />
-            <div
-              className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2"
-              style={{ borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444' }}
-            />
-            <div
-              className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2"
-              style={{ borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444' }}
-            />
-            <div
-              className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2"
-              style={{ borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444' }}
-            />
+          {/* Active Modular Text Box Skin */}
+          {(() => {
+            const activeSkinId = currentSpeaker?.textBoxConfig?.theme || story.textBoxConfig.theme || 'classified';
+            const effectiveFontSize = currentSpeaker?.textBoxConfig?.fontSize || story.textBoxConfig.fontSize || 'base';
+            const fontSizeClass =
+              effectiveFontSize === 'sm'
+                ? 'text-xs'
+                : effectiveFontSize === 'lg'
+                ? 'text-sm sm:text-base'
+                : 'text-xs sm:text-sm';
+            const font = resolveEffectiveFontFamily({
+              eventFont: currentEvent?.fontFamily,
+              characterFont: currentSpeaker?.fontFamily,
+              storyFont: story.defaultFontFamily,
+              editorTheme: story.editorTheme,
+            });
 
-            <div className="flex items-center justify-between mb-1.5 border-b pb-1" style={{ borderColor: `${activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#b91c1c'}40` }}>
-              <div className="flex items-center gap-2.5">
-                <span
-                  className="font-bold tracking-widest uppercase text-sm md:text-base"
-                  style={{ color: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.nameplateColor || currentSpeaker?.color || story.textBoxConfig.nameplateColor || '#ef4444' }}
-                >
-                  {interpolateText(activeInspection?.speaker || activeReaction?.speakerName || currentEvent?.customSpeakerName || currentSpeaker?.name || 'SYSTEM LOG', variablesState)}
-                </span>
-                {(activeInspection?.badge || currentSpeaker?.badgeTitle) && (
-                  <span
-                    className="px-1.5 py-0.5 border text-[9px] uppercase tracking-widest rounded"
-                    style={{
-                      backgroundColor: `${activeInspection?.speakerColor || currentSpeaker?.color || '#ef4444'}20`,
-                      borderColor: `${activeInspection?.speakerColor || currentSpeaker?.color || '#ef4444'}80`,
-                      color: activeInspection?.speakerColor || currentSpeaker?.color || '#ef4444',
-                    }}
-                  >
-                    {activeInspection?.badge || currentSpeaker?.badgeTitle}
+            const speakerTitle = interpolateText(
+              activeInspection?.speaker || activeReaction?.speakerName || currentEvent?.customSpeakerName || currentSpeaker?.name || 'SYSTEM LOG',
+              variablesState
+            );
+
+            return (
+              <VNTextBoxRenderer
+                skinId={activeSkinId}
+                speakerName={speakerTitle}
+                speakerColor={activeInspection?.speakerColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444'}
+                borderColor={activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#b91c1c'}
+                backgroundColor={currentSpeaker?.textBoxConfig?.backgroundColor || story.textBoxConfig.backgroundColor || `rgba(8, 8, 12, ${currentSpeaker?.textBoxConfig?.opacity ?? story.textBoxConfig.opacity ?? 0.92})`}
+                textColor={currentSpeaker?.textBoxConfig?.textColor || story.textBoxConfig.textColor || '#e5e7eb'}
+                nameplateColor={activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.nameplateColor || currentSpeaker?.color || story.textBoxConfig.nameplateColor}
+                badge={activeInspection?.badge || currentSpeaker?.badgeTitle}
+                badgeColor={activeInspection?.speakerColor || currentSpeaker?.color}
+                fontSizeClass={fontSizeClass}
+                fontFamily={font}
+                onAdvance={advanceEvent}
+                onClose={handleCloseTextBox}
+                dialogueText={
+                  <span className="whitespace-pre-wrap">
+                    {displayedText || (isHotspotMode ? 'Exploring area with navigation controls...' : '...')}
                   </span>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                {!isTyping && (
-                  <span
-                    className="text-xs animate-bounce tracking-widest hidden sm:inline"
-                    style={{ color: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444' }}
-                  >
-                    {activeInspection ? '[ SPACE / CLICK TO CLOSE ]' : '[ SPACE / CLICK TO CONTINUE ]'}
-                  </span>
-                )}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCloseTextBox();
-                  }}
-                  className="p-1 px-2.5 hover:bg-white/10 rounded text-gray-400 hover:text-white transition-colors cursor-pointer text-xs flex items-center gap-1.5 border border-white/10 hover:border-white/30"
-                  title="Close dialogue box"
-                >
-                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
-                  <span className="text-[10px] uppercase tracking-wider hidden md:inline">Close</span>
-                </button>
-              </div>
-            </div>
-
-            {(() => {
-              const effectiveFontSize = currentSpeaker?.textBoxConfig?.fontSize || story.textBoxConfig.fontSize || 'base';
-              const fontSizeClass =
-                effectiveFontSize === 'sm'
-                  ? 'text-xs'
-                  : effectiveFontSize === 'lg'
-                  ? 'text-sm sm:text-base'
-                  : 'text-xs sm:text-sm';
-
-              return (
-                <p
-                  className={`${fontSizeClass} leading-relaxed min-h-[50px] tracking-wide whitespace-pre-wrap`}
-                  style={{
-                    color: currentSpeaker?.textBoxConfig?.textColor || story.textBoxConfig.textColor || '#e5e7eb',
-                    fontFamily: resolveEffectiveFontFamily({
-                      eventFont: currentEvent?.fontFamily,
-                      characterFont: currentSpeaker?.fontFamily,
-                      storyFont: story.defaultFontFamily,
-                      editorTheme: story.editorTheme,
-                    }),
-                  }}
-                >
-                  {displayedText || (isHotspotMode ? 'Exploring area with navigation controls...' : '...')}
-                </p>
-              );
-            })()}
+                }
+              />
+            );
+          })()}
 
             <div
               onClick={(e) => e.stopPropagation()}
@@ -923,7 +894,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               </div>
             </div>
           </div>
-        </div>
       )}
 
       {/* Floating button to reopen dialogue if closed and story is still ongoing */}

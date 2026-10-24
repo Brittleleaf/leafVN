@@ -1,6 +1,19 @@
 // Full Data Schema for Visual Novel Engine with Conditionals & Staging
 
-export type VNTransitionType = 'fade' | 'glitch' | 'dissolve' | 'instant';
+export type VNTransitionType =
+  | 'fade'
+  | 'fade_black'
+  | 'fade_white'
+  | 'dissolve'
+  | 'cross_dissolve'
+  | 'glitch'
+  | 'slide_left'
+  | 'slide_right'
+  | 'iris_circle'
+  | 'shutter_wipe'
+  | 'pixelate'
+  | 'instant'
+  | (string & {});
 
 export type VNPosition = 'left' | 'center' | 'right';
 

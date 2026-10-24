@@ -4,6 +4,7 @@ import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { playSfx, playAudioPreview, stopAudioPreview, subscribeAudioPreview, getCurrentlyPlayingPreviewUrl } from '@/lib/audioSettings';
 import { VN_FONT_CATALOG, ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
 import { VN_CURSORS_CATALOG } from '../cursors';
+import { getAllTransitions } from '../transitions';
 import { EventInspectorSubProps } from './types';
 import { useVNMaker } from '../VNMakerContext';
 
@@ -410,6 +411,29 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
               </button>
             </>
           )}
+        </div>
+      </div>
+
+      {/* Dialogue Line Scene Transition */}
+      <div className="flex items-center justify-between gap-2 p-2 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <GuiIconRenderer icon={GUI_ICONS.state.play} size={14} className="text-[var(--accent)]" />
+          <span className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider truncate">
+            Event Transition:
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <select
+            value={currentLine.transition || 'instant'}
+            onChange={(e) => onUpdateCurrentLine('transition', e.target.value === 'instant' ? undefined : (e.target.value as any))}
+            className="bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-2 py-1 text-xs text-[var(--text)] outline-none"
+          >
+            {getAllTransitions().map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
