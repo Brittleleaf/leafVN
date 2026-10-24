@@ -396,7 +396,6 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         <img
           src={currentSpeakerAvatar}
           alt={currentSpeaker?.name || 'avatar'}
-          crossOrigin="anonymous"
           draggable={false}
           style={{
             borderColor: activeBorderColor,
@@ -708,7 +707,6 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 <img
                   src={effectiveBgUrl}
                   alt="Scene Background"
-                  crossOrigin="anonymous"
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                   style={{ filter: stageFxFilter }}
                 />

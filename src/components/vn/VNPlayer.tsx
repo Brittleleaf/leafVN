@@ -227,7 +227,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={bgUrl}
                       alt="Scene Background"
-                      crossOrigin="anonymous"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                       style={{ filter: playerFxFilter }}
                     />
@@ -388,7 +387,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               <img
                 src={activeAvatarUrl}
                 alt={currentSpeaker?.name || 'Character'}
-                crossOrigin="anonymous"
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
@@ -426,7 +424,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={avatar}
                       alt={char.name}
-                      crossOrigin="anonymous"
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#ef4444',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
@@ -467,7 +464,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={avatar}
                       alt={char.name}
-                      crossOrigin="anonymous"
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#a855f7',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
@@ -508,7 +504,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={avatar}
                       alt={char.name}
-                      crossOrigin="anonymous"
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#0284c7',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
@@ -800,7 +795,6 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               <img
                 src={activeAvatarUrl}
                 alt={currentSpeaker?.name || 'Character'}
-                crossOrigin="anonymous"
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,

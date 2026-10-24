@@ -384,7 +384,6 @@ export default function StaticScreenView({
               <img
                 src={bgUrl}
                 alt="Static Background"
-                crossOrigin="anonymous"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                 style={{ filter: staticScreenFxFilter }}
               />
