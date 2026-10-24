@@ -73,7 +73,8 @@ export function AssetUploadModal({
     }
   };
 
-  const handleUrlChange = (url: string) => {
+  const handleUrlChange = (rawUrl: string) => {
+    let url = rawUrl;
     setNewAssetUrl(url);
     setUrlPreviewStatus('idle');
     if (urlAudioTesterRef.current) {
@@ -82,31 +83,44 @@ export function AssetUploadModal({
       setUrlTestAudioPlaying(false);
     }
 
-    if (!url.trim()) return;
+    const trimmed = url.trim();
+    if (!trimmed) return;
+
+    const normalizedUrl =
+      !trimmed.startsWith('http://') && !trimmed.startsWith('https://') && !trimmed.startsWith('/') && !trimmed.startsWith('data:')
+        ? `https://${trimmed}`
+        : trimmed;
 
     if (!newAssetName.trim()) {
       try {
-        const parsed = new URL(url);
+        const parsed = new URL(normalizedUrl);
         const segments = parsed.pathname.split('/').filter(Boolean);
         const lastSegment = segments[segments.length - 1];
         if (lastSegment) {
           const rawName = decodeURIComponent(lastSegment)
             .replace(/\.[^/.]+$/, '')
             .replace(/[-_]/g, ' ');
-          if (rawName) setNewAssetName(rawName);
+          if (rawName && rawName.length > 1) {
+            setNewAssetName(rawName);
+          }
         }
       } catch (_) {}
     }
 
     if (!initialFilterType) {
-      const lower = url.toLowerCase();
+      const lower = normalizedUrl.toLowerCase();
       if (lower.match(/\.(mp3|wav|ogg|m4a|aac)(\?.*)?$/)) {
         if (lower.includes('bgm') || lower.includes('music') || lower.includes('theme') || lower.includes('ambient')) {
           setNewAssetType('bgm');
         } else {
           setNewAssetType('sfx');
         }
-      } else if (lower.match(/\.(png|jpg|jpeg|webp|gif|svg)(\?.*)?$/)) {
+      } else if (
+        lower.match(/\.(png|jpg|jpeg|webp|gif|svg|avif)(\?.*)?$/) ||
+        lower.includes('pinimg.com') ||
+        lower.includes('unsplash.com') ||
+        lower.includes('imgur.com')
+      ) {
         if (lower.includes('avatar') || lower.includes('char') || lower.includes('sprite')) {
           setNewAssetType('character');
         } else if (lower.includes('icon') || lower.endsWith('.svg')) {
@@ -130,7 +144,11 @@ export function AssetUploadModal({
 
     if (!newAssetUrl.trim()) return;
     try {
-      const audio = new Audio(newAssetUrl.trim());
+      let testUrl = newAssetUrl.trim();
+      if (!testUrl.startsWith('http://') && !testUrl.startsWith('https://') && !testUrl.startsWith('/')) {
+        testUrl = `https://${testUrl}`;
+      }
+      const audio = new Audio(testUrl);
       urlAudioTesterRef.current = audio;
       setUrlTestAudioPlaying(true);
       setUrlPreviewStatus('valid');
@@ -156,10 +174,31 @@ export function AssetUploadModal({
 
   const handleLinkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newAssetUrl.trim() || !newAssetName.trim()) {
+    const trimmedUrl = newAssetUrl.trim();
+    if (!trimmedUrl) {
       playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
-      notify('Please enter a valid URL and an asset name.');
+      notify('Please enter a valid URL.');
       return;
+    }
+
+    let finalUrl = trimmedUrl;
+    if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://') && !finalUrl.startsWith('/') && !finalUrl.startsWith('data:')) {
+      finalUrl = `https://${finalUrl}`;
+    }
+
+    let finalName = newAssetName.trim();
+    if (!finalName) {
+      try {
+        const parsed = new URL(finalUrl);
+        const segments = parsed.pathname.split('/').filter(Boolean);
+        const lastSegment = segments[segments.length - 1];
+        if (lastSegment) {
+          finalName = decodeURIComponent(lastSegment).replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+        }
+      } catch (_) {}
+    }
+    if (!finalName) {
+      finalName = `Indexed ${newAssetType} ${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
     }
 
     setIsUploading(true);
@@ -168,8 +207,8 @@ export function AssetUploadModal({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: newAssetName.trim(),
-          url: newAssetUrl.trim(),
+          name: finalName,
+          url: finalUrl,
           assetType: newAssetType,
           category: newAssetCategory.trim() || 'Web Link',
         }),
@@ -191,7 +230,7 @@ export function AssetUploadModal({
         setUrlTestAudioPlaying(false);
       }
       playSfx('/assets/sfx/success.mp3', false, 0.5);
-      notify(`Web asset "${newAssetName.trim()}" indexed to gallery!`);
+      notify(`Asset "${finalName}" indexed to gallery!`);
       onClose();
     } catch (err: any) {
       setIsUploading(false);
@@ -435,7 +474,7 @@ export function AssetUploadModal({
           <div className="flex items-center justify-end gap-2 pt-1">
             <button
               type="submit"
-              disabled={isUploading || !newAssetUrl.trim() || !newAssetName.trim()}
+              disabled={isUploading || !newAssetUrl.trim()}
               className="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 disabled:opacity-40 text-white font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer transition-all shadow flex items-center gap-1.5"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.link} size={12} className="text-white" />

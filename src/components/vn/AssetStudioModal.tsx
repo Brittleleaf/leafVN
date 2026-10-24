@@ -169,7 +169,6 @@ export default function AssetStudioModal({
 
   // Filtered Assets logic
   const filteredAssets = allAssets.filter((asset) => {
-    if (initialFilterType && asset.type !== initialFilterType) return false;
     if (activeTypeTab !== 'all' && asset.type !== activeTypeTab) return false;
 
     if (activeOriginFilter === 'system' && asset.origin !== 'system') return false;

@@ -721,37 +721,22 @@ export default function StaticScreenView({
           {/* Static Reference Guides (Visible when showGuides is ON) */}
           {showGuides && (
             <>
-              {/* Vertical Center Axis (X: 50%) */}
-              <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1px] bg-cyan-400/40 border-l border-dashed border-cyan-400/60 shadow-[0_0_8px_rgba(34,211,238,0.4)]">
-                <span className="absolute top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 shadow">
-                  X: 50%
-                </span>
-                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 shadow">
-                  CENTER
-                </span>
-              </div>
+              {/* Vertical Center Axis */}
+              <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1px] border-l border-dashed border-cyan-400/30" />
 
-              {/* Horizontal Center Axis (Y: 50%) */}
-              <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[1px] bg-cyan-400/40 border-t border-dashed border-cyan-400/60 shadow-[0_0_8px_rgba(34,211,238,0.4)]">
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 shadow">
-                  Y: 50%
-                </span>
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded text-[8px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 shadow">
-                  CENTER
-                </span>
-              </div>
+              {/* Horizontal Center Axis */}
+              <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[1px] border-t border-dashed border-cyan-400/30" />
 
-              {/* Rule of Thirds subtle lines */}
+              {/* Subtle Rule of Thirds */}
               <div className="absolute top-0 bottom-0 left-1/3 -translate-x-1/2 w-[1px] border-l border-dotted border-white/10" />
               <div className="absolute top-0 bottom-0 left-2/3 -translate-x-1/2 w-[1px] border-l border-dotted border-white/10" />
               <div className="absolute left-0 right-0 top-1/3 -translate-y-1/2 h-[1px] border-t border-dotted border-white/10" />
               <div className="absolute left-0 right-0 top-2/3 -translate-y-1/2 h-[1px] border-t border-dotted border-white/10" />
 
               {/* Safe Margins (8%) */}
-              <div className="absolute inset-[8%] border border-dashed border-white/10 rounded-xl" />
+              <div className="absolute inset-[8%] border border-dashed border-cyan-500/15 rounded-xl" />
             </>
           )}
-
         </div>
       )}
     </div>

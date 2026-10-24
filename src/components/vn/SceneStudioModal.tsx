@@ -746,8 +746,24 @@ export default function SceneStudioModal({
                                 onChange={async (e) => {
                                   const file = e.target.files?.[0];
                                   if (!file) return;
-                                  const b64 = await fileToBase64(file);
-                                  handleUpdateCurrentScene({ backgroundUrl: b64 });
+                                  let bgUrl = '';
+                                  try {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('assetType', 'background');
+                                    const res = await fetch(`/api/projects/${story.id || 'current-project'}/assets`, {
+                                      method: 'POST',
+                                      body: formData,
+                                    });
+                                    if (res.ok) {
+                                      const data = await res.json();
+                                      if (data.url) bgUrl = data.url;
+                                    }
+                                  } catch (_) {}
+                                  if (!bgUrl) {
+                                    bgUrl = await fileToBase64(file);
+                                  }
+                                  handleUpdateCurrentScene({ backgroundUrl: bgUrl });
                                   notify('Background updated from your PC');
                                 }}
                                 className="hidden"
@@ -1205,6 +1221,11 @@ export default function SceneStudioModal({
             assetPickerConfig.onSelect(asset);
             setAssetPickerConfig(null);
           }}
+          onUpdateStoryCustomAssets={(updatedAssets) => {
+            if (onUpdateStory) {
+              onUpdateStory({ ...story, customAssets: updatedAssets });
+            }
+          }}
           onClose={() => setAssetPickerConfig(null)}
           notify={notify}
         />
@@ -1219,6 +1240,11 @@ export default function SceneStudioModal({
             handleUpdateCurrentScene({ backgroundUrl: asset.url });
             setShowBgAssetPicker(false);
             notify(`Background selected from gallery: ${asset.name}`);
+          }}
+          onUpdateStoryCustomAssets={(updatedAssets) => {
+            if (onUpdateStory) {
+              onUpdateStory({ ...story, customAssets: updatedAssets });
+            }
           }}
           onClose={() => setShowBgAssetPicker(false)}
           notify={notify}

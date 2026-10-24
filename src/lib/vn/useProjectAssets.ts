@@ -18,7 +18,9 @@ export function useProjectAssets(
   onUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void
 ): UseProjectAssetsResult {
   const activeStoredProject =
-    typeof window !== 'undefined' ? localStorage.getItem('vn_active_project_id') : null;
+    typeof window !== 'undefined'
+      ? localStorage.getItem('leafvn_active_project_id') || localStorage.getItem('vn_active_project_id')
+      : null;
   const projectId = story?.id || activeStoredProject || 'current-project';
 
   const [projectAssets, setProjectAssets] = useState<VNAssetItem[]>(story?.customAssets || []);
@@ -29,15 +31,24 @@ export function useProjectAssets(
     onUpdateStoryCustomAssetsRef.current = onUpdateStoryCustomAssets;
   }, [onUpdateStoryCustomAssets]);
 
-  // Combine system assets with physical project assets and story custom assets, deduplicated by ID
+  // Combine system assets with physical project assets and story custom assets, deduplicated by URL / ID
   const customAssets = story?.customAssets || [];
   const systemAssets = SYSTEM_ASSETS;
 
   const allAssets: VNAssetItem[] = (() => {
     const map = new Map<string, VNAssetItem>();
-    systemAssets.forEach((a) => map.set(a.id, a));
-    customAssets.forEach((a) => map.set(a.id, a));
-    projectAssets.forEach((a) => map.set(a.id, a));
+    systemAssets.forEach((a) => {
+      const key = a.url || a.id;
+      map.set(key, a);
+    });
+    customAssets.forEach((a) => {
+      const key = a.url || a.id;
+      map.set(key, a);
+    });
+    projectAssets.forEach((a) => {
+      const key = a.url || a.id;
+      map.set(key, a);
+    });
     return Array.from(map.values());
   })();
 

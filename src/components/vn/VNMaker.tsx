@@ -42,6 +42,7 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
     isFullscreenWorkspace,
     feedbackMsg,
     handlePatchCurrentScene,
+    handleUpdateStoryCustomAssets,
   } = contextValue;
 
   return (
@@ -119,6 +120,7 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
               scene={currentScene}
               story={story}
               onUpdateScene={handlePatchCurrentScene}
+              onUpdateStoryCustomAssets={handleUpdateStoryCustomAssets}
               onSave={handleManualSave}
               editorTheme={editorTheme}
             />
@@ -127,6 +129,7 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
               scene={currentScene}
               story={story}
               onUpdateScene={handlePatchCurrentScene}
+              onUpdateStoryCustomAssets={handleUpdateStoryCustomAssets}
               editorTheme={editorTheme}
             />
           ) : (

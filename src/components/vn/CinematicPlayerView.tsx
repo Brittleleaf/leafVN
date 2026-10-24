@@ -355,31 +355,33 @@ export default function CinematicPlayerView({
         {/* 3. SCREEN FX OVERLAYS */}
         <CinematicScreenFxLayer activeFxClips={activeFxClips} />
 
-        {/* 4. TOP CINEMATIC BAR & SKIP BUTTON */}
-        <div className="relative z-40 flex items-center justify-between p-3.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
-          <div className="flex items-center gap-3">
-            <span className="px-2.5 py-0.5 rounded text-[10px] font-mono tracking-widest uppercase bg-[#2E1256]/80 border border-[#D17BF8]/50 text-[#F5F2FF] flex items-center gap-1.5">
-              <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5" />
-              <span>CINEMATIC {isEditor ? 'STUDIO' : 'EVENT'}</span>
-            </span>
-            <span className="text-xs text-gray-400 font-mono">
-              {formatTime(currentTimeSec)} / {formatTime(duration)}
-            </span>
-          </div>
+        {/* 4. TOP CINEMATIC BAR & SKIP BUTTON (Only in Player Mode, never obstructing the editor canvas) */}
+        {!isEditor && (
+          <div className="relative z-40 flex items-center justify-between p-3.5 bg-gradient-to-b from-black/80 via-black/40 to-transparent pointer-events-none">
+            <div className="flex items-center gap-3">
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-mono tracking-widest uppercase bg-[#2E1256]/80 border border-[#D17BF8]/50 text-[#F5F2FF] flex items-center gap-1.5 shadow">
+                <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5" />
+                <span>CINEMATIC EVENT</span>
+              </span>
+              <span className="text-xs text-gray-400 font-mono">
+                {formatTime(currentTimeSec)} / {formatTime(duration)}
+              </span>
+            </div>
 
-          {isInteractive && !isEditor && onSkip && (
-            <button
-              onClick={() => {
-                playUiSound('select', 0.35);
-                clearAll();
-                onSkip();
-              }}
-              className="px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-black/60 hover:bg-black/90 border border-white/20 hover:border-white/50 text-gray-300 hover:text-white backdrop-blur-md cursor-pointer transition-all shadow-md active:scale-95"
-            >
-              SALTAR CINEMÁTICA »
-            </button>
-          )}
-        </div>
+            {isInteractive && onSkip && (
+              <button
+                onClick={() => {
+                  playUiSound('select', 0.35);
+                  clearAll();
+                  onSkip();
+                }}
+                className="px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-black/60 hover:bg-black/90 border border-white/20 hover:border-white/50 text-gray-300 hover:text-white backdrop-blur-md cursor-pointer transition-all shadow-md active:scale-95 pointer-events-auto"
+              >
+                SALTAR CINEMÁTICA »
+              </button>
+            )}
+          </div>
+        )}
 
         {/* 5. BOTTOM SCRUBBER (Only in pure Player Mode) */}
         {!isEditor && (

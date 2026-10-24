@@ -36,6 +36,7 @@ interface CinematicSequencerStudioProps {
   scene: VNScene;
   story: VNStory;
   onUpdateScene: (patch: Partial<VNScene>) => void;
+  onUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
   onSave?: () => Promise<void> | void;
   editorTheme?: 'default_dark' | 'default_light' | 'rotp';
 }
@@ -44,6 +45,7 @@ export default function CinematicSequencerStudio({
   scene,
   story,
   onUpdateScene,
+  onUpdateStoryCustomAssets,
   onSave,
   editorTheme = 'default_dark',
 }: CinematicSequencerStudioProps) {
@@ -821,6 +823,7 @@ export default function CinematicSequencerStudio({
           filterType={assetPickerConfig.filterType}
           initialFilterType={assetPickerConfig.filterType}
           previewBackgroundUrl={assetPickerConfig.previewBackgroundUrl || scene.backgroundUrl}
+          onUpdateStoryCustomAssets={onUpdateStoryCustomAssets}
           onSelectAsset={(asset) => {
             assetPickerConfig.onSelect(asset);
             setAssetPickerConfig(null);

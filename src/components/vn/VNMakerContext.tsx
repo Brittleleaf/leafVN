@@ -10,6 +10,7 @@ import {
   VNHotspot,
   VNHotspotStyle,
   VNAssetType,
+  VNAssetItem,
   VNScreenFxType,
 } from '@/types/vn';
 import { VNEditorTheme } from '@/lib/vn/themeManager';
@@ -198,6 +199,7 @@ export interface VNMakerContextType {
   handleApplyBackgroundToCurrentScene: (bgUrl: string) => void;
   handleUpdateCharacter: (charId: string, patch: Partial<VNCharacter>) => void;
   handleApplyScaleToAllDialogues: (characterId: string, scale: number) => void;
+  handleUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
 }
 
 export const VNMakerContext = createContext<VNMakerContextType | null>(null);

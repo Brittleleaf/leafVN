@@ -564,10 +564,34 @@ export function saveProjectExternalAsset(
     }
   }
 
-  const cleanUrl = asset.url.trim();
+  let cleanUrl = asset.url.trim();
+  if (
+    !cleanUrl.startsWith('http://') &&
+    !cleanUrl.startsWith('https://') &&
+    !cleanUrl.startsWith('/') &&
+    !cleanUrl.startsWith('data:')
+  ) {
+    cleanUrl = `https://${cleanUrl}`;
+  }
+
+  let finalName = asset.name?.trim() || '';
+  if (!finalName) {
+    try {
+      const u = new URL(cleanUrl);
+      const segs = u.pathname.split('/').filter(Boolean);
+      const last = segs[segs.length - 1];
+      if (last) {
+        finalName = decodeURIComponent(last).replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      }
+    } catch (_) {}
+  }
+  if (!finalName) {
+    finalName = `Indexed ${asset.assetType || 'Asset'} ${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+  }
+
   const newItem: VNAssetItem = {
     id: `asset-ext-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-    name: asset.name.trim() || 'Indexed Web Asset',
+    name: finalName,
     type: asset.assetType,
     origin: 'user',
     url: cleanUrl,
@@ -597,11 +621,16 @@ export function saveProjectAsset(
   originalFileName: string
 ): { url: string; fileName: string; filePath: string; size: number } {
   const safeId = sanitizeProjectId(projectId);
-  const subfolder = ['sfx', 'bgm', 'voice', 'backgrounds', 'characters', 'icons'].includes(assetType)
-    ? assetType
-    : assetType === 'background'
-    ? 'backgrounds'
-    : 'other';
+  const subfolder =
+    assetType === 'background' || assetType === 'backgrounds'
+      ? 'backgrounds'
+      : assetType === 'character' || assetType === 'characters'
+      ? 'characters'
+      : assetType === 'icon' || assetType === 'icons'
+      ? 'icons'
+      : ['sfx', 'bgm', 'voice'].includes(assetType)
+      ? assetType
+      : 'other';
 
   const targetDir = path.join(getProjectPath(safeId), 'assets', subfolder);
   if (!fs.existsSync(targetDir)) {

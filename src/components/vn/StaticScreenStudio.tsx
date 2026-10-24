@@ -28,6 +28,7 @@ interface StaticScreenStudioProps {
   scene: VNScene;
   story: VNStory;
   onUpdateScene: (patch: Partial<VNScene>) => void;
+  onUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
   editorTheme?: 'default_dark' | 'default_light' | 'rotp';
 }
 
@@ -35,10 +36,12 @@ export default function StaticScreenStudio({
   scene,
   story,
   onUpdateScene,
+  onUpdateStoryCustomAssets,
   editorTheme = 'default_dark',
 }: StaticScreenStudioProps) {
   const config: VNStaticScreenConfig = scene.staticScreenConfig || DEFAULT_DEATH_CONFIG;
 
+  const [activeTab, setActiveTab] = useState<'visual' | 'typography' | 'buttons'>('visual');
   const [selectedButtonId, setSelectedButtonId] = useState<string | null>(
     config.buttons?.[0]?.id || null
   );
@@ -46,8 +49,8 @@ export default function StaticScreenStudio({
     config.buttons?.[0]?.id || null
   );
 
-  // Interactive Canvas Alignment & Snapping state
-  const [showGuides, setShowGuides] = useState<boolean>(true);
+  // Interactive Canvas Alignment & Snapping state (default OFF for a clean canvas)
+  const [showGuides, setShowGuides] = useState<boolean>(false);
   const [snapToGuides, setSnapToGuides] = useState<boolean>(true);
 
   // Gallery Picker modal state
@@ -254,87 +257,204 @@ export default function StaticScreenStudio({
   return (
     <div className="flex-1 flex flex-col lg:flex-row h-full overflow-hidden bg-[var(--bg)] text-[var(--text)] select-none">
       {/* LEFT COLUMN: STATIC SCREEN CONFIGURATION CONTROLS */}
-      <div className="w-full lg:w-[420px] p-4 overflow-y-auto space-y-5 border-r border-[var(--border)] bg-[var(--surface)] backdrop-blur-md shrink-0 custom-scrollbar">
+      <div className="w-full lg:w-[420px] p-4 overflow-y-auto space-y-4 border-r border-[var(--border)] bg-[var(--surface)] backdrop-blur-md shrink-0 custom-scrollbar flex flex-col">
         
         {/* Header & Quick Presets */}
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-5 h-5 text-[var(--accent)]" />
-            <h3 className="font-bold text-sm tracking-wide uppercase text-[var(--text)]">
-              Static Screen Studio
-            </h3>
-          </div>
-          <p className="text-xs text-[var(--muted)] mb-3">
-            Fully customize Death, Ending, or Intro cards: typography, media gallery assets, and free positioning.
-          </p>
+        <div className="space-y-3 pb-3 border-b border-[var(--border)]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
+                <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-[var(--accent)]" />
+              </div>
+              <div>
+                <h3 className="font-bold text-xs tracking-wide uppercase text-[var(--text)]">
+                  Static Screen Studio
+                </h3>
+                <span className="text-[10px] text-[var(--muted)] font-mono">
+                  {scene.name || 'Static Event'}
+                </span>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {/* Quick Presets dropdown / pill */}
+            <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-xl">
+              <span className="text-[9px] uppercase font-bold text-[var(--muted)] px-1.5 font-mono">Preset:</span>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('title')}
+                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-emerald-400 cursor-pointer transition-colors"
+                title="Title / Main Menu preset"
+              >
+                Title
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('death')}
+                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-red-400 cursor-pointer transition-colors"
+                title="You Died / Game Over preset"
+              >
+                Death
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('ending')}
+                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-purple-400 cursor-pointer transition-colors"
+                title="Story Ending preset"
+              >
+                Ending
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('intro')}
+                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-sky-400 cursor-pointer transition-colors"
+                title="Chapter Intro card preset"
+              >
+                Intro
+              </button>
+            </div>
+          </div>
+
+          {/* Sleek Segmented Studio Navigation Tabs */}
+          <div className="flex items-center gap-1 p-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl">
             <button
-              onClick={() => handleApplyPreset('title')}
-              className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-emerald-500/60 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+              type="button"
+              onClick={() => {
+                setActiveTab('visual');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                activeTab === 'visual'
+                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-3.5 h-3.5" />
-              <span>Title / Menu</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
+              <span>Visual</span>
             </button>
             <button
-              onClick={() => handleApplyPreset('death')}
-              className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-red-500/60 bg-red-950/40 hover:bg-red-900/60 text-red-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+              type="button"
+              onClick={() => {
+                setActiveTab('typography');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                activeTab === 'typography'
+                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.skullDeath} className="w-3.5 h-3.5" />
-              <span>Death Preset</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.fontFx} className="w-3.5 h-3.5" />
+              <span>Typography</span>
             </button>
             <button
-              onClick={() => handleApplyPreset('ending')}
-              className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-purple-500/60 bg-purple-950/40 hover:bg-purple-900/60 text-purple-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+              type="button"
+              onClick={() => {
+                setActiveTab('buttons');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                activeTab === 'buttons'
+                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.end} className="w-3.5 h-3.5" />
-              <span>Ending Preset</span>
-            </button>
-            <button
-              onClick={() => handleApplyPreset('intro')}
-              className="py-1.5 px-2 text-[10px] font-bold rounded-lg border border-sky-500/60 bg-sky-950/40 hover:bg-sky-900/60 text-sky-200 transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
-            >
-              <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5" />
-              <span>Intro Preset</span>
+              <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
+              <span>Buttons ({config.buttons?.length || 0})</span>
             </button>
           </div>
         </div>
 
-        {/* 1. Visual & Media Section */}
-        <StaticScreenVisualSection
-          scene={scene}
-          config={config}
-          updateConfig={updateConfig}
-          onUpdateScene={onUpdateScene}
-          setAssetPickerConfig={setAssetPickerConfig}
-        />
+        {/* Tab Content Section */}
+        <div className="flex-1 space-y-4">
+          {activeTab === 'visual' && (
+            <StaticScreenVisualSection
+              scene={scene}
+              config={config}
+              updateConfig={updateConfig}
+              onUpdateScene={onUpdateScene}
+              setAssetPickerConfig={setAssetPickerConfig}
+            />
+          )}
 
-        {/* 2. Text & Typography Section */}
-        <StaticScreenTypographySection
-          config={config}
-          updateConfig={updateConfig}
-          selectedTarget={selectedTarget}
-          setSelectedTarget={setSelectedTarget}
-          setSelectedButtonId={setSelectedButtonId}
-          setAssetPickerConfig={setAssetPickerConfig}
-        />
+          {activeTab === 'typography' && (
+            <StaticScreenTypographySection
+              config={config}
+              updateConfig={updateConfig}
+              selectedTarget={selectedTarget}
+              setSelectedTarget={setSelectedTarget}
+              setSelectedButtonId={setSelectedButtonId}
+              setAssetPickerConfig={setAssetPickerConfig}
+            />
+          )}
 
-        {/* 3. Buttons & Placement Section */}
-        <StaticScreenButtonsSection
-          config={config}
-          updateConfig={updateConfig}
-          selectedButtonId={selectedButtonId}
-          setSelectedButtonId={setSelectedButtonId}
-          handleAddButton={handleAddButton}
-          handleUpdateButton={handleUpdateButton}
-          handleDeleteButton={handleDeleteButton}
-          allStoryScenarios={allStoryScenarios}
-          setAssetPickerConfig={setAssetPickerConfig}
-        />
+          {activeTab === 'buttons' && (
+            <StaticScreenButtonsSection
+              config={config}
+              updateConfig={updateConfig}
+              selectedButtonId={selectedButtonId}
+              setSelectedButtonId={setSelectedButtonId}
+              handleAddButton={handleAddButton}
+              handleUpdateButton={handleUpdateButton}
+              handleDeleteButton={handleDeleteButton}
+              allStoryScenarios={allStoryScenarios}
+              setAssetPickerConfig={setAssetPickerConfig}
+            />
+          )}
+        </div>
       </div>
 
       {/* RIGHT COLUMN: LIVE WYSIWYG PREVIEW WITH DRAGGABLE BUTTONS */}
       <div className="flex-1 relative flex flex-col items-center justify-center p-4 xl:pr-24 bg-black/60 overflow-hidden">
+        {/* Sleek Workspace Top Bar OUTSIDE the canvas */}
+        <div className="w-full max-w-4xl mb-2.5 flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] text-xs backdrop-blur-md shadow-sm shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]" />
+            <span className="font-bold tracking-wider uppercase text-[11px] text-[var(--text)]">Static Screen Studio</span>
+            <span className="text-[10px] text-[var(--muted)] font-mono">
+              • {selectedTarget === 'title' ? 'Title Selected' : selectedTarget === 'subtitle' ? 'Subtitle Selected' : selectedButton ? `Button: "${selectedButton.label}"` : 'Clean Canvas'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Toggle Guides */}
+            <button
+              type="button"
+              onClick={() => {
+                setShowGuides(!showGuides);
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 backdrop-blur-md ${
+                showGuides
+                  ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--accent)] shadow-sm'
+                  : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
+              title="Toggle alignment guides"
+            >
+              <GuiIconRenderer icon={GUI_ICONS.general.ruler} className="w-3.5 h-3.5" />
+              <span>{showGuides ? 'Guides: ON' : 'Guides: OFF'}</span>
+            </button>
+
+            {/* Toggle Snap */}
+            <button
+              type="button"
+              onClick={() => {
+                setSnapToGuides(!snapToGuides);
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 backdrop-blur-md ${
+                snapToGuides
+                  ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--accent)] shadow-sm'
+                  : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
+              }`}
+              title="Toggle magnetic snapping"
+            >
+              <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3.5 h-3.5" />
+              <span>{snapToGuides ? 'Snap: ON' : 'Snap: OFF'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 16:9 Canvas Viewport */}
         <div className="relative w-full h-full max-w-4xl max-h-[640px] flex items-center justify-center">
           <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)]">
             <StaticScreenView
@@ -384,59 +504,6 @@ export default function StaticScreenStudio({
                 }
               }}
             />
-
-            {/* Top Canvas Bar with Guides Toggle & Snapping Controls */}
-            <div className="absolute top-3 left-3 right-3 z-40 flex items-center justify-between pointer-events-none">
-              <div className="bg-[var(--well-bg)] backdrop-blur-md px-3 py-1.5 rounded-full border border-[var(--border)] text-[10px] font-mono text-[var(--text)] flex items-center gap-2 shadow-lg pointer-events-auto">
-                <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]" />
-                <span className="font-bold">WYSIWYG CANVAS</span>
-                {selectedTarget === 'title' ? (
-                  <span className="text-[var(--accent)] font-bold ml-1">• TITLE TRANSFORM</span>
-                ) : selectedTarget === 'subtitle' ? (
-                  <span className="text-[var(--accent)] font-bold ml-1">• SUBTITLE TRANSFORM</span>
-                ) : config.buttonsLayout === 'free' ? (
-                  <span className="text-[var(--accent)] font-bold ml-1">• BUTTON TRANSFORM</span>
-                ) : null}
-              </div>
-
-              <div className="flex items-center gap-1.5 pointer-events-auto">
-                {/* Toggle Mostrar Guías */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowGuides(!showGuides);
-                    playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  }}
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer shadow-md flex items-center gap-1.5 backdrop-blur-md ${
-                    showGuides
-                      ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)]'
-                      : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
-                  }`}
-                  title="Toggle grid and centering guides"
-                >
-                  <GuiIconRenderer icon={GUI_ICONS.general.ruler} className="w-3.5 h-3.5" />
-                  <span>{showGuides ? 'Guides: ON' : 'Guides: OFF'}</span>
-                </button>
-
-                {/* Toggle Ajustar a Guías (Snap) */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSnapToGuides(!snapToGuides);
-                    playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  }}
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all cursor-pointer shadow-md flex items-center gap-1.5 backdrop-blur-md ${
-                    snapToGuides
-                      ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)]'
-                      : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
-                  }`}
-                  title="Toggle magnetic snapping"
-                >
-                  <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3.5 h-3.5" />
-                  <span>{snapToGuides ? 'Snap: ON' : 'Snap: OFF'}</span>
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* DOCKED VERTICAL STUDIO TOOLBAR (STRICTLY OUTSIDE CANVAS ON THE RIGHT RAIL) */}
@@ -476,6 +543,7 @@ export default function StaticScreenStudio({
           initialFilterType={assetPickerConfig.filterType}
           initialFontSample={assetPickerConfig.initialFontSample}
           previewBackgroundUrl={assetPickerConfig.previewBackgroundUrl || scene.backgroundUrl}
+          onUpdateStoryCustomAssets={onUpdateStoryCustomAssets}
           onSelectAsset={(asset) => {
             assetPickerConfig.onSelect(asset);
             setAssetPickerConfig(null);

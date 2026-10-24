@@ -9,6 +9,7 @@ import {
   VNHotspot,
   VNHotspotStyle,
   VNAssetType,
+  VNAssetItem,
   VNScreenFxType,
 } from '@/types/vn';
 import { SYSTEM_ASSETS } from '@/lib/vn/systemAssets';
@@ -677,6 +678,14 @@ export function useVNMakerState(
   const handleUpdateCurrentScene = useCallback((key: keyof VNScene, value: any) => {
     handlePatchCurrentScene({ [key]: value });
   }, [handlePatchCurrentScene]);
+
+  const handleUpdateStoryCustomAssets = useCallback((updatedAssets: VNAssetItem[]) => {
+    setStory((prevStory) => {
+      const updated = { ...prevStory, customAssets: updatedAssets };
+      saveActiveStory(updated);
+      return updated;
+    });
+  }, []);
 
   // Mutaciones de Línea / Evento
   const handlePatchCurrentLine = useCallback((patch: Partial<VNEvent>) => {
@@ -1637,5 +1646,6 @@ export function useVNMakerState(
     handleApplyBackgroundToCurrentScene,
     handleUpdateCharacter,
     handleApplyScaleToAllDialogues,
+    handleUpdateStoryCustomAssets,
   };
 }
