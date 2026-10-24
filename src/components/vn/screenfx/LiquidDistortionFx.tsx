@@ -106,16 +106,6 @@ export const LiquidDistortionComponent: React.FC<ScreenFxProps> = ({
         </defs>
       </svg>
 
-      {/* Backdrop Refraction Glass Layer */}
-      <div
-        className="absolute inset-0 pointer-events-none liquid-distortion-layer"
-        style={{
-          backdropFilter: 'url(#liquid)',
-          WebkitBackdropFilter: 'url(#liquid)',
-          filter: hueRotateDeg ? `hue-rotate(${hueRotateDeg}deg)` : undefined,
-        }}
-      />
-
       {/* Color Tint / Hue Fusion Overlay */}
       {isTintEnabled && activeColor && (
         <div

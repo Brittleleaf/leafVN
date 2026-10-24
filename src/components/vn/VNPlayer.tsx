@@ -17,7 +17,7 @@ import {
 import { playSfx } from '@/lib/audioSettings';
 import { evaluateCondition, getCharacterAvatar, interpolateText } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
-import { VNScreenFxOverlay } from './VNScreenFxOverlay';
+import { VNScreenFxOverlay, ScreenFxSvgDefs } from './VNScreenFxOverlay';
 import { VNTransitionOverlay } from './transitions';
 import { VNTextBoxRenderer } from './textboxes';
 import { resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
@@ -148,6 +148,9 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
       {(currentScene?.sceneType !== 'event' || currentScene?.eventSubtype !== 'static') && (
         <VNCursorLayer cursorType={activeCursorType} containerRef={playerContainerRef} />
       )}
+
+      {/* SVG Filter Definitions for Liquid & Pixelate (Always mounted, immune to Chromium culling) */}
+      <ScreenFxSvgDefs activeFx={activeScreenFx} />
 
       {/* 16:9 ASPECT-RATIO LOCKED GAME STAGE */}
       <div

@@ -18,3 +18,4 @@ export * from './FlashlightFx';
 export * from './CodeFlythroughFx';
 export * from './LiquidDistortionFx';
 export * from './RetroPixelateFx';
+export * from './ScreenFxSvgDefs';

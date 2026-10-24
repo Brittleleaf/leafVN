@@ -89,6 +89,51 @@ export function ScreenFxShowcaseTab({
               >
                 {/* 16:9 Live Preview Viewport over Scenario Template */}
                 <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
+                  {/* Card-isolated SVG filters for reliable real-time previewing */}
+                  <svg
+                    aria-hidden="true"
+                    style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0.001, pointerEvents: 'none' }}
+                  >
+                    <defs>
+                      {fx.id === 'liquid_distortion' && (
+                        <filter key={`liquid-${currentMultiplier}-${currentHue}`} id={`liquid_card_${fx.id}`} x="-20%" y="-20%" width="140%" height="140%">
+                          <feTurbulence type="fractalNoise" baseFrequency="0.015 0.015" numOctaves="3" result="noise">
+                            <animate attributeName="baseFrequency" values="0.015 0.015;0.021 0.018;0.015 0.015" dur="6s" repeatCount="indefinite" />
+                          </feTurbulence>
+                          <feDisplacementMap in="SourceGraphic" in2="noise" scale={Math.max(1, Math.round(30 * currentMultiplier))} xChannelSelector="R" yChannelSelector="G" />
+                        </filter>
+                      )}
+                      {fx.id === 'retro_pixelate' && (
+                        <>
+                          <filter key={`retro-tile-${currentPixelSize}-${currentColorSteps}`} id={`retro_tile_card_${fx.id}`} colorInterpolationFilters="sRGB" x="0" y="0" width="100%" height="100%">
+                            <feFlood x="0" y="0" width={1 + currentPixelSize * 4} height={1 + currentPixelSize * 4} />
+                            <feMorphology operator="erode" radius={currentPixelSize} x="0" y="0" width={1 + currentPixelSize * 4} height={1 + currentPixelSize * 4} />
+                            <feTile result="raster1" />
+                            <feMorphology operator="erode" radius={currentPixelSize} result="raster2" />
+                            <feComposite operator="in" in="SourceGraphic" in2="raster1" />
+                            <feGaussianBlur stdDeviation={Math.max(0.1, currentPixelSize - 0.5)} />
+                            <feComposite operator="in" in2="raster2" />
+                            <feComponentTransfer>
+                              <feFuncR type="discrete" tableValues={Array.from({ length: currentColorSteps + 1 }, (_, i) => (i / currentColorSteps).toFixed(3)).join(' ')} />
+                              <feFuncG type="discrete" tableValues={Array.from({ length: currentColorSteps + 1 }, (_, i) => (i / currentColorSteps).toFixed(3)).join(' ')} />
+                              <feFuncB type="discrete" tableValues={Array.from({ length: currentColorSteps + 1 }, (_, i) => (i / currentColorSteps).toFixed(3)).join(' ')} />
+                              <feFuncA type="discrete" tableValues="0 1" />
+                            </feComponentTransfer>
+                            <feMorphology operator="dilate" radius={currentPixelSize * 2} />
+                          </filter>
+                          <filter key={`retro-color-${currentColorSteps}`} id={`retro_color_card_${fx.id}`} colorInterpolationFilters="sRGB" x="0" y="0" width="100%" height="100%">
+                            <feComponentTransfer>
+                              <feFuncR type="discrete" tableValues={Array.from({ length: currentColorSteps + 1 }, (_, i) => (i / currentColorSteps).toFixed(3)).join(' ')} />
+                              <feFuncG type="discrete" tableValues={Array.from({ length: currentColorSteps + 1 }, (_, i) => (i / currentColorSteps).toFixed(3)).join(' ')} />
+                              <feFuncB type="discrete" tableValues={Array.from({ length: currentColorSteps + 1 }, (_, i) => (i / currentColorSteps).toFixed(3)).join(' ')} />
+                              <feFuncA type="discrete" tableValues="0 1" />
+                            </feComponentTransfer>
+                          </filter>
+                        </>
+                      )}
+                    </defs>
+                  </svg>
+
                   {effectiveBg && (
                     <img
                       src={effectiveBg}
@@ -97,9 +142,9 @@ export function ScreenFxShowcaseTab({
                       style={{
                         filter:
                           fx.id === 'liquid_distortion'
-                            ? (currentHue ? `url(#liquid) hue-rotate(${currentHue}deg)` : 'url(#liquid)')
+                            ? (currentHue ? `url(#liquid_card_${fx.id}) hue-rotate(${currentHue}deg)` : `url(#liquid_card_${fx.id})`)
                             : fx.id === 'retro_pixelate'
-                            ? (currentPixelSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)')
+                            ? (currentPixelSize === 0 ? `url(#retro_color_card_${fx.id})` : `url(#retro_tile_card_${fx.id})`)
                             : undefined,
                       }}
                     />

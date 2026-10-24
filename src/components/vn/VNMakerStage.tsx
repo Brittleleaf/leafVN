@@ -11,7 +11,7 @@ import {
 } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { playSfx } from '@/lib/audioSettings';
-import { VNScreenFxOverlay } from './VNScreenFxOverlay';
+import { VNScreenFxOverlay, ScreenFxSvgDefs } from './VNScreenFxOverlay';
 import { resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
 import { useVNMaker, VNActiveSelectedFx } from './VNMakerContext';
 import {
@@ -665,6 +665,9 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
 
       {/* GAME SCREEN CANVAS WRAPPER WITH DOCKED TOOLBAR RAIL */}
       <div className="relative w-full flex items-center justify-center">
+        {/* SVG Filter Definitions for Liquid & Pixelate (Always mounted, immune to Chromium culling) */}
+        <ScreenFxSvgDefs activeFx={currentSelectedFx} />
+
         {/* GAME SCREEN CANVAS */}
         <div
           ref={canvasRef}

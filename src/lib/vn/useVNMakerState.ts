@@ -446,6 +446,30 @@ export function useVNMakerState(
       }
     });
 
+    // Unclosed open effects continue to remain active on all subsequent events until the end of the timeline
+    openStack.forEach((item) => {
+      for (let i = item.startIdx + 1; i < currentScene.timeline.length; i++) {
+        const innerEv = currentScene.timeline[i];
+        if (innerEv && innerEv.type !== 'fx_start' && innerEv.type !== 'fx_end') {
+          if (!activeMap.has(innerEv.id)) {
+            activeMap.set(innerEv.id, {
+              type: item.type,
+              pairId: item.pairId,
+              intensity: item.intensity,
+              color: item.color,
+              animation: item.animation,
+              customWords: item.customWords,
+              params: item.params,
+              flashlightMode: item.flashlightMode,
+              flashlightRadius: item.flashlightRadius,
+              flashlightShutdown: item.flashlightShutdown,
+              flashlightHitsRequired: item.flashlightHitsRequired,
+            });
+          }
+        }
+      }
+    });
+
     return { activeMap, pairsMap };
   }, [currentScene?.timeline]);
 

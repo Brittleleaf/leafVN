@@ -105,15 +105,6 @@ export const RetroPixelateComponent: React.FC<ScreenFxProps> = ({
         </defs>
       </svg>
 
-      {/* Backdrop Pixelation Glass Layer */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backdropFilter: `url(#${activeFilterId})`,
-          WebkitBackdropFilter: `url(#${activeFilterId})`,
-        }}
-      />
-
       {/* Optional Pixel Grid / Scanline Phosphor Overlay */}
       {scanlines && pixelSize > 0 && (
         <div
