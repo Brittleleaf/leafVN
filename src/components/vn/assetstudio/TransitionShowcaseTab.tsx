@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { VNAssetItem } from '@/types/vn';
-import { VN_TRANSITIONS_CATALOG, VNTransitionDefinition, getTransition } from '../transitions';
+import { VN_TRANSITIONS_CATALOG, VNTransitionDefinition } from '../transitions';
 import { VNTransitionOverlay } from '../transitions/VNTransitionOverlay';
 import { playSfx } from '@/lib/audioSettings';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
@@ -19,408 +19,240 @@ export function TransitionShowcaseTab({
   onSelectAsset,
   onClose,
 }: TransitionShowcaseTabProps) {
-  const [selectedTransitionId, setSelectedTransitionId] = useState<string>('fade_black');
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [activeScene, setActiveScene] = useState<'A' | 'B'>('A');
-  const [isTransitionActive, setIsTransitionActive] = useState<boolean>(false);
-  const [isScrubbing, setIsScrubbing] = useState<boolean>(false);
-  const [scrubProgress, setScrubProgress] = useState<number>(0);
-  const [speedMultiplier, setSpeedMultiplier] = useState<number>(1.0); // 0.5x (fast), 1.0x (normal), 1.6x (cinematic)
-  const [autoCycle, setAutoCycle] = useState<boolean>(false);
+  const [activeTransitions, setActiveTransitions] = useState<Record<string, boolean>>({});
+  const [activeScenes, setActiveScenes] = useState<Record<string, 'A' | 'B'>>({});
+  const [transitionSpeeds, setTransitionSpeeds] = useState<Record<string, number>>({});
 
-  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const sceneSwitchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const swapTimersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
-  const effectiveBgA = previewBackgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg';
-  const selectedDef = getTransition(selectedTransitionId);
-  const effectiveDuration = (selectedDef.defaultDurationSec * speedMultiplier);
+  const effectiveBg = previewBackgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg';
+  const isCustomSceneBg = Boolean(previewBackgroundUrl);
 
-  // Play transition animation between Scene A and Scene B
-  const triggerTransition = (targetId?: string) => {
-    const nextId = targetId || selectedTransitionId;
-    if (nextId !== selectedTransitionId) {
-      setSelectedTransitionId(nextId);
-    }
+  const handlePlayTransition = (trans: VNTransitionDefinition) => {
+    const id = trans.id;
+    const durSec = transitionSpeeds[id] ?? trans.defaultDurationSec;
+    const durMs = Math.max(250, durSec * 1000);
 
-    // Cancel existing timers
-    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
-    if (sceneSwitchTimerRef.current) clearTimeout(sceneSwitchTimerRef.current);
+    // Clear any pending timers for this card
+    if (timersRef.current[id]) clearTimeout(timersRef.current[id]);
+    if (swapTimersRef.current[id]) clearTimeout(swapTimersRef.current[id]);
 
-    setIsScrubbing(false);
-    setIsTransitionActive(true);
-    playSfx('/assets/sfx/click intro.mp3', false, 0.25);
+    setActiveTransitions((prev) => ({ ...prev, [id]: true }));
+    playSfx('/assets/sfx/click intro.mp3', false, 0.2);
 
-    const durMs = Math.max(250, effectiveDuration * 1000);
-
-    // Swap scenes halfway through the transition
-    sceneSwitchTimerRef.current = setTimeout(() => {
-      setActiveScene((prev) => (prev === 'A' ? 'B' : 'A'));
+    // Swap scene halfway through the transition
+    swapTimersRef.current[id] = setTimeout(() => {
+      setActiveScenes((prev) => ({
+        ...prev,
+        [id]: prev[id] === 'B' ? 'A' : 'B',
+      }));
     }, durMs * 0.48);
 
     // End transition
-    transitionTimerRef.current = setTimeout(() => {
-      setIsTransitionActive(false);
+    timersRef.current[id] = setTimeout(() => {
+      setActiveTransitions((prev) => ({ ...prev, [id]: false }));
     }, durMs);
   };
 
-  // Auto-cycle loop effect
-  useEffect(() => {
-    if (!autoCycle) return;
-    const interval = setInterval(() => {
-      triggerTransition();
-    }, (effectiveDuration + 2.5) * 1000);
-
-    return () => clearInterval(interval);
-  }, [autoCycle, selectedTransitionId, speedMultiplier, effectiveDuration]);
-
-  // Clean up timers on unmount
-  useEffect(() => {
-    return () => {
-      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
-      if (sceneSwitchTimerRef.current) clearTimeout(sceneSwitchTimerRef.current);
-    };
-  }, []);
-
-  // Filter transitions
-  const filteredTransitions = VN_TRANSITIONS_CATALOG.filter((t) => {
-    const matchesSearch =
-      !searchQuery.trim() ||
-      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.id.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesCategory =
-      activeCategory === 'all' ||
-      t.category === activeCategory ||
-      (activeCategory === 'wipe' && (t.id.includes('wipe') || t.id.includes('slide'))) ||
-      (activeCategory === 'fade' && (t.id.includes('fade') || t.id.includes('dissolve')));
-
-    return matchesSearch && matchesCategory;
-  });
-
-  // Calculate current scene to display based on scrub or activeScene
-  const displayedScene = isScrubbing
-    ? scrubProgress < 0.5
-      ? 'A'
-      : 'B'
-    : activeScene;
-
   return (
     <div className="space-y-4">
-      {/* 1. CINEMATIC TRANSITION AUDITION ARENA (HERO PREVIEW) */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] space-y-4 shadow-xl backdrop-blur-md">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
-          <div className="space-y-0.5">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase bg-[var(--accent-surface)] border border-[var(--accent)]/40 text-[var(--accent)] font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span>Real-Time Transition Audition Arena</span>
-            </div>
-            <h3 className="text-sm font-black text-[var(--text)] flex items-center gap-2">
-              <span>Active Effect:</span>
-              <span className="text-[var(--accent)]">{selectedDef.name}</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--card-bg)] border border-[var(--border)] text-[var(--muted)]">
-                {selectedDef.tag || 'TRANSITION'}
+      {/* Header Banner - Matching ScreenFxShowcaseTab */}
+      <div className="p-4 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3 shadow-lg backdrop-blur-md">
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
+            <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-4 h-4 text-[var(--accent)]" />
+            <span>Scene Transitions & Camera Sequencing Engine</span>
+          </h3>
+          <p className="text-[11px] text-[var(--muted)] mt-0.5">
+            {isCustomSceneBg ? (
+              <span>
+                Real-time cinematic scene transitions simulated live over current scene background (<code className="font-mono text-emerald-400">{effectiveBg.split('/').pop()}</code>).
               </span>
-            </h3>
-          </div>
-
-          {/* Quick Arena Controls */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {/* Speed Presets */}
-            <div className="flex items-center bg-[var(--card-bg)] p-1 rounded-xl border border-[var(--border)] text-[10px] font-mono">
-              <span className="px-2 text-[var(--muted2)] font-bold uppercase">Speed:</span>
-              {[
-                { label: 'Fast (0.4s)', value: 0.5 },
-                { label: 'Normal (0.8s)', value: 1.0 },
-                { label: 'Cinematic (1.4s)', value: 1.75 },
-              ].map((s) => (
-                <button
-                  key={s.label}
-                  type="button"
-                  onClick={() => setSpeedMultiplier(s.value)}
-                  className={`px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    speedMultiplier === s.value
-                      ? 'bg-[var(--accent)] text-white shadow-sm'
-                      : 'text-[var(--muted)] hover:text-[var(--text)]'
-                  }`}
-                >
-                  {s.label.split(' ')[0]}
-                </button>
-              ))}
-            </div>
-
-            {/* Auto Cycle Toggle */}
-            <button
-              type="button"
-              onClick={() => setAutoCycle(!autoCycle)}
-              className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer shadow-sm ${
-                autoCycle
-                  ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
-                  : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
-              }`}
-              title="Automatically trigger transition in loop"
-            >
-              <GuiIconRenderer icon={GUI_ICONS.state.play} size={12} className={autoCycle ? 'animate-spin' : ''} />
-              <span>Auto-Loop</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 16:9 Interactive Transition Viewport */}
-        <div className="relative w-full aspect-video max-h-[340px] bg-black rounded-xl overflow-hidden border-2 border-[var(--border2)] shadow-2xl select-none mx-auto">
-          {/* SCENE A CONTENT */}
-          <div
-            className={`absolute inset-0 transition-opacity duration-300 ${
-              displayedScene === 'A' ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
-          >
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${effectiveBgA})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-            {/* Scene A HUD Elements */}
-            <div className="absolute top-3 left-3 flex items-center gap-2">
-              <span className="px-2 py-0.5 bg-rose-950/80 border border-rose-500/50 rounded text-[10px] font-mono font-bold text-rose-300 tracking-wider">
-                [ SCENE A // SECTOR 04 ]
+            ) : (
+              <span>
+                Real-time cinematic scene transitions simulated live over the scenario template background (<code className="font-mono text-emerald-500">SCENARIO-TEMPLATE.jpg</code>).
               </span>
-              <span className="text-[10px] text-gray-300 font-mono tracking-widest hidden sm:inline">
-                RECON DISCOVERY
-              </span>
-            </div>
-
-            <div className="absolute bottom-4 inset-x-4 p-3 bg-black/75 backdrop-blur-md rounded-xl border border-rose-500/40 max-w-xl">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-                <span className="text-xs font-bold uppercase tracking-wider text-rose-400">
-                  OPERATIVE CARTER
-                </span>
-              </div>
-              <p className="text-xs text-gray-200 leading-relaxed font-sans">
-                "The archive room has been breached. All terminal records point towards the lower sublevels."
-              </p>
-            </div>
-          </div>
-
-          {/* SCENE B CONTENT */}
-          <div
-            className={`absolute inset-0 transition-opacity duration-300 ${
-              displayedScene === 'B' ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
-          >
-            {/* Dark cyberpunk/sci-fi command atmosphere */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0c1829] via-[#09101f] to-[#040810]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/30 via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.3)_2px,rgba(0,0,0,0.3)_4px)] pointer-events-none" />
-
-            {/* Scene B HUD Elements */}
-            <div className="absolute top-3 left-3 flex items-center gap-2">
-              <span className="px-2 py-0.5 bg-cyan-950/80 border border-cyan-500/50 rounded text-[10px] font-mono font-bold text-cyan-300 tracking-wider">
-                [ SCENE B // SUBLEVEL 09 ]
-              </span>
-              <span className="text-[10px] text-cyan-400 font-mono tracking-widest hidden sm:inline">
-                CENTRAL MAINFRAME
-              </span>
-            </div>
-
-            <div className="absolute bottom-4 inset-x-4 p-3 bg-black/75 backdrop-blur-md rounded-xl border border-cyan-500/40 max-w-xl">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-                  SYSTEM OVERSEER
-                </span>
-              </div>
-              <p className="text-xs text-gray-200 leading-relaxed font-sans">
-                "Authorization granted. Commencing high-security sequence transfer now."
-              </p>
-            </div>
-          </div>
-
-          {/* TRANSITION OVERLAY RENDERER */}
-          <VNTransitionOverlay
-            transitionId={selectedTransitionId}
-            isActive={isTransitionActive}
-            progress={isScrubbing ? scrubProgress : undefined}
-            durationSec={effectiveDuration}
-          />
-
-          {/* Current Scene Watermark Indicator */}
-          <div className="absolute top-3 right-3 z-40 bg-black/80 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border border-white/20 text-white flex items-center gap-1.5 shadow">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>DISPLAYING SCENE {displayedScene}</span>
-          </div>
-        </div>
-
-        {/* Viewport Playback & Scrubber Controls Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
-          {/* Play / Trigger Button */}
-          <button
-            type="button"
-            onClick={() => triggerTransition()}
-            className="w-full sm:w-auto px-5 py-2.5 bg-[var(--accent)] hover:opacity-90 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all shrink-0"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.state.play} size={14} />
-            <span>Trigger {selectedDef.name}</span>
-          </button>
-
-          {/* Manual Timeline Scrubber Slider */}
-          <div className="flex-1 w-full flex items-center gap-3 bg-[var(--card-bg)] px-3 py-2 rounded-xl border border-[var(--border)]">
-            <span className="text-[10px] font-mono text-[var(--muted)] font-bold uppercase shrink-0">
-              Scrub Frame:
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={isScrubbing ? scrubProgress : 0}
-              onMouseDown={() => setIsScrubbing(true)}
-              onTouchStart={() => setIsScrubbing(true)}
-              onChange={(e) => {
-                setIsScrubbing(true);
-                setScrubProgress(parseFloat(e.target.value));
-              }}
-              className="flex-1 accent-[var(--accent)] cursor-ew-resize h-1.5 bg-[var(--well-bg)] rounded-lg"
-            />
-            <span className="text-[10px] font-mono text-[var(--accent)] font-bold shrink-0 min-w-[3rem] text-right">
-              {isScrubbing ? `${Math.round(scrubProgress * 100)}%` : 'LIVE'}
-            </span>
-            {isScrubbing && (
-              <button
-                type="button"
-                onClick={() => setIsScrubbing(false)}
-                className="text-[10px] text-red-400 hover:underline cursor-pointer shrink-0 font-mono"
-              >
-                Reset
-              </button>
             )}
-          </div>
+          </p>
         </div>
-      </div>
-
-      {/* 2. CATEGORY FILTER PILLS */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-        <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider mr-1">
-          Filter:
+        <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--text)] font-bold">
+          {VN_TRANSITIONS_CATALOG.length} Transition Presets
         </span>
-        {[
-          { id: 'all', label: 'All Transitions' },
-          { id: 'fade', label: 'Fades & Dissolves' },
-          { id: 'wipe', label: 'Wipes & Slides' },
-          { id: 'glitch', label: 'Cyber & Glitch' },
-          { id: 'artistic', label: 'Artistic & Iris' },
-          { id: 'retro', label: 'Retro Pixel' },
-        ].map((cat) => (
-          <button
-            key={cat.id}
-            type="button"
-            onClick={() => setActiveCategory(cat.id)}
-            className={`px-3 py-1 rounded-xl font-medium text-[11px] whitespace-nowrap transition-all cursor-pointer border ${
-              activeCategory === cat.id
-                ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] font-bold shadow-sm'
-                : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
       </div>
 
-      {/* 3. TRANSITION CARDS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-        {filteredTransitions.map((t) => {
-          const isSelected = selectedTransitionId === t.id;
-          return (
-            <div
-              key={t.id}
-              onClick={() => triggerTransition(t.id)}
-              className={`rounded-2xl border p-3.5 flex flex-col justify-between transition-all cursor-pointer shadow-sm group ${
-                isSelected
-                  ? 'border-[var(--accent)] bg-[var(--accent-surface)] ring-1 ring-[var(--accent)]/50'
-                  : 'border-[var(--border)] bg-[var(--card-bg)] hover:border-[var(--border2)] hover:bg-[var(--card-bg)]/90'
-              }`}
-            >
-              <div className="space-y-2">
-                {/* Header: Icon, Name & Tag */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+      {/* Grid of Transition Cards - Matching ScreenFxShowcaseTab Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {VN_TRANSITIONS_CATALOG
+          .filter(
+            (t) =>
+              !searchQuery.trim() ||
+              t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              t.id.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+          .map((t) => {
+            const isPlaying = Boolean(activeTransitions[t.id]);
+            const currentScene = activeScenes[t.id] || 'A';
+            const currentDuration = transitionSpeeds[t.id] ?? t.defaultDurationSec;
+
+            return (
+              <div
+                key={t.id}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
+              >
+                {/* 16:9 Live Preview Viewport over Scenario Background */}
+                <div
+                  onClick={() => handlePlayTransition(t)}
+                  className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)] cursor-pointer select-none"
+                  title="Click to trigger transition"
+                >
+                  {/* SCENE A */}
+                  <div
+                    className={`absolute inset-0 transition-opacity duration-300 ${
+                      currentScene === 'A' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                    }`}
+                  >
                     <div
-                      className={`w-7 h-7 rounded-xl flex items-center justify-center border shadow-sm ${
-                        isSelected
-                          ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
-                          : 'bg-[var(--well-bg)] text-[var(--accent)] border-[var(--border)] group-hover:scale-105 transition-transform'
-                      }`}
-                    >
-                      <GuiIconRenderer icon={t.icon} size={14} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-xs text-[var(--text)]">{t.name}</h4>
-                      <span className="text-[10px] text-[var(--muted2)] font-mono">
-                        Key: <code className="text-[var(--accent)] font-semibold">{t.id}</code>
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${effectiveBg})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                    <div className="absolute bottom-2 left-2.5 z-20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                      <span className="text-[10px] font-mono font-bold text-rose-300 tracking-wider uppercase bg-black/60 px-1.5 py-0.5 rounded border border-rose-500/30">
+                        Scene A
                       </span>
                     </div>
                   </div>
 
-                  <span className="text-[9px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold bg-[var(--well-bg)] border border-[var(--border)] text-[var(--muted)]">
-                    {t.tag || t.category}
-                  </span>
-                </div>
-
-                {/* Description */}
-                <p className="text-[11px] text-[var(--muted)] leading-relaxed">
-                  {t.description}
-                </p>
-              </div>
-
-              {/* Footer: Duration badge & Select button */}
-              <div className="mt-3 pt-2.5 border-t border-[var(--border)] flex items-center justify-between gap-2">
-                <span className="text-[10px] font-mono text-[var(--muted2)] flex items-center gap-1">
-                  <GuiIconRenderer icon={GUI_ICONS.state.play} size={10} />
-                  <span>{t.defaultDurationSec}s Default</span>
-                </span>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      triggerTransition(t.id);
-                    }}
-                    className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-lg text-[10px] font-bold text-[var(--text)] transition-colors flex items-center gap-1"
-                    title="Test this transition in the upper arena"
+                  {/* SCENE B */}
+                  <div
+                    className={`absolute inset-0 transition-opacity duration-300 ${
+                      currentScene === 'B' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                    }`}
                   >
-                    <GuiIconRenderer icon={GUI_ICONS.state.play} size={10} className="text-[var(--accent)]" />
-                    <span>Test</span>
-                  </button>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0c1829] via-[#09101f] to-[#040810]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/30 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.3)_2px,rgba(0,0,0,0.3)_4px)] pointer-events-none" />
+                    <div className="absolute bottom-2 left-2.5 z-20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                      <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-wider uppercase bg-black/60 px-1.5 py-0.5 rounded border border-cyan-500/30">
+                        Scene B
+                      </span>
+                    </div>
+                  </div>
 
-                  {onSelectAsset && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectAsset({
-                          id: `transition-${t.id}`,
-                          name: t.name,
-                          type: 'transition',
-                          origin: 'system',
-                          url: t.id,
-                          description: t.description,
-                        });
-                        onClose();
-                        playSfx('/assets/sfx/success.mp3', false, 0.4);
-                      }}
-                      className="px-3 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-black rounded-lg text-[10px] uppercase tracking-wider cursor-pointer shadow hover:opacity-90 transition-all flex items-center gap-1"
-                    >
-                      <GuiIconRenderer icon={GUI_ICONS.general.check} size={11} />
-                      <span>Select</span>
-                    </button>
-                  )}
+                  {/* LIVE TRANSITION OVERLAY */}
+                  <VNTransitionOverlay
+                    transitionId={t.id}
+                    isActive={isPlaying}
+                    durationSec={currentDuration}
+                  />
+
+                  {/* Top Badge */}
+                  <div className="absolute top-2 left-2 z-30 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider font-bold bg-black/75 backdrop-blur-md border border-white/20 text-white shadow">
+                    <GuiIconRenderer icon={t.icon} className="w-3.5 h-3.5" />
+                    <span className="uppercase">{t.name}</span>
+                  </div>
+
+                  {/* Duration Tag */}
+                  <div className="absolute bottom-2 right-2 z-30 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider text-emerald-400 border border-emerald-500/30">
+                    {currentDuration}s
+                  </div>
+                </div>
+
+                {/* Card Controls & Details */}
+                <div className="p-3.5 space-y-3 flex-1 flex flex-col justify-between text-xs">
+                  <div>
+                    <h4 className="font-bold text-sm text-[var(--text)] flex items-center gap-1.5">
+                      <GuiIconRenderer icon={t.icon} className="w-4 h-4 text-[var(--accent)]" />
+                      <span>{t.name}</span>
+                    </h4>
+                    <p className="text-[11px] text-[var(--muted)] leading-relaxed mt-1">
+                      {t.description}
+                    </p>
+                  </div>
+
+                  {/* Controls: Speed / Duration Selector & Play Test Button */}
+                  <div className="space-y-2 pt-2 border-t border-[var(--border)]">
+                    <div className="flex items-center justify-between text-[10px]">
+                      <span className="font-bold uppercase text-[var(--muted)]">Speed / Timing:</span>
+                      <div className="flex items-center gap-1">
+                        {[
+                          { label: '0.4s', val: 0.4 },
+                          { label: `${t.defaultDurationSec}s`, val: t.defaultDurationSec },
+                          { label: '1.4s', val: 1.4 },
+                        ].map((spd) => (
+                          <button
+                            key={spd.label}
+                            type="button"
+                            onClick={() => {
+                              setTransitionSpeeds((prev) => ({ ...prev, [t.id]: spd.val }));
+                              playSfx('/assets/sfx/click intro.mp3', false, 0.15);
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold transition-all cursor-pointer ${
+                              currentDuration === spd.val
+                                ? 'bg-[var(--accent)] text-white shadow'
+                                : 'bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
+                            }`}
+                          >
+                            {spd.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] pt-1 border-t border-[var(--border)]">
+                      <span className="text-[var(--muted)]">Preview Animation:</span>
+                      <button
+                        type="button"
+                        onClick={() => handlePlayTransition(t)}
+                        className={`px-2.5 py-1 rounded border font-mono text-[10px] cursor-pointer flex items-center gap-1.5 transition-all ${
+                          isPlaying
+                            ? 'border-emerald-500/50 bg-emerald-950/40 text-emerald-300 animate-pulse'
+                            : 'border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] hover:border-[var(--accent)]'
+                        }`}
+                      >
+                        <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3 h-3 text-[var(--accent)]" />
+                        <span>{isPlaying ? 'Playing...' : 'Play Transition'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Selection Button */}
+                  <div className="pt-2">
+                    {onSelectAsset ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectAsset({
+                            id: `transition-${t.id}`,
+                            name: t.name,
+                            type: 'transition',
+                            origin: 'system',
+                            url: t.id,
+                            description: t.description,
+                          });
+                          onClose();
+                          playSfx('/assets/sfx/success.mp3', false, 0.4);
+                        }}
+                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-black rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow hover:opacity-90 transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5" />
+                        <span>Select This Transition</span>
+                      </button>
+                    ) : (
+                      <div className="flex items-center justify-between text-[10px] text-[var(--muted2)] font-mono">
+                        <span>Preset Key:</span>
+                        <code className="text-cyan-400 font-bold">{t.id}</code>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
