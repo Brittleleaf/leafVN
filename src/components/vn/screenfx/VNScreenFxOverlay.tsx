@@ -20,7 +20,14 @@ export const VNScreenFxOverlay: React.FC<VNScreenFxOverlayProps> = ({
   customWords,
   params,
 }) => {
-  const intensityMultiplier = intensity === 'light' ? 0.6 : intensity === 'heavy' ? 1.3 : 1.0;
+  const intensityMultiplier =
+    typeof params?.intensityMultiplier === 'number'
+      ? params.intensityMultiplier
+      : intensity === 'light'
+      ? 0.6
+      : intensity === 'heavy'
+      ? 1.3
+      : 1.0;
   const duration = isFadingOut ? fadeOutSeconds : fadeInSeconds;
 
   const fxDef = SCREEN_FX_REGISTRY[fxType];

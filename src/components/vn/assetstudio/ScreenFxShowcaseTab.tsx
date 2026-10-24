@@ -19,11 +19,16 @@ export function ScreenFxShowcaseTab({
   onClose,
 }: ScreenFxShowcaseTabProps) {
   const [fxIntensities, setFxIntensities] = useState<Record<string, 'light' | 'medium' | 'heavy'>>({});
+  const [fxMultipliers, setFxMultipliers] = useState<Record<string, number>>({});
+  const [fxHueRotates, setFxHueRotates] = useState<Record<string, number>>({});
+  const [fxTintColors, setFxTintColors] = useState<Record<string, string>>({});
+
   const effectiveBg = previewBackgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg';
   const isCustomSceneBg = Boolean(previewBackgroundUrl);
 
   return (
     <div className="space-y-4">
+      {/* Header Banner */}
       <div className="p-4 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3 shadow-lg backdrop-blur-md">
         <div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
@@ -47,11 +52,30 @@ export function ScreenFxShowcaseTab({
         </span>
       </div>
 
+      {/* Grid of FX Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.values(SCREEN_FX_REGISTRY)
-          .filter((fx) => !searchQuery.trim() || fx.label.toLowerCase().includes(searchQuery.toLowerCase()) || fx.description.toLowerCase().includes(searchQuery.toLowerCase()))
+          .filter(
+            (fx) =>
+              !searchQuery.trim() ||
+              fx.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              fx.description.toLowerCase().includes(searchQuery.toLowerCase())
+          )
           .map((fx) => {
             const currentIntensity = fxIntensities[fx.id] || 'medium';
+            const currentMultiplier =
+              fxMultipliers[fx.id] ?? (currentIntensity === 'light' ? 0.6 : currentIntensity === 'heavy' ? 1.4 : 1.0);
+            const currentHue = fxHueRotates[fx.id] ?? 0;
+            const currentTintColor = fxTintColors[fx.id] || (fx.id === 'liquid_distortion' ? '#06b6d4' : undefined);
+
+            const cardParams = {
+              ...(fx.defaultParams || {}),
+              intensityMultiplier: currentMultiplier,
+              hueRotate: currentHue,
+              tintColor: currentTintColor,
+              tintEnabled: Boolean(currentTintColor || currentHue > 0),
+            };
+
             return (
               <div
                 key={fx.id}
@@ -70,6 +94,8 @@ export function ScreenFxShowcaseTab({
                   <VNScreenFxOverlay
                     fxType={fx.id}
                     intensity={currentIntensity}
+                    params={cardParams}
+                    color={currentTintColor}
                     fadeInSeconds={0.2}
                     fadeOutSeconds={0.2}
                   />
@@ -81,8 +107,10 @@ export function ScreenFxShowcaseTab({
                   </div>
 
                   {/* Active Intensity indicator */}
-                  <div className="absolute bottom-2 right-2 z-30 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider text-emerald-400 border border-emerald-500/30">
-                    {currentIntensity}
+                  <div className="absolute bottom-2 right-2 z-30 bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                    <span>{currentIntensity}</span>
+                    <span className="text-[var(--muted2)]">|</span>
+                    <span>{Math.round(currentMultiplier * 100)}%</span>
                   </div>
                 </div>
 
@@ -98,30 +126,104 @@ export function ScreenFxShowcaseTab({
                     </p>
                   </div>
 
-                  {/* Controls: Intensity Selector & Audio Preview */}
+                  {/* Controls: Intensity Level Buttons + Smooth Slider */}
                   <div className="space-y-2 pt-2 border-t border-[var(--border)]">
-                    <div className="flex items-center justify-between text-[10px]">
-                      <span className="font-bold uppercase text-[var(--muted)]">Test Intensity:</span>
-                      <div className="flex items-center gap-1">
-                        {(['light', 'medium', 'heavy'] as const).map((lvl) => (
-                          <button
-                            key={lvl}
-                            type="button"
-                            onClick={() => {
-                              setFxIntensities((prev) => ({ ...prev, [fx.id]: lvl }));
-                              playSfx('/assets/sfx/click intro.mp3', false, 0.15);
-                            }}
-                            className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold transition-all cursor-pointer ${
-                              currentIntensity === lvl
-                                ? 'bg-[var(--accent)] text-white shadow'
-                                : 'bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
-                            }`}
-                          >
-                            {lvl}
-                          </button>
-                        ))}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[10px]">
+                        <span className="font-bold uppercase text-[var(--muted)]">Intensity:</span>
+                        <div className="flex items-center gap-1">
+                          {[
+                            { lvl: 'light', mult: 0.6 },
+                            { lvl: 'medium', mult: 1.0 },
+                            { lvl: 'heavy', mult: 1.4 },
+                          ].map(({ lvl, mult }) => (
+                            <button
+                              key={lvl}
+                              type="button"
+                              onClick={() => {
+                                setFxIntensities((prev) => ({ ...prev, [fx.id]: lvl as any }));
+                                setFxMultipliers((prev) => ({ ...prev, [fx.id]: mult }));
+                                playSfx('/assets/sfx/click intro.mp3', false, 0.15);
+                              }}
+                              className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold transition-all cursor-pointer ${
+                                currentIntensity === lvl
+                                  ? 'bg-[var(--accent)] text-white shadow'
+                                  : 'bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
+                              }`}
+                            >
+                              {lvl}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Smooth Intensity Slider */}
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <input
+                          type="range"
+                          min="0.2"
+                          max="2.2"
+                          step="0.05"
+                          value={currentMultiplier}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value);
+                            setFxMultipliers((prev) => ({ ...prev, [fx.id]: val }));
+                            const lvl = val <= 0.7 ? 'light' : val >= 1.3 ? 'heavy' : 'medium';
+                            setFxIntensities((prev) => ({ ...prev, [fx.id]: lvl }));
+                          }}
+                          className="flex-1 accent-[var(--accent)] cursor-ew-resize h-1.5 bg-[var(--well-bg)] rounded"
+                        />
+                        <span className="font-mono text-[10px] text-[var(--accent)] font-bold min-w-[2.5rem] text-right">
+                          {Math.round(currentMultiplier * 100)}%
+                        </span>
                       </div>
                     </div>
+
+                    {/* Color Tint & Hue Spectrum Row (for Liquid Distortion & Tintable FX) */}
+                    {(fx.id === 'liquid_distortion' || fx.id === 'vignette') && (
+                      <div className="space-y-1.5 pt-1.5 border-t border-[var(--border)] text-[10px]">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold uppercase text-[var(--muted)] flex items-center gap-1">
+                            <GuiIconRenderer icon={GUI_ICONS.general.palette} size={11} className="text-cyan-400" />
+                            <span>Color Tint & Hue:</span>
+                          </span>
+                          <span className="font-mono text-cyan-300 font-bold">{currentHue}°</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={currentTintColor || '#06b6d4'}
+                            onChange={(e) => setFxTintColors((prev) => ({ ...prev, [fx.id]: e.target.value }))}
+                            className="w-6 h-6 rounded border border-[var(--border)] bg-transparent cursor-pointer shrink-0"
+                            title="Pick Tint Color"
+                          />
+                          <input
+                            type="range"
+                            min="0"
+                            max="360"
+                            step="5"
+                            value={currentHue}
+                            onChange={(e) => setFxHueRotates((prev) => ({ ...prev, [fx.id]: parseInt(e.target.value, 10) }))}
+                            className="flex-1 cursor-ew-resize h-2 rounded"
+                            style={{
+                              background:
+                                'linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)',
+                            }}
+                            title="Shift Hue Spectrum"
+                          />
+                          {currentHue > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setFxHueRotates((prev) => ({ ...prev, [fx.id]: 0 }))}
+                              className="text-[9px] text-[var(--muted2)] hover:text-white px-1 font-mono"
+                            >
+                              0°
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {fx.defaultSfx && (
                       <div className="flex items-center justify-between text-[10px] pt-1 border-t border-[var(--border)]">
