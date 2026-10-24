@@ -11,6 +11,7 @@ import { FontShowcaseTab } from './assetstudio/FontShowcaseTab';
 import { ScreenFxShowcaseTab } from './assetstudio/ScreenFxShowcaseTab';
 import { TextEffectShowcaseTab } from './assetstudio/TextEffectShowcaseTab';
 import { CursorShowcaseTab } from './assetstudio/CursorShowcaseTab';
+import { TransitionShowcaseTab } from './assetstudio/TransitionShowcaseTab';
 import { AssetUploadModal } from './assetstudio/AssetUploadModal';
 import { AssetRenameModal } from './assetstudio/AssetRenameModal';
 
@@ -370,6 +371,8 @@ export default function AssetStudioModal({
                     ? { id: 'text_effect', label: 'Text Effects (Typography Animations)', icon: GUI_ICONS.general.texts }
                     : initialFilterType === 'cursor'
                     ? { id: 'cursor', label: 'In-Game Cursors (Pointers)', icon: GUI_ICONS.action.target }
+                    : initialFilterType === 'transition'
+                    ? { id: 'transition', label: 'Scene Transitions', icon: GUI_ICONS.state.play }
                     : { id: 'icon', label: 'GUI Icons', icon: GUI_ICONS.asset.box },
                 ]
               : [
@@ -384,6 +387,7 @@ export default function AssetStudioModal({
                   { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.action.sparkles },
                   { id: 'text_effect', label: 'Text Effects', icon: GUI_ICONS.general.texts },
                   { id: 'cursor', label: 'Cursors', icon: GUI_ICONS.action.target },
+                  { id: 'transition', label: 'Transitions', icon: GUI_ICONS.state.play },
                 ]
             ).map((tab) => (
               <button
@@ -433,6 +437,13 @@ export default function AssetStudioModal({
           ) : activeTypeTab === 'cursor' ? (
             <CursorShowcaseTab
               searchQuery={searchQuery}
+              onSelectAsset={onSelectAsset}
+              onClose={onClose}
+            />
+          ) : activeTypeTab === 'transition' ? (
+            <TransitionShowcaseTab
+              searchQuery={searchQuery}
+              previewBackgroundUrl={previewBackgroundUrl}
               onSelectAsset={onSelectAsset}
               onClose={onClose}
             />

@@ -434,6 +434,21 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
               </option>
             ))}
           </select>
+          <button
+            type="button"
+            onClick={() => {
+              onOpenAssetPicker('transition', (selectedId) => {
+                if (selectedId) {
+                  onUpdateCurrentLine('transition', selectedId as any);
+                }
+              });
+            }}
+            className="px-2 py-1 bg-[var(--card-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-lg text-xs font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1"
+            title="Browse Transition Gallery"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.state.play} size={11} className="text-[var(--accent)]" />
+            <span>Gallery</span>
+          </button>
         </div>
       </div>
 

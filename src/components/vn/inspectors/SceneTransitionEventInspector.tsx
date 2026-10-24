@@ -2,12 +2,14 @@
 import React from 'react';
 import { EventInspectorSubProps } from './types';
 import { getAllTransitions } from '../transitions';
+import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 export const SceneTransitionEventInspector: React.FC<EventInspectorSubProps> = ({
   currentLine,
   story,
   currentChapter,
   onUpdateCurrentLine,
+  onOpenAssetPicker,
 }) => {
   return (
     <>
@@ -54,17 +56,36 @@ export const SceneTransitionEventInspector: React.FC<EventInspectorSubProps> = (
           <label className="text-[10px] text-[var(--muted)] uppercase block font-bold pt-1">
             Scene Transition Effect:
           </label>
-          <select
-            value={currentLine.transition || 'instant'}
-            onChange={(e) => onUpdateCurrentLine('transition', e.target.value === 'instant' ? undefined : (e.target.value as any))}
-            className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2 text-xs text-[var(--text)] outline-none"
-          >
-            {getAllTransitions().map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2">
+            <select
+              value={currentLine.transition || 'instant'}
+              onChange={(e) => onUpdateCurrentLine('transition', e.target.value === 'instant' ? undefined : (e.target.value as any))}
+              className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg p-2 text-xs text-[var(--text)] outline-none"
+            >
+              {getAllTransitions().map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+            {onOpenAssetPicker && (
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenAssetPicker('transition', (selectedId) => {
+                    if (selectedId) {
+                      onUpdateCurrentLine('transition', selectedId as any);
+                    }
+                  });
+                }}
+                className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow-sm flex items-center gap-1.5 shrink-0"
+                title="Browse Transition Gallery"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.state.play} size={11} className="text-[var(--accent)]" />
+                <span>Gallery</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
 

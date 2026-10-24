@@ -548,7 +548,7 @@ export interface VNStory {
   customAssets?: VNAssetItem[]; // Assets creados o subidos por el usuario para este proyecto
 }
 
-export type VNAssetType = 'sfx' | 'bgm' | 'voice' | 'background' | 'character' | 'icon' | 'font' | 'fx' | 'text_effect' | 'cursor';
+export type VNAssetType = 'sfx' | 'bgm' | 'voice' | 'background' | 'character' | 'icon' | 'font' | 'fx' | 'text_effect' | 'cursor' | 'transition';
 export type VNAssetOrigin = 'system' | 'user';
 
 export interface VNAssetItem {
