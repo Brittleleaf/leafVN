@@ -210,6 +210,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     backgroundImage: (!isVideo && bgUrl)
                       ? `url("${bgUrl.replace(/"/g, '\\"')}")`
                       : 'none',
+                    filter: activeScreenFx?.fxType === 'liquid_distortion' ? 'url(#liquid)' : undefined,
                   }}
                 >
                   {isVideo && bgUrl && (

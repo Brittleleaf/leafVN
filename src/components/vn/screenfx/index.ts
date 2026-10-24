@@ -16,3 +16,4 @@ export * from './MonitorFx';
 export * from './VignetteFx';
 export * from './FlashlightFx';
 export * from './CodeFlythroughFx';
+export * from './LiquidDistortionFx';

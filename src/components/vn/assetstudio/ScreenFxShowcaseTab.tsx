@@ -61,7 +61,10 @@ export function ScreenFxShowcaseTab({
                 <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
                   <div
                     className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${effectiveBg})` }}
+                    style={{
+                      backgroundImage: `url(${effectiveBg})`,
+                      filter: fx.id === 'liquid_distortion' ? 'url(#liquid)' : undefined,
+                    }}
                   />
                   {/* Live FX Overlay */}
                   <VNScreenFxOverlay

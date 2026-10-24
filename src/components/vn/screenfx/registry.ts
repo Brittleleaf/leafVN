@@ -12,6 +12,7 @@ import { monitorFx } from './MonitorFx';
 import { vignetteFx } from './VignetteFx';
 import { flashlightFx } from './FlashlightFx';
 import { codeFlythroughFx } from './CodeFlythroughFx';
+import { liquidDistortionFx } from './LiquidDistortionFx';
 
 export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   red_alert: redAlertFx,
@@ -27,6 +28,7 @@ export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   vignette: vignetteFx,
   flashlight: flashlightFx,
   code_flythrough: codeFlythroughFx,
+  liquid_distortion: liquidDistortionFx,
 };
 
 // Config metadata compatibility map (same shape as previously exported SCREEN_FX_CONFIGS)
