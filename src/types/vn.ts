@@ -567,6 +567,7 @@ export interface VNAssetItem {
   tags?: string[];
   isProtected?: boolean; // True si es del sistema (no eliminable)
   createdAt?: string;
+  extra?: Record<string, any>;
 }
 
 // Runtime player state

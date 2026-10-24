@@ -365,6 +365,10 @@ export function ScreenFxShowcaseTab({
                             origin: 'system',
                             url: fx.id,
                             description: fx.description,
+                            extra: {
+                              intensity: currentIntensity,
+                              params: cardParams,
+                            },
                           });
                           onClose();
                           playSfx('/assets/sfx/success.mp3', false, 0.4);

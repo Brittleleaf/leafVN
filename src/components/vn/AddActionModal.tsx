@@ -6,6 +6,7 @@ import { getAllScreenFx, SCREEN_FX_CONFIGS } from '@/components/vn/screenfx';
 import { VN_CURSORS_CATALOG } from '@/components/vn/cursors';
 import { getCharacterAvatar } from '@/lib/vn/engineUtils';
 import { useVNMaker } from './VNMakerContext';
+import { ScreenFxShowcaseTab } from './assetstudio/ScreenFxShowcaseTab';
 
 export type VNActionType =
   | 'dialogue'
@@ -232,7 +233,9 @@ export default function AddActionModal(props: AddActionModalProps) {
       }}
       className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center animate-fade-in font-sans"
     >
-      <div className="max-w-2xl w-full max-h-[88vh] sm:max-h-[85vh] vn-modal-card flex flex-col overflow-hidden text-[var(--text)]">
+      <div className={`w-full max-h-[88vh] sm:max-h-[85vh] vn-modal-card flex flex-col overflow-hidden text-[var(--text)] transition-all duration-200 ${
+        activeSubStep === 'fx_start' ? 'max-w-5xl' : 'max-w-2xl'
+      }`}>
         
         {/* =========================================================
             HEADER: Adapts dynamically based on active sub-step
@@ -425,38 +428,23 @@ export default function AddActionModal(props: AddActionModalProps) {
                 placeholder="Search screen effects..."
                 value={subPickerSearch}
                 onChange={(e) => setSubPickerSearch(e.target.value)}
-                className="w-48 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none"
+                className="w-56 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none"
               />
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {getAllScreenFx()
-                  .filter((fx) => {
-                    if (!subPickerSearch.trim()) return true;
-                    const q = subPickerSearch.toLowerCase();
-                    return fx.label.toLowerCase().includes(q) || fx.description.toLowerCase().includes(q);
-                  })
-                  .map((fx) => (
-                    <button
-                      key={fx.id}
-                      onClick={() => onInsertEvent('fx_start', { fxType: fx.id })}
-                      className="p-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm hover:shadow-lg hover:shadow-[var(--accent-glow)]/15 flex items-start gap-3.5 backdrop-blur-md"
-                    >
-                      <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[var(--accent)] transition-all shadow-sm mt-0.5 text-[var(--accent)]">
-                        <GuiIconRenderer icon={fx.icon} className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <span className="text-xs font-bold text-[var(--text)] block uppercase mb-0.5 group-hover:text-[var(--accent)] transition-colors truncate tracking-wide">
-                          {fx.label}
-                        </span>
-                        <span className="text-[11px] text-[var(--muted)] group-hover:text-[var(--text)] block leading-snug line-clamp-2 transition-colors">
-                          {fx.description}
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-              </div>
+              <ScreenFxShowcaseTab
+                searchQuery={subPickerSearch}
+                previewBackgroundUrl={currentScene?.backgroundUrl}
+                onSelectAsset={(asset) => {
+                  onInsertEvent('fx_start', {
+                    fxType: asset.url as VNScreenFxType,
+                    fxIntensity: asset.extra?.intensity || 'medium',
+                    fxParams: asset.extra?.params,
+                  });
+                }}
+                onClose={onClose}
+              />
             </div>
           </div>
         )}
