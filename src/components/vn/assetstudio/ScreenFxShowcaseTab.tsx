@@ -4,6 +4,7 @@ import { VNAssetItem } from '@/types/vn';
 import { SCREEN_FX_REGISTRY, VNScreenFxOverlay } from '../VNScreenFxOverlay';
 import { playSfx } from '@/lib/audioSettings';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 interface ScreenFxShowcaseTabProps {
   searchQuery: string;
@@ -136,10 +137,12 @@ export function ScreenFxShowcaseTab({
 
                   {effectiveBg && (
                     <img
-                      src={effectiveBg}
+                      src={getProxiedImageUrl(effectiveBg)}
+                      crossOrigin="anonymous"
                       alt="preview"
                       className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                       style={{
+                        imageRendering: fx.id === 'retro_pixelate' ? 'pixelated' : undefined,
                         filter:
                           fx.id === 'liquid_distortion'
                             ? (currentHue ? `url(#liquid_card_${fx.id}) hue-rotate(${currentHue}deg)` : `url(#liquid_card_${fx.id})`)

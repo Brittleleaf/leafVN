@@ -132,6 +132,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
 
   // Directly apply SVG visual filter to stage background and character photo
   const stageFxFilter = getSceneElementFxFilter(currentSelectedFx);
+  const isStagePixelate = currentSelectedFx?.type === 'retro_pixelate';
   const [snapToGuides, setSnapToGuides] = useState<boolean>(true);
 
   // Auto-clear selection when switching scenes or lines
@@ -403,6 +404,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
             borderColor: activeBorderColor,
             transform: charFlipX ? 'scaleX(-1)' : undefined,
             filter: stageFxFilter,
+            imageRendering: isStagePixelate ? 'pixelated' : undefined,
           }}
           className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-2xl pointer-events-none"
         />
@@ -704,7 +706,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   muted
                   playsInline
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                  style={{ filter: stageFxFilter }}
+                  style={{ filter: stageFxFilter, imageRendering: isStagePixelate ? 'pixelated' : undefined }}
                 />
               ) : (
                 <img
@@ -712,7 +714,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   crossOrigin="anonymous"
                   alt="Scene Background"
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                  style={{ filter: stageFxFilter }}
+                  style={{ filter: stageFxFilter, imageRendering: isStagePixelate ? 'pixelated' : undefined }}
                 />
               )
             ) : null}

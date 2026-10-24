@@ -29,12 +29,49 @@ export function getSceneElementFxFilter(
     return hue ? `url(#liquid) hue-rotate(${hue}deg)` : 'url(#liquid)';
   }
   if (fxType === 'retro_pixelate') {
-    const pSize =
-      activeFx.params?.pixelSize ??
-      (activeFx.intensity === 'light' ? 1 : activeFx.intensity === 'heavy' ? 4 : 2);
-    return pSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)';
+    const rawPixelSize =
+      activeFx.params?.pixelSize !== undefined
+        ? activeFx.params.pixelSize
+        : activeFx.intensity === 'light'
+        ? 1
+        : activeFx.intensity === 'heavy'
+        ? 4
+        : 2;
+    const pixelSize = Math.max(0, Math.min(12, Math.round(rawPixelSize * (activeFx.params?.intensityMultiplier ?? 1.0))));
+    const colorSteps = Math.max(
+      2,
+      Math.min(20, activeFx.params?.colorSteps ?? (activeFx.intensity === 'heavy' ? 3 : activeFx.intensity === 'light' ? 8 : 5))
+    );
+    const boxSize = 1 + pixelSize * 4;
+
+    return pixelSize === 0
+      ? `url(#retro_pixelate_color_${colorSteps})`
+      : `url(#retro_pixelate_tile_${boxSize}_${colorSteps})`;
   }
   return undefined;
+}
+
+/**
+ * Returns complete CSS properties for scene assets including nearest-neighbor pixelated rendering when retro_pixelate is active.
+ */
+export function getSceneElementFxStyle(
+  activeFx?: {
+    type?: string;
+    fxType?: string;
+    intensity?: 'light' | 'medium' | 'heavy';
+    params?: Record<string, any>;
+  } | null
+): React.CSSProperties {
+  const filter = getSceneElementFxFilter(activeFx);
+  if (!filter) return {};
+  const fxType = activeFx?.type || activeFx?.fxType;
+  if (fxType === 'retro_pixelate') {
+    return {
+      filter,
+      imageRendering: 'pixelated',
+    };
+  }
+  return { filter };
 }
 
 export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) => {
@@ -111,7 +148,7 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
       }}
     >
       <defs>
-        {/* Liquid Distortion Filter (Kept permanently in DOM without dynamic key to preserve Chromium bindings) */}
+        {/* Liquid Distortion Filter */}
         <filter id="liquid" x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence
             ref={turbulenceRef}
@@ -136,7 +173,32 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
           />
         </filter>
 
-        {/* Retro Pixelate Tile Filter (With alpha clipping to prevent character sprite edge dilation) */}
+        {/* Retro Pixelate Tile Filter (Dynamic parameter-bound ID for instant Chromium repaint) */}
+        <filter
+          id={`retro_pixelate_tile_${boxSize}_${colorSteps}`}
+          colorInterpolationFilters="sRGB"
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+        >
+          <feFlood x="0" y="0" width={boxSize} height={boxSize} />
+          <feMorphology operator="erode" radius={morphRadius} x="0" y="0" width={boxSize} height={boxSize} />
+          <feTile result="raster1" />
+          <feMorphology operator="erode" radius={morphRadius} result="raster2" />
+          <feComposite operator="in" in="SourceGraphic" in2="raster1" />
+          <feGaussianBlur stdDeviation={stdDev} />
+          <feComposite operator="in" in2="raster2" />
+          <feComponentTransfer>
+            <feFuncR type="discrete" tableValues={tableValues} />
+            <feFuncG type="discrete" tableValues={tableValues} />
+            <feFuncB type="discrete" tableValues={tableValues} />
+            <feFuncA type="discrete" tableValues="0 1" />
+          </feComponentTransfer>
+          <feMorphology operator="dilate" radius={dilateRadius} />
+        </filter>
+
+        {/* Retro Pixelate Tile Static Fallback */}
         <filter
           id="retro_pixelate_tile"
           colorInterpolationFilters="sRGB"
@@ -159,10 +221,26 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
             <feFuncA type="discrete" tableValues="0 1" />
           </feComponentTransfer>
           <feMorphology operator="dilate" radius={dilateRadius} />
-          <feComposite operator="in" in2="SourceGraphic" />
         </filter>
 
-        {/* Retro Pixelate Color Palette Reduction Only (when pixelSize is 0) */}
+        {/* Retro Pixelate Color Palette Reduction (Dynamic ID when pixelSize is 0) */}
+        <filter
+          id={`retro_pixelate_color_${colorSteps}`}
+          colorInterpolationFilters="sRGB"
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+        >
+          <feComponentTransfer>
+            <feFuncR type="discrete" tableValues={tableValues} />
+            <feFuncG type="discrete" tableValues={tableValues} />
+            <feFuncB type="discrete" tableValues={tableValues} />
+            <feFuncA type="discrete" tableValues="0 1" />
+          </feComponentTransfer>
+        </filter>
+
+        {/* Retro Pixelate Color Static Fallback */}
         <filter
           id="retro_pixelate_color"
           colorInterpolationFilters="sRGB"

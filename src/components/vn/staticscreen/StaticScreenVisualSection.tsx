@@ -389,6 +389,26 @@ export function StaticScreenVisualSection({
               </div>
             </div>
           )}
+
+          {/* DYNAMIC SCREEN FX INSPECTOR (Self-contained by effect definition, e.g. Retro Pixelate & Liquid Sliders) */}
+          {(() => {
+            if (!activeFx) return null;
+            const fxDef = SCREEN_FX_REGISTRY[activeFx];
+            const InspectorComp = fxDef?.inspector;
+            if (!InspectorComp) return null;
+            return (
+              <div className="pt-2 border-t border-[var(--border)]">
+                <InspectorComp
+                  params={config.screenFxParams || {}}
+                  onChange={(patch) => {
+                    updateConfig({
+                      screenFxParams: { ...(config.screenFxParams || {}), ...patch },
+                    });
+                  }}
+                />
+              </div>
+            );
+          })()}
         </div>
       </div>
 

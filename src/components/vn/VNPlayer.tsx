@@ -131,6 +131,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
 
   // Directly apply SVG visual filter to stage background and character photo
   const playerFxFilter = getSceneElementFxFilter(activeScreenFx);
+  const isPixelate = activeScreenFx?.fxType === 'retro_pixelate';
 
   return (
     <div ref={playerContainerRef} className="relative w-full h-screen bg-black flex items-center justify-center overflow-hidden select-none font-typewriter">
@@ -223,7 +224,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                       muted
                       playsInline
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                      style={{ filter: playerFxFilter }}
+                      style={{ filter: playerFxFilter, imageRendering: isPixelate ? 'pixelated' : undefined }}
                     />
                   ) : bgUrl ? (
                     <img
@@ -231,7 +232,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                       crossOrigin="anonymous"
                       alt="Scene Background"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                      style={{ filter: playerFxFilter }}
+                      style={{ filter: playerFxFilter, imageRendering: isPixelate ? 'pixelated' : undefined }}
                     />
                   ) : null}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/50 pointer-events-none" />
@@ -395,6 +396,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
                   filter: playerFxFilter,
+                  imageRendering: isPixelate ? 'pixelated' : undefined,
                 }}
                 className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
               />
@@ -434,6 +436,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
                         filter: playerFxFilter,
+                        imageRendering: isPixelate ? 'pixelated' : undefined,
                       }}
                       className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
                     />
@@ -475,6 +478,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
                         filter: playerFxFilter,
+                        imageRendering: isPixelate ? 'pixelated' : undefined,
                       }}
                       className="h-[56cqh] max-h-[58cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
                     />
@@ -516,6 +520,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
                         filter: playerFxFilter,
+                        imageRendering: isPixelate ? 'pixelated' : undefined,
                       }}
                       className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
                     />
@@ -807,6 +812,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
                   filter: playerFxFilter,
+                  imageRendering: isPixelate ? 'pixelated' : undefined,
                 }}
                 className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
               />

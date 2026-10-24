@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VNScene, VNStaticScreenConfig, VNStaticScreenButton } from '@/types/vn';
 import { VNScreenFxOverlay } from './VNScreenFxOverlay';
-import { ScreenFxSvgDefs, getSceneElementFxFilter } from './screenfx';
+import { ScreenFxSvgDefs, getSceneElementFxFilter, getSceneElementFxStyle } from './screenfx';
 import { playSfx } from '@/lib/audioSettings';
 import { ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
 import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
@@ -347,9 +347,10 @@ export default function StaticScreenView({
   const isTitleSelected = !isInteractive && selectedTarget === 'title';
   const isSubtitleSelected = !isInteractive && selectedTarget === 'subtitle';
 
-  const staticScreenFxFilter = getSceneElementFxFilter({
+  const staticScreenFxStyle = getSceneElementFxStyle({
     fxType: config.screenFx,
     intensity: config.fxIntensity || 'heavy',
+    params: config.screenFxParams,
   });
 
   return (
@@ -360,7 +361,13 @@ export default function StaticScreenView({
       }`}
     >
       {/* SVG Filter Definitions for Static Screen Camera FX */}
-      <ScreenFxSvgDefs activeFx={{ fxType: config.screenFx, intensity: config.fxIntensity || 'heavy' }} />
+      <ScreenFxSvgDefs
+        activeFx={{
+          fxType: config.screenFx,
+          intensity: config.fxIntensity || 'heavy',
+          params: config.screenFxParams,
+        }}
+      />
 
       {/* Custom Engine Cursor */}
       <VNCursorLayer cursorType={config.cursorType} containerRef={stageRef} />
@@ -380,7 +387,7 @@ export default function StaticScreenView({
                 muted
                 playsInline
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                style={{ filter: staticScreenFxFilter }}
+                style={staticScreenFxStyle}
               />
             ) : bgUrl ? (
               <img
@@ -388,7 +395,7 @@ export default function StaticScreenView({
                 crossOrigin="anonymous"
                 alt="Static Background"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-                style={{ filter: staticScreenFxFilter }}
+                style={staticScreenFxStyle}
               />
             ) : null}
           </div>

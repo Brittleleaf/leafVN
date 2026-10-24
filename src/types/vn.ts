@@ -326,6 +326,7 @@ export interface VNStaticScreenConfig {
   sfxUrl?: string; // One-shot impact sfx when screen loads
   screenFx?: VNScreenFxType;
   fxIntensity?: 'light' | 'medium' | 'heavy';
+  screenFxParams?: Record<string, any>;
   cursorType?: VNCursorType;
   buttonsLayout?: 'stacked' | 'free'; // 'stacked' (centered vertical stack) | 'free' (draggable xPercent / yPercent)
   buttons: VNStaticScreenButton[];

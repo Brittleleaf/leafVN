@@ -2,7 +2,8 @@
 import React, { useMemo } from 'react';
 import { VNScreenFxType } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
-import { SCREEN_FX_REGISTRY, VNScreenFxOverlay } from './index';
+import { SCREEN_FX_REGISTRY, VNScreenFxOverlay, ScreenFxSvgDefs } from './index';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 export const DEFAULT_POPULAR_FX: VNScreenFxType[] = ['digital_glitch', 'red_alert', 'cinema_grain'];
 
@@ -98,12 +99,15 @@ export const VNScreenFxPickerGrid: React.FC<VNScreenFxPickerGridProps> = ({
           >
             {/* 16:9 Live Preview Viewport over Effective Scene Background */}
             <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
+              <ScreenFxSvgDefs activeFx={{ fxType: fxKey, intensity }} />
               {effectiveBg && (
                 <img
-                  src={effectiveBg}
+                  src={getProxiedImageUrl(effectiveBg)}
+                  crossOrigin="anonymous"
                   alt="preview"
                   className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                   style={{
+                    imageRendering: fxKey === 'retro_pixelate' ? 'pixelated' : undefined,
                     filter:
                       fxKey === 'liquid_distortion'
                         ? 'url(#liquid)'
