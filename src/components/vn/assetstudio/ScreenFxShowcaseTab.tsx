@@ -89,18 +89,21 @@ export function ScreenFxShowcaseTab({
               >
                 {/* 16:9 Live Preview Viewport over Scenario Template */}
                 <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{
-                      backgroundImage: `url(${effectiveBg})`,
-                      filter:
-                        fx.id === 'liquid_distortion'
-                          ? 'url(#liquid)'
-                          : fx.id === 'retro_pixelate'
-                          ? (currentPixelSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)')
-                          : undefined,
-                    }}
-                  />
+                  {effectiveBg && (
+                    <img
+                      src={effectiveBg}
+                      alt="preview"
+                      className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                      style={{
+                        filter:
+                          fx.id === 'liquid_distortion'
+                            ? (currentHue ? `url(#liquid) hue-rotate(${currentHue}deg)` : 'url(#liquid)')
+                            : fx.id === 'retro_pixelate'
+                            ? (currentPixelSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)')
+                            : undefined,
+                      }}
+                    />
+                  )}
                   {/* Live FX Overlay */}
                   <VNScreenFxOverlay
                     fxType={fx.id}

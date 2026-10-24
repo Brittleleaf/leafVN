@@ -98,10 +98,21 @@ export const VNScreenFxPickerGrid: React.FC<VNScreenFxPickerGridProps> = ({
           >
             {/* 16:9 Live Preview Viewport over Effective Scene Background */}
             <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${effectiveBg})` }}
-              />
+              {effectiveBg && (
+                <img
+                  src={effectiveBg}
+                  alt="preview"
+                  className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                  style={{
+                    filter:
+                      fxKey === 'liquid_distortion'
+                        ? 'url(#liquid)'
+                        : fxKey === 'retro_pixelate'
+                        ? 'url(#retro_pixelate_tile)'
+                        : undefined,
+                  }}
+                />
+              )}
               {/* Live FX Overlay Animation */}
               <VNScreenFxOverlay
                 fxType={fxKey}

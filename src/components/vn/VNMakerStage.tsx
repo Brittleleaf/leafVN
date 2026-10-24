@@ -128,6 +128,20 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
   const [isEditingChoiceText, setIsEditingChoiceText] = useState<boolean>(false);
   const [isEditingPromptText, setIsEditingPromptText] = useState<boolean>(false);
   const [showGuides, setShowGuides] = useState<boolean>(false);
+
+  // Computed SVG filter string for stage background and characters
+  const stageFxFilter = (() => {
+    if (!currentSelectedFx) return undefined;
+    if (currentSelectedFx.type === 'liquid_distortion') {
+      const hue = currentSelectedFx.params?.hueRotate;
+      return hue ? `url(#liquid) hue-rotate(${hue}deg)` : 'url(#liquid)';
+    }
+    if (currentSelectedFx.type === 'retro_pixelate') {
+      const pSize = currentSelectedFx.params?.pixelSize ?? (currentSelectedFx.intensity === 'light' ? 1 : currentSelectedFx.intensity === 'heavy' ? 4 : 2);
+      return pSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)';
+    }
+    return undefined;
+  })();
   const [snapToGuides, setSnapToGuides] = useState<boolean>(true);
 
   // Auto-clear selection when switching scenes or lines
@@ -397,6 +411,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
           style={{
             borderColor: activeBorderColor,
             transform: charFlipX ? 'scaleX(-1)' : undefined,
+            filter: stageFxFilter,
           }}
           className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-2xl pointer-events-none"
         />
@@ -663,20 +678,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
             previewShake
           } ${isPlacingButton ? 'cursor-crosshair' : 'cursor-default'}`}
         >
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-all duration-300"
-            style={{ backgroundImage: effectiveBgUrl ? `url('${effectiveBgUrl}')` : 'none' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/50 pointer-events-none" />
-
-          {previewFlash && (
-            <div
-              className="absolute inset-0 pointer-events-none z-40 transition-opacity"
-              style={{ backgroundColor: previewFlash }}
-            />
-          )}
-
-          {/* Continuous Screen Effect Overlay in Editor */}
+          {/* Continuous Screen Effect Overlay & Filter Definitions in Editor */}
           {currentSelectedFx && (
             <VNScreenFxOverlay
               fxType={currentSelectedFx.type}
@@ -691,6 +693,40 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               fadeInSeconds={currentSelectedFx.fadeInSeconds}
               isFadingOut={false}
               params={currentSelectedFx.params}
+            />
+          )}
+
+          {/* Background layer with live SVG filter support */}
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-all duration-300 overflow-hidden"
+          >
+            {effectiveBgUrl ? (
+              effectiveBgUrl.endsWith('.mp4') || effectiveBgUrl.endsWith('.webm') || effectiveBgUrl.startsWith('data:video/') ? (
+                <video
+                  src={effectiveBgUrl}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                  style={{ filter: stageFxFilter }}
+                />
+              ) : (
+                <img
+                  src={effectiveBgUrl}
+                  alt="Scene Background"
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                  style={{ filter: stageFxFilter }}
+                />
+              )
+            ) : null}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/50 pointer-events-none" />
+
+          {previewFlash && (
+            <div
+              className="absolute inset-0 pointer-events-none z-40 transition-opacity"
+              style={{ backgroundColor: previewFlash }}
             />
           )}
 

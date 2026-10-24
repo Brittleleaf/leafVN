@@ -128,6 +128,20 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     isTextBoxVisible &&
     (currentEvent?.type === 'dialogue' || Boolean(activeInspection) || Boolean(pendingReaction));
 
+  // Computed SVG filter string for player stage background and characters
+  const playerFxFilter = (() => {
+    if (!activeScreenFx) return undefined;
+    if (activeScreenFx.fxType === 'liquid_distortion') {
+      const hue = activeScreenFx.params?.hueRotate;
+      return hue ? `url(#liquid) hue-rotate(${hue}deg)` : 'url(#liquid)';
+    }
+    if (activeScreenFx.fxType === 'retro_pixelate') {
+      const pSize = activeScreenFx.params?.pixelSize ?? (activeScreenFx.intensity === 'light' ? 1 : activeScreenFx.intensity === 'heavy' ? 4 : 2);
+      return pSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)';
+    }
+    return undefined;
+  })();
+
   return (
     <div ref={playerContainerRef} className="relative w-full h-screen bg-black flex items-center justify-center overflow-hidden select-none font-typewriter">
       {/* Dynamic Cursor Layer (StaticScreenView handles its own internal cursor layer) */}
@@ -206,28 +220,25 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                   className={`absolute inset-0 bg-cover bg-center overflow-hidden transition-all duration-700 ${shakeClass} ${
                     (!isHotspotMode || (isHotspotMode && (currentScene?.hotspots || []).filter((hs) => !(hs.interactionLimit === 'once' && consumedHotspots.includes(hs.id))).length === 0)) && currentEvent?.type !== 'choice' && isTextBoxVisible ? 'cursor-pointer' : ''
                   }`}
-                  style={{
-                    backgroundImage: (!isVideo && bgUrl)
-                      ? `url("${bgUrl.replace(/"/g, '\\"')}")`
-                      : 'none',
-                    filter:
-                      activeScreenFx?.fxType === 'liquid_distortion'
-                        ? 'url(#liquid)'
-                        : activeScreenFx?.fxType === 'retro_pixelate'
-                        ? (activeScreenFx?.params?.pixelSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)')
-                        : undefined,
-                  }}
                 >
-                  {isVideo && bgUrl && (
+                  {isVideo && bgUrl ? (
                     <video
                       src={bgUrl}
                       autoPlay
                       loop
                       muted
                       playsInline
-                      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                      style={{ filter: playerFxFilter }}
                     />
-                  )}
+                  ) : bgUrl ? (
+                    <img
+                      src={bgUrl}
+                      alt="Scene Background"
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                      style={{ filter: playerFxFilter }}
+                    />
+                  ) : null}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/50 pointer-events-none" />
                 </div>
               );
@@ -387,6 +398,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
+                  filter: playerFxFilter,
                 }}
                 className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
               />
@@ -424,6 +436,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#ef4444',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
+                        filter: playerFxFilter,
                       }}
                       className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
                     />
@@ -463,6 +476,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#a855f7',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
+                        filter: playerFxFilter,
                       }}
                       className="h-[56cqh] max-h-[58cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
                     />
@@ -502,6 +516,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#0284c7',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
+                        filter: playerFxFilter,
                       }}
                       className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
                     />
@@ -791,6 +806,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
+                  filter: playerFxFilter,
                 }}
                 className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
               />
