@@ -11,7 +11,7 @@ import {
 } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { playSfx } from '@/lib/audioSettings';
-import { VNScreenFxOverlay, ScreenFxSvgDefs } from './VNScreenFxOverlay';
+import { VNScreenFxOverlay, ScreenFxSvgDefs, getSceneElementFxFilter } from './screenfx';
 import { resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
 import { useVNMaker, VNActiveSelectedFx } from './VNMakerContext';
 import {
@@ -129,19 +129,8 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
   const [isEditingPromptText, setIsEditingPromptText] = useState<boolean>(false);
   const [showGuides, setShowGuides] = useState<boolean>(false);
 
-  // Computed SVG filter string for stage background and characters
-  const stageFxFilter = (() => {
-    if (!currentSelectedFx) return undefined;
-    if (currentSelectedFx.type === 'liquid_distortion') {
-      const hue = currentSelectedFx.params?.hueRotate;
-      return hue ? `url(#liquid) hue-rotate(${hue}deg)` : 'url(#liquid)';
-    }
-    if (currentSelectedFx.type === 'retro_pixelate') {
-      const pSize = currentSelectedFx.params?.pixelSize ?? (currentSelectedFx.intensity === 'light' ? 1 : currentSelectedFx.intensity === 'heavy' ? 4 : 2);
-      return pSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)';
-    }
-    return undefined;
-  })();
+  // Directly apply SVG visual filter to stage background and character photo
+  const stageFxFilter = getSceneElementFxFilter(currentSelectedFx);
   const [snapToGuides, setSnapToGuides] = useState<boolean>(true);
 
   // Auto-clear selection when switching scenes or lines
@@ -407,6 +396,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         <img
           src={currentSpeakerAvatar}
           alt={currentSpeaker?.name || 'avatar'}
+          crossOrigin="anonymous"
           draggable={false}
           style={{
             borderColor: activeBorderColor,
@@ -718,6 +708,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 <img
                   src={effectiveBgUrl}
                   alt="Scene Background"
+                  crossOrigin="anonymous"
                   className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                   style={{ filter: stageFxFilter }}
                 />

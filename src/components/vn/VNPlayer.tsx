@@ -17,7 +17,7 @@ import {
 import { playSfx } from '@/lib/audioSettings';
 import { evaluateCondition, getCharacterAvatar, interpolateText } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
-import { VNScreenFxOverlay, ScreenFxSvgDefs } from './VNScreenFxOverlay';
+import { VNScreenFxOverlay, ScreenFxSvgDefs, getSceneElementFxFilter } from './screenfx';
 import { VNTransitionOverlay } from './transitions';
 import { VNTextBoxRenderer } from './textboxes';
 import { resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
@@ -128,19 +128,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     isTextBoxVisible &&
     (currentEvent?.type === 'dialogue' || Boolean(activeInspection) || Boolean(pendingReaction));
 
-  // Computed SVG filter string for player stage background and characters
-  const playerFxFilter = (() => {
-    if (!activeScreenFx) return undefined;
-    if (activeScreenFx.fxType === 'liquid_distortion') {
-      const hue = activeScreenFx.params?.hueRotate;
-      return hue ? `url(#liquid) hue-rotate(${hue}deg)` : 'url(#liquid)';
-    }
-    if (activeScreenFx.fxType === 'retro_pixelate') {
-      const pSize = activeScreenFx.params?.pixelSize ?? (activeScreenFx.intensity === 'light' ? 1 : activeScreenFx.intensity === 'heavy' ? 4 : 2);
-      return pSize === 0 ? 'url(#retro_pixelate_color)' : 'url(#retro_pixelate_tile)';
-    }
-    return undefined;
-  })();
+  // Directly apply SVG visual filter to stage background and character photo
+  const playerFxFilter = getSceneElementFxFilter(activeScreenFx);
 
   return (
     <div ref={playerContainerRef} className="relative w-full h-screen bg-black flex items-center justify-center overflow-hidden select-none font-typewriter">
@@ -238,6 +227,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={bgUrl}
                       alt="Scene Background"
+                      crossOrigin="anonymous"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                       style={{ filter: playerFxFilter }}
                     />
@@ -398,6 +388,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               <img
                 src={activeAvatarUrl}
                 alt={currentSpeaker?.name || 'Character'}
+                crossOrigin="anonymous"
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
@@ -435,6 +426,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={avatar}
                       alt={char.name}
+                      crossOrigin="anonymous"
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#ef4444',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
@@ -475,6 +467,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={avatar}
                       alt={char.name}
+                      crossOrigin="anonymous"
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#a855f7',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
@@ -515,6 +508,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                     <img
                       src={avatar}
                       alt={char.name}
+                      crossOrigin="anonymous"
                       style={{
                         borderColor: char.textBoxConfig?.borderColor || char.color || '#0284c7',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
@@ -806,6 +800,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               <img
                 src={activeAvatarUrl}
                 alt={currentSpeaker?.name || 'Character'}
+                crossOrigin="anonymous"
                 style={{
                   borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
