@@ -401,6 +401,12 @@ export default function StaticScreenView({
                 src={getProxiedImageUrl(bgUrl)}
                 crossOrigin="anonymous"
                 alt="Static Background"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.src.includes('SCENARIO-TEMPLATE.jpg')) {
+                    target.src = '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg';
+                  }
+                }}
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                 style={staticScreenFxStyle}
               />
@@ -411,12 +417,21 @@ export default function StaticScreenView({
       <div
         className="absolute inset-0 transition-all duration-500 pointer-events-none"
         style={{
-          backgroundColor:
-            config.bgOverlayColor !== undefined
+          backgroundColor: (() => {
+            if (config.screenFx === 'retro_pixelate' || config.screenFx === 'liquid_distortion') {
+              if (
+                !config.bgOverlayColor ||
+                config.bgOverlayColor === 'rgba(10, 2, 4, 0.85)' ||
+                config.bgOverlayColor === 'rgba(5, 5, 12, 0.85)' ||
+                config.bgOverlayColor === 'rgba(2, 6, 23, 0.85)'
+              ) {
+                return 'rgba(5, 5, 12, 0.35)';
+              }
+            }
+            return config.bgOverlayColor !== undefined
               ? config.bgOverlayColor
-              : config.screenFx === 'retro_pixelate' || config.screenFx === 'liquid_distortion'
-              ? 'rgba(5, 5, 12, 0.45)'
-              : 'rgba(5, 5, 12, 0.85)',
+              : 'rgba(5, 5, 12, 0.85)';
+          })(),
         }}
       />
 

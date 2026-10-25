@@ -473,14 +473,6 @@ export default function StaticScreenStudio({
           }}
           className="relative w-full h-full max-w-4xl max-h-[640px] flex items-center justify-center"
         >
-          {/* Top-level mounted SVG filter defs to ensure Blink/Chromium registers filters reliably */}
-          <ScreenFxSvgDefs
-            activeFx={{
-              fxType: config.screenFx,
-              intensity: config.fxIntensity || 'heavy',
-              params: config.screenFxParams,
-            }}
-          />
           <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)]">
             <StaticScreenView
               scene={scene}

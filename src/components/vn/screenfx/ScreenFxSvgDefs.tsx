@@ -40,7 +40,7 @@ export function getSceneElementFxFilter(
     const pixelSize = Math.max(0, Math.min(12, Math.round(rawPixelSize * (activeFx.params?.intensityMultiplier ?? 1.0))));
     const colorSteps = Math.max(
       2,
-      Math.min(20, activeFx.params?.colorSteps ?? (activeFx.intensity === 'heavy' ? 3 : activeFx.intensity === 'light' ? 8 : 5))
+      Math.min(20, activeFx.params?.colorSteps ?? (activeFx.intensity === 'heavy' ? 5 : activeFx.intensity === 'light' ? 8 : 6))
     );
     const boxSize = 1 + pixelSize * 4;
 
@@ -103,7 +103,7 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
   const stdDev = Math.max(0.1, pixelSize - 0.5);
   const colorSteps = Math.max(
     2,
-    Math.min(20, params.colorSteps ?? (intensity === 'heavy' ? 3 : intensity === 'light' ? 8 : 5))
+    Math.min(20, params.colorSteps ?? (intensity === 'heavy' ? 5 : intensity === 'light' ? 8 : 6))
   );
   const tableValues = Array.from({ length: colorSteps + 1 }, (_, i) => (i / colorSteps).toFixed(3)).join(' ');
 
@@ -141,11 +141,10 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
         position: 'absolute',
         top: 0,
         left: 0,
-        width: 0,
-        height: 0,
-        opacity: 0,
+        width: '1px',
+        height: '1px',
+        opacity: 0.001,
         pointerEvents: 'none',
-        overflow: 'hidden',
       }}
     >
       <defs>

@@ -54,14 +54,41 @@ export function StaticScreenVisualSection({
       title: 'Select Screen FX from Gallery',
       previewBackgroundUrl: scene.backgroundUrl,
       onSelect: (asset) => {
-        updateConfig({ screenFx: asset.url as VNScreenFxType });
+        const extra = (asset as any).extra || {};
+        const newIntensity = extra.intensity || config.fxIntensity || 'medium';
+        const newParams = extra.params || config.screenFxParams;
+        const updates: Partial<VNStaticScreenConfig> = {
+          screenFx: asset.url as VNScreenFxType,
+          fxIntensity: newIntensity,
+          screenFxParams: newParams,
+        };
+
+        // When retro_pixelate or liquid_distortion is selected and the current background tint is very dark (>= 0.65),
+        // soften it to a balanced ~0.35 so the effect and background are immediately vivid and visible
+        if (asset.url === 'retro_pixelate' || asset.url === 'liquid_distortion') {
+          const match = config.bgOverlayColor?.match(/rgba?\([^,]+,[^,]+,[^,]+,([^)]+)\)/);
+          const currentAlpha = match ? parseFloat(match[1]) : 0.85;
+          if (currentAlpha >= 0.65) {
+            updates.bgOverlayColor = 'rgba(5, 5, 12, 0.35)';
+          }
+        }
+
+        updateConfig(updates);
         playSfx('/assets/sfx/success.mp3', false, 0.4);
       },
     });
   };
 
   const handleSelectFx = (fxKey: VNScreenFxType) => {
-    updateConfig({ screenFx: fxKey });
+    const updates: Partial<VNStaticScreenConfig> = { screenFx: fxKey };
+    if (fxKey === 'retro_pixelate' || fxKey === 'liquid_distortion') {
+      const match = config.bgOverlayColor?.match(/rgba?\([^,]+,[^,]+,[^,]+,([^)]+)\)/);
+      const currentAlpha = match ? parseFloat(match[1]) : 0.85;
+      if (currentAlpha >= 0.65) {
+        updates.bgOverlayColor = 'rgba(5, 5, 12, 0.35)';
+      }
+    }
+    updateConfig(updates);
     playSfx('/assets/sfx/click intro.mp3', false, 0.2);
   };
 
