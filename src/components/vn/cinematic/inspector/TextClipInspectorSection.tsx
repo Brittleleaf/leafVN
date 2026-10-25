@@ -1,11 +1,14 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { VNCinematicClip, VNStory, VNCharacter, VNAssetType } from '@/types/vn';
-import { VN_TEXT_EFFECTS_CATALOG } from '@/lib/vn/textEffects';
+import { VN_TEXT_EFFECTS_CATALOG, VNTextEffectRenderer } from '@/lib/vn/textEffects';
 import { VN_FONT_CATALOG, ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
-import { VN_CURSORS_CATALOG } from '../../cursors';
+import { VN_CURSORS_CATALOG, VN_CURSORS_MAP } from '../../cursors';
 import { playSfx, playAudioPreview, stopAudioPreview, subscribeAudioPreview, getActivePreviewUrl } from '@/lib/audioSettings';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
+import { FontShowcaseTab } from '../../assetstudio/FontShowcaseTab';
+import { TextEffectShowcaseTab } from '../../assetstudio/TextEffectShowcaseTab';
+import { CursorShowcaseTab } from '../../assetstudio/CursorShowcaseTab';
 
 interface TextClipInspectorSectionProps {
   clip: VNCinematicClip;
@@ -24,6 +27,8 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
   onOpenAssetPicker,
 }) => {
   const [activePreviewUrl, setActivePreviewUrl] = useState<string | null>(null);
+  const [activeShowcaseModal, setActiveShowcaseModal] = useState<'font' | 'textEffect' | 'cursor' | null>(null);
+  const [fontSampleText, setFontSampleText] = useState<string>(clip.text || 'The quick brown fox jumps over the lazy dog.');
 
   useEffect(() => {
     return subscribeAudioPreview(() => {
@@ -379,17 +384,27 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             <GuiIconRenderer icon={GUI_ICONS.general.texts} className="w-3.5 h-3.5 text-cyan-400" />
             <span>Font Family Override:</span>
           </label>
-          {clip.fontFamily && (
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
-              onClick={() => onUpdateClip(clip.id, { fontFamily: undefined })}
-              className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1 flex items-center gap-1"
-              title="Reset to default font"
+              onClick={() => setActiveShowcaseModal('font')}
+              className="text-[10px] text-[var(--accent)] hover:underline font-bold flex items-center gap-1 cursor-pointer"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
-              <span>Reset</span>
+              <GuiIconRenderer icon={GUI_ICONS.general.gallery} size={11} />
+              <span>Browse Fonts</span>
             </button>
-          )}
+            {clip.fontFamily && (
+              <button
+                type="button"
+                onClick={() => onUpdateClip(clip.id, { fontFamily: undefined })}
+                className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1 flex items-center gap-1"
+                title="Reset to default font"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <select
@@ -424,10 +439,20 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
       </div>
 
       {/* 7. Text Effect (FX) */}
-      <div className="space-y-1">
-        <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider block">
-          Text Effect (FX Animation):
-        </label>
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider block">
+            Text Effect (FX Animation):
+          </label>
+          <button
+            type="button"
+            onClick={() => setActiveShowcaseModal('textEffect')}
+            className="text-[10px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 cursor-pointer"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.action.sparkles} size={11} />
+            <span>Browse FX Gallery</span>
+          </button>
+        </div>
         <select
           value={clip.textEffect || 'none'}
           onChange={(e) => onUpdateClip(clip.id, { textEffect: e.target.value })}
@@ -440,6 +465,19 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             </option>
           ))}
         </select>
+
+        {/* Live animated preview of the chosen text effect */}
+        {clip.textEffect && clip.textEffect !== 'none' && (
+          <div className="p-2.5 rounded-xl bg-black/60 border border-purple-500/30 flex items-center justify-center min-h-[44px] overflow-hidden shadow-inner">
+            <VNTextEffectRenderer
+              effectId={clip.textEffect}
+              text={clip.text ? clip.text.slice(0, 35) : 'Dynamic Animated Typography'}
+              className="text-sm font-semibold"
+              fontFamily={clip.fontFamily}
+              color={clip.textColor || '#ffffff'}
+            />
+          </div>
+        )}
       </div>
 
       {/* 8. Typography: Size & Color */}
@@ -559,16 +597,26 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5 text-cyan-400" />
             <span>Cursor Style Override:</span>
           </label>
-          {clip.cursorType && (
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
-              onClick={() => onUpdateClip(clip.id, { cursorType: undefined })}
-              className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1 flex items-center justify-center"
-              title="Reset cursor"
+              onClick={() => setActiveShowcaseModal('cursor')}
+              className="text-[10px] text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 cursor-pointer"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
+              <GuiIconRenderer icon={GUI_ICONS.action.target} size={11} />
+              <span>Browse Cursors</span>
             </button>
-          )}
+            {clip.cursorType && (
+              <button
+                type="button"
+                onClick={() => onUpdateClip(clip.id, { cursorType: undefined })}
+                className="text-red-400 hover:text-red-300 text-xs cursor-pointer px-1 flex items-center justify-center"
+                title="Reset cursor"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
+              </button>
+            )}
+          </div>
         </div>
 
         <select
@@ -583,7 +631,119 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             </option>
           ))}
         </select>
+
+        {/* Live preview badge of the selected cursor */}
+        {clip.cursorType && VN_CURSORS_MAP[clip.cursorType] && (
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-[var(--card-bg)] border border-[var(--border)]">
+            <div className="w-6 h-6 rounded bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center text-cyan-400 shrink-0">
+              <GuiIconRenderer icon={VN_CURSORS_MAP[clip.cursorType].icon} size={14} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <span className="text-[11px] font-bold text-[var(--text)] block truncate">
+                {VN_CURSORS_MAP[clip.cursorType].name}
+              </span>
+              <span className="text-[9px] text-[var(--muted)] block truncate">
+                {VN_CURSORS_MAP[clip.cursorType].description}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Showcase Modal (Font / Text Effect / Cursor) */}
+      {activeShowcaseModal !== null && (
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setActiveShowcaseModal(null);
+          }}
+          className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center animate-fade-in font-sans"
+        >
+          <div className="w-full max-w-5xl max-h-[88vh] vn-modal-card flex flex-col overflow-hidden text-[var(--text)]">
+            <div className="p-4 sm:p-5 border-b vn-glass-header shrink-0 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <GuiIconRenderer
+                  icon={
+                    activeShowcaseModal === 'font'
+                      ? GUI_ICONS.general.texts
+                      : activeShowcaseModal === 'textEffect'
+                      ? GUI_ICONS.action.sparkles
+                      : GUI_ICONS.action.target
+                  }
+                  className="w-4 h-4 text-[var(--accent)]"
+                />
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--text)] uppercase tracking-wider">
+                    {activeShowcaseModal === 'font'
+                      ? 'Font Typography Showcase'
+                      : activeShowcaseModal === 'textEffect'
+                      ? 'Animated Text FX Showcase'
+                      : 'Interactive Pointer Showcase'}
+                  </h3>
+                  <p className="text-xs text-[var(--muted)]">
+                    {activeShowcaseModal === 'font'
+                      ? 'Audition and test typography fonts in real-time.'
+                      : activeShowcaseModal === 'textEffect'
+                      ? 'Explore looped text animation styles for dialogue lines.'
+                      : 'Test and audition mouse pointers in real-time.'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveShowcaseModal(null)}
+                className="w-8 h-8 rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar">
+              {activeShowcaseModal === 'font' && (
+                <FontShowcaseTab
+                  story={story || ({ title: 'Project', chapters: [], customAssets: [] } as any)}
+                  searchQuery=""
+                  customFontSample={fontSampleText}
+                  setCustomFontSample={setFontSampleText}
+                  onSelectAsset={(asset) => {
+                    const fontDef = VN_FONT_CATALOG.find((f) => f.id === asset.url);
+                    if (fontDef) {
+                      ensureGoogleFontLoaded(fontDef.googleUrl || fontDef.id);
+                    }
+                    onUpdateClip(clip.id, { fontFamily: asset.url });
+                    setActiveShowcaseModal(null);
+                  }}
+                  onClose={() => setActiveShowcaseModal(null)}
+                  notify={() => {}}
+                />
+              )}
+
+              {activeShowcaseModal === 'textEffect' && (
+                <TextEffectShowcaseTab
+                  searchQuery=""
+                  customFontSample={fontSampleText}
+                  setCustomFontSample={setFontSampleText}
+                  onSelectAsset={(asset) => {
+                    onUpdateClip(clip.id, { textEffect: asset.url });
+                    setActiveShowcaseModal(null);
+                  }}
+                  onClose={() => setActiveShowcaseModal(null)}
+                />
+              )}
+
+              {activeShowcaseModal === 'cursor' && (
+                <CursorShowcaseTab
+                  searchQuery=""
+                  onSelectAsset={(asset) => {
+                    onUpdateClip(clip.id, { cursorType: asset.url as any });
+                    setActiveShowcaseModal(null);
+                  }}
+                  onClose={() => setActiveShowcaseModal(null)}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

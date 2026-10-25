@@ -7,6 +7,9 @@ import { VN_CURSORS_CATALOG } from '@/components/vn/cursors';
 import { getCharacterAvatar } from '@/lib/vn/engineUtils';
 import { useVNMaker } from './VNMakerContext';
 import { ScreenFxShowcaseTab } from './assetstudio/ScreenFxShowcaseTab';
+import { CursorShowcaseTab } from './assetstudio/CursorShowcaseTab';
+import { SYSTEM_ASSETS } from '@/lib/vn/systemAssets';
+import { playAudioPreview, stopAudioPreview, subscribeAudioPreview, getCurrentlyPlayingPreviewUrl, playSfx } from '@/lib/audioSettings';
 
 export type VNActionType =
   | 'dialogue'
@@ -168,14 +171,34 @@ export default function AddActionModal(props: AddActionModalProps) {
   // Search for sub-pickers
   const [subPickerSearch, setSubPickerSearch] = useState('');
 
+  // Audio preview & volume states for BGM sub-picker
+  const [playingAudioUrl, setPlayingAudioUrl] = useState<string | null>(getCurrentlyPlayingPreviewUrl());
+  const [bgmVolume, setBgmVolume] = useState<number>(0.5);
+
+  // Background filter for bg_change sub-picker
+  const [bgSourceFilter, setBgSourceFilter] = useState<'all' | 'scenarios' | 'assets'>('all');
+
+  // Sync audio preview subscriber
+  useEffect(() => {
+    const unsub = subscribeAudioPreview(() => {
+      setPlayingAudioUrl(getCurrentlyPlayingPreviewUrl());
+    });
+    return () => {
+      unsub();
+      stopAudioPreview();
+    };
+  }, []);
+
   // Handle ESC key hierarchically (first go back to main grid, then close modal)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (activeSubStep !== null) {
+          stopAudioPreview();
           setActiveSubStep(null);
           setSubPickerSearch('');
         } else {
+          stopAudioPreview();
           onClose();
         }
       }
@@ -216,6 +239,34 @@ export default function AddActionModal(props: AddActionModalProps) {
     return Array.from(scenesMap.values());
   }, [story]);
 
+  // Audio tracks combining system assets and story custom assets
+  const availableBgmTracks = useMemo(() => {
+    const systemBgm = SYSTEM_ASSETS.filter((a) => a.type === 'bgm');
+    const customBgm = (story?.customAssets || []).filter((a) => a.type === 'bgm');
+    const map = new Map<string, { id: string; name: string; url: string; description?: string; origin: string }>();
+    systemBgm.forEach((a) => {
+      map.set(a.url, { id: a.id, name: a.name, url: a.url, description: a.description, origin: 'system' });
+    });
+    customBgm.forEach((a) => {
+      map.set(a.url, { id: a.id, name: a.name, url: a.url, description: a.description, origin: 'local' });
+    });
+    return Array.from(map.values());
+  }, [story]);
+
+  // Background library assets
+  const availableBackgroundAssets = useMemo(() => {
+    const systemBg = SYSTEM_ASSETS.filter((a) => a.type === 'background');
+    const customBg = (story?.customAssets || []).filter((a) => a.type === 'background');
+    const map = new Map<string, { id: string; name: string; url: string; description?: string; origin: 'system' | 'local' }>();
+    systemBg.forEach((a) => {
+      map.set(a.url, { id: a.id, name: a.name, url: a.url, description: a.description, origin: 'system' });
+    });
+    customBg.forEach((a) => {
+      map.set(a.url, { id: a.id, name: a.name, url: a.url, description: a.description, origin: 'local' });
+    });
+    return Array.from(map.values());
+  }, [story]);
+
   // Handle click on action card
   const handleCardClick = (card: ActionCardConfig) => {
     setSubPickerSearch('');
@@ -226,16 +277,24 @@ export default function AddActionModal(props: AddActionModalProps) {
     }
   };
 
+  const modalMaxWidth =
+    activeSubStep === 'fx_start' || activeSubStep === 'cursor_change'
+      ? 'max-w-5xl'
+      : activeSubStep === 'bgm' || activeSubStep === 'bg_change' || activeSubStep === 'jump_scene'
+      ? 'max-w-4xl'
+      : 'max-w-2xl';
+
   return (
     <div
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          stopAudioPreview();
+          onClose();
+        }
       }}
       className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center animate-fade-in font-sans"
     >
-      <div className={`w-full max-h-[88vh] sm:max-h-[85vh] vn-modal-card flex flex-col overflow-hidden text-[var(--text)] transition-all duration-200 ${
-        activeSubStep === 'fx_start' ? 'max-w-5xl' : 'max-w-2xl'
-      }`}>
+      <div className={`w-full max-h-[88vh] sm:max-h-[85vh] vn-modal-card flex flex-col overflow-hidden text-[var(--text)] transition-all duration-200 ${modalMaxWidth}`}>
         
         {/* =========================================================
             HEADER: Adapts dynamically based on active sub-step
@@ -598,28 +657,28 @@ export default function AddActionModal(props: AddActionModalProps) {
             SUB-VIEW D: CURSOR STYLE PICKER (cursor_change)
            ========================================================= */}
         {activeSubStep === 'cursor_change' && (
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {VN_CURSORS_CATALOG.map((cur) => (
-                <button
-                  key={cur.id}
-                  type="button"
-                  onClick={() => onInsertEvent('cursor_change', { cursorType: cur.id as any, cursorMode: 'persistent' })}
-                  className="p-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-start gap-3 backdrop-blur-md"
-                >
-                  <div className="w-8 h-8 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 text-[var(--accent)] mt-0.5">
-                    <GuiIconRenderer icon={cur.icon} className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-xs font-bold text-[var(--text)] block uppercase mb-0.5 group-hover:text-[var(--accent)] transition-colors truncate">
-                      {cur.name}
-                    </span>
-                    <span className="text-[11px] text-[var(--muted)] group-hover:text-[var(--text)] block leading-snug line-clamp-2 transition-colors">
-                      {cur.description}
-                    </span>
-                  </div>
-                </button>
-              ))}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-4 py-2 border-b border-[var(--border)] shrink-0 bg-[var(--well-bg)]/40 flex items-center justify-between gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
+                Interactive Cursor Audition Showcase ({VN_CURSORS_CATALOG.length}):
+              </span>
+              <input
+                type="text"
+                placeholder="Search cursors..."
+                value={subPickerSearch}
+                onChange={(e) => setSubPickerSearch(e.target.value)}
+                className="w-56 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none"
+              />
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar">
+              <CursorShowcaseTab
+                searchQuery={subPickerSearch}
+                onSelectAsset={(asset) => {
+                  onInsertEvent('cursor_change', { cursorType: asset.url as any, cursorMode: 'persistent' });
+                }}
+                onClose={onClose}
+              />
             </div>
           </div>
         )}
@@ -681,42 +740,122 @@ export default function AddActionModal(props: AddActionModalProps) {
            ========================================================= */}
         {activeSubStep === 'bg_change' && (
           <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="px-4 py-2 border-b border-[var(--border)] shrink-0 bg-[var(--well-bg)]/40 flex items-center justify-between gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
-                Select New Background:
-              </span>
-              <input
-                type="text"
-                placeholder="Search background..."
-                value={subPickerSearch}
-                onChange={(e) => setSubPickerSearch(e.target.value)}
-                className="w-48 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none"
-              />
+            <div className="px-4 py-2.5 border-b border-[var(--border)] shrink-0 bg-[var(--well-bg)]/40 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-1.5 overflow-x-auto text-[10px] font-bold uppercase tracking-wider">
+                {[
+                  { id: 'all', label: 'All Backgrounds' },
+                  { id: 'scenarios', label: `Scenarios (${allScenarios.filter((s) => s.backgroundUrl).length})` },
+                  { id: 'assets', label: `Asset Library (${availableBackgroundAssets.length})` },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setBgSourceFilter(tab.id as any)}
+                    className={`px-2.5 py-1 rounded-lg cursor-pointer transition-colors border ${
+                      bgSourceFilter === tab.id
+                        ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent)] font-bold'
+                        : 'bg-[var(--btn-bg)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)]'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Search backgrounds..."
+                  value={subPickerSearch}
+                  onChange={(e) => setSubPickerSearch(e.target.value)}
+                  className="w-44 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none"
+                />
+                {context?.openAssetPicker && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      context.openAssetPicker('background', (url) => {
+                        onInsertEvent('bg_change', { backgroundUrl: url });
+                        onClose();
+                      });
+                    }}
+                    className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-lg text-xs font-bold cursor-pointer transition-colors flex items-center gap-1 shrink-0"
+                    title="Open Full Asset Studio"
+                  >
+                    <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-[var(--accent)]" />
+                    <span className="hidden sm:inline">Studio</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                {allScenarios
-                  .filter((sc) => sc.backgroundUrl)
-                  .filter((sc) => {
-                    if (!subPickerSearch.trim()) return true;
-                    return sc.name.toLowerCase().includes(subPickerSearch.toLowerCase());
-                  })
-                  .map((sc) => (
-                    <button
-                      key={sc.id}
-                      type="button"
-                      onClick={() => onInsertEvent('bg_change', { backgroundUrl: sc.backgroundUrl })}
-                      className="p-2 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-1.5"
-                    >
-                      <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)]">
-                        <img src={sc.backgroundUrl} alt={sc.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                      </div>
-                      <span className="text-[11px] font-bold text-[var(--text)] block truncate group-hover:text-[var(--accent)] transition-colors">
-                        {sc.name}
-                      </span>
-                    </button>
-                  ))}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {(bgSourceFilter === 'all' || bgSourceFilter === 'scenarios') &&
+                  allScenarios
+                    .filter((sc) => sc.backgroundUrl)
+                    .filter((sc) => {
+                      if (!subPickerSearch.trim()) return true;
+                      return sc.name.toLowerCase().includes(subPickerSearch.toLowerCase());
+                    })
+                    .map((sc) => (
+                      <button
+                        key={`scene-${sc.id}`}
+                        type="button"
+                        onClick={() => onInsertEvent('bg_change', { backgroundUrl: sc.backgroundUrl })}
+                        className="p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-2"
+                      >
+                        <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] relative">
+                          <img src={sc.backgroundUrl} alt={sc.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                          <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider bg-black/70 text-gray-200 backdrop-blur-sm">
+                            Scenario
+                          </span>
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[11px] font-bold text-[var(--text)] block truncate group-hover:text-[var(--accent)] transition-colors">
+                            {sc.name}
+                          </span>
+                          {sc.chapterTitle && (
+                            <span className="text-[9px] text-[var(--muted2)] truncate block">
+                              {sc.chapterTitle}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+
+                {(bgSourceFilter === 'all' || bgSourceFilter === 'assets') &&
+                  availableBackgroundAssets
+                    .filter((bg) => {
+                      if (!subPickerSearch.trim()) return true;
+                      const q = subPickerSearch.toLowerCase();
+                      return bg.name.toLowerCase().includes(q) || (bg.description && bg.description.toLowerCase().includes(q));
+                    })
+                    .map((bg) => (
+                      <button
+                        key={`asset-${bg.id}`}
+                        type="button"
+                        onClick={() => onInsertEvent('bg_change', { backgroundUrl: bg.url })}
+                        className="p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-2"
+                      >
+                        <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] relative">
+                          <img src={bg.url} alt={bg.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                          <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 backdrop-blur-sm">
+                            {bg.origin === 'system' ? 'System' : 'Project'}
+                          </span>
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[11px] font-bold text-[var(--text)] block truncate group-hover:text-[var(--accent)] transition-colors">
+                            {bg.name}
+                          </span>
+                          {bg.description && (
+                            <span className="text-[9px] text-[var(--muted2)] truncate block">
+                              {bg.description}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
               </div>
             </div>
           </div>
@@ -726,46 +865,130 @@ export default function AddActionModal(props: AddActionModalProps) {
             SUB-VIEW G: BACKGROUND MUSIC (BGM)
            ========================================================= */}
         {activeSubStep === 'bgm' && (
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar space-y-2.5">
-            <span className="text-[10px] text-[var(--muted)] uppercase font-bold tracking-wider block">
-              Preset Audio Tracks:
-            </span>
-            {[
-              {
-                name: 'White Noise / Cyberpunk Static (Loop)',
-                url: '/assets/sfx/bg-tvnoise.mp3',
-                desc: 'Continuous atmospheric hum and electronic interference.',
-              },
-              {
-                name: 'Residual Radio Frequency',
-                url: '/assets/sfx/back to intro.mp3',
-                desc: 'Retro mysterious broadcast frequency loop.',
-              },
-              {
-                name: 'Error / Alarm Siren',
-                url: '/assets/sfx/ERROR RING.mp3',
-                desc: 'Continuous urgent warning sound.',
-              },
-            ].map((track) => (
-              <button
-                key={track.url}
-                type="button"
-                onClick={() => onInsertEvent('bgm', { audioUrl: track.url, audioVolume: 0.5 })}
-                className="w-full p-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center justify-between gap-3"
-              >
-                <div>
-                  <span className="text-xs font-bold text-[var(--text)] block uppercase mb-0.5 group-hover:text-[var(--accent)] transition-colors">
-                    {track.name}
-                  </span>
-                  <span className="text-[11px] text-[var(--muted)] group-hover:text-[var(--text)] block transition-colors">
-                    {track.desc}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Header Toolbar */}
+            <div className="px-4 py-2.5 border-b border-[var(--border)] shrink-0 bg-[var(--well-bg)]/40 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-[var(--muted)] uppercase font-bold tracking-wider">
+                  BGM Library ({availableBgmTracks.length}):
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] text-[var(--muted2)] uppercase font-mono">Vol:</span>
+                  <input
+                    type="range"
+                    min="0.1"
+                    max="1"
+                    step="0.05"
+                    value={bgmVolume}
+                    onChange={(e) => {
+                      const v = parseFloat(e.target.value);
+                      setBgmVolume(v);
+                      if (playingAudioUrl) {
+                        playAudioPreview(playingAudioUrl, v);
+                      }
+                    }}
+                    className="w-20 accent-[var(--accent)] cursor-pointer"
+                  />
+                  <span className="text-[10px] font-mono text-[var(--text)] w-7 text-right">
+                    {Math.round(bgmVolume * 100)}%
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--well-bg)] border border-[var(--border)] text-[var(--accent)] font-bold shrink-0">
-                  Select
-                </span>
-              </button>
-            ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Filter soundtrack..."
+                  value={subPickerSearch}
+                  onChange={(e) => setSubPickerSearch(e.target.value)}
+                  className="w-48 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none"
+                />
+                {context?.openAssetPicker && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      context.openAssetPicker('bgm', (url) => {
+                        onInsertEvent('bgm', { audioUrl: url, audioVolume: bgmVolume });
+                        onClose();
+                      });
+                    }}
+                    className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-lg text-xs font-bold cursor-pointer transition-colors flex items-center gap-1 shrink-0"
+                    title="Open Full Audio Gallery"
+                  >
+                    <GuiIconRenderer icon={GUI_ICONS.media.volume} className="w-3.5 h-3.5 text-[var(--accent)]" />
+                    <span className="hidden sm:inline">Audio Studio</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Track List with Audition */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar space-y-2">
+              {availableBgmTracks
+                .filter((track) => {
+                  if (!subPickerSearch.trim()) return true;
+                  const q = subPickerSearch.toLowerCase();
+                  return track.name.toLowerCase().includes(q) || (track.description && track.description.toLowerCase().includes(q));
+                })
+                .map((track) => {
+                  const isPlaying = playingAudioUrl === track.url;
+                  return (
+                    <div
+                      key={track.url}
+                      className="p-3 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] transition-all duration-150 flex items-center justify-between gap-3 shadow-sm group"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (isPlaying) {
+                            stopAudioPreview();
+                          } else {
+                            playAudioPreview(track.url, bgmVolume);
+                          }
+                        }}
+                        className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 cursor-pointer transition-all ${
+                          isPlaying
+                            ? 'bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-md shadow-rose-500/20'
+                            : 'bg-[var(--accent-surface)] border-[var(--border2)] text-[var(--accent)] hover:scale-105'
+                        }`}
+                        title={isPlaying ? 'Stop playback' : 'Audition preview'}
+                      >
+                        <GuiIconRenderer
+                          icon={isPlaying ? GUI_ICONS.general.cancel : GUI_ICONS.media.play}
+                          className="w-4 h-4"
+                        />
+                      </button>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-xs font-bold text-[var(--text)] block truncate group-hover:text-[var(--accent)] transition-colors">
+                            {track.name}
+                          </span>
+                          <span className="text-[9px] px-1.5 py-0.2 rounded font-mono uppercase bg-[var(--well-bg)] border border-[var(--border)] text-[var(--muted2)]">
+                            {track.origin}
+                          </span>
+                        </div>
+                        {track.description && (
+                          <p className="text-[11px] text-[var(--muted)] truncate">
+                            {track.description}
+                          </p>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          stopAudioPreview();
+                          onInsertEvent('bgm', { audioUrl: track.url, audioVolume: bgmVolume });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-white border border-[var(--border)] hover:border-[var(--accent)] text-xs font-bold uppercase cursor-pointer transition-all shrink-0 shadow-sm"
+                      >
+                        Select
+                      </button>
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         )}
 
