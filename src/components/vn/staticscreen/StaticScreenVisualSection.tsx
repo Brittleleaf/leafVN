@@ -133,6 +133,52 @@ export function StaticScreenVisualSection({
           </div>
         </div>
 
+        {/* Background Overlay Darkness Slider */}
+        <div className="space-y-1.5 p-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-sm">
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1">
+              <GuiIconRenderer icon={GUI_ICONS.general.screenFx} size={12} className="text-cyan-400" />
+              <span>Background Dark Tint:</span>
+            </span>
+            <span className="font-mono text-cyan-400 font-bold">
+              {(() => {
+                if (!config.bgOverlayColor) return 85;
+                const match = config.bgOverlayColor.match(/rgba?\([^,]+,[^,]+,[^,]+,([^)]+)\)/);
+                if (match) {
+                  const parsed = parseFloat(match[1]);
+                  return Number.isFinite(parsed) ? Math.round(parsed * 100) : 85;
+                }
+                return 85;
+              })()}%
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={(() => {
+              if (!config.bgOverlayColor) return 0.85;
+              const match = config.bgOverlayColor.match(/rgba?\([^,]+,[^,]+,[^,]+,([^)]+)\)/);
+              if (match) {
+                const parsed = parseFloat(match[1]);
+                return Number.isFinite(parsed) ? parsed : 0.85;
+              }
+              return 0.85;
+            })()}
+            onChange={(e) => {
+              const val = parseFloat(e.target.value);
+              updateConfig({ bgOverlayColor: `rgba(5, 5, 12, ${val.toFixed(2)})` });
+            }}
+            className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-[var(--well-bg)] rounded-lg"
+          />
+          <div className="flex justify-between text-[9px] font-mono text-[var(--muted2)]">
+            <span>0% (Vivid / Clear)</span>
+            <span>50% (Balanced)</span>
+            <span>100% (Solid Dark)</span>
+          </div>
+        </div>
+
         {/* Entrance Impact SFX & Ambient BGM: Visual Audio Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {/* SFX Card */}

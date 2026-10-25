@@ -130,8 +130,18 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     (currentEvent?.type === 'dialogue' || Boolean(activeInspection) || Boolean(pendingReaction));
 
   // Directly apply SVG visual filter to stage background and character photo
-  const playerFxFilter = getSceneElementFxFilter(activeScreenFx);
-  const isPixelate = activeScreenFx?.fxType === 'retro_pixelate';
+  const effectiveScreenFx =
+    currentScene?.sceneType === 'event' && currentScene?.eventSubtype === 'static'
+      ? {
+          type: currentScene.staticScreenConfig?.screenFx,
+          fxType: currentScene.staticScreenConfig?.screenFx,
+          intensity: currentScene.staticScreenConfig?.fxIntensity || 'heavy',
+          params: currentScene.staticScreenConfig?.screenFxParams,
+        }
+      : activeScreenFx;
+
+  const playerFxFilter = getSceneElementFxFilter(effectiveScreenFx);
+  const isPixelate = effectiveScreenFx?.fxType === 'retro_pixelate';
 
   return (
     <div ref={playerContainerRef} className="relative w-full h-screen bg-black flex items-center justify-center overflow-hidden select-none font-typewriter">
@@ -141,7 +151,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
       )}
 
       {/* SVG Filter Definitions for Liquid & Pixelate (Always mounted, immune to Chromium culling) */}
-      <ScreenFxSvgDefs activeFx={activeScreenFx} />
+      <ScreenFxSvgDefs activeFx={effectiveScreenFx} />
 
       {/* 16:9 ASPECT-RATIO LOCKED GAME STAGE */}
       <div

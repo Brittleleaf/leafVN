@@ -374,7 +374,7 @@ export default function StaticScreenView({
 
       {/* Background photo with custom overlay color & video support */}
       {(() => {
-        const bgUrl = scene.backgroundUrl;
+        const bgUrl = scene.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg';
         const isVideo = isVideoMedia(bgUrl);
         return (
           <div className="absolute inset-0 bg-cover bg-center overflow-hidden transition-all duration-700">
@@ -402,9 +402,14 @@ export default function StaticScreenView({
         );
       })()}
       <div
-        className="absolute inset-0 transition-all duration-500"
+        className="absolute inset-0 transition-all duration-500 pointer-events-none"
         style={{
-          backgroundColor: config.bgOverlayColor || 'rgba(5, 5, 12, 0.85)',
+          backgroundColor:
+            config.bgOverlayColor !== undefined
+              ? config.bgOverlayColor
+              : config.screenFx === 'retro_pixelate' || config.screenFx === 'liquid_distortion'
+              ? 'rgba(5, 5, 12, 0.45)'
+              : 'rgba(5, 5, 12, 0.85)',
         }}
       />
 
@@ -415,6 +420,7 @@ export default function StaticScreenView({
           intensity={config.fxIntensity || 'heavy'}
           fadeInSeconds={0.4}
           fadeOutSeconds={0.4}
+          params={config.screenFxParams}
         />
       )}
 

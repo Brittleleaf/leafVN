@@ -136,15 +136,16 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
   return (
     <svg
       aria-hidden="true"
-      className="pointer-events-none"
+      className="pointer-events-none absolute"
       style={{
-        position: 'fixed',
-        top: -9999,
-        left: -9999,
-        width: 1,
-        height: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: 0,
+        height: 0,
         opacity: 0,
         pointerEvents: 'none',
+        overflow: 'hidden',
       }}
     >
       <defs>
