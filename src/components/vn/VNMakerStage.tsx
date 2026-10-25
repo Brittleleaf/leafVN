@@ -657,7 +657,18 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
       </div>
 
       {/* GAME SCREEN CANVAS WRAPPER WITH DOCKED TOOLBAR RAIL */}
-      <div className="relative w-full flex items-center justify-center">
+      <div
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            setSelectedElement(null);
+            setSelectedHotspotId(null);
+            setSelectedChoiceIndex(null);
+            setIsEditingChoiceText(false);
+            setIsEditingPromptText(false);
+          }
+        }}
+        className="relative w-full flex items-center justify-center"
+      >
         {/* SVG Filter Definitions for Liquid & Pixelate (Always mounted, immune to Chromium culling) */}
         <ScreenFxSvgDefs activeFx={currentSelectedFx} />
 
@@ -665,9 +676,15 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         <div
           ref={canvasRef}
           onClick={(e) => {
+            if (isPlacingButton) {
+              if (handleCanvasClick) handleCanvasClick(e);
+              return;
+            }
             setSelectedElement(null);
             setSelectedHotspotId(null);
-            if (handleCanvasClick) handleCanvasClick(e);
+            setSelectedChoiceIndex(null);
+            setIsEditingChoiceText(false);
+            setIsEditingPromptText(false);
           }}
           style={{ aspectRatio: '16 / 9', containerType: 'size' }}
           className={`relative w-full aspect-video shrink-0 rounded-2xl overflow-hidden border border-[var(--border2)] bg-black shadow-2xl transition-all ${
@@ -1350,7 +1367,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
 
         {/* DOCKED VERTICAL STUDIO TOOLBAR (STRICTLY OUTSIDE CANVAS ON THE RIGHT RAIL) */}
         {selectedElement === 'character' && currentSpeakerAvatar && (
-          <div className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
+          <div onClick={(e) => e.stopPropagation()} className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
             <VNTransformToolbar
               target={{
                 id: 'stage-character',
@@ -1397,7 +1414,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         )}
 
         {selectedElement === 'hotspot' && selectedHotspot && (
-          <div className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
+          <div onClick={(e) => e.stopPropagation()} className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
             <VNTransformToolbar
               target={{
                 id: selectedHotspot.id,
@@ -1449,7 +1466,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
           const y = opt.yPercent ?? defaultY;
 
           return (
-            <div className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
+            <div onClick={(e) => e.stopPropagation()} className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
               <VNTransformToolbar
                 target={{
                   id: opt.id,
@@ -1502,7 +1519,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
           const py = currentLine.promptYPercent ?? defaultY;
 
           return (
-            <div className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
+            <div onClick={(e) => e.stopPropagation()} className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
               <VNTransformToolbar
                 target={{
                   id: 'choice-prompt',

@@ -146,6 +146,8 @@ export const VNUniversalTransformGizmo: React.FC<VNUniversalTransformGizmoProps>
       {/* 2. Universal Bounding Container */}
       <div
         ref={containerRef}
+        onClick={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
         className="absolute inset-0 pointer-events-none select-none z-40 touch-none"
       >
         <div
@@ -211,6 +213,7 @@ export const VNUniversalTransformGizmo: React.FC<VNUniversalTransformGizmoProps>
                 lastBodyPointerDownRef.current = now;
                 startTransform(e, 'move', containerRef.current!);
               }}
+              onClick={(e) => e.stopPropagation()}
               className="absolute inset-0 cursor-move pointer-events-auto touch-none"
               title="Drag to move (Hold Shift for axis lock). Double-click to edit/crop. Use Arrow keys to nudge."
             />

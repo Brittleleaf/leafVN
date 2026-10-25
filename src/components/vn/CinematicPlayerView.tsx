@@ -159,7 +159,7 @@ export default function CinematicPlayerView({
   // Clear selection when clicking empty stage background
   const handleStageBackgroundClick = (e: React.MouseEvent) => {
     if (!isEditor) return;
-    if (e.target === stageRef.current && onSelectClip) {
+    if (onSelectClip) {
       onSelectClip(null);
     }
   };
@@ -313,6 +313,12 @@ export default function CinematicPlayerView({
   return (
     <div
       ref={viewportRef}
+      onClick={(e) => {
+        if (!isEditor) return;
+        if (e.target === e.currentTarget && onSelectClip) {
+          onSelectClip(null);
+        }
+      }}
       className="relative w-full h-full overflow-hidden select-none bg-black flex items-center justify-center"
     >
       {/* Virtual Reference Resolution Stage (960x540 strictly proportional across all screens & browser zooms) */}

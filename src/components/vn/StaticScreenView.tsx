@@ -22,7 +22,7 @@ interface StaticScreenViewProps {
   showGuides?: boolean;
   snapToGuides?: boolean;
   onSelectTarget?: (target: 'title' | 'subtitle' | string | null) => void;
-  onSelectButton?: (btnId: string) => void;
+  onSelectButton?: (btnId: string | null) => void;
   onDragButton?: (btnId: string, xPercent: number, yPercent: number) => void;
   onTransformButton?: (btnId: string, patch: Partial<VNStaticScreenButton>) => void;
   onTransformText?: (
@@ -356,6 +356,13 @@ export default function StaticScreenView({
   return (
     <div
       ref={stageRef}
+      onClick={(e) => {
+        if (!isInteractive) {
+          onSelectTarget?.(null);
+          onSelectButton?.(null);
+          setEditingButtonId(null);
+        }
+      }}
       className={`relative w-full h-full flex flex-col items-center justify-center overflow-hidden select-none ${
         config.cursorType && config.cursorType !== 'default' ? 'cursor-none' : ''
       }`}
@@ -438,6 +445,12 @@ export default function StaticScreenView({
               if (!isInteractive && onSelectTarget) {
                 e.stopPropagation();
                 onSelectTarget('title');
+              }
+            }}
+            onClick={(e) => {
+              if (!isInteractive) {
+                e.stopPropagation();
+                onSelectTarget?.('title');
               }
             }}
             style={{
@@ -523,6 +536,12 @@ export default function StaticScreenView({
               if (!isInteractive && onSelectTarget) {
                 e.stopPropagation();
                 onSelectTarget('subtitle');
+              }
+            }}
+            onClick={(e) => {
+              if (!isInteractive) {
+                e.stopPropagation();
+                onSelectTarget?.('subtitle');
               }
             }}
             style={{

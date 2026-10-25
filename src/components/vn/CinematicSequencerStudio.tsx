@@ -638,8 +638,22 @@ export default function CinematicSequencerStudio({
           className="flex-1 min-h-0 relative flex flex-col items-center justify-between p-2 md:p-3 bg-[var(--well-bg)] overflow-hidden"
         >
           {/* Strictly 16:9 Aspect Ratio Canvas Stage Container with Dedicated Outside Dock */}
-          <div className="flex-1 min-h-0 w-full flex items-center justify-center relative overflow-visible">
-            <div className="relative flex items-center justify-center shrink-0">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget && selectedClipId) {
+                setSelectedClipId(null);
+              }
+            }}
+            className="flex-1 min-h-0 w-full flex items-center justify-center relative overflow-visible"
+          >
+            <div
+              onClick={(e) => {
+                if (e.target === e.currentTarget && selectedClipId) {
+                  setSelectedClipId(null);
+                }
+              }}
+              className="relative flex items-center justify-center shrink-0"
+            >
               {/* 16:9 Canvas Stage */}
               <div
                 style={{
@@ -668,6 +682,7 @@ export default function CinematicSequencerStudio({
               {/* DOCKED VERTICAL STUDIO TOOLBAR (COMPLETELY OUTSIDE CANVAS ON THE RIGHT) */}
               {selectedClip && (
                 <div
+                  onClick={(e) => e.stopPropagation()}
                   className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto"
                 >
                   <VNTransformToolbar

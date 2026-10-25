@@ -405,7 +405,15 @@ export default function StaticScreenStudio({
       </div>
 
       {/* RIGHT COLUMN: LIVE WYSIWYG PREVIEW WITH DRAGGABLE BUTTONS */}
-      <div className="flex-1 relative flex flex-col items-center justify-center p-4 xl:pr-24 bg-black/60 overflow-hidden">
+      <div
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            setSelectedTarget(null);
+            setSelectedButtonId(null);
+          }
+        }}
+        className="flex-1 relative flex flex-col items-center justify-center p-4 xl:pr-24 bg-black/60 overflow-hidden"
+      >
         {/* Sleek Workspace Top Bar OUTSIDE the canvas */}
         <div className="w-full max-w-4xl mb-2.5 flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] text-xs backdrop-blur-md shadow-sm shrink-0">
           <div className="flex items-center gap-2">
@@ -456,7 +464,15 @@ export default function StaticScreenStudio({
         </div>
 
         {/* 16:9 Canvas Viewport */}
-        <div className="relative w-full h-full max-w-4xl max-h-[640px] flex items-center justify-center">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedTarget(null);
+              setSelectedButtonId(null);
+            }
+          }}
+          className="relative w-full h-full max-w-4xl max-h-[640px] flex items-center justify-center"
+        >
           {/* Top-level mounted SVG filter defs to ensure Blink/Chromium registers filters reliably */}
           <ScreenFxSvgDefs
             activeFx={{
@@ -479,6 +495,8 @@ export default function StaticScreenStudio({
                   setSelectedButtonId(null);
                 } else if (target) {
                   setSelectedButtonId(target);
+                } else {
+                  setSelectedButtonId(null);
                 }
               }}
               onSelectButton={(btnId) => {
@@ -517,7 +535,10 @@ export default function StaticScreenStudio({
 
           {/* DOCKED VERTICAL STUDIO TOOLBAR (STRICTLY OUTSIDE CANVAS ON THE RIGHT RAIL) */}
           {activeTransformTarget && (
-            <div className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto"
+            >
               <VNTransformToolbar
                 target={activeTransformTarget}
                 onUpdate={handleToolbarUpdate}
