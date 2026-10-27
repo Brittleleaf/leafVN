@@ -42,9 +42,9 @@ interface MenuRoleDefinition {
 const MENU_ROLES: MenuRoleDefinition[] = [
   {
     role: 'intro',
-    title: 'Pantalla de Intro',
+    title: 'Startup Intro Screen',
     badge: 'STARTUP INTRO',
-    description: 'Secuencia cinemática o estática al iniciar la novela visual',
+    description: 'Cinematic or static opening sequence played on game start',
     color: '#38bdf8',
     borderColor: 'border-sky-500/50',
     bgColor: 'bg-sky-950/20',
@@ -53,9 +53,9 @@ const MENU_ROLES: MenuRoleDefinition[] = [
   },
   {
     role: 'main_menu',
-    title: 'Menú Principal (Title)',
+    title: 'Main Title Screen',
     badge: 'CORE TITLE SCREEN',
-    description: 'Pantalla de inicio con botones libres, fondo y banda sonora',
+    description: 'Home menu screen with customizable buttons, soundtrack and background',
     color: '#10b981',
     borderColor: 'border-emerald-500/70',
     bgColor: 'bg-emerald-950/25',
@@ -64,9 +64,9 @@ const MENU_ROLES: MenuRoleDefinition[] = [
   },
   {
     role: 'play',
-    title: 'Iniciar Historia (Play)',
+    title: 'Start Story (Play)',
     badge: 'GAMEPLAY ENTRY',
-    description: 'Punto de partida de la historia o prólogo del juego',
+    description: 'Entry point of the narrative story or game prologue',
     color: '#a855f7',
     borderColor: 'border-purple-500/50',
     bgColor: 'bg-purple-950/20',
@@ -75,9 +75,9 @@ const MENU_ROLES: MenuRoleDefinition[] = [
   },
   {
     role: 'load_game',
-    title: 'Partidas Guardadas',
+    title: 'Saved Games (Load)',
     badge: 'SAVE / LOAD SLOTS',
-    description: 'Ranuras interactivas de guardado con capturas y marcas de tiempo',
+    description: 'Interactive save & load slots with visual snapshots and timestamps',
     color: '#06b6d4',
     borderColor: 'border-cyan-500/50',
     bgColor: 'bg-cyan-950/20',
@@ -86,9 +86,9 @@ const MENU_ROLES: MenuRoleDefinition[] = [
   },
   {
     role: 'settings',
-    title: 'Configuración',
+    title: 'Game Settings',
     badge: 'SETTINGS & AUDIO',
-    description: 'Ajustes de sonido, pantalla, velocidad de texto e idioma',
+    description: 'Volume sliders, display mode, text speed and language controls',
     color: '#ec4899',
     borderColor: 'border-pink-500/50',
     bgColor: 'bg-pink-950/20',
@@ -97,9 +97,9 @@ const MENU_ROLES: MenuRoleDefinition[] = [
   },
   {
     role: 'gallery',
-    title: 'Galería & Cinemáticas',
+    title: 'Gallery & Extras',
     badge: 'EXTRAS & DOSSIERS',
-    description: 'Visor de cinemáticas por capítulo, escenarios y personajes',
+    description: 'Unlocked cinematics by chapter, scenario backgrounds and character profiles',
     color: '#f59e0b',
     borderColor: 'border-amber-500/50',
     bgColor: 'bg-amber-950/20',
@@ -144,7 +144,7 @@ export default function MenuGameToolModal({
     });
     (story.scenarios || []).forEach((sc) => {
       if (!list.some((item) => item.scene.id === sc.id)) {
-        list.push({ scene: sc, chapterTitle: 'Escenarios Globales' });
+        list.push({ scene: sc, chapterTitle: 'Global Scenarios' });
       }
     });
     return list;
@@ -280,7 +280,7 @@ export default function MenuGameToolModal({
       menuSystemConfig: updatedConfig,
     });
     playUiSound('select', 0.5);
-    notify(`Pantalla asignada a rol: ${role.toUpperCase()}`);
+    notify(`Screen assigned to role: ${role.toUpperCase()}`);
   };
 
   // Generate missing menu screens with one click
@@ -307,7 +307,7 @@ export default function MenuGameToolModal({
 
     // 1. Intro Screen
     if (!resolvedRoleScenes.intro) {
-      const introScene = createScreen('intro', 'Inicio: Intro Cinemática', DEFAULT_INTRO_CONFIG);
+      const introScene = createScreen('intro', 'Startup Intro', DEFAULT_INTRO_CONFIG);
       currentScenarios.push(introScene);
       newConfig.introSceneId = introScene.id;
       createdCount++;
@@ -315,7 +315,7 @@ export default function MenuGameToolModal({
 
     // 2. Main Menu
     if (!resolvedRoleScenes.main_menu) {
-      const menuScene = createScreen('title', 'Menú Principal (Title)', DEFAULT_TITLE_CONFIG);
+      const menuScene = createScreen('title', 'Main Title Screen', DEFAULT_TITLE_CONFIG);
       currentScenarios.push(menuScene);
       newConfig.mainMenuSceneId = menuScene.id;
       createdCount++;
@@ -323,7 +323,7 @@ export default function MenuGameToolModal({
 
     // 3. Load Game
     if (!resolvedRoleScenes.load_game) {
-      const loadScene = createScreen('load', 'Menú: Cargar Partida', DEFAULT_LOAD_GAME_CONFIG);
+      const loadScene = createScreen('load', 'Load Game', DEFAULT_LOAD_GAME_CONFIG);
       currentScenarios.push(loadScene);
       newConfig.loadGameSceneId = loadScene.id;
       createdCount++;
@@ -331,7 +331,7 @@ export default function MenuGameToolModal({
 
     // 4. Settings
     if (!resolvedRoleScenes.settings) {
-      const settingsScene = createScreen('settings', 'Menú: Configuración', DEFAULT_SETTINGS_CONFIG);
+      const settingsScene = createScreen('settings', 'Game Settings', DEFAULT_SETTINGS_CONFIG);
       currentScenarios.push(settingsScene);
       newConfig.settingsSceneId = settingsScene.id;
       createdCount++;
@@ -339,7 +339,7 @@ export default function MenuGameToolModal({
 
     // 5. Gallery
     if (!resolvedRoleScenes.gallery) {
-      const galleryScene = createScreen('gallery', 'Menú: Galería y Extras', DEFAULT_GALLERY_CONFIG);
+      const galleryScene = createScreen('gallery', 'Gallery & Extras', DEFAULT_GALLERY_CONFIG);
       currentScenarios.push(galleryScene);
       newConfig.gallerySceneId = galleryScene.id;
       createdCount++;
@@ -358,8 +358,8 @@ export default function MenuGameToolModal({
     playSfx('/assets/sfx/success.mp3', false, 0.4);
     notify(
       createdCount > 0
-        ? `Se han generado ${createdCount} pantallas del sistema de menú.`
-        : 'Todas las pantallas de menú ya están configuradas.'
+        ? `Generated ${createdCount} menu screens successfully.`
+        : 'All menu system screens are already configured.'
     );
   };
 
@@ -504,24 +504,24 @@ export default function MenuGameToolModal({
                 setEditingSceneId(null);
                 playSfx('/assets/sfx/click intro.mp3', false, 0.3);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--accent)] font-bold text-xs hover:opacity-80 transition-all cursor-pointer shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--accent)] font-bold text-xs hover:opacity-80 transition-all cursor-pointer shadow-sm"
             >
               <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-4 h-4" />
-              <span>Volver al Mapa de Menú</span>
+              <span>Return to Menu Map</span>
             </button>
             <div className="h-4 w-[1px] bg-[var(--border)] mx-1" />
-            <span className="text-xs font-mono text-[var(--muted)]">Configurando:</span>
+            <span className="text-xs font-mono text-[var(--muted)]">Configuring:</span>
             <span className="text-xs font-bold text-[var(--text)]">{editingScene.name}</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded-full font-mono">
-              Auto-guardado activo
+            <span className="text-[10px] text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded-md font-mono">
+              Auto-save active
             </span>
             <button
               onClick={onClose}
-              className="text-[var(--muted)] hover:text-[var(--text)] p-1.5 cursor-pointer rounded-lg hover:bg-[var(--btn-hover-bg)]"
-              title="Cerrar"
+              className="text-[var(--muted)] hover:text-[var(--text)] p-1.5 cursor-pointer rounded-md hover:bg-[var(--btn-hover-bg)]"
+              title="Close"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-4 h-4" />
             </button>
@@ -548,7 +548,7 @@ export default function MenuGameToolModal({
       {/* HEADER / TOOLBAR */}
       <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-[var(--accent-surface)] border border-[var(--accent)]/40 flex items-center justify-center text-[var(--accent)] shadow-sm">
+          <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--accent)]/40 flex items-center justify-center text-[var(--accent)] shadow-sm">
             <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-4 h-4 text-[var(--accent)]" />
           </div>
           <div>
@@ -556,12 +556,12 @@ export default function MenuGameToolModal({
               <h2 className="text-sm font-bold tracking-wide uppercase text-[var(--text)]">
                 Menu Game Tool
               </h2>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/50 border border-emerald-600/40 text-emerald-300 font-mono font-bold">
-                {configuredCount} / 6 Pantallas
+              <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-950/50 border border-emerald-600/40 text-emerald-300 font-mono font-bold">
+                {configuredCount} / 6 Screens
               </span>
             </div>
             <p className="text-[10px] text-[var(--muted)]">
-              Arquitectura visual del menú principal, pantallas de inicio y enlaces del sistema
+              Visual architecture of title screen, startup intro sequence & system links
             </p>
           </div>
         </div>
@@ -571,44 +571,44 @@ export default function MenuGameToolModal({
           {/* Menu Enabled Toggle */}
           <button
             onClick={handleToggleMenuEnabled}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm ${
+            className={`px-3 py-1.5 rounded-md border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm ${
               isMenuEnabled
                 ? 'border-emerald-500/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50'
                 : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-white'
             }`}
-            title="Activa o desactiva que el juego arranque en la Intro/Menú Principal"
+            title="Toggle whether the game boots into Intro/Title Menu or directly into Chapter 1"
           >
             <div className={`w-2 h-2 rounded-full ${isMenuEnabled ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-gray-500'}`} />
-            <span>{isMenuEnabled ? 'Menú Activo en Juego' : 'Menú Omitido'}</span>
+            <span>{isMenuEnabled ? 'Menu Active in Game' : 'Menu Bypassed'}</span>
           </button>
 
           {/* Playtest Menu Button */}
           <button
             onClick={handlePlaytestMenu}
-            className="px-3 py-1.5 rounded-xl border border-sky-500/60 bg-sky-950/40 text-sky-300 hover:bg-sky-900/50 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-            title="Abre el reproductor para probar la experiencia de menú en tiempo real"
+            className="px-3 py-1.5 rounded-md border border-sky-500/60 bg-sky-950/40 text-sky-300 hover:bg-sky-900/50 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+            title="Open live player to test menu experience in real-time"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-sky-400" />
-            <span>Probar Menú</span>
+            <span>Playtest Menu</span>
           </button>
 
           {/* Generate Missing Screens Button */}
           {configuredCount < 6 && (
             <button
               onClick={handleGenerateMissingScreens}
-              className="px-3 py-1.5 rounded-xl border border-amber-500/50 bg-amber-950/30 text-amber-300 hover:bg-amber-900/40 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-              title="Crea automáticamente en el proyecto las pantallas de menú que aún no existen"
+              className="px-3 py-1.5 rounded-md border border-amber-500/50 bg-amber-950/30 text-amber-300 hover:bg-amber-900/40 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Automatically create missing menu screens in the project"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-3.5 h-3.5 text-amber-400" />
-              <span>Generar Pantallas Faltantes</span>
+              <span>Generate Missing Screens</span>
             </button>
           )}
 
           {/* Auto Layout */}
           <button
             onClick={handleAutoLayout}
-            className="px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
-            title="Ordenar nodos automáticamente"
+            className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+            title="Organize nodes automatically"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.transform} className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Auto-Layout</span>
@@ -617,19 +617,19 @@ export default function MenuGameToolModal({
           {/* Center on Menu */}
           <button
             onClick={handleCenterOnMenu}
-            className="px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
-            title="Centrar vista en Menú Principal"
+            className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+            title="Center view on Main Title Screen"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Centrar</span>
+            <span className="hidden sm:inline">Center</span>
           </button>
 
           {/* Zoom controls */}
-          <div className="flex items-center bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-0.5">
+          <div className="flex items-center bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-0.5">
             <button
               onClick={() => setZoom((z) => Math.max(0.4, z - 0.1))}
               className="px-2 py-1 text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
-              title="Reducir Zoom"
+              title="Zoom Out"
             >
               -
             </button>
@@ -639,7 +639,7 @@ export default function MenuGameToolModal({
             <button
               onClick={() => setZoom((z) => Math.min(2.0, z + 0.1))}
               className="px-2 py-1 text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
-              title="Aumentar Zoom"
+              title="Zoom In"
             >
               +
             </button>
@@ -650,8 +650,8 @@ export default function MenuGameToolModal({
           {/* Close */}
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] cursor-pointer transition-colors"
-            title="Cerrar (Esc)"
+            className="p-2 rounded-md text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] cursor-pointer transition-colors"
+            title="Close (Esc)"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-4 h-4" />
           </button>
@@ -857,7 +857,7 @@ export default function MenuGameToolModal({
 
                     <div className="relative z-10 flex items-start justify-between">
                       <span className="text-[10px] font-bold text-white drop-shadow truncate max-w-[170px]">
-                        {assignedScene ? assignedScene.name : 'Pantalla no vinculada'}
+                        {assignedScene ? assignedScene.name : 'Unlinked Screen'}
                       </span>
                       {assignedScene?.staticScreenConfig?.screenFx && (
                         <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-black/70 border border-white/20 text-cyan-300">
@@ -881,10 +881,10 @@ export default function MenuGameToolModal({
                     </div>
 
                     <div className="relative z-10 flex items-center justify-between text-[9px] text-gray-400">
-                      <span>{assignedScene?.sceneType === 'event' ? 'Pantalla Estática' : 'Escena Narrativa'}</span>
+                      <span>{assignedScene?.sceneType === 'event' ? 'Static Screen' : 'Story Scenario'}</span>
                       {assignedScene && (
                         <span className="text-cyan-400 group-hover:underline flex items-center gap-0.5">
-                          <span>Editar</span>
+                          <span>Edit</span>
                           <span>➜</span>
                         </span>
                       )}
@@ -894,14 +894,14 @@ export default function MenuGameToolModal({
                   {/* Scene Selector Dropdown */}
                   <div>
                     <label className="text-[9px] text-[var(--muted)] font-mono block mb-1">
-                      Escenario Vinculado:
+                      Linked Scenario:
                     </label>
                     <select
                       value={assignedScene?.id || ''}
                       onChange={(e) => handleAssignSceneToRole(def.role, e.target.value)}
-                      className="w-full text-[11px] px-2 py-1 rounded-lg border border-[var(--border)] bg-[var(--btn-bg)] text-[var(--text)] cursor-pointer truncate"
+                      className="w-full text-[11px] px-2 py-1 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] text-[var(--text)] cursor-pointer truncate"
                     >
-                      <option value="">-- Sin asignar --</option>
+                      <option value="">-- Unassigned --</option>
                       {allScenes.map(({ scene: sc, chapterTitle }) => (
                         <option key={sc.id} value={sc.id}>
                           [{chapterTitle}] {sc.name}
@@ -919,10 +919,10 @@ export default function MenuGameToolModal({
                             setEditingSceneId(assignedScene.id);
                             playSfx('/assets/sfx/click intro.mp3', false, 0.3);
                           }}
-                          className="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--accent)] hover:opacity-85 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                          className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--accent)] hover:opacity-85 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
-                          <span>Configurar Pantalla</span>
+                          <span>Configure Screen</span>
                         </button>
                       ) : (
                         <button
@@ -931,20 +931,20 @@ export default function MenuGameToolModal({
                             onClose();
                             playSfx('/assets/sfx/click intro.mp3', false, 0.3);
                           }}
-                          className="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border border-purple-500/50 bg-purple-950/30 text-purple-300 hover:bg-purple-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
-                          title="Abrir este escenario narrativo en el editor principal"
+                          className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-purple-500/50 bg-purple-950/30 text-purple-300 hover:bg-purple-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                          title="Open this narrative scenario in the story editor"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5" />
-                          <span>Editar Escenario ➜</span>
+                          <span>Edit Scenario ➜</span>
                         </button>
                       )
                     ) : (
                       <button
                         onClick={handleGenerateMissingScreens}
-                        className="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border border-emerald-500/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                        className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-emerald-500/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3.5 h-3.5" />
-                        <span>Crear Pantalla</span>
+                        <span>Create Screen</span>
                       </button>
                     )}
                   </div>
@@ -956,16 +956,16 @@ export default function MenuGameToolModal({
 
         {/* FLOATING INFORMATIVE HUD */}
         <div className="absolute bottom-4 left-4 z-30 pointer-events-none">
-          <div className="bg-[var(--surface)]/90 backdrop-blur-md border border-[var(--border)] p-3 rounded-2xl shadow-xl flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-cyan-950/50 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+          <div className="bg-[var(--surface)]/90 backdrop-blur-md border border-[var(--border)] p-3 rounded-lg shadow-xl flex items-center gap-3">
+            <div className="w-8 h-8 rounded-md bg-cyan-950/50 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
               <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-4 h-4" />
             </div>
             <div>
               <p className="text-[11px] font-bold text-[var(--text)]">
-                Arquitectura de Menús Totalmente Personalizable
+                Customizable Menu System Flow
               </p>
               <p className="text-[10px] text-[var(--muted)]">
-                Arrastra los nodos para organizar el mapa. Haz clic en "Configurar Pantalla" para diseñar los botones y estética con el gizmo libre.
+                Drag nodes to organize the map. Click "Configure Screen" to customize buttons, layout and visual gizmos.
               </p>
             </div>
           </div>

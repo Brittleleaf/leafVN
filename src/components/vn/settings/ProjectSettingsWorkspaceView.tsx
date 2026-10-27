@@ -31,7 +31,7 @@ export default function ProjectSettingsWorkspaceView() {
               setCurrentWorkspace('hub');
             }}
             className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
-            title="Volver a la pantalla principal del proyecto"
+            title="Return to Master Hub"
           >
             <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
             <span>Hub</span>
@@ -48,7 +48,7 @@ export default function ProjectSettingsWorkspaceView() {
                 Project Settings & Logic
               </h2>
               <span className="text-[10px] text-[var(--muted)] font-mono">
-                Variables de bifurcación, estilo de texto y auditoría del proyecto
+                Branching variables, global textbox style and project health audit
               </span>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function ProjectSettingsWorkspaceView() {
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5" />
-            <span>Variables & Lógica ({story.variables?.length || 0})</span>
+            <span>Variables & Logic ({story.variables?.length || 0})</span>
           </button>
 
           <button
@@ -83,7 +83,7 @@ export default function ProjectSettingsWorkspaceView() {
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
-            <span>Estilo Text Box Global</span>
+            <span>Global Text Box Style</span>
           </button>
 
           <button
@@ -98,7 +98,7 @@ export default function ProjectSettingsWorkspaceView() {
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
-            <span>Project Doctor (Auditoría)</span>
+            <span>Project Doctor (Audit)</span>
           </button>
         </div>
       </div>

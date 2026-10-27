@@ -55,8 +55,8 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
     playUiSound('select', 0.5);
     notify(
       nextState
-        ? 'Sistema de Menú Activado al arrancar el juego'
-        : 'Sistema de Menú Omitido (Arranque directo en Capítulo 1)'
+        ? 'Menu System Enabled on Startup'
+        : 'Menu System Bypassed (Direct start at Chapter 1)'
     );
   };
 
@@ -91,13 +91,13 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </h1>
 
               <p className="text-xs md:text-sm text-[var(--muted)] leading-relaxed">
-                {story.description || 'Sin descripción. Gestiona todos los pilares de tu novela visual desde este centro de mando unificado.'}
+                {story.description || 'No description provided. Manage all pillars of your visual novel project from this unified command center.'}
               </p>
 
               <div className="flex items-center gap-4 text-xs font-mono text-[var(--muted2)] pt-1 flex-wrap">
-                <span>Autor: <strong className="text-gray-200">{story.author || 'Creador Leaf VN'}</strong></span>
+                <span>Author: <strong className="text-gray-200">{story.author || 'Leaf VN Creator'}</strong></span>
                 <span>•</span>
-                <span>Actualizado: <strong className="text-gray-200">{new Date(story.updatedAt).toLocaleDateString()}</strong></span>
+                <span>Updated: <strong className="text-gray-200">{new Date(story.updatedAt).toLocaleDateString()}</strong></span>
               </div>
             </div>
 
@@ -109,28 +109,28 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                   onPlayStory(story);
                 }}
                 className="px-4 py-2.5 rounded-md bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
-                title="Lanzar el juego completo en el reproductor en vivo"
+                title="Launch and play full story in live player"
               >
                 <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-white" />
-                <span>Probar Juego</span>
+                <span>Playtest Story</span>
               </button>
 
               <button
                 onClick={handleManualSave}
                 className="px-3.5 py-2.5 rounded-md border border-[#2d3346] bg-[#181c28] hover:bg-[#202536] text-xs font-semibold text-gray-200 hover:text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                title="Guardar cambios del proyecto en disco y almacenamiento local"
+                title="Save project changes (Ctrl+S)"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Guardar</span>
+                <span>Save</span>
               </button>
 
               <button
                 onClick={handleExport}
                 className="px-3.5 py-2.5 rounded-md border border-[#2d3346] bg-[#181c28] hover:bg-[#202536] text-xs font-semibold text-gray-200 hover:text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                title="Exportar archivo de proyecto .leafvn / .json"
+                title="Export project bundle (.leafvn / .json)"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-purple-400" />
-                <span>Exportar</span>
+                <span>Export</span>
               </button>
             </div>
           </div>
@@ -141,9 +141,9 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
           <div className="flex items-center justify-between pb-3">
             <h2 className="text-xs font-bold font-mono tracking-widest uppercase text-[var(--muted)] flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
-              <span>ESPACIOS DE TRABAJO PRINCIPALES</span>
+              <span>CORE WORKSPACES</span>
             </h2>
-            <span className="text-[11px] font-mono text-[var(--muted2)]">Haz clic en cualquier pilar para comenzar a crear</span>
+            <span className="text-[11px] font-mono text-[var(--muted2)]">Click any workspace pillar to begin creating</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -159,7 +159,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-5 h-5 text-emerald-400" />
                   </div>
                   <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-950/50 border border-emerald-600/40 text-emerald-300">
-                    {menuConfiguredCount}/6 Pantallas
+                    {menuConfiguredCount}/6 Screens
                   </span>
                 </div>
 
@@ -168,15 +168,15 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     Menu Game Tool
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
-                    Diseño y arquitectura del flujo de arranque: Pantalla de Intro, Menú Principal, Carga de Partidas, Ajustes de Audio y Pantalla.
+                    Design title screen, startup intro sequence, save/load screen, settings & screen gallery flow map.
                   </p>
                 </div>
 
                 {/* Status */}
                 <div className="pt-2 border-t border-emerald-900/30 flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-[var(--muted)]">Arranque del juego:</span>
+                  <span className="text-[var(--muted)]">Game Startup:</span>
                   <span className={isMenuEnabled ? 'text-emerald-400 font-bold' : 'text-gray-500'}>
-                    {isMenuEnabled ? '● Menú Activo' : '○ Directo a Escena 1'}
+                    {isMenuEnabled ? '● Menu Active' : '○ Direct to Scene 1'}
                   </span>
                 </div>
               </div>
@@ -186,7 +186,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                   type="button"
                   className="w-full py-2 px-3.5 rounded-md border border-emerald-500/40 bg-emerald-950/40 group-hover:bg-emerald-600 text-emerald-300 group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  <span>Abrir Diseñador de Menús</span>
+                  <span>Open Menu Designer</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
                 </button>
               </div>
@@ -203,24 +203,24 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-5 h-5 text-purple-400" />
                   </div>
                   <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-purple-950/50 border border-purple-600/40 text-purple-300">
-                    {totalChapters} Capítulos • {totalScenes} Escenas
+                    {totalChapters} Chapters • {totalScenes} Scenarios
                   </span>
                 </div>
 
                 <div>
                   <h3 className="text-base font-bold text-white group-hover:text-purple-300 transition-colors tracking-wide">
-                    Visual Novel Tool
+                    Story / Visual Novel Tool
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
-                    El corazón narrativo: Guion interactivo, timeline de eventos, decisiones ramificadas, stage visual WYSIWYG y cinemáticas multitrack.
+                    Core interactive narrative: Dialogue script, event timeline, branching choices, WYSIWYG stage and multitrack cinematics.
                   </p>
                 </div>
 
                 {/* Status */}
                 <div className="pt-2 border-t border-purple-900/30 flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-[var(--muted)]">Escenario actual:</span>
+                  <span className="text-[var(--muted)]">Current Scenario:</span>
                   <span className="text-purple-300 font-bold truncate max-w-[150px]">
-                    {currentScene?.name || 'Escenario 1'}
+                    {currentScene?.name || 'Scenario 1'}
                   </span>
                 </div>
               </div>
@@ -230,7 +230,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                   type="button"
                   className="w-full py-2 px-3.5 rounded-md border border-purple-500/40 bg-purple-950/40 group-hover:bg-purple-600 text-purple-300 group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  <span>Continuar Guion & Escenas</span>
+                  <span>Continue Script & Scenarios</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
                 </button>
               </div>
@@ -247,7 +247,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-5 h-5 text-amber-400" />
                   </div>
                   <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-950/50 border border-amber-600/40 text-amber-300">
-                    {totalCharacters} Personajes • {totalAssets} Assets
+                    {totalCharacters} Characters • {totalAssets} Assets
                   </span>
                 </div>
 
@@ -256,15 +256,15 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     Gallery & Assets
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
-                    Gestión integral de recursos: Dossiers de personajes y expresiones, biblioteca de música BGM, SFX, fondos y visor de extras.
+                    Asset and character management: Character expressions, background music, SFX audio library and in-game gallery simulation.
                   </p>
                 </div>
 
                 {/* Status */}
                 <div className="pt-2 border-t border-amber-900/30 flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-[var(--muted)]">Galería de Extras:</span>
+                  <span className="text-[var(--muted)]">Extras Gallery:</span>
                   <span className="text-amber-300 font-bold">
-                    Cinemáticas & Escenarios
+                    Cinematics & Scenarios
                   </span>
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                   type="button"
                   className="w-full py-2 px-3.5 rounded-md border border-amber-500/40 bg-amber-950/40 group-hover:bg-amber-600 text-amber-300 group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  <span>Explorar Galería & Recursos</span>
+                  <span>Explore Gallery & Assets</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
                 </button>
               </div>
@@ -288,10 +288,10 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
           <div className="flex items-center justify-between pb-3 border-b border-[#232838]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--muted)] flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
-              <span>AJUSTES GLOBALES, LÓGICA & AUDITORÍA</span>
+              <span>GLOBAL SETTINGS, LOGIC & AUDIT</span>
             </span>
             <span className="text-[10px] font-mono text-[var(--muted2)]">
-              Variables: {totalVariables} activas
+              Variables: {totalVariables} active
             </span>
           </div>
 
@@ -305,7 +305,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white group-hover:text-amber-300">Variables & Flags</h4>
-                <p className="text-[10px] text-[var(--muted)]">Lógica de bifurcaciones</p>
+                <p className="text-[10px] text-[var(--muted)]">Branching logic & conditions</p>
               </div>
             </button>
 
@@ -318,7 +318,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white group-hover:text-cyan-300">Global Text Box</h4>
-                <p className="text-[10px] text-[var(--muted)]">Estilo y tipografía de diálogo</p>
+                <p className="text-[10px] text-[var(--muted)]">Dialogue style & typography</p>
               </div>
             </button>
 
@@ -331,7 +331,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </div>
               <div>
                 <h4 className="text-xs font-bold text-emerald-300">Project Doctor</h4>
-                <p className="text-[10px] text-[var(--muted)]">Auditoría y enlaces rotos</p>
+                <p className="text-[10px] text-[var(--muted)]">Health audit & broken links</p>
               </div>
             </button>
 
@@ -343,8 +343,8 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white group-hover:text-purple-300">Mapa Narrativo</h4>
-                <p className="text-[10px] text-[var(--muted)]">Grafo de escenas completo</p>
+                <h4 className="text-xs font-bold text-white group-hover:text-purple-300">Narrative Map</h4>
+                <p className="text-[10px] text-[var(--muted)]">Full scene graph & flow</p>
               </div>
             </button>
           </div>
@@ -358,7 +358,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
           onClick={onExit}
           className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
         >
-          <span>← Volver a la lista de proyectos</span>
+          <span>← Return to Projects List</span>
         </button>
         <span className="font-mono text-[11px]">
           Leaf Visual Novel Engine • Next-Gen Interactive Studio

@@ -29,7 +29,7 @@ export default function GalleryAssetsWorkspaceView() {
               setCurrentWorkspace('hub');
             }}
             className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
-            title="Volver a la pantalla principal del proyecto"
+            title="Return to Master Hub"
           >
             <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
             <span>Hub</span>
@@ -46,7 +46,7 @@ export default function GalleryAssetsWorkspaceView() {
                 Gallery & Asset Studio
               </h2>
               <span className="text-[10px] text-[var(--muted)] font-mono">
-                Personajes, biblioteca de medios y galería de extras
+                Character rosters, multimedia assets and in-game gallery simulation
               </span>
             </div>
           </div>
@@ -66,7 +66,7 @@ export default function GalleryAssetsWorkspaceView() {
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5" />
-            <span>Personajes & Expresiones</span>
+            <span>Characters & Expressions</span>
           </button>
 
           <button
@@ -81,7 +81,7 @@ export default function GalleryAssetsWorkspaceView() {
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5" />
-            <span>Biblioteca Multimedia (BGM / SFX / BG)</span>
+            <span>Multimedia Library (BGM / SFX / BG)</span>
           </button>
 
           <button
@@ -96,7 +96,7 @@ export default function GalleryAssetsWorkspaceView() {
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
-            <span>Previsualizar Galería del Juego</span>
+            <span>Preview In-Game Gallery</span>
           </button>
         </div>
       </div>

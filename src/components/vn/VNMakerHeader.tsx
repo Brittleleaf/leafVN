@@ -132,7 +132,7 @@ export default function VNMakerHeader({
       </div>
 
       {/* ZONA CENTRAL: WORKSPACE SWITCHER (SOBER PHOTOSHOP STYLE) */}
-      <nav className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] rounded-lg p-0.5 shadow-sm overflow-x-auto max-w-full" aria-label="Espacios de Trabajo">
+      <nav className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] rounded-lg p-0.5 shadow-sm overflow-x-auto max-w-full" aria-label="Workspaces">
         {/* 1. Hub */}
         <button
           onClick={() => setCurrentWorkspace?.('hub')}
@@ -141,13 +141,13 @@ export default function VNMakerHeader({
               ? 'bg-[#232838] border-[#3e4660] text-white font-semibold shadow-sm'
               : 'bg-transparent border-transparent text-[#94a3b8] hover:text-white hover:bg-[#1b1f2d]'
           }`}
-          title="Master Hub — Centro de control y resumen del proyecto"
+          title="Master Hub — Project overview and control center"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 opacity-90" />
           <span>Hub</span>
         </button>
 
-        {/* 2. Menú Tool */}
+        {/* 2. Menu Tool */}
         <button
           onClick={() => setCurrentWorkspace?.('menu_tool')}
           className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
@@ -155,13 +155,13 @@ export default function VNMakerHeader({
               ? 'bg-emerald-950/70 border-emerald-500/80 text-emerald-200 font-semibold shadow-sm'
               : 'bg-transparent border-transparent text-[#94a3b8] hover:text-emerald-300 hover:bg-[#1b1f2d]'
           }`}
-          title="Menú Tool — Diagrama visual de pantallas (Intro, Título, Opciones, Cargar, Galería)"
+          title="Menu Tool — Title screen, intro sequence & menu system flow map"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Menú Tool</span>
+          <span>Menu Tool</span>
         </button>
 
-        {/* 3. Novela / Guion (Story Tool) */}
+        {/* 3. Story Tool */}
         <button
           onClick={() => setCurrentWorkspace?.('story_tool')}
           className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
@@ -169,13 +169,13 @@ export default function VNMakerHeader({
               ? 'bg-purple-950/70 border-purple-500/80 text-purple-200 font-semibold shadow-sm'
               : 'bg-transparent border-transparent text-[#94a3b8] hover:text-purple-300 hover:bg-[#1b1f2d]'
           }`}
-          title="Novela / Guion — Editor de líneas de diálogo, línea de tiempo, personajes y cinemáticas"
+          title="Story Tool — Script editor, timeline, characters and cinematics"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5 text-purple-400" />
-          <span>Novela / Guion</span>
+          <span>Story Tool</span>
         </button>
 
-        {/* 4. Galería & Assets */}
+        {/* 4. Gallery & Assets */}
         <button
           onClick={() => setCurrentWorkspace?.('gallery_assets')}
           className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
@@ -183,13 +183,13 @@ export default function VNMakerHeader({
               ? 'bg-amber-950/70 border-amber-500/80 text-amber-200 font-semibold shadow-sm'
               : 'bg-transparent border-transparent text-[#94a3b8] hover:text-amber-300 hover:bg-[#1b1f2d]'
           }`}
-          title="Galería & Assets — Gestión de personajes, biblioteca multimedia y extras in-game"
+          title="Gallery & Assets — Character rosters, media library and game extras"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5 text-amber-400" />
-          <span>Galería & Assets</span>
+          <span>Gallery & Assets</span>
         </button>
 
-        {/* 5. Ajustes del Proyecto */}
+        {/* 5. Settings */}
         <button
           onClick={() => setCurrentWorkspace?.('project_settings')}
           className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
@@ -197,10 +197,10 @@ export default function VNMakerHeader({
               ? 'bg-cyan-950/70 border-cyan-500/80 text-cyan-200 font-semibold shadow-sm'
               : 'bg-transparent border-transparent text-[#94a3b8] hover:text-cyan-300 hover:bg-[#1b1f2d]'
           }`}
-          title="Ajustes — Variables lógicas, estilo de caja de texto global y auditoría Doctor"
+          title="Settings — Variables, logic, global text box design and Project Doctor"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Ajustes</span>
+          <span>Settings</span>
         </button>
       </nav>
 
