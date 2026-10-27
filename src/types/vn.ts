@@ -573,6 +573,13 @@ export interface VNMenuSystemConfig {
   nodePositions?: Record<string, { x: number; y: number }>;
 }
 
+export type VNWorkspaceView =
+  | 'hub'               // Project Hub Dashboard / Pantalla principal del proyecto
+  | 'menu_tool'         // Menu Game Tool (arquitectura de inicio, title y flujo)
+  | 'story_tool'        // Visual Novel Tool (guion, timeline, stage WYSIWYG, cinemáticas)
+  | 'gallery_assets'    // Gallery & Assets Studio (personajes, multimedia, dossiers, extras)
+  | 'project_settings'; // Ajustes de proyecto, variables, text box y doctor diagnóstico
+
 export type VNAssetType = 'sfx' | 'bgm' | 'voice' | 'background' | 'character' | 'icon' | 'font' | 'fx' | 'text_effect' | 'cursor' | 'transition';
 export type VNAssetOrigin = 'system' | 'user';
 

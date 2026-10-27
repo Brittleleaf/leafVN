@@ -11,6 +11,7 @@ import {
   VNAssetType,
   VNAssetItem,
   VNScreenFxType,
+  VNWorkspaceView,
 } from '@/types/vn';
 import { SYSTEM_ASSETS } from '@/lib/vn/systemAssets';
 import { playSfx, playAudioPreview, stopAudioPreview } from '@/lib/audioSettings';
@@ -65,7 +66,14 @@ export function useVNMakerState(
     }
   }, []);
 
-  // Navegación activa
+  // Navegación activa y Espacio de Trabajo Principal (Hub por defecto)
+  const [currentWorkspace, setCurrentWorkspaceState] = useState<VNWorkspaceView>('hub');
+
+  const setCurrentWorkspace = useCallback((ws: VNWorkspaceView) => {
+    setCurrentWorkspaceState(ws);
+    playSfx('/assets/sfx/click intro.mp3', false, 0.25);
+  }, []);
+
   const [selectedChapterId, setSelectedChapterId] = useState<string>(story.chapters[0]?.id || '');
   const [selectedSceneId, setSelectedSceneId] = useState<string>(
     story.chapters[0]?.scenes[0]?.id || ''
@@ -719,11 +727,15 @@ export function useVNMakerState(
   }, [handlePatchCurrentLine]);
 
   const handleSelectScene = useCallback((sceneId: string) => {
+    const parentChap = story.chapters.find((c) => c.scenes.some((s) => s.id === sceneId));
+    if (parentChap) {
+      setSelectedChapterId(parentChap.id);
+    }
     setSelectedSceneId(sceneId);
     setSelectedLineIndex(0);
     playSfx('/assets/sfx/click intro.mp3', false, 0.2);
     notify('Scenario loaded');
-  }, [notify]);
+  }, [story.chapters, notify]);
 
   const handleAddScene = useCallback((
     name?: string,
@@ -1541,6 +1553,8 @@ export function useVNMakerState(
     setStory,
     editorTheme,
     handleSelectTheme,
+    currentWorkspace,
+    setCurrentWorkspace,
     selectedChapterId,
     setSelectedChapterId,
     selectedSceneId,

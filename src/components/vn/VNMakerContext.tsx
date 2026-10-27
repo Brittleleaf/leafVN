@@ -12,6 +12,7 @@ import {
   VNAssetType,
   VNAssetItem,
   VNScreenFxType,
+  VNWorkspaceView,
 } from '@/types/vn';
 import { VNEditorTheme } from '@/lib/vn/themeManager';
 import { DraggedTimelineItem } from './VNMakerTimeline';
@@ -61,7 +62,9 @@ export interface VNMakerContextType {
   editorTheme: VNEditorTheme;
   handleSelectTheme: (theme: VNEditorTheme) => void;
 
-  // Navegación
+  // Navegación y Espacios de Trabajo (Workspaces)
+  currentWorkspace: VNWorkspaceView;
+  setCurrentWorkspace: (view: VNWorkspaceView) => void;
   selectedChapterId: string;
   setSelectedChapterId: (id: string) => void;
   selectedSceneId: string;

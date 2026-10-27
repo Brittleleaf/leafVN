@@ -1,0 +1,150 @@
+"use client";
+import React, { useState } from 'react';
+import { useVNMaker } from '../VNMakerContext';
+import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
+import { playSfx, playUiSound } from '@/lib/audioSettings';
+import VariableStudioModal from '../VariableStudioModal';
+import GlobalTextBoxModal from '../GlobalTextBoxModal';
+import ProjectDoctorModal from '../ProjectDoctorModal';
+
+export default function ProjectSettingsWorkspaceView() {
+  const {
+    story,
+    setStory,
+    setCurrentWorkspace,
+    setSelectedChapterId,
+    setSelectedSceneId,
+    setSelectedLineIndex,
+    notify,
+  } = useVNMaker();
+
+  const [activeTab, setActiveTab] = useState<'variables' | 'textbox' | 'doctor' | 'general'>('variables');
+
+  return (
+    <div className="flex-1 w-full h-full flex flex-col bg-[#0b0e17] select-none overflow-hidden">
+      {/* HEADER / TOOLBAR */}
+      <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              playSfx('/assets/sfx/click intro.mp3', false, 0.25);
+              setCurrentWorkspace('hub');
+            }}
+            className="px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
+            title="Volver a la pantalla principal del proyecto"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
+            <span>Hub</span>
+          </button>
+
+          <div className="h-4 w-[1px] bg-[var(--border)]" />
+
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-xl bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-sm">
+              <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
+            </div>
+            <div>
+              <h2 className="text-xs font-bold tracking-wide uppercase text-white">
+                Project Settings & Logic
+              </h2>
+              <span className="text-[10px] text-[var(--muted)] font-mono">
+                Variables de bifurcación, estilo de texto y auditoría del proyecto
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* WORKSPACE SEGMENTED SUB-TABS */}
+        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-2xl shadow-inner">
+          <button
+            onClick={() => {
+              setActiveTab('variables');
+              playUiSound('select', 0.4);
+            }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'variables'
+                ? 'bg-amber-600 text-white shadow-md'
+                : 'text-[var(--muted)] hover:text-white'
+            }`}
+          >
+            <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5" />
+            <span>Variables & Lógica ({story.variables?.length || 0})</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('textbox');
+              playUiSound('select', 0.4);
+            }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'textbox'
+                ? 'bg-cyan-600 text-white shadow-md'
+                : 'text-[var(--muted)] hover:text-white'
+            }`}
+          >
+            <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
+            <span>Estilo Text Box Global</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('doctor');
+              playUiSound('select', 0.4);
+            }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'doctor'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-[var(--muted)] hover:text-white'
+            }`}
+          >
+            <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
+            <span>Project Doctor (Auditoría)</span>
+          </button>
+        </div>
+      </div>
+
+      {/* CONTENT AREA */}
+      <div className="flex-1 relative overflow-hidden">
+        {activeTab === 'variables' && (
+          <div className="w-full h-full relative">
+            <VariableStudioModal
+              story={story}
+              onUpdateStory={(updated) => setStory(updated)}
+              onClose={() => setCurrentWorkspace('hub')}
+              notify={notify}
+            />
+          </div>
+        )}
+
+        {activeTab === 'textbox' && (
+          <div className="w-full h-full relative">
+            <GlobalTextBoxModal
+              story={story}
+              onUpdateStory={(updated) => setStory(updated)}
+              onOpenCharacterStudio={() => setCurrentWorkspace('gallery_assets')}
+              onClose={() => setCurrentWorkspace('hub')}
+            />
+          </div>
+        )}
+
+        {activeTab === 'doctor' && (
+          <div className="w-full h-full relative">
+            <ProjectDoctorModal
+              story={story}
+              onNavigateToIssue={(chapterId, sceneId, lineIndex) => {
+                setSelectedChapterId(chapterId);
+                setSelectedSceneId(sceneId);
+                if (typeof lineIndex === 'number') {
+                  setSelectedLineIndex(lineIndex);
+                }
+                setCurrentWorkspace('story_tool');
+                notify('Navegando al escenario reportado por Project Doctor');
+              }}
+              onClose={() => setCurrentWorkspace('hub')}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

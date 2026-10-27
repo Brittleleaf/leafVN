@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from 'react';
-import { VNStory, VNChapter } from '@/types/vn';
+import { VNStory, VNChapter, VNWorkspaceView } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES } from '@/lib/vn/themeManager';
 
 interface VNMakerHeaderProps {
   story: VNStory;
   currentChapter: VNChapter | undefined;
+  currentWorkspace?: VNWorkspaceView;
+  setCurrentWorkspace?: (ws: VNWorkspaceView) => void;
   activeGlobalModal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null;
   setActiveGlobalModal: (modal: any) => void;
   canUndo: boolean;
@@ -28,6 +30,8 @@ interface VNMakerHeaderProps {
 export default function VNMakerHeader({
   story,
   currentChapter,
+  currentWorkspace = 'hub',
+  setCurrentWorkspace,
   activeGlobalModal,
   setActiveGlobalModal,
   canUndo,
@@ -127,133 +131,78 @@ export default function VNMakerHeader({
         </div>
       </div>
 
-      {/* ZONA CENTRAL: DOCK UNIFICADO DE ESTUDIOS */}
-      <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-2xl p-1 shadow-sm overflow-x-auto max-w-full backdrop-blur-sm">
-        {/* Capítulos */}
+      {/* ZONA CENTRAL: WORKSPACE SWITCHER */}
+      <nav className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-2xl p-1 shadow-sm overflow-x-auto max-w-full backdrop-blur-sm" aria-label="Espacios de Trabajo">
+        {/* 1. Hub */}
         <button
-          onClick={() => setActiveGlobalModal('chapter')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'chapter'
+          onClick={() => setCurrentWorkspace?.('hub')}
+          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+            currentWorkspace === 'hub'
               ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
               : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
           }`}
-          title="Chapter Studio and Manager"
+          title="Master Hub — Centro de control y resumen del proyecto"
         >
-          <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 opacity-80" />
-          <span>Chapters</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)]">
-            {story.chapters.length}
-          </span>
+          <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 opacity-90" />
+          <span>Hub</span>
         </button>
 
-        {/* Escenarios */}
+        {/* 2. Menú Tool */}
         <button
-          onClick={() => setActiveGlobalModal('scenes')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'scenes'
-              ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
-          }`}
-          title="Scenario Studio and Library"
-        >
-          <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5 opacity-80" />
-          <span>Scenarios</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)]">
-            {currentChapter?.scenes.length || 0}
-          </span>
-        </button>
-
-
-        {/* Personajes */}
-        <button
-          onClick={() => setActiveGlobalModal('characters')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'characters'
-              ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
-          }`}
-          title="Character and Expression Studio"
-        >
-          <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5 opacity-80" />
-          <span>Characters</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)]">
-            {story.characters.length}
-          </span>
-        </button>
-
-        {/* Variables */}
-        <button
-          onClick={() => setActiveGlobalModal('variables')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'variables'
-              ? 'bg-amber-950/80 border-amber-500 text-amber-200 shadow-md ring-1 ring-amber-500/40 font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-amber-300 hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
-          }`}
-          title="Global Variables and Branching Logic"
-        >
-          <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5 text-amber-400" />
-          <span>Variables</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)]">
-            {story.variables?.length || 0}
-          </span>
-        </button>
-
-        {/* Galería Assets */}
-        <button
-          onClick={() => setActiveGlobalModal('assets')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'assets'
-              ? 'bg-emerald-950/80 border-emerald-500 text-emerald-200 shadow-md ring-1 ring-emerald-500/40 font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-emerald-300 hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
-          }`}
-          title="Central Asset Gallery (SFX, BGM, Backgrounds, Sprites, Icons)"
-        >
-          <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Assets</span>
-        </button>
-
-        {/* Textbox */}
-        <button
-          onClick={() => setActiveGlobalModal('textbox')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'textbox'
-              ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
-          }`}
-          title="Global Text Box Design and Style"
-        >
-          <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5 opacity-80" />
-          <span>Text Box</span>
-        </button>
-
-        {/* Menu Game Tool */}
-        <button
-          onClick={() => setActiveGlobalModal('menu_tool')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'menu_tool'
+          onClick={() => setCurrentWorkspace?.('menu_tool')}
+          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+            currentWorkspace === 'menu_tool'
               ? 'bg-emerald-500/25 border-emerald-500 text-emerald-800 dark:text-emerald-100 shadow-[0_0_12px_rgba(16,185,129,0.35)] font-bold'
               : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-emerald-400 hover:bg-[var(--btn-hover-bg)] hover:border-emerald-500/50'
           }`}
-          title="Menu Game Tool — Title screen, intro sequence & menu system flow map"
+          title="Menú Tool — Diagrama visual de pantallas (Intro, Título, Opciones, Cargar, Galería)"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Menu Tool</span>
+          <span>Menú Tool</span>
         </button>
 
-        {/* Project Doctor */}
+        {/* 3. Novela / Guion (Story Tool) */}
         <button
-          onClick={() => setActiveGlobalModal('doctor')}
-          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
-            activeGlobalModal === 'doctor'
-              ? 'bg-emerald-500/25 border-emerald-500 text-emerald-800 dark:text-emerald-100 shadow-[0_0_12px_rgba(16,185,129,0.35)] font-bold'
-              : 'bg-[var(--btn-bg)] border-emerald-500/30 text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-100 hover:bg-emerald-500/15 hover:border-emerald-500/60'
+          onClick={() => setCurrentWorkspace?.('story_tool')}
+          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+            currentWorkspace === 'story_tool'
+              ? 'bg-purple-500/25 border-purple-500 text-purple-800 dark:text-purple-100 shadow-[0_0_12px_rgba(168,85,247,0.35)] font-bold'
+              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-purple-300 hover:bg-[var(--btn-hover-bg)] hover:border-purple-500/50'
           }`}
-          title="Run project health diagnostic & broken link audit"
+          title="Novela / Guion — Editor de líneas de diálogo, línea de tiempo, personajes y cinemáticas"
         >
-          <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-          <span>Doctor</span>
+          <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5 text-purple-400" />
+          <span>Novela / Guion</span>
         </button>
-      </div>
+
+        {/* 4. Galería & Assets */}
+        <button
+          onClick={() => setCurrentWorkspace?.('gallery_assets')}
+          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+            currentWorkspace === 'gallery_assets'
+              ? 'bg-amber-500/25 border-amber-500 text-amber-800 dark:text-amber-100 shadow-[0_0_12px_rgba(245,158,11,0.35)] font-bold'
+              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-amber-300 hover:bg-[var(--btn-hover-bg)] hover:border-amber-500/50'
+          }`}
+          title="Galería & Assets — Gestión de personajes, biblioteca multimedia y extras in-game"
+        >
+          <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5 text-amber-400" />
+          <span>Galería & Assets</span>
+        </button>
+
+        {/* 5. Ajustes del Proyecto */}
+        <button
+          onClick={() => setCurrentWorkspace?.('project_settings')}
+          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+            currentWorkspace === 'project_settings'
+              ? 'bg-cyan-500/25 border-cyan-500 text-cyan-800 dark:text-cyan-100 shadow-[0_0_12px_rgba(6,182,212,0.35)] font-bold'
+              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--btn-hover-bg)] hover:border-cyan-500/50'
+          }`}
+          title="Ajustes — Variables lógicas, estilo de caja de texto global y auditoría Doctor"
+        >
+          <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Ajustes</span>
+        </button>
+      </nav>
 
       {/* ZONA DERECHA: ACCIONES Y MENÚ DE ARCHIVO */}
       <div className="flex items-center gap-2 shrink-0">
