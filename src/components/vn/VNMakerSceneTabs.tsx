@@ -168,12 +168,45 @@ export default function VNMakerSceneTabs() {
                       <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3 h-3 text-sky-400 shrink-0" />
                       <span>{sc.name}</span>
                     </span>
-                  ) : sc.sceneType === 'event' && sc.eventSubtype === 'static' ? (
-                    <span className="truncate flex items-center gap-1.5 text-red-300 font-bold">
-                      <GuiIconRenderer icon={GUI_ICONS.general.dead} className="w-3 h-3 text-red-400 shrink-0" />
-                      <span>{sc.name}</span>
-                    </span>
-                  ) : (
+                  ) : sc.sceneType === 'event' && sc.eventSubtype === 'static' ? (() => {
+                    const purpose = sc.staticScreenConfig?.purpose;
+                    let icon = GUI_ICONS.general.staticScreen;
+                    let textClass = 'text-purple-300';
+                    let iconClass = 'text-purple-400';
+
+                    if (purpose === 'title') {
+                      icon = GUI_ICONS.general.gameMenu;
+                      textClass = 'text-emerald-300';
+                      iconClass = 'text-emerald-400';
+                    } else if (purpose === 'intro') {
+                      icon = GUI_ICONS.media.video;
+                      textClass = 'text-sky-300';
+                      iconClass = 'text-sky-400';
+                    } else if (purpose === 'load_game') {
+                      icon = GUI_ICONS.general.save;
+                      textClass = 'text-cyan-300';
+                      iconClass = 'text-cyan-400';
+                    } else if (purpose === 'settings') {
+                      icon = GUI_ICONS.general.gear;
+                      textClass = 'text-pink-300';
+                      iconClass = 'text-pink-400';
+                    } else if (purpose === 'gallery') {
+                      icon = GUI_ICONS.general.gallery;
+                      textClass = 'text-amber-300';
+                      iconClass = 'text-amber-400';
+                    } else if (purpose === 'death') {
+                      icon = GUI_ICONS.general.dead;
+                      textClass = 'text-red-300';
+                      iconClass = 'text-red-400';
+                    }
+
+                    return (
+                      <span className={`truncate flex items-center gap-1.5 ${textClass} font-bold`}>
+                        <GuiIconRenderer icon={icon} className={`w-3 h-3 ${iconClass} shrink-0`} />
+                        <span>{sc.name}</span>
+                      </span>
+                    );
+                  })() : (
                     <span className="truncate flex items-center gap-1.5">
                       <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3 h-3 text-gray-400 shrink-0" />
                       <span>{sc.name}</span>
@@ -196,6 +229,16 @@ export default function VNMakerSceneTabs() {
         >
           <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-3.5 h-3.5 text-[var(--accent)]" />
           <span>View Map</span>
+        </button>
+
+        {/* 2. Menu Game Tool */}
+        <button
+          onClick={() => setActiveGlobalModal('menu_tool')}
+          className="px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border border-emerald-500/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 transition-all shadow-sm active:scale-95"
+          title="Open Menu Game Tool flow map"
+        >
+          <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Menu Tool</span>
         </button>
 
         {/* 3. Dropdown Menu for '+ New Scene' */}
@@ -236,14 +279,14 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-xl flex items-center gap-3 hover:bg-red-950/40 text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-xl flex items-center gap-3 hover:bg-purple-950/40 text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
-                <div className="w-7 h-7 rounded-lg bg-red-500/20 text-red-300 border border-red-500/40 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <GuiIconRenderer icon={GUI_ICONS.general.dead} className="w-4 h-4 text-red-300" />
+                <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-purple-300" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-xs text-red-300">+ Static Screen</span>
-                  <span className="text-[10px] text-gray-400">Death, game over, or title card</span>
+                  <span className="font-bold text-xs text-purple-300">+ Static Screen</span>
+                  <span className="text-[10px] text-gray-400">Title, intro, load, settings or death</span>
                 </div>
               </button>
 

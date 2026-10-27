@@ -99,6 +99,38 @@ export function StaticScreenVisualSection({
 
   return (
     <>
+      {/* 0. PURPOSE-SPECIFIC CONFIGURATION (GALLERY DEFAULT TAB) */}
+      {config.purpose === 'gallery' && (
+        <div className="space-y-2 p-3 rounded-xl border border-amber-500/40 bg-amber-950/20 backdrop-blur-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-amber-400" />
+              <span>Pestaña Inicial de Galería</span>
+            </span>
+            <span className="text-[9px] font-mono text-amber-300/80">Default Tab</span>
+          </div>
+          <div className="grid grid-cols-3 gap-1 pt-0.5">
+            {(['cinematics', 'scenarios', 'characters'] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => {
+                  updateConfig({ galleryTab: tab });
+                  playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+                }}
+                className={`py-1.5 px-2 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer border ${
+                  (config.galleryTab || 'cinematics') === tab
+                    ? 'bg-amber-500 text-black border-amber-300 shadow-sm font-bold'
+                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white'
+                }`}
+              >
+                {tab === 'cinematics' ? 'Cinemáticas' : tab === 'scenarios' ? 'Escenarios' : 'Personajes'}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 1. MEDIA & BACKGROUND GALLERY SECTION */}
       <div className="space-y-3 p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm shadow-sm">
         <div className="flex items-center justify-between pb-1 border-b border-[var(--border)]">

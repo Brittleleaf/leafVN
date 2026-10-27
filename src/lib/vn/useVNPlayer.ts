@@ -42,7 +42,10 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     initialSaveState?.currentChapterId || story.chapters[0]?.id || ''
   );
   const [currentSceneId, setCurrentSceneId] = useState<string>(
-    initialSaveState?.currentSceneId || story.chapters[0]?.startSceneId || story.chapters[0]?.scenes[0]?.id || ''
+    initialSaveState?.currentSceneId ||
+    (story.menuSystemConfig?.enabled
+      ? (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId || story.chapters[0]?.startSceneId || story.chapters[0]?.scenes[0]?.id || '')
+      : (story.chapters[0]?.startSceneId || story.chapters[0]?.scenes[0]?.id || ''))
   );
   const [eventIndex, setEventIndex] = useState<number>(initialSaveState?.eventIndex || 0);
   const [variablesState, setVariablesState] = useState<Record<string, boolean | string | number>>(
@@ -1754,7 +1757,9 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     setLoadingScreen(null);
 
     const firstChapter = story.chapters[0];
-    const firstSceneId = firstChapter?.startSceneId || firstChapter?.scenes[0]?.id || '';
+    const firstSceneId = (story.menuSystemConfig?.enabled && (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId))
+      ? (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId!)
+      : (firstChapter?.startSceneId || firstChapter?.scenes[0]?.id || '');
     const isSameScene = firstSceneId === currentSceneId;
 
     if (isSameScene) {

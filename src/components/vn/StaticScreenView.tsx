@@ -793,7 +793,7 @@ export default function StaticScreenView({
 
       {/* Interactive Purpose-specific System Widgets (Load Game, Settings, Gallery) */}
       {config.purpose === 'load_game' && (
-        <div className="absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 pointer-events-auto">
+        <div className={`absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}>
           <StaticScreenSaveLoadWidget
             isInteractive={isInteractive}
             onLoadSlot={(slot) => {
@@ -808,7 +808,7 @@ export default function StaticScreenView({
       )}
 
       {config.purpose === 'settings' && (
-        <div className="absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 pointer-events-auto">
+        <div className={`absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}>
           <StaticScreenSettingsWidget
             isInteractive={isInteractive}
           />
@@ -816,7 +816,7 @@ export default function StaticScreenView({
       )}
 
       {config.purpose === 'gallery' && (
-        <div className="absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 pointer-events-auto">
+        <div className={`absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}>
           <StaticScreenGalleryWidget
             story={story}
             initialTab={config.galleryTab || 'cinematics'}

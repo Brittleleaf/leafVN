@@ -232,6 +232,32 @@ export default function MenuGameToolModal({
     });
   };
 
+  const isMenuEnabled = menuConfig.enabled !== false;
+
+  const handleToggleMenuEnabled = () => {
+    const nextState = !isMenuEnabled;
+    onUpdateStory({
+      ...story,
+      menuSystemConfig: {
+        ...menuConfig,
+        enabled: nextState,
+      },
+    });
+    playUiSound('select', 0.5);
+    notify(
+      nextState
+        ? 'Sistema de Menú Activado: El juego iniciará desde Intro / Menú Principal'
+        : 'Sistema de Menú Desactivado: El juego iniciará directo en el Capítulo 1'
+    );
+  };
+
+  const handlePlaytestMenu = () => {
+    playSfx('/assets/sfx/click intro.mp3', false, 0.4);
+    if (typeof window !== 'undefined') {
+      window.open('/player', '_blank');
+    }
+  };
+
   // Assign or reassign a scene to a role
   const handleAssignSceneToRole = (role: MenuScreenRole, sceneId: string) => {
     const keyMap: Record<MenuScreenRole, keyof VNMenuSystemConfig> = {
@@ -542,6 +568,30 @@ export default function MenuGameToolModal({
 
         {/* Action Controls */}
         <div className="flex items-center gap-2">
+          {/* Menu Enabled Toggle */}
+          <button
+            onClick={handleToggleMenuEnabled}
+            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm ${
+              isMenuEnabled
+                ? 'border-emerald-500/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50'
+                : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-white'
+            }`}
+            title="Activa o desactiva que el juego arranque en la Intro/Menú Principal"
+          >
+            <div className={`w-2 h-2 rounded-full ${isMenuEnabled ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bg-gray-500'}`} />
+            <span>{isMenuEnabled ? 'Menú Activo en Juego' : 'Menú Omitido'}</span>
+          </button>
+
+          {/* Playtest Menu Button */}
+          <button
+            onClick={handlePlaytestMenu}
+            className="px-3 py-1.5 rounded-xl border border-sky-500/60 bg-sky-950/40 text-sky-300 hover:bg-sky-900/50 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+            title="Abre el reproductor para probar la experiencia de menú en tiempo real"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-sky-400" />
+            <span>Probar Menú</span>
+          </button>
+
           {/* Generate Missing Screens Button */}
           {configuredCount < 6 && (
             <button
@@ -863,16 +913,31 @@ export default function MenuGameToolModal({
                   {/* Configure Button */}
                   <div className="flex items-center gap-1.5 pt-1">
                     {assignedScene ? (
-                      <button
-                        onClick={() => {
-                          setEditingSceneId(assignedScene.id);
-                          playSfx('/assets/sfx/click intro.mp3', false, 0.3);
-                        }}
-                        className="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--accent)] hover:opacity-85 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
-                      >
-                        <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
-                        <span>Configurar Pantalla</span>
-                      </button>
+                      assignedScene.sceneType === 'event' && assignedScene.eventSubtype === 'static' ? (
+                        <button
+                          onClick={() => {
+                            setEditingSceneId(assignedScene.id);
+                            playSfx('/assets/sfx/click intro.mp3', false, 0.3);
+                          }}
+                          className="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--accent)] hover:opacity-85 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                        >
+                          <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
+                          <span>Configurar Pantalla</span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            if (onSelectScene) onSelectScene(assignedScene.id);
+                            onClose();
+                            playSfx('/assets/sfx/click intro.mp3', false, 0.3);
+                          }}
+                          className="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold border border-purple-500/50 bg-purple-950/30 text-purple-300 hover:bg-purple-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                          title="Abrir este escenario narrativo en el editor principal"
+                        >
+                          <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5" />
+                          <span>Editar Escenario ➜</span>
+                        </button>
+                      )
                     ) : (
                       <button
                         onClick={handleGenerateMissingScreens}
