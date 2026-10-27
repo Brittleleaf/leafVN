@@ -28,7 +28,7 @@ export default function GalleryAssetsWorkspaceView() {
               playSfx('/assets/sfx/click intro.mp3', false, 0.25);
               setCurrentWorkspace('hub');
             }}
-            className="px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
+            className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
             title="Volver a la pantalla principal del proyecto"
           >
             <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
@@ -38,7 +38,7 @@ export default function GalleryAssetsWorkspaceView() {
           <div className="h-4 w-[1px] bg-[var(--border)]" />
 
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-amber-950/60 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-sm">
+            <div className="w-7 h-7 rounded-md bg-amber-950/60 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-sm">
               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-4 h-4 text-amber-400" />
             </div>
             <div>
@@ -53,15 +53,15 @@ export default function GalleryAssetsWorkspaceView() {
         </div>
 
         {/* WORKSPACE SEGMENTED SUB-TABS */}
-        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-2xl shadow-inner">
+        <div className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] p-0.5 rounded-lg shadow-inner">
           <button
             onClick={() => {
               setActiveTab('characters');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'characters'
-                ? 'bg-[var(--accent)] text-white shadow-md'
+                ? 'bg-[#232838] border border-[#3e4660] text-white font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >
@@ -74,9 +74,9 @@ export default function GalleryAssetsWorkspaceView() {
               setActiveTab('assets');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'assets'
-                ? 'bg-[var(--accent)] text-white shadow-md'
+                ? 'bg-[#232838] border border-[#3e4660] text-white font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >
@@ -89,9 +89,9 @@ export default function GalleryAssetsWorkspaceView() {
               setActiveTab('extras_preview');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'extras_preview'
-                ? 'bg-amber-500 text-black shadow-md font-extrabold'
+                ? 'bg-amber-950/70 border border-amber-500/80 text-amber-200 font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >

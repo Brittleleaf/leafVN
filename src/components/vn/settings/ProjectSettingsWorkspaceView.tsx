@@ -30,7 +30,7 @@ export default function ProjectSettingsWorkspaceView() {
               playSfx('/assets/sfx/click intro.mp3', false, 0.25);
               setCurrentWorkspace('hub');
             }}
-            className="px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
+            className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer flex items-center gap-1.5 transition-all shadow-sm"
             title="Volver a la pantalla principal del proyecto"
           >
             <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
@@ -40,7 +40,7 @@ export default function ProjectSettingsWorkspaceView() {
           <div className="h-4 w-[1px] bg-[var(--border)]" />
 
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-sm">
+            <div className="w-7 h-7 rounded-md bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-sm">
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
             </div>
             <div>
@@ -55,15 +55,15 @@ export default function ProjectSettingsWorkspaceView() {
         </div>
 
         {/* WORKSPACE SEGMENTED SUB-TABS */}
-        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-2xl shadow-inner">
+        <div className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] p-0.5 rounded-lg shadow-inner">
           <button
             onClick={() => {
               setActiveTab('variables');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'variables'
-                ? 'bg-amber-600 text-white shadow-md'
+                ? 'bg-amber-950/70 border border-amber-500/80 text-amber-200 font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >
@@ -76,9 +76,9 @@ export default function ProjectSettingsWorkspaceView() {
               setActiveTab('textbox');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'textbox'
-                ? 'bg-cyan-600 text-white shadow-md'
+                ? 'bg-cyan-950/70 border border-cyan-500/80 text-cyan-200 font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >
@@ -91,9 +91,9 @@ export default function ProjectSettingsWorkspaceView() {
               setActiveTab('doctor');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'doctor'
-                ? 'bg-emerald-600 text-white shadow-md'
+                ? 'bg-emerald-950/70 border border-emerald-500/80 text-emerald-200 font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >

@@ -58,7 +58,7 @@ export default function VNMakerHeader({
       {/* Toast Notification flotante */}
       {feedbackMsg && (
         <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-50 pointer-events-none animate-fade-in">
-          <div className="bg-emerald-950/90 border border-emerald-500/80 text-emerald-200 text-xs px-3.5 py-1 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.35)] font-mono font-bold flex items-center gap-1.5 backdrop-blur-md">
+          <div className="bg-emerald-950/95 border border-emerald-500/80 text-emerald-200 text-xs px-3.5 py-1 rounded-md shadow-lg font-mono font-bold flex items-center gap-1.5 backdrop-blur-md">
             <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5 text-emerald-400" />
             <span>{feedbackMsg}</span>
           </div>
@@ -70,7 +70,7 @@ export default function VNMakerHeader({
         {/* Photoshop-style Home button to return to Launcher */}
         <button
           onClick={onExit}
-          className="h-8 w-8 rounded-xl flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] active:scale-95 transition-all cursor-pointer border border-[var(--border)] hover:border-[var(--border2)] shrink-0 shadow-sm"
+          className="h-8 w-8 rounded-md flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] active:scale-95 transition-all cursor-pointer border border-[var(--border)] hover:border-[var(--border2)] shrink-0 shadow-sm"
           title="Return to Home / Projects"
           aria-label="Return to Home / Projects"
         >
@@ -80,8 +80,8 @@ export default function VNMakerHeader({
         <div className="h-4 w-[1px] bg-[var(--border2)]" />
 
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent-glow)] animate-pulse" />
-          <span className="text-xs md:text-sm font-extrabold tracking-widest text-[var(--accent)] font-mono hidden sm:inline">
+          <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent-glow)]" />
+          <span className="text-xs md:text-sm font-extrabold tracking-wider text-[var(--accent)] font-mono hidden sm:inline">
             VN STUDIO
           </span>
         </div>
@@ -91,7 +91,7 @@ export default function VNMakerHeader({
         {/* Project Selector */}
         <button
           onClick={() => setActiveGlobalModal('projects')}
-          className="flex items-center gap-1.5 text-xs text-[var(--text)] max-w-[120px] md:max-w-[180px] xl:max-w-xs truncate cursor-pointer bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] px-2.5 py-1.5 rounded-xl border border-[var(--border)] hover:border-[var(--border2)] transition-all shadow-sm"
+          className="flex items-center gap-1.5 text-xs text-[var(--text)] max-w-[120px] md:max-w-[180px] xl:max-w-xs truncate cursor-pointer bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] px-2.5 py-1.5 rounded-md border border-[var(--border)] hover:border-[var(--border2)] transition-all shadow-sm"
           title="Open Project Manager"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
@@ -100,11 +100,11 @@ export default function VNMakerHeader({
         </button>
 
         {/* UNDO / REDO BUTTONS */}
-        <div className="flex items-center gap-0.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-0.5 backdrop-blur-sm">
+        <div className="flex items-center gap-0.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-0.5 backdrop-blur-sm">
           <button
             onClick={onUndo}
             disabled={!canUndo}
-            className={`h-7 px-2.5 rounded-lg flex items-center gap-1 text-xs font-mono font-bold transition-colors ${
+            className={`h-7 px-2 rounded flex items-center gap-1 text-xs font-mono font-bold transition-colors ${
               canUndo
                 ? 'text-[var(--text)] hover:bg-[var(--btn-hover-bg)] cursor-pointer'
                 : 'text-[var(--muted2)] cursor-not-allowed opacity-40'
@@ -118,7 +118,7 @@ export default function VNMakerHeader({
           <button
             onClick={onRedo}
             disabled={!canRedo}
-            className={`h-7 px-2.5 rounded-lg flex items-center gap-1 text-xs font-mono font-bold transition-colors ${
+            className={`h-7 px-2 rounded flex items-center gap-1 text-xs font-mono font-bold transition-colors ${
               canRedo
                 ? 'text-[var(--text)] hover:bg-[var(--btn-hover-bg)] cursor-pointer'
                 : 'text-[var(--muted2)] cursor-not-allowed opacity-40'
@@ -131,15 +131,15 @@ export default function VNMakerHeader({
         </div>
       </div>
 
-      {/* ZONA CENTRAL: WORKSPACE SWITCHER */}
-      <nav className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-2xl p-1 shadow-sm overflow-x-auto max-w-full backdrop-blur-sm" aria-label="Espacios de Trabajo">
+      {/* ZONA CENTRAL: WORKSPACE SWITCHER (SOBER PHOTOSHOP STYLE) */}
+      <nav className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] rounded-lg p-0.5 shadow-sm overflow-x-auto max-w-full" aria-label="Espacios de Trabajo">
         {/* 1. Hub */}
         <button
           onClick={() => setCurrentWorkspace?.('hub')}
-          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+          className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
             currentWorkspace === 'hub'
-              ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)]'
+              ? 'bg-[#232838] border-[#3e4660] text-white font-semibold shadow-sm'
+              : 'bg-transparent border-transparent text-[#94a3b8] hover:text-white hover:bg-[#1b1f2d]'
           }`}
           title="Master Hub — Centro de control y resumen del proyecto"
         >
@@ -150,10 +150,10 @@ export default function VNMakerHeader({
         {/* 2. Menú Tool */}
         <button
           onClick={() => setCurrentWorkspace?.('menu_tool')}
-          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+          className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
             currentWorkspace === 'menu_tool'
-              ? 'bg-emerald-500/25 border-emerald-500 text-emerald-800 dark:text-emerald-100 shadow-[0_0_12px_rgba(16,185,129,0.35)] font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-emerald-400 hover:bg-[var(--btn-hover-bg)] hover:border-emerald-500/50'
+              ? 'bg-emerald-950/70 border-emerald-500/80 text-emerald-200 font-semibold shadow-sm'
+              : 'bg-transparent border-transparent text-[#94a3b8] hover:text-emerald-300 hover:bg-[#1b1f2d]'
           }`}
           title="Menú Tool — Diagrama visual de pantallas (Intro, Título, Opciones, Cargar, Galería)"
         >
@@ -164,10 +164,10 @@ export default function VNMakerHeader({
         {/* 3. Novela / Guion (Story Tool) */}
         <button
           onClick={() => setCurrentWorkspace?.('story_tool')}
-          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+          className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
             currentWorkspace === 'story_tool'
-              ? 'bg-purple-500/25 border-purple-500 text-purple-800 dark:text-purple-100 shadow-[0_0_12px_rgba(168,85,247,0.35)] font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-purple-300 hover:bg-[var(--btn-hover-bg)] hover:border-purple-500/50'
+              ? 'bg-purple-950/70 border-purple-500/80 text-purple-200 font-semibold shadow-sm'
+              : 'bg-transparent border-transparent text-[#94a3b8] hover:text-purple-300 hover:bg-[#1b1f2d]'
           }`}
           title="Novela / Guion — Editor de líneas de diálogo, línea de tiempo, personajes y cinemáticas"
         >
@@ -178,10 +178,10 @@ export default function VNMakerHeader({
         {/* 4. Galería & Assets */}
         <button
           onClick={() => setCurrentWorkspace?.('gallery_assets')}
-          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+          className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
             currentWorkspace === 'gallery_assets'
-              ? 'bg-amber-500/25 border-amber-500 text-amber-800 dark:text-amber-100 shadow-[0_0_12px_rgba(245,158,11,0.35)] font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-amber-300 hover:bg-[var(--btn-hover-bg)] hover:border-amber-500/50'
+              ? 'bg-amber-950/70 border-amber-500/80 text-amber-200 font-semibold shadow-sm'
+              : 'bg-transparent border-transparent text-[#94a3b8] hover:text-amber-300 hover:bg-[#1b1f2d]'
           }`}
           title="Galería & Assets — Gestión de personajes, biblioteca multimedia y extras in-game"
         >
@@ -192,10 +192,10 @@ export default function VNMakerHeader({
         {/* 5. Ajustes del Proyecto */}
         <button
           onClick={() => setCurrentWorkspace?.('project_settings')}
-          className={`h-8 px-3 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+          className={`h-7.5 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border ${
             currentWorkspace === 'project_settings'
-              ? 'bg-cyan-500/25 border-cyan-500 text-cyan-800 dark:text-cyan-100 shadow-[0_0_12px_rgba(6,182,212,0.35)] font-bold'
-              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--btn-hover-bg)] hover:border-cyan-500/50'
+              ? 'bg-cyan-950/70 border-cyan-500/80 text-cyan-200 font-semibold shadow-sm'
+              : 'bg-transparent border-transparent text-[#94a3b8] hover:text-cyan-300 hover:bg-[#1b1f2d]'
           }`}
           title="Ajustes — Variables lógicas, estilo de caja de texto global y auditoría Doctor"
         >
@@ -210,7 +210,7 @@ export default function VNMakerHeader({
         <div className="relative">
           <button
             onClick={() => setShowThemeMenu(!showThemeMenu)}
-            className="h-8 px-2.5 rounded-xl text-xs font-semibold cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)] text-[var(--text)] shadow-sm backdrop-blur-sm"
+            className="h-8 px-2.5 rounded-md text-xs font-medium cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)] text-[var(--text)] shadow-sm"
             title="Change Engine UI Theme (Modern Dark / Light / ROTP Theme)"
           >
             <GuiIconRenderer
@@ -240,7 +240,7 @@ export default function VNMakerHeader({
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Pestaña superior estilo carpeta / expediente */}
-                <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-xl vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
+                <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-lg vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
                   <span className="flex items-center gap-1.5">
                     <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--accent)]" />
                     <span>DOSSIER // THEME SELECTOR</span>
@@ -249,7 +249,7 @@ export default function VNMakerHeader({
                 </div>
 
                 {/* Cuerpo redondeado estilo carpeta */}
-                <div className="rounded-b-2xl rounded-tl-2xl p-2.5 vn-dossier-card flex flex-col gap-1.5">
+                <div className="rounded-b-lg rounded-tl-lg p-2.5 vn-dossier-card flex flex-col gap-1.5 border border-[var(--border)]">
                   <div className="px-2 py-0.5 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)]">
                     <span>SELECT APPEARANCE</span>
                     <span className="text-[var(--muted2)] font-mono text-[9px]">ENGINE & FONTS</span>
@@ -263,14 +263,14 @@ export default function VNMakerHeader({
                           onSelectTheme?.(th.id);
                           setShowThemeMenu(false);
                         }}
-                        className={`flex items-start gap-2.5 p-2 rounded-xl text-left transition-all cursor-pointer border backdrop-blur-md ${
+                        className={`flex items-start gap-2.5 p-2 rounded-md text-left transition-all cursor-pointer border backdrop-blur-md ${
                           isCurrent
-                            ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
+                            ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-sm font-bold'
                             : 'bg-[var(--btn-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)] text-[var(--muted)] hover:text-[var(--text)]'
                         }`}
                       >
                         <div
-                          className="w-7 h-7 rounded-lg mt-0.5 shrink-0 border flex items-center justify-center shadow-inner"
+                          className="w-7 h-7 rounded mt-0.5 shrink-0 border flex items-center justify-center shadow-inner"
                           style={{
                             backgroundColor: th.previewBg,
                             borderColor: th.previewBorder,
@@ -313,9 +313,9 @@ export default function VNMakerHeader({
         {/* Botón Ayuda Rápida */}
         <button
           onClick={() => setShowHelpGuide((prev) => !prev)}
-          className={`h-8 w-8 flex items-center justify-center rounded-xl text-xs cursor-pointer border transition-colors ${
+          className={`h-8 w-8 flex items-center justify-center rounded-md text-xs cursor-pointer border transition-colors ${
             showHelpGuide
-              ? 'bg-amber-950/60 border-amber-600 text-amber-300 shadow-[0_0_8px_rgba(217,119,6,0.3)]'
+              ? 'bg-amber-950/60 border-amber-600 text-amber-300 shadow-sm'
               : 'border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)]'
           }`}
           title={showHelpGuide ? "Hide quick help guide" : "Show quick help guide"}
@@ -326,7 +326,7 @@ export default function VNMakerHeader({
         {/* Botón Probar Historia */}
         <button
           onClick={() => onPlayStory(story)}
-          className="h-8 px-3.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_4px_16px_rgba(209,123,248,0.45)] flex items-center gap-1.5 shrink-0"
+          className="h-8 px-3.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-md text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm flex items-center gap-1.5 shrink-0"
           title="Play and test story in visual player"
         >
           <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3.5 h-3.5 text-[#0F0503]" />
@@ -336,18 +336,18 @@ export default function VNMakerHeader({
         {/* Botón Guardar */}
         <button
           onClick={onManualSave}
-          className="h-8 px-3 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)] rounded-xl text-xs font-semibold cursor-pointer flex items-center gap-1.5 transition-all shrink-0 shadow-sm"
+          className="h-8 px-3 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)] rounded-md text-xs font-semibold cursor-pointer flex items-center gap-1.5 transition-all shrink-0 shadow-sm"
           title="Save project changes (Ctrl+S)"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5 text-[var(--accent)]" />
           <span className="hidden md:inline">Save</span>
         </button>
 
-        {/* Menú Desplegable Archivo / Proyecto (Estilo Carpeta Redondeada) */}
+        {/* Menú Desplegable Archivo / Proyecto */}
         <div className="relative">
           <button
             onClick={() => setShowProjectMenu(!showProjectMenu)}
-            className="h-8 px-2.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)] rounded-xl text-xs font-semibold cursor-pointer flex items-center gap-1 transition-all shadow-sm"
+            className="h-8 px-2.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)] rounded-md text-xs font-semibold cursor-pointer flex items-center gap-1 transition-all shadow-sm"
             title="File and project options"
           >
             <span>File</span>
@@ -365,7 +365,7 @@ export default function VNMakerHeader({
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Pestaña superior estilo carpeta */}
-                <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-xl vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
+                <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-lg vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
                   <span className="flex items-center gap-1.5">
                     <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--accent)]" />
                     <span>DOSSIER // ARCHIVE & FILE</span>
@@ -375,7 +375,7 @@ export default function VNMakerHeader({
 
                 {/* Cuerpo redondeado estilo carpeta */}
                 <div
-                  className="rounded-b-2xl rounded-tl-2xl p-2 vn-dossier-card space-y-1 text-xs font-sans"
+                  className="rounded-b-lg rounded-tl-lg p-2 vn-dossier-card space-y-1 text-xs font-sans border border-[var(--border)]"
                   onClick={() => setShowProjectMenu(false)}
                 >
                   <button
