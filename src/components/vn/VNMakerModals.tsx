@@ -18,6 +18,7 @@ import AssetStudioModal from './AssetStudioModal';
 import ProjectStudioModal from './ProjectStudioModal';
 import HotspotStudioModal from './HotspotStudioModal';
 import SceneAudioModal from './SceneAudioModal';
+import MenuGameToolModal from './menu/MenuGameToolModal';
 
 export default function VNMakerModals() {
   const {
@@ -101,6 +102,23 @@ export default function VNMakerModals() {
           story={story}
           currentChapterId={selectedChapterId}
           selectedSceneId={selectedSceneId}
+          onSelectScene={(sceneId) => {
+            setSelectedSceneId(sceneId);
+            setSelectedLineIndex(0);
+          }}
+          onUpdateStory={(updatedStory) => {
+            setStory(updatedStory);
+            saveActiveStory(updatedStory);
+          }}
+          onClose={() => setActiveGlobalModal(null)}
+          notify={notify}
+        />
+      )}
+
+      {/* 4.5 MENU GAME TOOL (SISTEMA DE PANTALLAS DE MENÚ) */}
+      {activeGlobalModal === 'menu_tool' && (
+        <MenuGameToolModal
+          story={story}
           onSelectScene={(sceneId) => {
             setSelectedSceneId(sceneId);
             setSelectedLineIndex(0);

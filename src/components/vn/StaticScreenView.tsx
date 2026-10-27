@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { VNScene, VNStaticScreenConfig, VNStaticScreenButton } from '@/types/vn';
+import { VNScene, VNStory, VNStaticScreenConfig, VNStaticScreenButton } from '@/types/vn';
 import { VNScreenFxOverlay } from './VNScreenFxOverlay';
 import { ScreenFxSvgDefs, getSceneElementFxFilter, getSceneElementFxStyle } from './screenfx';
 import { playSfx } from '@/lib/audioSettings';
@@ -13,9 +13,13 @@ import { VNUniversalTransformGizmo } from './transform';
 import VNUniversalButton from './ui/VNUniversalButton';
 import { isVideoMedia } from './cinematic/layers/CinematicVisualLayer';
 import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
+import { StaticScreenSaveLoadWidget } from './staticscreen/widgets/StaticScreenSaveLoadWidget';
+import { StaticScreenSettingsWidget } from './staticscreen/widgets/StaticScreenSettingsWidget';
+import { StaticScreenGalleryWidget } from './staticscreen/widgets/StaticScreenGalleryWidget';
 
 interface StaticScreenViewProps {
   scene: VNScene;
+  story?: VNStory;
   isInteractive?: boolean; // true in VNPlayer, false in VNMaker editor preview
   selectedButtonId?: string | null;
   selectedTarget?: 'title' | 'subtitle' | string | null;
@@ -40,7 +44,12 @@ interface StaticScreenViewProps {
   onNextScene?: () => void;
   onLoadGame?: () => void;
   onMainMenu?: () => void;
+  onStartGame?: () => void;
+  onOpenSettings?: () => void;
+  onOpenGallery?: () => void;
+  onExitToIntro?: () => void;
   onJumpScene?: (targetSceneId: string) => void;
+  onLoadSlot?: (slotNumber: number) => void;
 }
 
 export const DEFAULT_DEATH_CONFIG: VNStaticScreenConfig = {
@@ -167,37 +176,141 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
   buttonsLayout: 'free',
   buttons: [
     {
-      id: 'btn-new-game',
-      label: 'NEW GAME',
-      action: 'next_scene',
+      id: 'btn-play',
+      label: 'PLAY / INICIAR',
+      action: 'start_game',
       style: 'cyber',
       size: 'lg',
       xPercent: 50,
-      yPercent: 62,
+      yPercent: 54,
     },
     {
       id: 'btn-load-game',
-      label: 'LOAD GAME',
+      label: 'LOAD GAME / CARGAR',
       action: 'load_game',
+      style: 'glass',
+      size: 'md',
+      xPercent: 50,
+      yPercent: 63,
+    },
+    {
+      id: 'btn-settings',
+      label: 'CONFIGURATION / AJUSTES',
+      action: 'open_settings',
       style: 'glass',
       size: 'md',
       xPercent: 50,
       yPercent: 72,
     },
     {
-      id: 'btn-credits',
-      label: 'CREDITS',
-      action: 'main_menu',
+      id: 'btn-gallery',
+      label: 'CINEMATICS / GALLERY',
+      action: 'open_gallery',
+      style: 'glass',
+      size: 'md',
+      xPercent: 50,
+      yPercent: 81,
+    },
+    {
+      id: 'btn-exit-intro',
+      label: 'EXIT TO INTRO',
+      action: 'exit_to_intro',
       style: 'ghost',
       size: 'sm',
       xPercent: 50,
-      yPercent: 82,
+      yPercent: 90,
+    },
+  ],
+};
+
+export const DEFAULT_LOAD_GAME_CONFIG: VNStaticScreenConfig = {
+  purpose: 'load_game',
+  title: 'PARTIDAS GUARDADAS',
+  subtitle: 'Selecciona una ranura de guardado para reanudar tu aventura',
+  titleColor: '#38bdf8',
+  subtitleColor: '#94a3b8',
+  titleAnimation: 'fade_in',
+  titleFontSize: 'xl',
+  subtitleFontSize: 'sm',
+  titleYPercent: 10,
+  subtitleYPercent: 16,
+  bgOverlayColor: 'rgba(5, 10, 20, 0.90)',
+  screenFx: 'cinema_grain',
+  fxIntensity: 'light',
+  buttonsLayout: 'free',
+  buttons: [
+    {
+      id: 'btn-back-menu',
+      label: '⬅ VOLVER AL MENÚ',
+      action: 'main_menu',
+      style: 'ghost',
+      size: 'sm',
+      xPercent: 10,
+      yPercent: 92,
+    },
+  ],
+};
+
+export const DEFAULT_SETTINGS_CONFIG: VNStaticScreenConfig = {
+  purpose: 'settings',
+  title: 'CONFIGURACIÓN DEL JUEGO',
+  subtitle: 'Ajustes de audio, resolución, pantalla, velocidad y lenguaje',
+  titleColor: '#a855f7',
+  subtitleColor: '#d4d4d8',
+  titleAnimation: 'fade_in',
+  titleFontSize: 'xl',
+  subtitleFontSize: 'sm',
+  titleYPercent: 10,
+  subtitleYPercent: 16,
+  bgOverlayColor: 'rgba(10, 5, 20, 0.92)',
+  screenFx: 'cinema_grain',
+  fxIntensity: 'light',
+  buttonsLayout: 'free',
+  buttons: [
+    {
+      id: 'btn-back-menu',
+      label: '⬅ VOLVER AL MENÚ',
+      action: 'main_menu',
+      style: 'ghost',
+      size: 'sm',
+      xPercent: 10,
+      yPercent: 92,
+    },
+  ],
+};
+
+export const DEFAULT_GALLERY_CONFIG: VNStaticScreenConfig = {
+  purpose: 'gallery',
+  galleryTab: 'cinematics',
+  title: 'GALERÍA & CINEMÁTICAS',
+  subtitle: 'Revive escenas cinemáticas, escenarios desbloqueados y perfiles de personajes',
+  titleColor: '#f59e0b',
+  subtitleColor: '#fed7aa',
+  titleAnimation: 'fade_in',
+  titleFontSize: 'xl',
+  subtitleFontSize: 'sm',
+  titleYPercent: 10,
+  subtitleYPercent: 16,
+  bgOverlayColor: 'rgba(12, 10, 6, 0.92)',
+  screenFx: 'cinema_grain',
+  fxIntensity: 'light',
+  buttonsLayout: 'free',
+  buttons: [
+    {
+      id: 'btn-back-menu',
+      label: '⬅ VOLVER AL MENÚ',
+      action: 'main_menu',
+      style: 'ghost',
+      size: 'sm',
+      xPercent: 10,
+      yPercent: 92,
     },
   ],
 };
 
 export default function StaticScreenView({
   scene,
+  story,
   isInteractive = true,
   selectedButtonId,
   selectedTarget,
@@ -212,7 +325,12 @@ export default function StaticScreenView({
   onNextScene,
   onLoadGame,
   onMainMenu,
+  onStartGame,
+  onOpenSettings,
+  onOpenGallery,
+  onExitToIntro,
   onJumpScene,
+  onLoadSlot,
 }: StaticScreenViewProps) {
   const config: VNStaticScreenConfig = scene.staticScreenConfig || DEFAULT_DEATH_CONFIG;
   const stageRef = useRef<HTMLDivElement>(null);
@@ -280,6 +398,16 @@ export default function StaticScreenView({
     }
 
     switch (button.action) {
+      case 'start_game':
+        unloadBgm();
+        if (button.targetSceneId && onJumpScene) {
+          onJumpScene(button.targetSceneId);
+        } else if (onStartGame) {
+          onStartGame();
+        } else if (onNextScene) {
+          onNextScene();
+        }
+        break;
       case 'next_scene':
         unloadBgm();
         if (onNextScene) onNextScene();
@@ -290,11 +418,44 @@ export default function StaticScreenView({
         if (onRetry) onRetry();
         break;
       case 'load_game':
-        if (onLoadGame) onLoadGame();
+        if (button.targetSceneId && onJumpScene) {
+          unloadBgm();
+          onJumpScene(button.targetSceneId);
+        } else if (onLoadGame) {
+          onLoadGame();
+        }
+        break;
+      case 'open_settings':
+        if (button.targetSceneId && onJumpScene) {
+          unloadBgm();
+          onJumpScene(button.targetSceneId);
+        } else if (onOpenSettings) {
+          onOpenSettings();
+        }
+        break;
+      case 'open_gallery':
+        if (button.targetSceneId && onJumpScene) {
+          unloadBgm();
+          onJumpScene(button.targetSceneId);
+        } else if (onOpenGallery) {
+          onOpenGallery();
+        }
+        break;
+      case 'exit_to_intro':
+        unloadBgm();
+        if (button.targetSceneId && onJumpScene) {
+          onJumpScene(button.targetSceneId);
+        } else if (onExitToIntro) {
+          onExitToIntro();
+        }
         break;
       case 'main_menu':
         unloadBgm();
-        if (onMainMenu) onMainMenu();
+        if (button.targetSceneId && onJumpScene) {
+          onJumpScene(button.targetSceneId);
+        } else if (onMainMenu) {
+          onMainMenu();
+        }
         break;
       case 'jump_scene':
         unloadBgm();
@@ -629,6 +790,40 @@ export default function StaticScreenView({
           </div>
         );
       })()}
+
+      {/* Interactive Purpose-specific System Widgets (Load Game, Settings, Gallery) */}
+      {config.purpose === 'load_game' && (
+        <div className="absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 pointer-events-auto">
+          <StaticScreenSaveLoadWidget
+            isInteractive={isInteractive}
+            onLoadSlot={(slot) => {
+              if (onLoadSlot) onLoadSlot(slot.slotNumber);
+              else if (onLoadGame) onLoadGame();
+            }}
+            onBackToMenu={() => {
+              if (onMainMenu) onMainMenu();
+            }}
+          />
+        </div>
+      )}
+
+      {config.purpose === 'settings' && (
+        <div className="absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 pointer-events-auto">
+          <StaticScreenSettingsWidget
+            isInteractive={isInteractive}
+          />
+        </div>
+      )}
+
+      {config.purpose === 'gallery' && (
+        <div className="absolute inset-x-4 sm:inset-x-8 top-[24%] bottom-[12%] z-20 pointer-events-auto">
+          <StaticScreenGalleryWidget
+            story={story}
+            initialTab={config.galleryTab || 'cinematics'}
+            isInteractive={isInteractive}
+          />
+        </div>
+      )}
 
       {/* Unified Engine Buttons (Static Screen Actions) */}
       <div className="absolute inset-0 pointer-events-none z-30">

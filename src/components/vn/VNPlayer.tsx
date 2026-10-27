@@ -167,15 +167,49 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
         {currentScene?.sceneType === 'event' && currentScene?.eventSubtype === 'static' ? (
           <StaticScreenView
             scene={currentScene}
+            story={story}
             isInteractive={true}
             onNextScene={advanceToNextScene}
             onRetry={handleRetryPrevious}
+            onStartGame={() => {
+              if (story.menuSystemConfig?.playStartSceneId) {
+                jumpToScene(story.menuSystemConfig.playStartSceneId, 0);
+              } else {
+                advanceToNextScene();
+              }
+            }}
             onLoadGame={() => {
-              setShowSaveLoadModal('load');
+              if (story.menuSystemConfig?.loadGameSceneId) {
+                jumpToScene(story.menuSystemConfig.loadGameSceneId, 0);
+              } else {
+                setShowSaveLoadModal('load');
+              }
+            }}
+            onOpenSettings={() => {
+              if (story.menuSystemConfig?.settingsSceneId) {
+                jumpToScene(story.menuSystemConfig.settingsSceneId, 0);
+              }
+            }}
+            onOpenGallery={() => {
+              if (story.menuSystemConfig?.gallerySceneId) {
+                jumpToScene(story.menuSystemConfig.gallerySceneId, 0);
+              }
+            }}
+            onExitToIntro={() => {
+              if (story.menuSystemConfig?.introSceneId) {
+                jumpToScene(story.menuSystemConfig.introSceneId, 0);
+              } else {
+                handleRestartStory();
+              }
             }}
             onMainMenu={() => {
-              if (onExit) onExit();
-              else handleRestartStory();
+              if (story.menuSystemConfig?.mainMenuSceneId) {
+                jumpToScene(story.menuSystemConfig.mainMenuSceneId, 0);
+              } else if (onExit) {
+                onExit();
+              } else {
+                handleRestartStory();
+              }
             }}
             onJumpScene={(targetId) => {
               const jumped = jumpToScene(targetId, 0);
@@ -183,6 +217,10 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 console.warn(`[VNPlayer] StaticScreen jump failed for scene "${targetId}". Advancing to next scene.`);
                 advanceToNextScene();
               }
+            }}
+            onLoadSlot={(slotNum) => {
+              const slot = saveSlots.find((s) => s.slotNumber === slotNum);
+              if (slot) handleLoadFromSlot(slot);
             }}
           />
         ) : currentScene?.sceneType === 'event' && currentScene?.eventSubtype === 'cinematic' ? (

@@ -113,6 +113,7 @@ export const GUI_ICONS = {
   // 5. Interfaz General
   general: {
     home: '/assets/image/GUI%20ICONS/home.svg',
+    gameMenu: '/assets/image/GUI%20ICONS/home.svg',
     folder: '/assets/image/GUI%20ICONS/open-folder.svg',
     files: '/assets/image/GUI%20ICONS/files.svg',
     scenario: '/assets/image/GUI%20ICONS/scenario.svg',

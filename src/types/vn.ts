@@ -281,7 +281,16 @@ export type VNEventSubtype = 'cinematic' | 'static';
 export interface VNStaticScreenButton {
   id: string;
   label: string;
-  action: 'retry_previous' | 'next_scene' | 'load_game' | 'jump_scene' | 'main_menu';
+  action:
+    | 'retry_previous'
+    | 'next_scene'
+    | 'load_game'
+    | 'jump_scene'
+    | 'main_menu'
+    | 'start_game'
+    | 'open_settings'
+    | 'open_gallery'
+    | 'exit_to_intro';
   targetSceneId?: string;
   style?: 'danger' | 'primary' | 'ghost' | 'retro' | 'glass' | 'cyber';
   sfxUrl?: string;
@@ -300,7 +309,8 @@ export interface VNStaticScreenButton {
 }
 
 export interface VNStaticScreenConfig {
-  purpose: 'death' | 'ending' | 'intro' | 'title' | 'custom';
+  purpose: 'death' | 'ending' | 'intro' | 'title' | 'custom' | 'load_game' | 'settings' | 'gallery';
+  galleryTab?: 'cinematics' | 'scenarios' | 'characters';
   title?: string;
   subtitle?: string;
   titleColor?: string;
@@ -549,6 +559,18 @@ export interface VNStory {
   chapters: VNChapter[];
   scenarios?: VNScene[]; // Biblioteca global de escenarios del proyecto (independiente del timeline)
   customAssets?: VNAssetItem[]; // Assets creados o subidos por el usuario para este proyecto
+  menuSystemConfig?: VNMenuSystemConfig;
+}
+
+export interface VNMenuSystemConfig {
+  enabled?: boolean;
+  introSceneId?: string;
+  mainMenuSceneId?: string;
+  loadGameSceneId?: string;
+  settingsSceneId?: string;
+  gallerySceneId?: string;
+  playStartSceneId?: string;
+  nodePositions?: Record<string, { x: number; y: number }>;
 }
 
 export type VNAssetType = 'sfx' | 'bgm' | 'voice' | 'background' | 'character' | 'icon' | 'font' | 'fx' | 'text_effect' | 'cursor' | 'transition';

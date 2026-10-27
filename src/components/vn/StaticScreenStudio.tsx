@@ -14,6 +14,9 @@ import StaticScreenView, {
   DEFAULT_ENDING_CONFIG,
   DEFAULT_INTRO_CONFIG,
   DEFAULT_TITLE_CONFIG,
+  DEFAULT_LOAD_GAME_CONFIG,
+  DEFAULT_SETTINGS_CONFIG,
+  DEFAULT_GALLERY_CONFIG,
 } from './StaticScreenView';
 import AssetStudioModal from './AssetStudioModal';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
@@ -30,6 +33,7 @@ interface StaticScreenStudioProps {
   story: VNStory;
   onUpdateScene: (patch: Partial<VNScene>) => void;
   onUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
+  onBackToMenuMap?: () => void;
   editorTheme?: 'default_dark' | 'default_light' | 'rotp';
 }
 
@@ -38,6 +42,7 @@ export default function StaticScreenStudio({
   story,
   onUpdateScene,
   onUpdateStoryCustomAssets,
+  onBackToMenuMap,
   editorTheme = 'default_dark',
 }: StaticScreenStudioProps) {
   const config: VNStaticScreenConfig = scene.staticScreenConfig || DEFAULT_DEATH_CONFIG;
@@ -73,7 +78,7 @@ export default function StaticScreenStudio({
     });
   };
 
-  const handleApplyPreset = (purpose: 'death' | 'ending' | 'intro' | 'title') => {
+  const handleApplyPreset = (purpose: 'death' | 'ending' | 'intro' | 'title' | 'load_game' | 'settings' | 'gallery') => {
     playSfx('/assets/sfx/open folder.mp3', false, 0.4);
     if (purpose === 'death') {
       updateConfig(DEFAULT_DEATH_CONFIG);
@@ -94,6 +99,21 @@ export default function StaticScreenStudio({
       updateConfig(DEFAULT_TITLE_CONFIG);
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Main Menu' : scene.name,
+      });
+    } else if (purpose === 'load_game') {
+      updateConfig(DEFAULT_LOAD_GAME_CONFIG);
+      onUpdateScene({
+        name: scene.name.startsWith('Scenario') ? 'Load Game Menu' : scene.name,
+      });
+    } else if (purpose === 'settings') {
+      updateConfig(DEFAULT_SETTINGS_CONFIG);
+      onUpdateScene({
+        name: scene.name.startsWith('Scenario') ? 'Configuration Menu' : scene.name,
+      });
+    } else if (purpose === 'gallery') {
+      updateConfig(DEFAULT_GALLERY_CONFIG);
+      onUpdateScene({
+        name: scene.name.startsWith('Scenario') ? 'Gallery & Cinematics' : scene.name,
       });
     }
   };
@@ -262,8 +282,19 @@ export default function StaticScreenStudio({
         
         {/* Header & Quick Presets */}
         <div className="space-y-3 pb-3 border-b border-[var(--border)]">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-2">
+              {onBackToMenuMap && (
+                <button
+                  type="button"
+                  onClick={onBackToMenuMap}
+                  className="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer shadow-sm transition-all flex items-center gap-1.5"
+                  title="Volver al Mapa de Menús"
+                >
+                  <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
+                  <span>Menu Tool</span>
+                </button>
+              )}
               <div className="w-8 h-8 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
                 <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-[var(--accent)]" />
               </div>
@@ -278,20 +309,52 @@ export default function StaticScreenStudio({
             </div>
 
             {/* Quick Presets dropdown / pill */}
-            <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-xl">
-              <span className="text-[9px] uppercase font-bold text-[var(--muted)] px-1.5 font-mono">Preset:</span>
+            <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-xl flex-wrap">
+              <span className="text-[9px] uppercase font-bold text-[var(--muted)] px-1 font-mono">Preset:</span>
               <button
                 type="button"
                 onClick={() => handleApplyPreset('title')}
-                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-emerald-400 cursor-pointer transition-colors"
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-emerald-400 cursor-pointer transition-colors"
                 title="Title / Main Menu preset"
               >
                 Title
               </button>
               <button
                 type="button"
+                onClick={() => handleApplyPreset('load_game')}
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-cyan-400 cursor-pointer transition-colors"
+                title="Load Game preset"
+              >
+                Load
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('settings')}
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-purple-400 cursor-pointer transition-colors"
+                title="Configuration / Settings preset"
+              >
+                Config
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('gallery')}
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-amber-400 cursor-pointer transition-colors"
+                title="Gallery & Cinematics preset"
+              >
+                Gallery
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('intro')}
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-sky-400 cursor-pointer transition-colors"
+                title="Chapter Intro card preset"
+              >
+                Intro
+              </button>
+              <button
+                type="button"
                 onClick={() => handleApplyPreset('death')}
-                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-red-400 cursor-pointer transition-colors"
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-red-400 cursor-pointer transition-colors"
                 title="You Died / Game Over preset"
               >
                 Death
@@ -299,18 +362,10 @@ export default function StaticScreenStudio({
               <button
                 type="button"
                 onClick={() => handleApplyPreset('ending')}
-                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-purple-400 cursor-pointer transition-colors"
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-pink-400 cursor-pointer transition-colors"
                 title="Story Ending preset"
               >
-                Ending
-              </button>
-              <button
-                type="button"
-                onClick={() => handleApplyPreset('intro')}
-                className="px-2 py-0.5 text-[10px] font-bold rounded-lg hover:bg-[var(--btn-hover-bg)] text-sky-400 cursor-pointer transition-colors"
-                title="Chapter Intro card preset"
-              >
-                Intro
+                End
               </button>
             </div>
           </div>
@@ -476,6 +531,7 @@ export default function StaticScreenStudio({
           <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)]">
             <StaticScreenView
               scene={scene}
+              story={story}
               isInteractive={false}
               selectedButtonId={selectedButtonId}
               selectedTarget={selectedTarget}

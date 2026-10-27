@@ -138,8 +138,8 @@ export interface VNMakerContextType {
   recordHistorySnapshot: () => void;
 
   // Modales y Pickers
-  activeGlobalModal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | null;
-  setActiveGlobalModal: (modal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | null) => void;
+  activeGlobalModal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null;
+  setActiveGlobalModal: (modal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null) => void;
   showCharacterPicker: boolean;
   setShowCharacterPicker: (show: boolean) => void;
   showAddActionModal: boolean;

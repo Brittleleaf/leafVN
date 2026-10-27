@@ -7,7 +7,7 @@ import { VNEditorTheme, VN_THEMES } from '@/lib/vn/themeManager';
 interface VNMakerHeaderProps {
   story: VNStory;
   currentChapter: VNChapter | undefined;
-  activeGlobalModal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | null;
+  activeGlobalModal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null;
   setActiveGlobalModal: (modal: any) => void;
   canUndo: boolean;
   canRedo: boolean;
@@ -224,6 +224,20 @@ export default function VNMakerHeader({
         >
           <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5 opacity-80" />
           <span>Text Box</span>
+        </button>
+
+        {/* Menu Game Tool */}
+        <button
+          onClick={() => setActiveGlobalModal('menu_tool')}
+          className={`h-8 px-2.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap border backdrop-blur-md shadow-sm ${
+            activeGlobalModal === 'menu_tool'
+              ? 'bg-emerald-500/25 border-emerald-500 text-emerald-800 dark:text-emerald-100 shadow-[0_0_12px_rgba(16,185,129,0.35)] font-bold'
+              : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-emerald-400 hover:bg-[var(--btn-hover-bg)] hover:border-emerald-500/50'
+          }`}
+          title="Menu Game Tool — Title screen, intro sequence & menu system flow map"
+        >
+          <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Menu Tool</span>
         </button>
 
         {/* Project Doctor */}

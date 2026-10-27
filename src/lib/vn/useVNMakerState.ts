@@ -83,7 +83,7 @@ export function useVNMakerState(
   const [showCharacterPicker, setShowCharacterPicker] = useState<boolean>(false);
   const [showAddActionModal, setShowAddActionModal] = useState<boolean>(false);
   const [activeGlobalModal, setActiveGlobalModal] = useState<
-    'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | null
+    'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null
   >(null);
   const [showHelpGuide, setShowHelpGuide] = useState<boolean>(true);
   const [isFullscreenWorkspace, setIsFullscreenWorkspace] = useState<boolean>(false);
