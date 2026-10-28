@@ -531,6 +531,14 @@ export function applyCustomAccent(accentHex: string | null): void {
 
     localStorage.setItem(CUSTOM_ACCENT_KEY, accentHex);
 
+    const bgPrefs = getStoredBgPreferences();
+    const dotsDisabledRule = !bgPrefs.showDots
+      ? `
+  --bg-dots-image: ${isLightMode ? 'var(--bg-gradient)' : 'none'} !important;
+  background-image: ${isLightMode ? 'var(--bg-gradient)' : 'none'} !important;
+`
+      : '';
+
     // Inyectar con máxima especificidad (!important) para garantizar contraste WCAG perfecto
     const cssRules = `
 :root,
@@ -569,6 +577,7 @@ export function applyCustomAccent(accentHex: string | null): void {
   --vn-accent-gradient: ${palette.vnAccentGradient} !important;
   --vn-border-active: ${palette.accent} !important;
   --vn-card-solid: ${palette.vnCardSolid} !important;
+  ${dotsDisabledRule}
 }
 `;
 
@@ -671,7 +680,25 @@ export function applyBgPreferences(prefs: Partial<VNBgPreferences>): void {
 
     // Apply to DOM
     const root = document.documentElement;
-    root.setAttribute('data-vn-no-dots', updated.showDots ? 'false' : 'true');
+    const isLightMode = getStoredTheme() === 'default_light';
+
+    if (updated.showDots) {
+      root.removeAttribute('data-vn-no-dots');
+      root.style.removeProperty('--bg-dots-image');
+      document.body?.removeAttribute('data-vn-no-dots');
+      document.querySelectorAll('.vn-engine-root').forEach((el) => {
+        el.removeAttribute('data-vn-no-dots');
+        (el as HTMLElement).style.removeProperty('background-image');
+      });
+    } else {
+      root.setAttribute('data-vn-no-dots', 'true');
+      root.style.setProperty('--bg-dots-image', isLightMode ? 'var(--bg-gradient)' : 'none');
+      document.body?.setAttribute('data-vn-no-dots', 'true');
+      document.querySelectorAll('.vn-engine-root').forEach((el) => {
+        el.setAttribute('data-vn-no-dots', 'true');
+        (el as HTMLElement).style.setProperty('background-image', isLightMode ? 'var(--bg-gradient)' : 'none', 'important');
+      });
+    }
 
     if (updated.customImage) {
       root.style.setProperty('--custom-bg-image', `url("${updated.customImage}")`);
@@ -679,6 +706,12 @@ export function applyBgPreferences(prefs: Partial<VNBgPreferences>): void {
     } else {
       root.style.removeProperty('--custom-bg-image');
       root.style.setProperty('--custom-bg-opacity', '0');
+    }
+
+    // Re-apply custom accent style tag if active
+    const customAccent = getStoredCustomAccent();
+    if (customAccent) {
+      applyCustomAccent(customAccent);
     }
   } catch {
     // ignore

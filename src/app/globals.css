@@ -1217,37 +1217,40 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 /* ========================================================
    AMBIENT BACKGROUND EFFECT (Dot-grid texture & Glow circles)
    ======================================================== */
-[data-vn-theme="default_dark"] .vn-engine-root,
-[data-vn-theme="default_dark"].vn-engine-root,
-:root:not([data-vn-theme="default_light"]):not([data-vn-theme="rotp"]) .vn-engine-root,
-:root:not([data-vn-theme="default_light"]):not([data-vn-theme="rotp"]).vn-engine-root {
-  background-color: #030207 !important;
-  background-image: 
-    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
-  background-size: 26px 26px !important;
+:root {
+  --bg-dots-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  --bg-dots-size: 26px 26px;
+}
+
+[data-vn-theme="default_light"] {
+  --bg-dots-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px), var(--bg-gradient);
+  --bg-dots-size: 26px 26px, 250% 250%;
+}
+
+.vn-engine-root {
+  background-color: var(--bg) !important;
+  background-image: var(--bg-dots-image) !important;
+  background-size: var(--bg-dots-size) !important;
   animation: none !important;
 }
 
-[data-vn-theme="default_light"] .vn-engine-root,
-[data-vn-theme="default_light"].vn-engine-root {
-  background-image: 
-    radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    var(--bg-gradient) !important;
-  background-size: 26px 26px, 250% 250% !important;
-}
-
-/* Background dots toggle (Disable Ambient Grid Dots) */
-html[data-vn-no-dots="true"] .vn-engine-root,
-html[data-vn-no-dots="true"].vn-engine-root,
+/* Background dots toggle: Completely remove dots when data-vn-no-dots is set */
+[data-vn-no-dots="true"],
 [data-vn-no-dots="true"] .vn-engine-root,
-[data-vn-no-dots="true"].vn-engine-root {
+[data-vn-no-dots="true"].vn-engine-root,
+.vn-engine-root[data-vn-no-dots="true"],
+html[data-vn-no-dots="true"] .vn-engine-root,
+html[data-vn-no-dots="true"] [data-vn-engine],
+body[data-vn-no-dots="true"] .vn-engine-root {
+  --bg-dots-image: none !important;
   background-image: none !important;
 }
 
-html[data-vn-no-dots="true"][data-vn-theme="default_light"] .vn-engine-root,
-html[data-vn-no-dots="true"][data-vn-theme="default_light"].vn-engine-root,
 [data-vn-no-dots="true"][data-vn-theme="default_light"] .vn-engine-root,
-[data-vn-no-dots="true"][data-vn-theme="default_light"].vn-engine-root {
+[data-vn-no-dots="true"][data-vn-theme="default_light"].vn-engine-root,
+html[data-vn-no-dots="true"][data-vn-theme="default_light"] .vn-engine-root,
+html[data-vn-no-dots="true"] [data-vn-theme="default_light"] .vn-engine-root {
+  --bg-dots-image: var(--bg-gradient) !important;
   background-image: var(--bg-gradient) !important;
   background-size: 250% 250% !important;
 }
