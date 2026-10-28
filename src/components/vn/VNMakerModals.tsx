@@ -164,6 +164,8 @@ export default function VNMakerModals() {
               setSelectedSceneId(ch.startSceneId || ch.scenes[0].id);
               setSelectedLineIndex(0);
             }
+            setCurrentWorkspace('story_tool');
+            setActiveGlobalModal(null);
           }}
           onUpdateStory={(updatedStory) => {
             setStory(updatedStory);
@@ -198,6 +200,7 @@ export default function VNMakerModals() {
             if (typeof lineIndex === 'number') {
               setSelectedLineIndex(lineIndex);
             }
+            setCurrentWorkspace('story_tool');
             setActiveGlobalModal(null);
           }}
           onClose={() => setActiveGlobalModal(null)}
@@ -213,6 +216,8 @@ export default function VNMakerModals() {
           onSelectScene={(scId) => {
             setSelectedSceneId(scId);
             setSelectedLineIndex(0);
+            setCurrentWorkspace('story_tool');
+            setActiveGlobalModal(null);
           }}
           onUpdateStory={(updatedStory) => {
             setStory(updatedStory);

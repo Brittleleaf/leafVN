@@ -27,6 +27,7 @@ export default function VNMakerSceneTabs() {
     setActiveGlobalModal,
     isFullscreenWorkspace,
     toggleFullscreenWorkspace,
+    setCurrentWorkspace,
   } = useVNMaker();
 
   const [isNewSceneOpen, setIsNewSceneOpen] = useState(false);
@@ -164,39 +165,39 @@ export default function VNMakerSceneTabs() {
               ) : (
                 <>
                   {sc.sceneType === 'event' && sc.eventSubtype === 'cinematic' ? (
-                    <span className="truncate flex items-center gap-1.5 text-sky-300 font-bold">
+                    <span className="truncate flex items-center gap-1.5 text-sky-700 dark:text-sky-300 font-bold">
                       <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3 h-3 text-sky-400 shrink-0" />
                       <span>{sc.name}</span>
                     </span>
                   ) : sc.sceneType === 'event' && sc.eventSubtype === 'static' ? (() => {
                     const purpose = sc.staticScreenConfig?.purpose;
                     let icon = GUI_ICONS.general.staticScreen;
-                    let textClass = 'text-purple-300';
+                    let textClass = 'text-purple-700 dark:text-purple-300';
                     let iconClass = 'text-purple-400';
 
                     if (purpose === 'title') {
                       icon = GUI_ICONS.general.gameMenu;
-                      textClass = 'text-emerald-300';
+                      textClass = 'text-emerald-700 dark:text-emerald-300';
                       iconClass = 'text-emerald-400';
                     } else if (purpose === 'intro') {
                       icon = GUI_ICONS.media.video;
-                      textClass = 'text-sky-300';
+                      textClass = 'text-sky-700 dark:text-sky-300';
                       iconClass = 'text-sky-400';
                     } else if (purpose === 'load_game') {
                       icon = GUI_ICONS.general.save;
-                      textClass = 'text-cyan-300';
+                      textClass = 'text-cyan-700 dark:text-cyan-300';
                       iconClass = 'text-cyan-400';
                     } else if (purpose === 'settings') {
                       icon = GUI_ICONS.general.gear;
-                      textClass = 'text-pink-300';
+                      textClass = 'text-pink-700 dark:text-pink-300';
                       iconClass = 'text-pink-400';
                     } else if (purpose === 'gallery') {
                       icon = GUI_ICONS.general.gallery;
-                      textClass = 'text-amber-300';
+                      textClass = 'text-amber-700 dark:text-amber-300';
                       iconClass = 'text-amber-400';
                     } else if (purpose === 'death') {
                       icon = GUI_ICONS.general.dead;
-                      textClass = 'text-red-300';
+                      textClass = 'text-red-700 dark:text-red-300';
                       iconClass = 'text-red-400';
                     }
 
@@ -233,8 +234,8 @@ export default function VNMakerSceneTabs() {
 
         {/* 2. Menu Game Tool */}
         <button
-          onClick={() => setActiveGlobalModal('menu_tool')}
-          className="px-2.5 py-1 rounded-md text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border border-emerald-500/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 transition-all shadow-sm active:scale-95"
+          onClick={() => setCurrentWorkspace('menu_tool')}
+          className="px-2.5 py-1 rounded-md text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25 transition-all shadow-sm active:scale-95"
           title="Open Menu Game Tool flow map"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-3.5 h-3.5 text-emerald-400" />

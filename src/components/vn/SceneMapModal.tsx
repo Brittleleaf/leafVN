@@ -581,7 +581,7 @@ export default function SceneMapModal({
           {unplacedScenarios.length > 0 && (
             <button
               onClick={() => setShowLibraryModal(true)}
-              className="px-2.5 py-1 bg-sky-950/80 hover:bg-sky-900 border border-sky-600/80 text-sky-200 text-xs font-bold rounded-md flex items-center gap-1.5 transition-all shadow cursor-pointer"
+              className="px-2.5 py-1 bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/50 text-sky-700 dark:text-sky-300 text-xs font-bold rounded-md flex items-center gap-1.5 transition-all shadow cursor-pointer"
               title="Insert scenario saved in library that is not in this chapter"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5 text-sky-400" />
