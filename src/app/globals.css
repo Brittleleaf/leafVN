@@ -1236,6 +1236,36 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   background-size: 26px 26px, 250% 250% !important;
 }
 
+/* Background dots toggle (Disable Ambient Grid Dots) */
+html[data-vn-no-dots="true"] .vn-engine-root,
+html[data-vn-no-dots="true"].vn-engine-root,
+[data-vn-no-dots="true"] .vn-engine-root,
+[data-vn-no-dots="true"].vn-engine-root {
+  background-image: none !important;
+}
+
+html[data-vn-no-dots="true"][data-vn-theme="default_light"] .vn-engine-root,
+html[data-vn-no-dots="true"][data-vn-theme="default_light"].vn-engine-root,
+[data-vn-no-dots="true"][data-vn-theme="default_light"] .vn-engine-root,
+[data-vn-no-dots="true"][data-vn-theme="default_light"].vn-engine-root {
+  background-image: var(--bg-gradient) !important;
+  background-size: 250% 250% !important;
+}
+
+/* Personalized Custom Background Layer */
+.vn-custom-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--custom-bg-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: var(--custom-bg-opacity, 0);
+  transition: opacity 250ms ease;
+}
+
 .vn-bg-glow {
   position: absolute;
   inset: 0;

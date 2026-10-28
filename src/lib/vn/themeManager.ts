@@ -621,12 +621,78 @@ export function setStoredTheme(theme: VNEditorTheme): void {
   }
 }
 
-export function initStoredThemeAndAccent(): { theme: VNEditorTheme; customAccent: string | null } {
+export interface VNBgPreferences {
+  showDots: boolean;
+  customImage: string | null;
+  customOpacity: number;
+}
+
+const BG_SHOW_DOTS_KEY = 'vn_bg_show_dots';
+const BG_CUSTOM_IMAGE_KEY = 'vn_bg_custom_image';
+const BG_CUSTOM_OPACITY_KEY = 'vn_bg_custom_opacity';
+
+export function getStoredBgPreferences(): VNBgPreferences {
+  if (typeof window === 'undefined') {
+    return { showDots: true, customImage: null, customOpacity: 0.35 };
+  }
+  try {
+    const showDotsStored = localStorage.getItem(BG_SHOW_DOTS_KEY);
+    const showDots = showDotsStored !== null ? showDotsStored === 'true' : true;
+    const customImage = localStorage.getItem(BG_CUSTOM_IMAGE_KEY);
+    const opacityStored = localStorage.getItem(BG_CUSTOM_OPACITY_KEY);
+    const customOpacity = opacityStored !== null ? parseFloat(opacityStored) : 0.35;
+    return {
+      showDots,
+      customImage: customImage || null,
+      customOpacity: isNaN(customOpacity) ? 0.35 : customOpacity,
+    };
+  } catch {
+    return { showDots: true, customImage: null, customOpacity: 0.35 };
+  }
+}
+
+export function applyBgPreferences(prefs: Partial<VNBgPreferences>): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getStoredBgPreferences();
+    const updated: VNBgPreferences = {
+      showDots: prefs.showDots !== undefined ? prefs.showDots : current.showDots,
+      customImage: prefs.customImage !== undefined ? prefs.customImage : current.customImage,
+      customOpacity: prefs.customOpacity !== undefined ? prefs.customOpacity : current.customOpacity,
+    };
+
+    localStorage.setItem(BG_SHOW_DOTS_KEY, updated.showDots ? 'true' : 'false');
+    if (updated.customImage) {
+      localStorage.setItem(BG_CUSTOM_IMAGE_KEY, updated.customImage);
+    } else {
+      localStorage.removeItem(BG_CUSTOM_IMAGE_KEY);
+    }
+    localStorage.setItem(BG_CUSTOM_OPACITY_KEY, updated.customOpacity.toString());
+
+    // Apply to DOM
+    const root = document.documentElement;
+    root.setAttribute('data-vn-no-dots', updated.showDots ? 'false' : 'true');
+
+    if (updated.customImage) {
+      root.style.setProperty('--custom-bg-image', `url("${updated.customImage}")`);
+      root.style.setProperty('--custom-bg-opacity', updated.customOpacity.toString());
+    } else {
+      root.style.removeProperty('--custom-bg-image');
+      root.style.setProperty('--custom-bg-opacity', '0');
+    }
+  } catch {
+    // ignore
+  }
+}
+
+export function initStoredThemeAndAccent(): { theme: VNEditorTheme; customAccent: string | null; bgPrefs: VNBgPreferences } {
   const theme = getStoredTheme();
   setStoredTheme(theme);
   const customAccent = getStoredCustomAccent();
   if (customAccent) {
     applyCustomAccent(customAccent);
   }
-  return { theme, customAccent };
+  const bgPrefs = getStoredBgPreferences();
+  applyBgPreferences(bgPrefs);
+  return { theme, customAccent, bgPrefs };
 }

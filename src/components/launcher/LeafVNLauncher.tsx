@@ -625,6 +625,9 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         <div className="vn-glow-circle vn-glow-c2" />
         <div className="vn-glow-circle vn-glow-c3" />
       </div>
+
+      {/* PERSONALIZED CUSTOM BACKGROUND LAYER */}
+      <div className="vn-custom-bg-layer" aria-hidden="true" />
       {/* 1. BARRA SUPERIOR DE LA APLICACIÓN (MENU BAR AUTÉNTICO SIN BOTONES REPETIDOS) */}
       <header className="h-11 border-b border-[var(--border)] bg-[var(--header-bg)] backdrop-blur-md flex items-center justify-between px-4 text-xs shadow-sm z-30">
         <div className="flex items-center gap-4">

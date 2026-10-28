@@ -71,6 +71,9 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
           <div className="vn-glow-circle vn-glow-c3" />
         </div>
 
+        {/* PERSONALIZED CUSTOM BACKGROUND LAYER */}
+        <div className="vn-custom-bg-layer" aria-hidden="true" />
+
         {/* 1. GLOBAL HEADER BAR (Hidden in Fullscreen Workspace Mode) */}
         {!isFullscreenWorkspace && (
           <VNMakerHeader
