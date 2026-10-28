@@ -29,48 +29,58 @@
 
 [data-vn-theme="default_dark"],
 :root {
-  --bg: #010103;
-  --bg-gradient: linear-gradient(135deg, #010103 0%, #2E1256 50%, #010103 100%);
-  --panel: rgba(46, 18, 86, 0.20);
-  --panel2: rgba(46, 18, 86, 0.35);
-  --panel-hover: rgba(177, 91, 228, 0.15);
-  --border: rgba(177, 91, 228, 0.25);
-  --border2: rgba(209, 123, 248, 0.40);
-  --border-hover: rgba(209, 123, 248, 0.60);
-  --text: #F7F6FE;
-  --muted: #d8b4fe;
-  --muted2: #a855f7;
-  --accent: #D17BF8;
-  --accent2: #B15BE4;
-  --accent-glow: rgba(209, 123, 248, 0.45);
-  --accent-surface: rgba(209, 123, 248, 0.18);
-  --accent-border: rgba(209, 123, 248, 0.50);
-  --danger: #ff4d5e;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.60);
-  --focus: 0 0 0 3px rgba(209, 123, 248, 0.30);
+  --bg: #07070a;
+  --bg-alt: #0b0c11;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #12131d 0%, #07070a 75%);
+  --bg-grid: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-strong: rgba(255, 255, 255, 0.065);
+  --panel: rgba(18, 19, 26, 0.65);
+  --panel2: rgba(24, 25, 36, 0.75);
+  --panel-hover: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.09);
+  --border2: rgba(255, 255, 255, 0.16);
+  --border-hover: rgba(167, 139, 250, 0.50);
+  --text: #f4f4f6;
+  --muted: #9699a6;
+  --muted2: #5c606c;
+  --indigo: #6366f1;
+  --violet: #a78bfa;
+  --cyan: #22d3ee;
+  --accent: #a78bfa;
+  --accent2: #6366f1;
+  --accent-cyan: #22d3ee;
+  --accent-grad: linear-gradient(100deg, var(--indigo), var(--violet) 55%, var(--cyan));
+  --accent-glow: rgba(99, 102, 241, 0.45);
+  --accent-surface: rgba(99, 102, 241, 0.12);
+  --accent-border: rgba(167, 139, 250, 0.35);
+  --danger: #ef4444;
+  --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.65), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 20px 50px -20px rgba(0, 0, 0, 0.65), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+  --focus: 0 0 0 2px var(--indigo);
   --radius: 6px;
   --radius2: 8px;
-  --font: var(--font-barlow), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  --card-bg: linear-gradient(135deg, rgba(46, 18, 86, 0.55) 0%, rgba(1, 1, 3, 0.75) 100%);
-  --btn-bg: rgba(46, 18, 86, 0.55);
-  --btn-hover-bg: rgba(209, 123, 248, 0.25);
-  --btn-ghost-bg: rgba(255, 255, 255, 0.06);
-  --well-bg: rgba(1, 1, 3, 0.65);
-  --well-focus-bg: rgba(46, 18, 86, 0.85);
-  --header-bg: rgba(1, 1, 3, 0.85);
-  --modal-bg: linear-gradient(180deg, rgba(35, 14, 60, 0.96), rgba(1, 1, 3, 0.98));
-  --dropdown-bg: rgba(18, 8, 32, 0.88);
-  --icon-color: #F7F6FE;
+  --font: var(--font-barlow), 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --card-bg: linear-gradient(180deg, rgba(20, 21, 29, 0.78), rgba(12, 13, 18, 0.72));
+  --btn-bg: rgba(255, 255, 255, 0.045);
+  --btn-hover-bg: rgba(255, 255, 255, 0.08);
+  --btn-ghost-bg: rgba(255, 255, 255, 0.03);
+  --well-bg: rgba(7, 7, 10, 0.70);
+  --well-focus-bg: rgba(15, 16, 24, 0.85);
+  --header-bg: linear-gradient(180deg, rgba(18, 19, 26, 0.85), rgba(12, 13, 18, 0.72));
+  --modal-bg: linear-gradient(180deg, rgba(20, 21, 29, 0.96), rgba(12, 13, 18, 0.98));
+  --dropdown-bg: linear-gradient(180deg, rgba(20, 21, 29, 0.95), rgba(13, 14, 19, 0.95));
+  --icon-color: #f4f4f6;
 
   /* Backward compatibility aliases */
   --vn-canvas: var(--bg);
   --vn-surface: var(--panel2);
-  --vn-surface-solid: #0F0503;
+  --vn-surface-solid: #0b0c11;
   --vn-surface-hover: var(--panel-hover);
   --vn-card: var(--panel);
-  --vn-card-solid: #12081d;
+  --vn-card-solid: #12131a;
   --vn-border: var(--border);
-  --vn-border-subtle: rgba(177, 91, 228, 0.15);
+  --vn-border-subtle: rgba(255, 255, 255, 0.05);
   --vn-border-hover: var(--border-hover);
   --vn-border-active: var(--accent);
   --vn-text-main: var(--text);
@@ -80,55 +90,65 @@
   --vn-header-bg: var(--header-bg);
   --vn-active-tab-bg: var(--accent-surface);
   --vn-active-tab-border: var(--accent-border);
-  --vn-active-tab-text: #F7F6FE;
+  --vn-active-tab-text: #ffffff;
   --vn-accent-primary: var(--accent);
-  --vn-accent-gradient: linear-gradient(135deg, #D17BF8 0%, #B15BE4 100%);
+  --vn-accent-gradient: var(--accent-grad);
   --vn-card-shadow: var(--shadow);
 }
 
 [data-vn-theme="default_light"] {
-  --bg: #F5F2FF;
-  --bg-gradient: linear-gradient(135deg, #DDD7FF 0%, #F5F2FF 45%, #EADBFA 80%, #FAF9FE 100%);
-  --panel: rgba(255, 255, 255, 0.45);
-  --panel2: rgba(221, 215, 255, 0.40);
-  --panel-hover: rgba(255, 255, 255, 0.75);
-  --border: rgba(104, 81, 223, 0.18);
-  --border2: rgba(104, 81, 223, 0.30);
-  --border-hover: rgba(104, 81, 223, 0.45);
-  --text: #0F0503;
-  --muted: #2d1832;
-  --muted2: #5b4b66;
-  --accent: #6851DF;
-  --accent2: #523bc7;
-  --accent-glow: rgba(104, 81, 223, 0.30);
-  --accent-surface: rgba(104, 81, 223, 0.12);
-  --accent-border: rgba(104, 81, 223, 0.40);
+  --bg: #f8f9fc;
+  --bg-alt: #ffffff;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #f0f2f8 75%);
+  --bg-grid: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  --surface: rgba(0, 0, 0, 0.025);
+  --surface-strong: rgba(0, 0, 0, 0.05);
+  --panel: rgba(255, 255, 255, 0.80);
+  --panel2: rgba(244, 245, 250, 0.85);
+  --panel-hover: rgba(0, 0, 0, 0.04);
+  --border: rgba(0, 0, 0, 0.08);
+  --border2: rgba(0, 0, 0, 0.14);
+  --border-hover: rgba(99, 102, 241, 0.50);
+  --text: #0f1117;
+  --muted: #5a5f72;
+  --muted2: #8c91a4;
+  --indigo: #4f46e5;
+  --violet: #7c3aed;
+  --cyan: #0891b2;
+  --accent: #6366f1;
+  --accent2: #4f46e5;
+  --accent-cyan: #0891b2;
+  --accent-grad: linear-gradient(100deg, var(--indigo), var(--violet) 55%, var(--cyan));
+  --accent-glow: rgba(79, 70, 229, 0.25);
+  --accent-surface: rgba(79, 70, 229, 0.08);
+  --accent-border: rgba(79, 70, 229, 0.28);
   --danger: #dc2626;
-  --shadow: 0 10px 30px rgba(104, 81, 223, 0.08);
-  --focus: 0 0 0 3px rgba(104, 81, 223, 0.25);
+  --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --focus: 0 0 0 2px var(--indigo);
   --radius: 6px;
   --radius2: 8px;
-  --font: var(--font-barlow), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.80) 0%, rgba(245, 242, 255, 0.55) 100%);
-  --btn-bg: rgba(255, 255, 255, 0.70);
-  --btn-hover-bg: rgba(255, 255, 255, 0.95);
-  --btn-ghost-bg: rgba(221, 215, 255, 0.45);
-  --well-bg: rgba(221, 215, 255, 0.45);
-  --well-focus-bg: rgba(255, 255, 255, 0.90);
-  --header-bg: rgba(245, 242, 255, 0.80);
-  --modal-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 242, 255, 0.98));
-  --dropdown-bg: rgba(250, 248, 255, 0.92);
-  --icon-color: #0F0503;
+  --font: var(--font-barlow), 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 249, 253, 0.90));
+  --btn-bg: rgba(255, 255, 255, 0.88);
+  --btn-hover-bg: #ffffff;
+  --btn-ghost-bg: rgba(0, 0, 0, 0.035);
+  --well-bg: rgba(240, 242, 248, 0.75);
+  --well-focus-bg: #ffffff;
+  --header-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 249, 253, 0.88));
+  --modal-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 249, 253, 0.98));
+  --dropdown-bg: rgba(255, 255, 255, 0.98);
+  --icon-color: #0f1117;
 
   /* Backward compatibility aliases */
   --vn-canvas: var(--bg);
   --vn-surface: var(--panel2);
-  --vn-surface-solid: rgba(255, 255, 255, 0.90);
+  --vn-surface-solid: #ffffff;
   --vn-surface-hover: var(--panel-hover);
   --vn-card: var(--panel);
-  --vn-card-solid: rgba(255, 255, 255, 0.90);
+  --vn-card-solid: #ffffff;
   --vn-border: var(--border);
-  --vn-border-subtle: rgba(104, 81, 223, 0.10);
+  --vn-border-subtle: rgba(0, 0, 0, 0.04);
   --vn-border-hover: var(--border-hover);
   --vn-border-active: var(--accent);
   --vn-text-main: var(--text);
@@ -136,17 +156,18 @@
   --vn-text-dim: var(--muted2);
   --vn-font-editor: var(--font);
   --vn-header-bg: var(--header-bg);
-  --vn-active-tab-bg: rgba(255, 255, 255, 0.90);
+  --vn-active-tab-bg: var(--accent-surface);
   --vn-active-tab-border: var(--accent-border);
-  --vn-active-tab-text: #0F0503;
+  --vn-active-tab-text: #0f1117;
   --vn-accent-primary: var(--accent);
-  --vn-accent-gradient: linear-gradient(135deg, rgba(104, 81, 223, 0.18), rgba(221, 215, 255, 0.25));
+  --vn-accent-gradient: var(--accent-grad);
   --vn-card-shadow: var(--shadow);
 }
 
 [data-vn-theme="rotp"] {
   --bg: #07070a;
   --bg-gradient: linear-gradient(135deg, #07070a 0%, #28080d 45%, #0d0406 75%, #22060a 100%);
+  --bg-grid: none;
   --panel: rgba(255, 255, 255, 0.02);
   --panel2: rgba(220, 38, 38, 0.05);
   --panel-hover: rgba(220, 38, 38, 0.10);
@@ -158,6 +179,7 @@
   --muted2: #6b7280;
   --accent: #dc2626;
   --accent2: #b91c1c;
+  --accent-grad: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
   --accent-glow: rgba(220, 38, 38, 0.50);
   --accent-surface: rgba(220, 38, 38, 0.15);
   --accent-border: rgba(220, 38, 38, 0.50);
@@ -211,6 +233,11 @@ body {
   color: var(--foreground);
   margin: 0;
   overflow-x: hidden;
+}
+
+::selection {
+  background: var(--indigo, #6366f1);
+  color: #ffffff;
 }
 
 /* Ocultar el efecto CRT/VHS global cuando el motor VN Maker esté activo para mantener la UI 100% limpia */
@@ -334,11 +361,119 @@ body:has(.vn-engine-root) #global-vhs-overlay {
    GLASS / ACRYLIC UI UTILITIES (VN ENGINE)
    ======================================================== */
 .vn-engine-root {
-  background: var(--bg-gradient) !important;
-  background-size: 250% 250% !important;
-  animation: vn-ambient-shift 20s ease infinite !important;
+  background-color: var(--bg) !important;
+  background-image: var(--bg-grid), var(--bg-gradient) !important;
   color: var(--text) !important;
   font-family: var(--font) !important;
+  position: relative;
+}
+
+/* ========================================================
+   AMBIENT BACKGROUND GLOW MESH & SAAS TEXTURE
+   ======================================================== */
+.vn-bg-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.vn-glow-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+[data-vn-theme="default_dark"] .vn-glow-c1 {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  left: 20%;
+  filter: blur(100px);
+  opacity: 0.16;
+  background: radial-gradient(circle, var(--indigo), transparent 70%);
+  mix-blend-mode: screen;
+  animation: vn-glow-drift-1 22s ease-in-out infinite alternate;
+}
+
+[data-vn-theme="default_dark"] .vn-glow-c2 {
+  width: 360px;
+  height: 360px;
+  top: 40%;
+  right: 15%;
+  filter: blur(110px);
+  opacity: 0.14;
+  background: radial-gradient(circle, var(--violet), transparent 70%);
+  mix-blend-mode: screen;
+  animation: vn-glow-drift-2 26s ease-in-out infinite alternate;
+}
+
+[data-vn-theme="default_dark"] .vn-glow-c3 {
+  width: 480px;
+  height: 480px;
+  bottom: -100px;
+  left: 35%;
+  filter: blur(120px);
+  opacity: 0.10;
+  background: radial-gradient(circle, var(--cyan), transparent 70%);
+  mix-blend-mode: screen;
+  animation: vn-glow-drift-3 30s ease-in-out infinite alternate;
+}
+
+[data-vn-theme="default_light"] .vn-glow-c1 {
+  width: 480px;
+  height: 480px;
+  top: -100px;
+  left: 15%;
+  filter: blur(120px);
+  opacity: 0.08;
+  background: radial-gradient(circle, #6366f1, transparent 70%);
+  animation: vn-glow-drift-1 22s ease-in-out infinite alternate;
+}
+
+[data-vn-theme="default_light"] .vn-glow-c2 {
+  width: 400px;
+  height: 400px;
+  top: 35%;
+  right: 10%;
+  filter: blur(130px);
+  opacity: 0.07;
+  background: radial-gradient(circle, #a78bfa, transparent 70%);
+  animation: vn-glow-drift-2 26s ease-in-out infinite alternate;
+}
+
+[data-vn-theme="default_light"] .vn-glow-c3 {
+  width: 520px;
+  height: 520px;
+  bottom: -120px;
+  left: 40%;
+  filter: blur(140px);
+  opacity: 0.06;
+  background: radial-gradient(circle, #22d3ee, transparent 70%);
+  animation: vn-glow-drift-3 30s ease-in-out infinite alternate;
+}
+
+[data-vn-theme="rotp"] .vn-bg-glow {
+  display: none !important;
+}
+
+@keyframes vn-glow-drift-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 35px) scale(1.08); }
+  100% { transform: translate(-30px, 60px) scale(0.96); }
+}
+
+@keyframes vn-glow-drift-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-70px, -40px) scale(1.12); }
+  100% { transform: translate(40px, -25px) scale(0.92); }
+}
+
+@keyframes vn-glow-drift-3 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, -50px) scale(1.06); }
+  100% { transform: translate(-40px, -15px) scale(1.02); }
 }
 
 .vn-engine-root .card,
@@ -519,11 +654,28 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 }
 
 .vn-glass-header {
+  position: relative;
   background: var(--header-bg) !important;
   border-color: var(--border) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Signature Top Hairline (SaaS accent gradient line) */
+.vn-glass-header::before,
+.vn-modal-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: var(--accent-grad);
+  opacity: 0.55;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 25;
 }
 
 .vn-glass-panel {

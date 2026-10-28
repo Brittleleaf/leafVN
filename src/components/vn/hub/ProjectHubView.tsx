@@ -61,24 +61,15 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
   };
 
   return (
-    <div className="flex-1 w-full h-full overflow-y-auto bg-[#0a0c13] text-[var(--text)] select-none custom-scrollbar p-4 md:p-8 flex flex-col justify-between">
+    <div className="flex-1 w-full h-full overflow-y-auto bg-transparent text-[var(--text)] select-none custom-scrollbar p-4 md:p-8 flex flex-col justify-between relative z-10">
       <div className="max-w-7xl mx-auto w-full space-y-6">
         
         {/* TOP HERO BANNER: PROJECT DOSSIER */}
-        <div className="relative rounded-xl overflow-hidden border border-[#232838] bg-[#11141e]/95 p-6 shadow-xl">
-          {/* Subtle Cyber Grid Background */}
-          <div
-            className="absolute inset-0 opacity-10 pointer-events-none"
-            style={{
-              backgroundImage: 'radial-gradient(circle, rgba(209, 123, 248, 0.2) 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-            }}
-          />
-
+        <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--card-bg)] backdrop-blur-md p-6 shadow-xl">
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase bg-[#D17BF8]/15 border border-[#D17BF8]/40 text-[#D17BF8]">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase bg-[var(--accent-surface)] border border-[var(--accent-border)] text-[var(--accent)]">
                   PROJECT DOSSIER // MASTER HUB
                 </span>
                 <span className="text-xs font-mono text-[var(--muted)]">v{story.version || '1.0.0'}</span>
@@ -86,7 +77,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 <span className="text-xs font-mono text-[var(--muted)]">ID: {story.id}</span>
               </div>
 
-              <h1 className="text-2xl md:text-3xl font-extrabold tracking-wide uppercase text-white">
+              <h1 className="text-2xl md:text-3xl font-extrabold tracking-wide uppercase text-[var(--text)]">
                 {story.title || 'Untitled Visual Novel'}
               </h1>
 
@@ -95,29 +86,29 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </p>
 
               <div className="flex items-center gap-4 text-xs font-mono text-[var(--muted2)] pt-1 flex-wrap">
-                <span>Author: <strong className="text-gray-200">{story.author || 'Leaf VN Creator'}</strong></span>
+                <span>Author: <strong className="text-[var(--text)]">{story.author || 'Leaf VN Creator'}</strong></span>
                 <span>•</span>
-                <span>Updated: <strong className="text-gray-200">{new Date(story.updatedAt).toLocaleDateString()}</strong></span>
+                <span>Updated: <strong className="text-[var(--text)]">{new Date(story.updatedAt).toLocaleDateString()}</strong></span>
               </div>
             </div>
 
-            {/* Quick Actions Action Block (Photoshop Pro Style) */}
+            {/* Quick Actions Action Block (SaaS Pro Style) */}
             <div className="flex flex-col sm:flex-row items-stretch md:items-center gap-2.5 shrink-0 w-full md:w-auto">
               <button
                 onClick={() => {
                   playSfx('/assets/sfx/start after click intro.mp3', false, 0.4);
                   onPlayStory(story);
                 }}
-                className="px-4 py-2.5 rounded-md bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+                className="px-4 py-2.5 rounded-md bg-[var(--accent-grad)] hover:opacity-95 text-[#07070a] font-extrabold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_6px_20px_var(--accent-glow)] transition-all cursor-pointer"
                 title="Launch and play full story in live player"
               >
-                <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-white" />
+                <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-[#07070a]" />
                 <span>Playtest Story</span>
               </button>
 
               <button
                 onClick={handleManualSave}
-                className="px-3.5 py-2.5 rounded-md border border-[#2d3346] bg-[#181c28] hover:bg-[#202536] text-xs font-semibold text-gray-200 hover:text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                className="px-3.5 py-2.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
                 title="Save project changes (Ctrl+S)"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5 text-cyan-400" />
@@ -126,7 +117,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
               <button
                 onClick={handleExport}
-                className="px-3.5 py-2.5 rounded-md border border-[#2d3346] bg-[#181c28] hover:bg-[#202536] text-xs font-semibold text-gray-200 hover:text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                className="px-3.5 py-2.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
                 title="Export project bundle (.leafvn / .json)"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-purple-400" />
@@ -151,7 +142,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
             {/* 1. MENU GAME TOOL PILLAR */}
             <div
               onClick={() => setCurrentWorkspace('menu_tool')}
-              className="group relative rounded-xl border border-emerald-500/25 bg-[#0e1418]/90 hover:border-emerald-500/60 p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
+              className="group relative rounded-xl border border-[var(--border)] hover:border-emerald-500/60 bg-[var(--card-bg)] backdrop-blur-md p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer shadow-lg hover:shadow-2xl"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
@@ -164,7 +155,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors tracking-wide">
+                  <h3 className="text-base font-bold text-[var(--text)] group-hover:text-emerald-400 transition-colors tracking-wide">
                     Menu Game Tool
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
@@ -173,9 +164,9 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 </div>
 
                 {/* Status */}
-                <div className="pt-2 border-t border-emerald-900/30 flex items-center justify-between text-[11px] font-mono">
+                <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--muted)]">Game Startup:</span>
-                  <span className={isMenuEnabled ? 'text-emerald-400 font-bold' : 'text-gray-500'}>
+                  <span className={isMenuEnabled ? 'text-emerald-400 font-bold' : 'text-[var(--muted2)]'}>
                     {isMenuEnabled ? '● Menu Active' : '○ Direct to Scene 1'}
                   </span>
                 </div>
@@ -195,7 +186,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
             {/* 2. VISUAL NOVEL STORY STUDIO PILLAR */}
             <div
               onClick={() => setCurrentWorkspace('story_tool')}
-              className="group relative rounded-xl border border-purple-500/25 bg-[#13101e]/90 hover:border-purple-500/60 p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
+              className="group relative rounded-xl border border-[var(--border)] hover:border-purple-500/60 bg-[var(--card-bg)] backdrop-blur-md p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer shadow-lg hover:shadow-2xl"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
@@ -208,7 +199,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-white group-hover:text-purple-300 transition-colors tracking-wide">
+                  <h3 className="text-base font-bold text-[var(--text)] group-hover:text-purple-400 transition-colors tracking-wide">
                     Story / Visual Novel Tool
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
@@ -217,9 +208,9 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 </div>
 
                 {/* Status */}
-                <div className="pt-2 border-t border-purple-900/30 flex items-center justify-between text-[11px] font-mono">
+                <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--muted)]">Current Scenario:</span>
-                  <span className="text-purple-300 font-bold truncate max-w-[150px]">
+                  <span className="text-purple-400 font-bold truncate max-w-[150px]">
                     {currentScene?.name || 'Scenario 1'}
                   </span>
                 </div>
@@ -239,7 +230,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
             {/* 3. GALLERY & ASSETS PILLAR */}
             <div
               onClick={() => setCurrentWorkspace('gallery_assets')}
-              className="group relative rounded-xl border border-amber-500/25 bg-[#16120d]/90 hover:border-amber-500/60 p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
+              className="group relative rounded-xl border border-[var(--border)] hover:border-amber-500/60 bg-[var(--card-bg)] backdrop-blur-md p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer shadow-lg hover:shadow-2xl"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
@@ -252,7 +243,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-white group-hover:text-amber-300 transition-colors tracking-wide">
+                  <h3 className="text-base font-bold text-[var(--text)] group-hover:text-amber-400 transition-colors tracking-wide">
                     Gallery & Assets
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
@@ -261,9 +252,9 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 </div>
 
                 {/* Status */}
-                <div className="pt-2 border-t border-amber-900/30 flex items-center justify-between text-[11px] font-mono">
+                <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono">
                   <span className="text-[var(--muted)]">Extras Gallery:</span>
-                  <span className="text-amber-300 font-bold">
+                  <span className="text-amber-400 font-bold">
                     Cinematics & Scenarios
                   </span>
                 </div>
@@ -284,8 +275,8 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
         </div>
 
         {/* BOTTOM SECTION: PROJECT LOGIC & GLOBAL SETTINGS */}
-        <div className="rounded-xl border border-[#232838] bg-[#11141e]/90 p-4 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-[#232838]">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--card-bg)] backdrop-blur-md p-4 shadow-sm">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--muted)] flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
               <span>GLOBAL SETTINGS, LOGIC & AUDIT</span>
@@ -298,52 +289,52 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 pt-3">
             <button
               onClick={() => setActiveGlobalModal('variables')}
-              className="p-3 rounded-md border border-[#232838] bg-[#161925] hover:bg-[#1e2334] hover:border-amber-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-amber-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-amber-950/50 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white group-hover:text-amber-300">Variables & Flags</h4>
+                <h4 className="text-xs font-bold text-[var(--text)] group-hover:text-amber-400">Variables & Flags</h4>
                 <p className="text-[10px] text-[var(--muted)]">Branching logic & conditions</p>
               </div>
             </button>
 
             <button
               onClick={() => setActiveGlobalModal('textbox')}
-              className="p-3 rounded-md border border-[#232838] bg-[#161925] hover:bg-[#1e2334] hover:border-cyan-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-cyan-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-cyan-950/50 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white group-hover:text-cyan-300">Global Text Box</h4>
+                <h4 className="text-xs font-bold text-[var(--text)] group-hover:text-cyan-400">Global Text Box</h4>
                 <p className="text-[10px] text-[var(--muted)]">Dialogue style & typography</p>
               </div>
             </button>
 
             <button
               onClick={() => setActiveGlobalModal('doctor')}
-              className="p-3 rounded-md border border-emerald-500/30 bg-[#121c17] hover:bg-[#16241e] text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-emerald-500/30 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-emerald-950/60 border border-emerald-500/50 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-emerald-300">Project Doctor</h4>
+                <h4 className="text-xs font-bold text-emerald-400">Project Doctor</h4>
                 <p className="text-[10px] text-[var(--muted)]">Health audit & broken links</p>
               </div>
             </button>
 
             <button
               onClick={() => setActiveGlobalModal('scene_map')}
-              className="p-3 rounded-md border border-[#232838] bg-[#161925] hover:bg-[#1e2334] hover:border-purple-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-purple-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-purple-950/50 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white group-hover:text-purple-300">Narrative Map</h4>
+                <h4 className="text-xs font-bold text-[var(--text)] group-hover:text-purple-400">Narrative Map</h4>
                 <p className="text-[10px] text-[var(--muted)]">Full scene graph & flow</p>
               </div>
             </button>

@@ -64,6 +64,13 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
           editorTheme === 'rotp' ? 'font-typewriter' : 'font-barlow'
         }`}
       >
+        {/* AMBIENT BACKGROUND GLOW (Indigo / Violet / Cyan Mesh) */}
+        <div className="vn-bg-glow pointer-events-none select-none" aria-hidden="true">
+          <div className="vn-glow-circle vn-glow-c1" />
+          <div className="vn-glow-circle vn-glow-c2" />
+          <div className="vn-glow-circle vn-glow-c3" />
+        </div>
+
         {/* 1. GLOBAL HEADER BAR (Hidden in Fullscreen Workspace Mode) */}
         {!isFullscreenWorkspace && (
           <VNMakerHeader
