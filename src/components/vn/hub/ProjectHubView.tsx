@@ -118,7 +118,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
               <button
                 onClick={handleManualSave}
-                className="px-3.5 py-2.5 rounded-lg bg-[var(--surface-strong)] hover:bg-[var(--btn-hover-bg)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2.5 rounded-lg bg-transparent hover:bg-[var(--surface-strong)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 title="Save project changes (Ctrl+S)"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5 text-cyan-400" />
@@ -127,7 +127,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
               <button
                 onClick={handleExport}
-                className="px-3.5 py-2.5 rounded-lg bg-[var(--surface-strong)] hover:bg-[var(--btn-hover-bg)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2.5 rounded-lg bg-transparent hover:bg-[var(--surface-strong)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 title="Export project bundle (.leafvn / .json)"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-purple-400" />
@@ -149,12 +149,12 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
             <span className="text-[11px] font-mono text-[var(--muted2)]">Click any workspace pillar to begin creating</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-0">
             
             {/* 1. MENU GAME TOOL PILLAR */}
             <div
               onClick={() => setCurrentWorkspace('menu_tool')}
-              className="group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
+              className="flex-1 group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
@@ -187,7 +187,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               <div className="pt-5">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-[var(--surface-strong)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Open Menu Designer</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
@@ -195,10 +195,13 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </div>
             </div>
 
+            {/* Vertical Separator */}
+            <div className="hidden md:block w-[1px] bg-[var(--border)] self-stretch mx-3 my-2 shrink-0" />
+
             {/* 2. VISUAL NOVEL STORY STUDIO PILLAR */}
             <div
               onClick={() => setCurrentWorkspace('story_tool')}
-              className="group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
+              className="flex-1 group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
@@ -231,7 +234,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               <div className="pt-5">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-[var(--surface-strong)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Continue Script & Scenarios</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
@@ -239,10 +242,13 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               </div>
             </div>
 
+            {/* Vertical Separator */}
+            <div className="hidden md:block w-[1px] bg-[var(--border)] self-stretch mx-3 my-2 shrink-0" />
+
             {/* 3. GALLERY & ASSETS PILLAR */}
             <div
               onClick={() => setCurrentWorkspace('gallery_assets')}
-              className="group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
+              className="flex-1 group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
@@ -275,7 +281,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               <div className="pt-5">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-[var(--surface-strong)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Explore Gallery & Assets</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
