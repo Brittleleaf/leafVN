@@ -21,7 +21,7 @@ export default function GalleryAssetsWorkspaceView() {
   return (
     <div className="flex-1 w-full h-full flex flex-col bg-transparent select-none overflow-hidden relative z-10">
       {/* HEADER / TOOLBAR */}
-      <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
+      <div className="h-14 border-b border-[var(--border)] bg-transparent backdrop-blur-md px-4 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3">
           <button
             onClick={() => {

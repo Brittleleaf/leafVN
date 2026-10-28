@@ -5,13 +5,16 @@ import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 
 interface CharacterDossierSidebarProps {
   activeChar: VNCharacter;
+  isWorkspaceView?: boolean;
 }
 
 export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = ({
   activeChar,
+  isWorkspaceView = false,
 }) => {
   return (
-    <div className="w-full md:w-64 lg:w-72 border-l border-[var(--border)] bg-[var(--well-bg)] p-4 flex flex-col justify-between overflow-y-auto space-y-4 shrink-0 custom-scrollbar">
+    <div className={`w-full md:w-64 lg:w-72 border-l border-[var(--border)] ${isWorkspaceView ? "bg-transparent backdrop-blur-xs" : "bg-[var(--well-bg)]"} p-4 flex flex-col justify-between overflow-y-auto space-y-4 shrink-0 custom-scrollbar`}>
+
       <div className="space-y-3.5">
         <div className="text-center">
           <div

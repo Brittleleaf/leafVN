@@ -90,7 +90,7 @@ export default function GlobalTextBoxModal({
       : 'text-xs sm:text-sm';
 
   const innerCard = (
-    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-4xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-xs text-[var(--text)]`}>
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-transparent' : 'max-w-4xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-xs text-[var(--text)]`}>
       
       {/* HEADER */}
       <div className="flex items-center justify-between border-b vn-glass-header px-5 py-3 shrink-0">

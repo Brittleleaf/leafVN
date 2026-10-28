@@ -190,7 +190,7 @@ export default function AssetStudioModal({
   });
 
   const modalContent = (
-    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-transparent' : 'max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
       
       {/* 1. GALLERY HEADER */}
       <div className="p-3 vn-glass-header border-b flex flex-wrap items-center justify-between gap-3 shrink-0">

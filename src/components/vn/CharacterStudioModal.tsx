@@ -97,9 +97,9 @@ export default function CharacterStudioModal({
   };
 
   const studioContent = (
-    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-transparent' : 'max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
       {/* MAIN HEADER */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b vn-glass-header px-5 py-3 shrink-0">
+      <div className={`flex flex-wrap items-center justify-between gap-3 border-b ${isWorkspaceView ? "bg-transparent backdrop-blur-md" : "vn-glass-header"} px-5 py-3 shrink-0`}>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
             <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-4 h-4" />
@@ -168,8 +168,9 @@ export default function CharacterStudioModal({
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           
           {/* 1. LEFT COLUMN: CHARACTERS LIST */}
-          <div className="w-full md:w-60 lg:w-64 border-r border-[var(--border)] flex flex-col bg-[var(--well-bg)] shrink-0">
-            <div className="p-3 border-b border-[var(--border)] flex items-center justify-between text-[11px] text-[var(--muted)] font-bold uppercase tracking-wider bg-[var(--header-bg)]">
+          <div className={`w-full md:w-60 lg:w-64 border-r border-[var(--border)] flex flex-col ${isWorkspaceView ? "bg-transparent backdrop-blur-xs" : "bg-[var(--well-bg)]"} shrink-0`}>
+            <div className={`p-3 border-b border-[var(--border)] flex items-center justify-between text-[11px] text-[var(--muted)] font-bold uppercase tracking-wider ${isWorkspaceView ? "bg-transparent" : "bg-[var(--header-bg)]"}`}>
+
               <span>Cast ({filteredChars.length})</span>
               <span className="text-[10px] text-[var(--muted2)] font-normal">Click to edit</span>
             </div>
@@ -298,10 +299,12 @@ export default function CharacterStudioModal({
 
           {/* 2. CENTER COLUMN: EDITING PANELS */}
           {activeChar ? (
-            <div className="flex-1 flex flex-col overflow-hidden bg-[var(--panel)]">
+            <div className={`flex-1 flex flex-col overflow-hidden ${isWorkspaceView ? "bg-transparent" : "bg-[var(--panel)]"}`}>
+
               
               {/* TABS DOCK */}
-              <div className="border-b border-[var(--border)] px-4 py-2.5 bg-[var(--header-bg)] flex items-center justify-between gap-2 overflow-x-auto shrink-0">
+              <div className={`border-b border-[var(--border)] px-4 py-2.5 ${isWorkspaceView ? "bg-transparent" : "bg-[var(--header-bg)]"} flex items-center justify-between gap-2 overflow-x-auto shrink-0`}>
+
                 <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-1 shadow-inner text-xs">
                   <button
                     type="button"
@@ -437,7 +440,7 @@ export default function CharacterStudioModal({
           )}
 
           {/* 3. RIGHT COLUMN: SUMMARY DOSSIER & LORE GUIDE */}
-          {activeChar && <CharacterDossierSidebar activeChar={activeChar} />}
+          {activeChar && <CharacterDossierSidebar activeChar={activeChar} isWorkspaceView={isWorkspaceView} />}
 
         </div>
 

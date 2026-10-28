@@ -425,7 +425,7 @@ export default function ProjectDoctorModal({
   const healthScore = Math.max(0, 100 - errorCount * 25 - warningCount * 10);
 
   const innerCard = (
-    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-3xl max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-transparent' : 'max-w-3xl max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
       
       {/* HEADER */}
       <div className="p-3 md:px-5 border-b vn-glass-header flex items-center justify-between shrink-0">
