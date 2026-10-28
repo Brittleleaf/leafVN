@@ -240,7 +240,7 @@ export default function VNMakerHeader({
                 onClick={() => setShowThemeMenu(false)}
               />
               <div
-                className="absolute right-0 top-10 w-80 z-[70] flex flex-col rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2 shadow-2xl animate-in fade-in zoom-in-95 duration-150 select-none"
+                className="absolute right-0 top-10 w-80 z-[70] flex flex-col rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl p-2 shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in fade-in zoom-in-95 duration-150 select-none"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="px-2 py-1.5 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)] mb-1">
@@ -359,7 +359,7 @@ export default function VNMakerHeader({
                 onClick={() => setShowProjectMenu(false)}
               />
               <div
-                className="absolute right-0 top-10 w-60 z-[70] flex flex-col rounded-xl border border-[var(--border)] bg-[var(--surface)] p-1.5 shadow-2xl animate-in fade-in zoom-in-95 duration-150 select-none text-xs"
+                className="absolute right-0 top-10 w-60 z-[70] flex flex-col rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl p-1.5 shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in fade-in zoom-in-95 duration-150 select-none text-xs"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="px-2.5 py-1 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)] mb-1">

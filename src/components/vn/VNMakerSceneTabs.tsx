@@ -256,7 +256,7 @@ export default function VNMakerSceneTabs() {
           </button>
 
           {isNewSceneOpen && (
-            <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1.5 z-50 flex flex-col gap-0.5 text-xs animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-1.5 z-50 flex flex-col gap-0.5 text-xs animate-in fade-in zoom-in-95 duration-150">
               {/* + Scenario */}
               <button
                 onClick={() => {

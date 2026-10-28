@@ -31,7 +31,7 @@ export default function QuickCharacterPickerModal({
       }}
       className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center animate-fade-in font-sans"
     >
-      <div className="max-w-2xl w-full max-h-[85vh] rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl flex flex-col overflow-hidden text-[var(--text)]">
+      <div className="max-w-2xl w-full max-h-[85vh] rounded-2xl border border-[var(--border2)] bg-[var(--modal-bg)] backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden text-[var(--text)]">
         {/* HEADER */}
         <div className="p-4 sm:p-5 border-b border-[var(--border)] shrink-0 flex items-center justify-between gap-3">
           <div>
