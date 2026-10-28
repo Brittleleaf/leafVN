@@ -544,7 +544,7 @@ export default function MenuGameToolModal({
   const configuredCount = Object.values(resolvedRoleScenes).filter(Boolean).length;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col select-none animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 bg-[#030207]/85 backdrop-blur-md flex flex-col select-none animate-in fade-in duration-150">
       {/* HEADER / TOOLBAR */}
       <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3">

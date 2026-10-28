@@ -19,7 +19,7 @@ export default function GalleryAssetsWorkspaceView() {
   const [activeTab, setActiveTab] = useState<'characters' | 'assets' | 'extras_preview'>('characters');
 
   return (
-    <div className="flex-1 w-full h-full flex flex-col bg-[#0b0e17] select-none overflow-hidden">
+    <div className="flex-1 w-full h-full flex flex-col bg-transparent select-none overflow-hidden relative z-10">
       {/* HEADER / TOOLBAR */}
       <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3">
@@ -53,7 +53,7 @@ export default function GalleryAssetsWorkspaceView() {
         </div>
 
         {/* WORKSPACE SEGMENTED SUB-TABS */}
-        <div className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] p-0.5 rounded-lg shadow-inner">
+        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-0.5 rounded-lg shadow-inner">
           <button
             onClick={() => {
               setActiveTab('characters');
@@ -61,7 +61,7 @@ export default function GalleryAssetsWorkspaceView() {
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'characters'
-                ? 'bg-[#232838] border border-[#3e4660] text-white font-semibold shadow-sm'
+                ? 'bg-[var(--accent-surface)] border border-[var(--accent)]/50 text-white font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >
@@ -76,7 +76,7 @@ export default function GalleryAssetsWorkspaceView() {
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'assets'
-                ? 'bg-[#232838] border border-[#3e4660] text-white font-semibold shadow-sm'
+                ? 'bg-[var(--accent-surface)] border border-[var(--accent)]/50 text-white font-semibold shadow-sm'
                 : 'text-[var(--muted)] hover:text-white'
             }`}
           >

@@ -61,11 +61,11 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
   };
 
   return (
-    <div className="flex-1 w-full h-full overflow-y-auto bg-[#0a0c13] text-[var(--text)] select-none custom-scrollbar p-4 md:p-8 flex flex-col justify-between">
+    <div className="flex-1 w-full h-full overflow-y-auto bg-transparent text-[var(--text)] select-none custom-scrollbar p-4 md:p-8 flex flex-col justify-between relative z-10">
       <div className="max-w-7xl mx-auto w-full space-y-6">
         
         {/* TOP HERO BANNER: PROJECT DOSSIER */}
-        <div className="relative rounded-xl overflow-hidden border border-[#232838] bg-[#11141e]/95 p-6 shadow-xl">
+        <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-6 shadow-xl">
           {/* Subtle Cyber Grid Background */}
           <div
             className="absolute inset-0 opacity-10 pointer-events-none"
@@ -284,8 +284,8 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
         </div>
 
         {/* BOTTOM SECTION: PROJECT LOGIC & GLOBAL SETTINGS */}
-        <div className="rounded-xl border border-[#232838] bg-[#11141e]/90 p-4 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-[#232838]">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-4 shadow-sm">
+          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--muted)] flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
               <span>GLOBAL SETTINGS, LOGIC & AUDIT</span>
@@ -298,7 +298,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 pt-3">
             <button
               onClick={() => setActiveGlobalModal('variables')}
-              className="p-3 rounded-md border border-[#232838] bg-[#161925] hover:bg-[#1e2334] hover:border-amber-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-amber-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-amber-950/50 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-4 h-4" />
@@ -311,7 +311,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
             <button
               onClick={() => setActiveGlobalModal('textbox')}
-              className="p-3 rounded-md border border-[#232838] bg-[#161925] hover:bg-[#1e2334] hover:border-cyan-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-cyan-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-cyan-950/50 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-4 h-4" />
@@ -324,7 +324,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
             <button
               onClick={() => setActiveGlobalModal('doctor')}
-              className="p-3 rounded-md border border-emerald-500/30 bg-[#121c17] hover:bg-[#16241e] text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-emerald-500/30 bg-emerald-950/40 hover:bg-emerald-950/60 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-emerald-950/60 border border-emerald-500/50 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-4 h-4" />
@@ -337,7 +337,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
             <button
               onClick={() => setActiveGlobalModal('scene_map')}
-              className="p-3 rounded-md border border-[#232838] bg-[#161925] hover:bg-[#1e2334] hover:border-purple-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-purple-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
             >
               <div className="w-8 h-8 rounded-md bg-purple-950/50 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-4 h-4" />

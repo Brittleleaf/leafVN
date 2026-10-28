@@ -615,11 +615,16 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
     <div
       data-vn-engine="true"
       data-vn-theme={editorTheme}
-      className={`min-h-screen flex flex-col select-none antialiased transition-colors duration-200 text-[var(--text)] ${
+      className={`vn-engine-root relative min-h-screen flex flex-col select-none antialiased transition-colors duration-200 text-[var(--text)] overflow-hidden ${
         editorTheme === 'rotp' ? 'font-typewriter' : 'font-barlow'
       }`}
-      style={{ background: 'var(--bg-gradient, var(--bg))' }}
     >
+      {/* AMBIENT BACKGROUND GLOW (Indigo / Violet / Cyan Mesh) */}
+      <div className="vn-bg-glow pointer-events-none select-none" aria-hidden="true">
+        <div className="vn-glow-circle vn-glow-c1" />
+        <div className="vn-glow-circle vn-glow-c2" />
+        <div className="vn-glow-circle vn-glow-c3" />
+      </div>
       {/* 1. BARRA SUPERIOR DE LA APLICACIÓN (MENU BAR AUTÉNTICO SIN BOTONES REPETIDOS) */}
       <header className="h-11 border-b border-[var(--border)] bg-[var(--header-bg)] backdrop-blur-md flex items-center justify-between px-4 text-xs shadow-sm z-30">
         <div className="flex items-center gap-4">
@@ -788,7 +793,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       {/* 2. CUERPO PRINCIPAL (SIDEBAR + MAIN CANVAS) */}
       <div className="flex-1 flex overflow-hidden">
         {/* BARRA LATERAL IZQUIERDA (PHOTOSHOP SIDEBAR TEMATIZADA CON ICONOS SVG) */}
-        <aside className="w-56 bg-[var(--panel)] border-r border-[var(--border)] backdrop-blur-md flex flex-col justify-between p-4 flex-shrink-0">
+        <aside className="w-56 bg-[var(--panel)] border-r border-[var(--border)] backdrop-blur-md flex flex-col justify-between p-4 flex-shrink-0 relative z-10">
           <div className="space-y-4">
             {/* Botón Píldora: Nuevo Proyecto */}
             <button
@@ -876,7 +881,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         </aside>
 
         {/* CONTENIDO CENTRAL */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-10">
+        <main className="flex-1 overflow-y-auto p-6 md:p-10 relative z-10">
           {activeTab === 'home' ? (
             <div className="max-w-7xl mx-auto space-y-8">
               {/* Saludo de Bienvenida */}

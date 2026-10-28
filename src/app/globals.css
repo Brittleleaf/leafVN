@@ -202,7 +202,7 @@
 }
 
 :root {
-  --background: #050508;
+  --background: #030207;
   --foreground: #e5e7eb;
 }
 
@@ -1206,7 +1206,9 @@ body:has(.vn-engine-root) #global-vhs-overlay {
    AMBIENT BACKGROUND EFFECT (Dot-grid texture & Glow circles)
    ======================================================== */
 [data-vn-theme="default_dark"] .vn-engine-root,
-:root:not([data-vn-theme="default_light"]):not([data-vn-theme="rotp"]) .vn-engine-root {
+[data-vn-theme="default_dark"].vn-engine-root,
+:root:not([data-vn-theme="default_light"]):not([data-vn-theme="rotp"]) .vn-engine-root,
+:root:not([data-vn-theme="default_light"]):not([data-vn-theme="rotp"]).vn-engine-root {
   background-color: #030207 !important;
   background-image: 
     radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
@@ -1214,7 +1216,8 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   animation: none !important;
 }
 
-[data-vn-theme="default_light"] .vn-engine-root {
+[data-vn-theme="default_light"] .vn-engine-root,
+[data-vn-theme="default_light"].vn-engine-root {
   background-image: 
     radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
     var(--bg-gradient) !important;

@@ -21,7 +21,7 @@ export default function ProjectSettingsWorkspaceView() {
   const [activeTab, setActiveTab] = useState<'variables' | 'textbox' | 'doctor' | 'general'>('variables');
 
   return (
-    <div className="flex-1 w-full h-full flex flex-col bg-[#0b0e17] select-none overflow-hidden">
+    <div className="flex-1 w-full h-full flex flex-col bg-transparent select-none overflow-hidden relative z-10">
       {/* HEADER / TOOLBAR */}
       <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3">
@@ -55,7 +55,7 @@ export default function ProjectSettingsWorkspaceView() {
         </div>
 
         {/* WORKSPACE SEGMENTED SUB-TABS */}
-        <div className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] p-0.5 rounded-lg shadow-inner">
+        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-0.5 rounded-lg shadow-inner">
           <button
             onClick={() => {
               setActiveTab('variables');

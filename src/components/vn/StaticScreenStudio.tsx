@@ -276,7 +276,7 @@ export default function StaticScreenStudio({
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full overflow-hidden bg-[var(--bg)] text-[var(--text)] select-none">
+    <div className="flex-1 flex flex-col lg:flex-row h-full overflow-hidden bg-transparent text-[var(--text)] select-none relative z-10">
       {/* LEFT COLUMN: STATIC SCREEN CONFIGURATION CONTROLS */}
       <div className="w-full lg:w-[420px] p-4 overflow-y-auto space-y-4 border-r border-[var(--border)] bg-[var(--surface)] backdrop-blur-md shrink-0 custom-scrollbar flex flex-col">
         

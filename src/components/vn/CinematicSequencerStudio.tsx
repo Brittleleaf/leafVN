@@ -591,7 +591,7 @@ export default function CinematicSequencerStudio({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[var(--bg)] text-[var(--text)] select-none relative">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-transparent text-[var(--text)] select-none relative z-10">
       {/* Floating Save Toast Notification */}
       {saveSuccessMsg && (
         <div className="absolute top-3 right-4 z-50 pointer-events-none animate-fade-in">
