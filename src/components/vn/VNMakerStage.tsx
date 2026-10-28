@@ -479,19 +479,19 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
       </div>
 
       {/* STUDIO ACTION BAR (OUTSIDE CANVAS — 100% CLEAN UNOBSTRUCTED VIEWPORT) */}
-      <div className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-md bg-[var(--surface)] border border-[var(--border)] shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-1 py-1">
         {/* Left: Button / Hotspot placement and alignment guides */}
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-1 flex-wrap">
           <button
             onClick={() => {
               setPendingButtonType('door');
               setIsPlacingButton(true);
               playSfx('/assets/sfx/click interface.mp3', true, 0.4);
             }}
-            className={`px-3 py-1 rounded-md text-xs font-bold uppercase transition-all cursor-pointer border shadow-sm ${
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 ${
               isPlacingButton
-                ? 'bg-amber-500/20 border-amber-400 text-amber-700 dark:text-amber-300 animate-pulse'
-                : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)]'
+                ? 'bg-amber-500/20 text-amber-600 dark:text-amber-300 animate-pulse'
+                : 'text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             {isPlacingButton ? 'Click on canvas...' : '+ Place Button'}
@@ -503,12 +503,14 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setShowHotspotStudio(true);
               playSfx('/assets/sfx/click intro.mp3', false, 0.3);
             }}
-            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
+            className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5"
             title="Open navigation hotspot manager and editor"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5 text-[var(--accent)]" />
             <span>Manage Buttons ({currentScene?.hotspots?.length || 0})</span>
           </button>
+
+          <div className="h-4 w-[1px] bg-[var(--border)] mx-1" />
 
           {/* Guides & Snapping Controls */}
           <button
@@ -517,14 +519,14 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setShowGuides(!showGuides);
               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
             }}
-            className={`px-2.5 py-1 rounded-md text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 ${
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               showGuides
-                ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.3)]'
-                : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--muted2)] hover:text-[var(--text)]'
+                ? 'bg-cyan-500/20 text-cyan-400 font-bold'
+                : 'text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
             title="Show or hide center alignment guides on canvas"
           >
-            <GuiIconRenderer icon={GUI_ICONS.general.ruler} className="w-3 h-3" />
+            <GuiIconRenderer icon={GUI_ICONS.general.ruler} className="w-3.5 h-3.5" />
             <span>{showGuides ? 'Guides: ON' : 'Guides'}</span>
           </button>
 
@@ -534,27 +536,27 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setSnapToGuides(!snapToGuides);
               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
             }}
-            className={`px-2.5 py-1 rounded-md text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 ${
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               snapToGuides
-                ? 'bg-[#ff007f]/20 border-[#ff007f] text-pink-200 shadow-[0_0_12px_rgba(255,0,127,0.3)]'
-                : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--muted2)] hover:text-[var(--text)]'
+                ? 'bg-pink-500/20 text-pink-400 font-bold'
+                : 'text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
             title="Toggle magnetic snap to center and alignments"
           >
-            <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3 h-3" />
+            <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3.5 h-3.5" />
             <span>{snapToGuides ? 'Snap: ON' : 'Snap: OFF'}</span>
           </button>
         </div>
 
         {/* Right: Stage Media, Textbox Visibility, Audio, Background & Upload */}
-        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+        <div className="flex items-center gap-1 flex-wrap justify-end">
           {currentLine?.type === 'dialogue' ? (
             <button
               onClick={() => setShowCanvasTextbox?.(!showCanvasTextbox)}
-              className={`px-3 py-1 rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
                 showCanvasTextbox
-                  ? 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)]'
-                  : 'bg-amber-500/20 border-amber-500 text-amber-700 dark:text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
+                  ? 'text-[var(--text)] hover:bg-[var(--surface-strong)]'
+                  : 'bg-amber-500/20 text-amber-600 dark:text-amber-300'
               }`}
               title={showCanvasTextbox ? 'Hide textbox to view full canvas' : 'Show textbox'}
             >
@@ -596,7 +598,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   notify?.("Layout changed to free transformable mode");
                 }
               }}
-              className="px-3 py-1 rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border border-purple-500/50 bg-purple-950/40 text-purple-200 hover:bg-purple-900/60"
+              className="px-2.5 py-1.5 rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25"
               title="Toggle between stacked column or free transformable mode"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
@@ -607,21 +609,23 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               </span>
             </button>
           ) : (
-            <div className="px-2.5 py-1 rounded-md text-[10px] uppercase font-mono font-bold bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--text)] shadow-sm flex items-center gap-1.5">
+            <div className="px-2.5 py-1.5 rounded-lg text-xs uppercase font-mono font-bold text-[var(--muted)] flex items-center gap-1.5">
               <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
               <span>
                 {currentLine?.type === 'fx_start'
-                  ? 'FX Start (No dialogue)'
+                  ? 'FX Start'
                   : currentLine?.type === 'fx_end'
-                  ? 'FX End (No dialogue)'
+                  ? 'FX End'
                   : `Event: ${currentLine?.type || 'Control'}`}
               </span>
             </div>
           )}
 
+          <div className="h-4 w-[1px] bg-[var(--border)] mx-1" />
+
           <button
             onClick={() => setShowSceneAudioModal?.(true)}
-            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
+            className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5"
             title="Configure background BGM and entrance SFX for this scenario"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.soundOn} className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
@@ -641,14 +645,14 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 setActiveGlobalModal('scenes');
               }
             }}
-            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
+            className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5"
             title="Select scenario background from Gallery"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
             <span>Background</span>
           </button>
 
-          <label className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5">
+          <label className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-3.5 h-3.5 text-[var(--accent)]" />
             <span>Upload</span>
             <input type="file" accept="image/*" onChange={handleUploadBackground} className="hidden" />
@@ -1599,7 +1603,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
             <span>SFX:</span>
           </span>
 
-          <div className="flex items-center gap-1.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2 py-1 max-w-[260px] backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 bg-[var(--well-bg)] rounded-lg px-2 py-1 max-w-[260px]">
             {currentLine?.sfx ? (
               <>
                 <button
@@ -1631,7 +1635,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               onClick={() =>
                 openAssetPicker('sfx', (url) => handleUpdateCurrentLine('sfx', url || undefined))
               }
-              className="ml-1 px-2 py-0.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-lg text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-colors shadow-sm flex items-center gap-1 shrink-0"
+              className="ml-1 px-2 py-0.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1 shrink-0"
               title="Open Asset Gallery to select an SFX (sound effects only)"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3 h-3 text-[var(--accent)]" />

@@ -830,7 +830,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
             <div className="pt-4 border-t border-[var(--border)] space-y-1">
               <button
                 onClick={() => handleTabChange('home')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   activeTab === 'home'
                     ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
                     : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
@@ -842,7 +842,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
 
               <button
                 onClick={() => handleTabChange('templates')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   activeTab === 'templates'
                     ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
                     : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
@@ -854,7 +854,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
 
               <button
                 onClick={() => handleTabChange('settings')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   activeTab === 'settings'
                     ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
                     : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'

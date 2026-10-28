@@ -37,10 +37,10 @@ export function StaticScreenTypographySection({
 
       {/* Title Direct Canvas Transform Status & Controls */}
       <div
-        className={`p-2 rounded-lg border transition-all ${
+        className={`p-2 rounded-lg transition-all ${
           selectedTarget === 'title'
-            ? 'border-cyan-400 bg-cyan-950/20 shadow-[0_0_12px_rgba(34,211,238,0.2)]'
-            : 'border-[var(--border)] bg-[var(--surface)]/60'
+            ? 'bg-cyan-950/25'
+            : 'bg-[var(--surface-strong)]/40 hover:bg-[var(--surface-strong)]/60'
         }`}
       >
         <div className="flex items-center justify-between text-[10px]">
@@ -49,7 +49,7 @@ export function StaticScreenTypographySection({
               <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3 h-3 text-cyan-400" />
               <span>Title Canvas:</span>
             </span>
-            <span className="text-gray-300">
+            <span className="text-[var(--text)]">
               X: <strong>{config.titleXPercent ?? 50}%</strong> Y: <strong>{config.titleYPercent ?? 28}%</strong> ({config.titleScale ?? 1.0}x)
             </span>
           </span>
@@ -61,10 +61,10 @@ export function StaticScreenTypographySection({
                 setSelectedButtonId(null);
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className={`px-1.5 py-0.5 rounded text-[9px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                 selectedTarget === 'title'
-                  ? 'bg-cyan-500 text-black border-cyan-400 shadow-sm'
-                  : 'bg-black/40 text-gray-400 border-white/10 hover:text-white'
+                  ? 'bg-cyan-500 text-black shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
               }`}
               title="Select Title directly on canvas to drag and transform"
             >
@@ -77,7 +77,7 @@ export function StaticScreenTypographySection({
                 updateConfig({ titleXPercent: 50 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-300 border border-white/10 hover:border-cyan-400 hover:text-cyan-200 cursor-pointer flex items-center gap-1"
+              className="px-2 py-0.5 rounded text-[10px] font-bold text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--surface-strong)] cursor-pointer flex items-center gap-1 transition-colors"
               title="Center Title horizontally (X: 50%)"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.circle} className="w-2.5 h-2.5" />
@@ -89,7 +89,7 @@ export function StaticScreenTypographySection({
                 updateConfig({ titleXPercent: 50, titleYPercent: 28, titleScale: 1.0 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-400 border border-white/10 hover:text-red-300 cursor-pointer flex items-center gap-1"
+              className="px-2 py-0.5 rounded text-[10px] font-bold text-[var(--muted)] hover:text-red-400 hover:bg-[var(--surface-strong)] cursor-pointer flex items-center gap-1 transition-colors"
               title="Reset Title position and scale"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
@@ -237,10 +237,10 @@ export function StaticScreenTypographySection({
 
       {/* Subtitle Direct Canvas Transform Status & Controls */}
       <div
-        className={`p-2 rounded-lg border transition-all ${
+        className={`p-2 rounded-lg transition-all ${
           selectedTarget === 'subtitle'
-            ? 'border-purple-400 bg-purple-950/20 shadow-[0_0_12px_rgba(192,132,252,0.2)]'
-            : 'border-[var(--border)] bg-[var(--surface)]/60'
+            ? 'bg-purple-950/25'
+            : 'bg-[var(--surface-strong)]/40 hover:bg-[var(--surface-strong)]/60'
         }`}
       >
         <div className="flex items-center justify-between text-[10px]">
@@ -249,7 +249,7 @@ export function StaticScreenTypographySection({
               <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3 h-3 text-purple-400" />
               <span>Subtitle Canvas:</span>
             </span>
-            <span className="text-gray-300">
+            <span className="text-[var(--text)]">
               X: <strong>{config.subtitleXPercent ?? 50}%</strong> Y: <strong>{config.subtitleYPercent ?? 40}%</strong> ({config.subtitleScale ?? 1.0}x)
             </span>
           </span>
@@ -261,10 +261,10 @@ export function StaticScreenTypographySection({
                 setSelectedButtonId(null);
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className={`px-1.5 py-0.5 rounded text-[9px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                 selectedTarget === 'subtitle'
-                  ? 'bg-purple-500 text-black border-purple-400 shadow-sm'
-                  : 'bg-black/40 text-gray-400 border-white/10 hover:text-white'
+                  ? 'bg-purple-500 text-black shadow-sm'
+                  : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
               }`}
               title="Select Subtitle directly on canvas to drag and transform"
             >
@@ -277,7 +277,7 @@ export function StaticScreenTypographySection({
                 updateConfig({ subtitleXPercent: 50 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-300 border border-white/10 hover:border-purple-400 hover:text-purple-200 cursor-pointer flex items-center gap-1"
+              className="px-2 py-0.5 rounded text-[10px] font-bold text-[var(--muted)] hover:text-purple-300 hover:bg-[var(--surface-strong)] cursor-pointer flex items-center gap-1 transition-colors"
               title="Center Subtitle horizontally (X: 50%)"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.circle} className="w-2.5 h-2.5" />
@@ -289,7 +289,7 @@ export function StaticScreenTypographySection({
                 updateConfig({ subtitleXPercent: 50, subtitleYPercent: 40, subtitleScale: 1.0 });
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
-              className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/40 text-gray-400 border border-white/10 hover:text-red-300 cursor-pointer flex items-center gap-1"
+              className="px-2 py-0.5 rounded text-[10px] font-bold text-[var(--muted)] hover:text-red-400 hover:bg-[var(--surface-strong)] cursor-pointer flex items-center gap-1 transition-colors"
               title="Reset Subtitle position and scale"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
