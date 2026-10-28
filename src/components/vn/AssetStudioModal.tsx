@@ -19,26 +19,28 @@ interface AssetStudioModalProps {
   story: VNStory;
   onUpdateStory?: (updatedStory: VNStory) => void;
   onUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
-  onClose: () => void;
+  onClose?: () => void;
   onSelectAsset?: (asset: VNAssetItem) => void;
   filterType?: VNAssetType;
   initialFilterType?: VNAssetType;
   initialFontSample?: string;
   previewBackgroundUrl?: string;
   notify?: (msg: string) => void;
+  isWorkspaceView?: boolean;
 }
 
 export default function AssetStudioModal({
   story,
   onUpdateStory,
   onUpdateStoryCustomAssets,
-  onClose,
+  onClose = () => {},
   onSelectAsset,
   filterType,
   initialFilterType: propInitialFilterType,
   initialFontSample,
   previewBackgroundUrl,
   notify = () => {},
+  isWorkspaceView = false,
 }: AssetStudioModalProps) {
   const initialFilterType = propInitialFilterType || filterType;
   const { allAssets, projectAssets, isLoading: isLoadingAssets, projectId, fetchProjectAssets } = useProjectAssets(
@@ -187,58 +189,58 @@ export default function AssetStudioModal({
     return true;
   });
 
-  return (
-    <div className="fixed inset-0 z-50 vn-modal-backdrop flex items-center justify-center p-3 sm:p-6 animate-fade-in">
-      <div className="w-full max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card flex flex-col overflow-hidden text-[var(--text)]">
-        
-        {/* 1. GALLERY HEADER */}
-        <div className="p-4 vn-glass-header border-b flex flex-wrap items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
-              <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold tracking-widest text-[var(--text)] uppercase">
-                  {onSelectAsset ? 'Select Media Asset' : 'Engine Asset Gallery'}
-                </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-[var(--btn-bg)] text-[var(--accent)] border border-[var(--border)] font-bold">
-                  {filteredAssets.length} available
-                </span>
-                {isLoadingAssets && (
-                  <span className="text-[10px] text-yellow-400 animate-pulse font-mono">
-                    Syncing disk...
-                  </span>
-                )}
-              </div>
-              <p className="text-[11px] text-[var(--muted)]">
-                Project Folder: <code className="text-emerald-500 font-mono">public/projects/{projectId}/assets/</code>
-              </p>
-            </div>
+  const modalContent = (
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+      
+      {/* 1. GALLERY HEADER */}
+      <div className="p-3 vn-glass-header border-b flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
+            <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-4 h-4" />
           </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xs font-bold tracking-widest text-[var(--text)] uppercase">
+                {onSelectAsset ? 'Select Media Asset' : 'Engine Asset Gallery'}
+              </h2>
+              <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-[var(--btn-bg)] text-[var(--accent)] border border-[var(--border)] font-bold">
+                {filteredAssets.length} available
+              </span>
+              {isLoadingAssets && (
+                <span className="text-[10px] text-yellow-400 animate-pulse font-mono">
+                  Syncing disk...
+                </span>
+              )}
+            </div>
+            <p className="text-[10px] text-[var(--muted)]">
+              Project Folder: <code className="text-emerald-500 font-mono">public/projects/{projectId}/assets/</code>
+            </p>
+          </div>
+        </div>
 
-          <div className="flex items-center gap-2">
-            {onSelectAsset && (
-              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 rounded-md text-[11px] text-amber-800 dark:text-amber-200 font-mono">
-                <GuiIconRenderer icon={GUI_ICONS.general.info} className="w-3.5 h-3.5 text-amber-500" />
-                <span>Selection Mode ({initialFilterType || 'General'})</span>
-              </div>
-            )}
+        <div className="flex items-center gap-2">
+          {onSelectAsset && (
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 rounded-md text-[11px] text-amber-800 dark:text-amber-200 font-mono">
+              <GuiIconRenderer icon={GUI_ICONS.general.info} className="w-3.5 h-3.5 text-amber-500" />
+              <span>Selection Mode ({initialFilterType || 'General'})</span>
+            </div>
+          )}
 
-            {/* Upload / Add Asset button */}
-            <button
-              onClick={() => setShowUploadForm(!showUploadForm)}
-              className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all shadow flex items-center gap-1.5 cursor-pointer ${
-                showUploadForm
-                  ? 'bg-emerald-700 text-white border border-emerald-400'
-                  : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-emerald-600 dark:text-emerald-300'
-              }`}
-              title="Add a web link or upload a file from PC"
-            >
-              <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{showUploadForm ? 'Close Upload' : 'Upload / Add Asset'}</span>
-            </button>
+          {/* Upload / Add Asset button */}
+          <button
+            onClick={() => setShowUploadForm(!showUploadForm)}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all shadow flex items-center gap-1.5 cursor-pointer ${
+              showUploadForm
+                ? 'bg-emerald-700 text-white border border-emerald-400'
+                : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-emerald-600 dark:text-emerald-300'
+            }`}
+            title="Add a web link or upload a file from PC"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-emerald-500" />
+            <span>{showUploadForm ? 'Close Upload' : 'Upload / Add Asset'}</span>
+          </button>
 
+          {!isWorkspaceView && onClose && (
             <button
               onClick={onClose}
               className="text-[var(--muted)] hover:text-[var(--text)] px-2 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] rounded-md border border-[var(--border)] cursor-pointer flex items-center justify-center transition-colors"
@@ -246,8 +248,9 @@ export default function AssetStudioModal({
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
             </button>
-          </div>
+          )}
         </div>
+      </div>
 
         {/* 2. UPLOAD MODAL */}
         <AssetUploadModal
@@ -680,6 +683,15 @@ export default function AssetStudioModal({
           </div>
         )}
       </div>
+  );
+
+  if (isWorkspaceView) {
+    return <div className="w-full h-full overflow-hidden flex flex-col">{modalContent}</div>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 vn-modal-backdrop flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+      {modalContent}
     </div>
   );
 }

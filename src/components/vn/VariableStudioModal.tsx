@@ -7,8 +7,9 @@ import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 interface VariableStudioModalProps {
   story: VNStory;
   onUpdateStory: (updatedStory: VNStory) => void;
-  onClose: () => void;
+  onClose?: () => void;
   notify?: (msg: string) => void;
+  isWorkspaceView?: boolean;
 }
 
 const VARIABLE_TEMPLATES = [
@@ -25,6 +26,7 @@ export default function VariableStudioModal({
   onUpdateStory,
   onClose,
   notify = () => {},
+  isWorkspaceView = false,
 }: VariableStudioModalProps) {
   const variables: VNVariableDefinition[] = story.variables || [];
   const [searchQuery, setSearchQuery] = useState('');
@@ -269,28 +271,28 @@ export default function VariableStudioModal({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center animate-fade-in font-sans">
-      <div className="max-w-4xl w-full vn-modal-card flex flex-col max-h-[88vh] sm:max-h-[85vh] overflow-hidden text-[var(--text)]">
-        
-        {/* CABECERA */}
-        <div className="p-4 vn-glass-header border-b flex items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center p-1.5 shrink-0 text-[var(--accent)]">
-              <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-[var(--text)] uppercase tracking-widest flex items-center gap-2">
-                <span>VARIABLES, FLAGS & INTERPOLATION</span>
-                <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-[var(--btn-bg)] text-[var(--accent)] border border-[var(--border)]">
-                  {variables.length} registered
-                </span>
-              </h3>
-              <p className="text-[11px] text-[var(--muted)]">
-                Create counters, flags, and items. Use <span className="text-[var(--accent)] font-mono font-bold">{`{variable_key}`}</span> in any dialogue.
-              </p>
-            </div>
+  const innerCard = (
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-4xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+      
+      {/* CABECERA */}
+      <div className="p-3 vn-glass-header border-b flex items-center justify-between gap-3 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center p-1.5 shrink-0 text-[var(--accent)]">
+            <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-4 h-4" />
           </div>
+          <div>
+            <h3 className="text-xs font-bold text-[var(--text)] uppercase tracking-widest flex items-center gap-2">
+              <span>VARIABLES, FLAGS & INTERPOLATION</span>
+              <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-[var(--btn-bg)] text-[var(--accent)] border border-[var(--border)]">
+                {variables.length} registered
+              </span>
+            </h3>
+            <p className="text-[10px] text-[var(--muted)]">
+              Create counters, flags, and items. Use <span className="text-[var(--accent)] font-mono font-bold">{`{variable_key}`}</span> in any dialogue.
+            </p>
+          </div>
+        </div>
+        {!isWorkspaceView && onClose && (
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
@@ -298,7 +300,8 @@ export default function VariableStudioModal({
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
-        </div>
+        )}
+      </div>
 
         {/* PLANTILLAS RÁPIDAS SUGERIDAS */}
         <div className="px-4 py-2.5 bg-[var(--well-bg)] border-b border-[var(--border)] flex items-center justify-between gap-2 shrink-0 flex-wrap">
@@ -581,18 +584,29 @@ export default function VariableStudioModal({
         </div>
 
         {/* PIE DEL MODAL */}
-        <div className="flex items-center justify-end pt-3 border-t border-[var(--border)]">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] font-bold rounded-md text-xs uppercase cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.action.check} size={14} className="text-[var(--accent)]" />
-            <span>Done / Return to Editor</span>
-          </button>
-        </div>
+        {!isWorkspaceView && onClose && (
+          <div className="flex items-center justify-end pt-3 border-t border-[var(--border)]">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] font-bold rounded-md text-xs uppercase cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
+            >
+              <GuiIconRenderer icon={GUI_ICONS.action.check} size={14} className="text-[var(--accent)]" />
+              <span>Done / Return to Editor</span>
+            </button>
+          </div>
+        )}
 
       </div>
+  );
+
+  if (isWorkspaceView) {
+    return <div className="w-full h-full overflow-hidden flex flex-col">{innerCard}</div>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center animate-fade-in font-sans">
+      {innerCard}
     </div>
   );
 }

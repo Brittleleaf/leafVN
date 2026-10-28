@@ -18,13 +18,15 @@ export interface ScriptIssue {
 interface ProjectDoctorModalProps {
   story: VNStory;
   onNavigateToIssue: (chapterId: string, sceneId: string, lineIndex?: number) => void;
-  onClose: () => void;
+  onClose?: () => void;
+  isWorkspaceView?: boolean;
 }
 
 export default function ProjectDoctorModal({
   story,
   onNavigateToIssue,
-  onClose,
+  onClose = () => {},
+  isWorkspaceView = false,
 }: ProjectDoctorModalProps) {
   // Analyze the story for broken links, missing assets, and logical inconsistencies
   const issues: ScriptIssue[] = useMemo(() => {
@@ -422,42 +424,43 @@ export default function ProjectDoctorModal({
 
   const healthScore = Math.max(0, 100 - errorCount * 25 - warningCount * 10);
 
-  return (
-    <div className="fixed inset-0 z-50 vn-modal-backdrop p-4 md:p-8 flex items-center justify-center animate-fade-in font-sans">
-      <div className="max-w-3xl w-full vn-modal-card flex flex-col max-h-[85vh] overflow-hidden text-[var(--text)]">
-        
-        {/* HEADER */}
-        <div className="p-4 md:px-6 border-b vn-glass-header flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-md bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center shadow-sm">
-              <GuiIconRenderer icon={GUI_ICONS.general.briefcase} className="w-5 h-5 text-emerald-500" />
-            </div>
-            <div>
-              <h2 className="text-base font-extrabold text-[var(--text)] uppercase tracking-wider flex items-center gap-2">
-                <span>PROJECT DOCTOR & DIAGNOSTICS</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold uppercase ${
-                  healthScore === 100
-                    ? 'bg-emerald-500/20 border border-emerald-500 text-emerald-800 dark:text-emerald-300'
-                    : healthScore >= 70
-                    ? 'bg-amber-500/20 border border-amber-500 text-amber-800 dark:text-amber-300'
-                    : 'bg-red-500/20 border border-red-500 text-red-800 dark:text-red-300'
-                }`}>
-                  Health: {healthScore}%
-                </span>
-              </h2>
-              <p className="text-xs text-[var(--muted)]">
-                Automated check for broken branching links, target scenes, and story integrity.
-              </p>
-            </div>
+  const innerCard = (
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-3xl max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+      
+      {/* HEADER */}
+      <div className="p-3 md:px-5 border-b vn-glass-header flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-md bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center shadow-sm">
+            <GuiIconRenderer icon={GUI_ICONS.general.briefcase} className="w-4 h-4 text-emerald-500" />
           </div>
+          <div>
+            <h2 className="text-xs font-extrabold text-[var(--text)] uppercase tracking-wider flex items-center gap-2">
+              <span>PROJECT DOCTOR & DIAGNOSTICS</span>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold uppercase ${
+                healthScore === 100
+                  ? 'bg-emerald-500/20 border border-emerald-500 text-emerald-800 dark:text-emerald-300'
+                  : healthScore >= 70
+                  ? 'bg-amber-500/20 border border-amber-500 text-amber-800 dark:text-amber-300'
+                  : 'bg-red-500/20 border border-red-500 text-red-800 dark:text-red-300'
+              }`}>
+                Health: {healthScore}%
+              </span>
+            </h2>
+            <p className="text-[10px] text-[var(--muted)]">
+              Automated check for broken branching links, target scenes, and story integrity.
+            </p>
+          </div>
+        </div>
 
+        {!isWorkspaceView && onClose && (
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
-        </div>
+        )}
+      </div>
 
         {/* STATUS SUMMARY STATS */}
         <div className="px-6 py-3 bg-[var(--well-bg)] border-b border-[var(--border)] flex items-center gap-4 text-xs shrink-0 flex-wrap">
@@ -559,16 +562,27 @@ export default function ProjectDoctorModal({
         </div>
 
         {/* FOOTER */}
-        <div className="p-3.5 bg-[var(--well-bg)] border-t border-[var(--border)] flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow-sm"
-          >
-            Close
-          </button>
-        </div>
+        {!isWorkspaceView && onClose && (
+          <div className="p-3.5 bg-[var(--well-bg)] border-t border-[var(--border)] flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-4 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow-sm"
+            >
+              Close
+            </button>
+          </div>
+        )}
 
       </div>
+  );
+
+  if (isWorkspaceView) {
+    return <div className="w-full h-full overflow-hidden flex flex-col">{innerCard}</div>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 vn-modal-backdrop p-4 md:p-8 flex items-center justify-center animate-fade-in font-sans">
+      {innerCard}
     </div>
   );
 }

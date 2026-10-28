@@ -16,8 +16,9 @@ import {
 interface CharacterStudioModalProps {
   story: VNStory;
   onUpdateStory: (updatedStory: VNStory) => void;
-  onClose: () => void;
+  onClose?: () => void;
   notify: (msg: string) => void;
+  isWorkspaceView?: boolean;
 }
 
 export default function CharacterStudioModal({
@@ -25,6 +26,7 @@ export default function CharacterStudioModal({
   onUpdateStory,
   onClose,
   notify,
+  isWorkspaceView = false,
 }: CharacterStudioModalProps) {
   const [selectedCharId, setSelectedCharId] = useState<string | null>(story.characters[0]?.id || null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -94,63 +96,62 @@ export default function CharacterStudioModal({
     notify(`Character '${newChar.name}' created with template`);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 vn-modal-backdrop p-2 md:p-6 flex items-center justify-center animate-fade-in">
-      <div className="max-w-6xl w-full max-h-[88vh] sm:max-h-[85vh] h-full vn-modal-card flex flex-col overflow-hidden text-[var(--text)]">
-        
-        {/* MAIN HEADER */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b vn-glass-header px-5 py-3.5 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
-              <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-5 h-5" />
+  const studioContent = (
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-6xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-[var(--text)]`}>
+      {/* MAIN HEADER */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b vn-glass-header px-5 py-3 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
+            <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs text-[var(--text)] font-extrabold uppercase tracking-widest">
+                Character & Role Studio
+              </h3>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--btn-bg)] text-[var(--accent)] border border-[var(--border)]">
+                {story.characters.length} registered
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm text-[var(--text)] font-extrabold uppercase tracking-widest">
-                  Character & Role Studio
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--btn-bg)] text-[var(--accent)] border border-[var(--border)]">
-                  {story.characters.length} registered
-                </span>
-              </div>
-              <p className="text-[11px] text-[var(--muted)]">
-                Identity, profile pictures, dialogue moods, and custom text box.
-              </p>
-            </div>
+            <p className="text-[10px] text-[var(--muted)]">
+              Identity, profile pictures, dialogue moods, and custom text box.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          {/* Search */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search by name, lore..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md pl-7 pr-3 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] transition-colors w-40 sm:w-52 font-sans"
+            />
+            <GuiIconRenderer icon={GUI_ICONS.general.search} className="absolute left-2 top-1.5 text-[var(--muted)] w-3.5 h-3.5 opacity-60" />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1 text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-3 h-3" />
+              </button>
+            )}
           </div>
 
-          <div className="flex items-center gap-2.5">
-            {/* Search */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search by name, lore..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md pl-7 pr-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] transition-colors w-40 sm:w-52 font-sans"
-              />
-              <GuiIconRenderer icon={GUI_ICONS.general.search} className="absolute left-2 top-2 text-[var(--muted)] w-3.5 h-3.5 opacity-60" />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-1.5 text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
-                >
-                  <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-3 h-3" />
-                </button>
-              )}
-            </div>
+          {/* Create Character Button */}
+          <button
+            type="button"
+            onClick={handleCreateNewChar}
+            className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs uppercase font-extrabold cursor-pointer transition-all shadow flex items-center gap-1.5 shrink-0"
+          >
+            <span>+</span>
+            <span>Create Character</span>
+          </button>
 
-            {/* Create Character Button */}
-            <button
-              type="button"
-              onClick={handleCreateNewChar}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs uppercase font-extrabold cursor-pointer transition-all shadow flex items-center gap-1.5 shrink-0"
-            >
-              <span>+</span>
-              <span>Create Character</span>
-            </button>
-
+          {!isWorkspaceView && onClose && (
             <button
               type="button"
               onClick={onClose}
@@ -159,8 +160,9 @@ export default function CharacterStudioModal({
             >
               <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-4 h-4 opacity-75 hover:opacity-100" />
             </button>
-          </div>
+          )}
         </div>
+      </div>
 
         {/* STUDIO BODY IN 3 COLUMNS */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
@@ -438,7 +440,6 @@ export default function CharacterStudioModal({
           {activeChar && <CharacterDossierSidebar activeChar={activeChar} />}
 
         </div>
-      </div>
 
       {/* ASSET PICKER MODAL FOR MAIN AVATAR */}
       {showAvatarAssetPicker && activeChar && (
@@ -507,6 +508,16 @@ export default function CharacterStudioModal({
           notify={notify}
         />
       )}
+    </div>
+  );
+
+  if (isWorkspaceView) {
+    return <div className="w-full h-full overflow-hidden flex flex-col">{studioContent}</div>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 vn-modal-backdrop p-2 md:p-6 flex items-center justify-center animate-fade-in">
+      {studioContent}
     </div>
   );
 }

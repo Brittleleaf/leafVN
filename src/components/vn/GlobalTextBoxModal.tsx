@@ -11,7 +11,8 @@ interface GlobalTextBoxModalProps {
   story: VNStory;
   onUpdateStory: (updatedStory: VNStory) => void;
   onOpenCharacterStudio: () => void;
-  onClose: () => void;
+  onClose?: () => void;
+  isWorkspaceView?: boolean;
 }
 
 export default function GlobalTextBoxModal({
@@ -19,6 +20,7 @@ export default function GlobalTextBoxModal({
   onUpdateStory,
   onOpenCharacterStudio,
   onClose,
+  isWorkspaceView = false,
 }: GlobalTextBoxModalProps) {
   const [showFontGallery, setShowFontGallery] = useState(false);
   const [previewSampleText, setPreviewSampleText] = useState(
@@ -87,25 +89,25 @@ export default function GlobalTextBoxModal({
       ? 'text-sm sm:text-base'
       : 'text-xs sm:text-sm';
 
-  return (
-    <div className="fixed inset-0 z-50 vn-modal-backdrop p-3 md:p-6 flex items-center justify-center animate-fade-in font-sans">
-      <div className="max-w-4xl w-full vn-modal-card flex flex-col max-h-[88vh] sm:max-h-[85vh] overflow-hidden text-xs text-[var(--text)]">
-        
-        {/* HEADER */}
-        <div className="flex items-center justify-between border-b vn-glass-header px-5 py-3.5 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
-              <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="text-sm text-[var(--text)] font-extrabold uppercase tracking-widest">
-                Global Dialogue Text Box
-              </h3>
-              <p className="text-[11px] text-[var(--muted)]">
-                Default layout, typography, borders, and sound timing across all scenes.
-              </p>
-            </div>
+  const innerCard = (
+    <div className={`w-full h-full ${isWorkspaceView ? 'bg-[var(--surface)]' : 'max-w-4xl max-h-[88vh] sm:max-h-[85vh] vn-modal-card'} flex flex-col overflow-hidden text-xs text-[var(--text)]`}>
+      
+      {/* HEADER */}
+      <div className="flex items-center justify-between border-b vn-glass-header px-5 py-3 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
+            <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-4 h-4" />
           </div>
+          <div>
+            <h3 className="text-xs text-[var(--text)] font-extrabold uppercase tracking-widest">
+              Global Dialogue Text Box
+            </h3>
+            <p className="text-[10px] text-[var(--muted)]">
+              Default layout, typography, borders, and sound timing across all scenes.
+            </p>
+          </div>
+        </div>
+        {!isWorkspaceView && onClose && (
           <button
             onClick={onClose}
             className="w-7 h-7 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
@@ -113,9 +115,10 @@ export default function GlobalTextBoxModal({
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
-        </div>
+        )}
+      </div>
 
-        {/* MODAL BODY */}
+      {/* MODAL BODY */}
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 custom-scrollbar">
           
           {/* NOTICE BANNER */}
@@ -461,32 +464,43 @@ export default function GlobalTextBoxModal({
         </div>
 
         {/* FOOTER */}
-        <div className="p-3 border-t vn-glass-header flex items-center justify-end gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md font-bold uppercase text-xs cursor-pointer transition-colors shadow-sm"
-          >
-            Done
-          </button>
-        </div>
-      </div>
+        {!isWorkspaceView && onClose && (
+          <div className="p-3 border-t vn-glass-header flex items-center justify-end gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md font-bold uppercase text-xs cursor-pointer transition-colors shadow-sm"
+            >
+              Done
+            </button>
+          </div>
+        )}
 
-      {showFontGallery && (
-        <AssetStudioModal
-          story={story}
-          filterType="font"
-          initialFilterType="font"
-          onSelectAsset={(asset) => {
-            ensureGoogleFontLoaded(asset.url);
-            onUpdateStory({ ...story, defaultFontFamily: asset.url });
-            setShowFontGallery(false);
-          }}
-          onClose={() => setShowFontGallery(false)}
-          onUpdateStory={onUpdateStory}
-          notify={() => {}}
-        />
-      )}
+        {showFontGallery && (
+          <AssetStudioModal
+            story={story}
+            filterType="font"
+            initialFilterType="font"
+            onSelectAsset={(asset) => {
+              ensureGoogleFontLoaded(asset.url);
+              onUpdateStory({ ...story, defaultFontFamily: asset.url });
+              setShowFontGallery(false);
+            }}
+            onClose={() => setShowFontGallery(false)}
+            onUpdateStory={onUpdateStory}
+            notify={() => {}}
+          />
+        )}
+      </div>
+  );
+
+  if (isWorkspaceView) {
+    return <div className="w-full h-full overflow-hidden flex flex-col">{innerCard}</div>;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 vn-modal-backdrop p-3 md:p-6 flex items-center justify-center animate-fade-in font-sans">
+      {innerCard}
     </div>
   );
 }

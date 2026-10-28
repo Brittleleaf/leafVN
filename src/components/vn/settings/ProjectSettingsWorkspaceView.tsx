@@ -112,6 +112,7 @@ export default function ProjectSettingsWorkspaceView() {
               onUpdateStory={(updated) => setStory(updated)}
               onClose={() => setCurrentWorkspace('hub')}
               notify={notify}
+              isWorkspaceView={true}
             />
           </div>
         )}
@@ -123,6 +124,7 @@ export default function ProjectSettingsWorkspaceView() {
               onUpdateStory={(updated) => setStory(updated)}
               onOpenCharacterStudio={() => setCurrentWorkspace('gallery_assets')}
               onClose={() => setCurrentWorkspace('hub')}
+              isWorkspaceView={true}
             />
           </div>
         )}
@@ -138,9 +140,10 @@ export default function ProjectSettingsWorkspaceView() {
                   setSelectedLineIndex(lineIndex);
                 }
                 setCurrentWorkspace('story_tool');
-                notify('Navegando al escenario reportado por Project Doctor');
+                notify('Navigating to scene reported by Project Doctor');
               }}
               onClose={() => setCurrentWorkspace('hub')}
+              isWorkspaceView={true}
             />
           </div>
         )}
