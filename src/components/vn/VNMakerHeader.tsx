@@ -81,9 +81,13 @@ export default function VNMakerHeader({
         <div className="h-4 w-[1px] bg-[var(--border2)]" />
 
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent-glow)]" />
+          <img
+            src="/assets/logo/LaefVN.png"
+            alt="Leaf VN Logo"
+            className="w-6 h-6 object-contain rounded-md filter drop-shadow-[0_0_6px_var(--accent-glow)] select-none pointer-events-none"
+          />
           <span className="text-xs md:text-sm font-extrabold tracking-wider text-[var(--accent)] font-mono hidden sm:inline">
-            VN STUDIO
+            LEAF VN
           </span>
         </div>
 

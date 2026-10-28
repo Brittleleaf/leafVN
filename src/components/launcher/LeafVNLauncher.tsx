@@ -633,9 +633,11 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         <div className="flex items-center gap-4">
           {/* Logo Estilo Photoshop Adaptativo */}
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] rounded-md flex items-center justify-center font-bold text-[var(--accent-contrast)] text-sm shadow-[0_0_12px_var(--accent-glow)]">
-              Lv
-            </div>
+            <img
+              src="/assets/logo/LaefVN.png"
+              alt="Leaf VN Logo"
+              className="w-7 h-7 object-contain rounded-md filter drop-shadow-[0_0_8px_var(--accent-glow)] select-none pointer-events-none"
+            />
             <span className="font-semibold tracking-wide text-[var(--text)]">Leaf VN Studio</span>
             <span className="text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted2)] px-1.5 py-0.5 rounded">
               v2.1
@@ -1306,7 +1308,10 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                   <div className="p-3.5 rounded-xl hover:bg-[var(--surface-strong)] transition-colors space-y-1">
                     <div className="text-[10px] font-mono uppercase text-[var(--muted2)]">Engine Version</div>
-                    <div className="font-bold text-[var(--text)]">Leaf VN Studio v2.1 (Standalone)</div>
+                    <div className="flex items-center gap-2">
+                      <img src="/assets/logo/LaefVN.png" alt="Leaf VN Logo" className="w-5 h-5 object-contain rounded-sm" />
+                      <div className="font-bold text-[var(--text)]">Leaf VN Studio v2.1 (Standalone)</div>
+                    </div>
                     <div className="text-[10px] text-emerald-500 font-medium flex items-center gap-1.5 pt-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       <span>Operational / Local & Disk Engine</span>

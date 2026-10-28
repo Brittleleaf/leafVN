@@ -27,6 +27,11 @@ import I18nInitializer from "@/components/i18n/I18nInitializer";
 export const metadata: Metadata = {
   title: "Leaf VN Studio - Visual Novel Engine",
   description: "Next-Gen Visual Novel Engine & Creative Authoring Studio",
+  icons: {
+    icon: "/assets/logo/LaefVN.png",
+    shortcut: "/assets/logo/LaefVN.png",
+    apple: "/assets/logo/LaefVN.png",
+  },
 };
 
 export default function RootLayout({
