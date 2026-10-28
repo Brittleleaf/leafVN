@@ -71,6 +71,7 @@ export default function CinematicSequencerStudio({
 
   // Canvas 16:9 strictly constrained responsive dimension hook (never stretches or squashes)
   const centerContainerRef = React.useRef<HTMLDivElement>(null);
+  const [centerContainerHeight, setCenterContainerHeight] = useState<number>(600);
   const [canvasDimensions, setCanvasDimensions] = useState<{ width: number; height: number }>({
     width: 800,
     height: 450,
@@ -81,6 +82,7 @@ export default function CinematicSequencerStudio({
     if (!el) return;
 
     const updateDimensions = () => {
+      setCenterContainerHeight(el.clientHeight);
       // Available box leaving room for padding, transport bar, and outside vertical toolbar
       const paddingX = 160;
       const paddingY = 88;
@@ -680,11 +682,19 @@ export default function CinematicSequencerStudio({
               </div>
 
               {/* DOCKED VERTICAL STUDIO TOOLBAR (COMPLETELY OUTSIDE CANVAS ON THE RIGHT) */}
-              {selectedClip && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="absolute left-full ml-3.5 top-1/2 -translate-y-1/2 z-50 shrink-0 pointer-events-auto"
-                >
+              {selectedClip && (() => {
+                // Dynamic scaling so the toolbar perfectly fits on screen without losing top/bottom buttons
+                const maxToolbarH = Math.max(160, centerContainerHeight - 92);
+                const toolbarScale = Math.min(1, Math.max(0.42, maxToolbarH / 580));
+                return (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      transform: `translateY(-50%) scale(${toolbarScale})`,
+                      transformOrigin: 'left center',
+                    }}
+                    className="absolute left-full ml-3.5 top-1/2 z-50 shrink-0 pointer-events-auto transition-transform duration-75"
+                  >
                   <VNTransformToolbar
                     target={{
                       id: selectedClip.id,
@@ -718,8 +728,9 @@ export default function CinematicSequencerStudio({
                     onDelete={() => handleDeleteClip(selectedClip.id)}
                     notify={setSaveSuccessMsg}
                   />
-                </div>
-              )}
+                  </div>
+                );
+              })()}
             </div>
           </div>
 

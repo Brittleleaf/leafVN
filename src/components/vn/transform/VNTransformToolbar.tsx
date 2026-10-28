@@ -209,7 +209,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
   // Clases dinámicas adaptadas a los tokens del tema
   const btnBaseClass =
-    "w-9 h-9 rounded-xl border flex items-center justify-center cursor-pointer transition-all duration-150 select-none";
+    "w-9 h-9 shrink-0 rounded-xl border flex items-center justify-center cursor-pointer transition-all duration-150 select-none";
   const btnInactiveClass =
     "bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border-hover)] shadow-sm";
   const btnActiveClass =
@@ -218,9 +218,9 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
     "pointer-events-none absolute left-full ml-2.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-[var(--modal-bg,var(--well-bg))] border border-[var(--border2)] text-[10px] font-medium text-[var(--text)] whitespace-nowrap shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity z-50 backdrop-blur-md";
 
   return (
-    <div className="flex flex-col items-center gap-1.5 p-2 bg-[var(--dropdown-bg,var(--panel))] backdrop-blur-2xl border border-[var(--border2)] rounded-lg shadow-[0_16px_45px_rgba(0,0,0,0.65),0_0_24px_var(--accent-glow)] ring-1 ring-[var(--accent)]/30 select-none animate-in fade-in slide-in-from-left-3 duration-200 text-[var(--text)]">
+    <div className="flex flex-col items-center gap-1.5 p-2 bg-[var(--dropdown-bg,var(--panel))] backdrop-blur-2xl border border-[var(--border2)] rounded-lg shadow-[0_16px_45px_rgba(0,0,0,0.65),0_0_24px_var(--accent-glow)] ring-1 ring-[var(--accent)]/30 select-none animate-in fade-in slide-in-from-left-3 duration-200 text-[var(--text)] shrink-0">
       {/* Header Tag & Live Telemetry Adaptado al Tema */}
-      <div className="flex flex-col items-center gap-0.5 pb-2 border-b border-[var(--border)] w-full">
+      <div className="flex flex-col items-center gap-0.5 pb-2 border-b border-[var(--border)] w-full shrink-0">
         <span className="text-[8px] font-mono font-bold tracking-widest uppercase text-[var(--accent)] bg-[var(--accent-surface)] px-2.5 py-0.5 rounded-full border border-[var(--accent-border)] shadow-sm">
           TRANSFORM
         </span>
@@ -264,7 +264,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
       {/* 0. In-Place Text Editing (For Text Targets) */}
       {target.isText && onEditText && (
-        <div className="relative group">
+        <div className="relative group shrink-0">
           <button
             type="button"
             onClick={onEditText}
@@ -281,7 +281,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
       {/* 0. Lock / Unlock Element */}
       {caps.allowLock && (
-        <div className="relative group">
+        <div className="relative group shrink-0">
           <button
             type="button"
             onClick={handleToggleLock}
@@ -301,7 +301,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
       {/* 0b. Configure Properties */}
       {onConfigure && (
-        <div className="relative group">
+        <div className="relative group shrink-0">
           <button
             type="button"
             onClick={onConfigure}
@@ -317,7 +317,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
       )}
 
       {/* 0c. Toggle Magnetic Snapping for this Element */}
-      <div className="relative group">
+      <div className="relative group shrink-0">
         <button
           type="button"
           onClick={() => {
@@ -342,7 +342,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
       {/* 1 & 2. Flip Controls */}
       {caps.allowFlip && (
         <>
-          <div className="relative group">
+          <div className="relative group shrink-0">
             <button
               type="button"
               onClick={handleFlipX}
@@ -356,7 +356,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
             </span>
           </div>
 
-          <div className="relative group">
+          <div className="relative group shrink-0">
             <button
               type="button"
               onClick={handleFlipY}
@@ -374,7 +374,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
       {/* 2b. Rotate 90° Clockwise */}
       {caps.allowRotate && (
-        <div className="relative group">
+        <div className="relative group shrink-0">
           <button
             type="button"
             onClick={handleRotate90}
@@ -408,7 +408,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
       {/* 3. 3D Perspective Mode */}
       {caps.allow3D && (
-        <div className="relative group">
+        <div className="relative group shrink-0">
           <button
             type="button"
             onClick={handleToggle3D}
@@ -425,7 +425,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
 
       {/* 4. Crop Mode */}
       {caps.allowCrop && (
-        <div className="relative group">
+        <div className="relative group shrink-0">
           <button
             type="button"
             onClick={handleToggleCrop}
@@ -466,10 +466,10 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
           </div>
         )}
 
-      <div className="w-6 h-[1px] bg-[var(--border)] my-0.5" />
+      <div className="w-6 h-[1px] bg-[var(--border)] my-0.5 shrink-0" />
 
       {/* Copy Transform State */}
-      <div className="relative group">
+      <div className="relative group shrink-0">
         <button
           type="button"
           onClick={handleCopyState}
@@ -487,7 +487,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
       </div>
 
       {/* Paste Transform State */}
-      <div className="relative group">
+      <div className="relative group shrink-0">
         <button
           type="button"
           disabled={!clipboardState}
@@ -512,10 +512,10 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
         </span>
       </div>
 
-      <div className="w-6 h-[1px] bg-[var(--border)] my-0.5" />
+      <div className="w-6 h-[1px] bg-[var(--border)] my-0.5 shrink-0" />
 
       {/* 5. Center on Stage */}
-      <div className="relative group">
+      <div className="relative group shrink-0">
         <button
           type="button"
           onClick={handleCenter}
@@ -530,7 +530,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
       </div>
 
       {/* 6. Reset Transforms */}
-      <div className="relative group">
+      <div className="relative group shrink-0">
         <button
           type="button"
           onClick={handleReset}
@@ -547,8 +547,8 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
       {/* 7. Universal Delete Button */}
       {onDelete && (
         <>
-          <div className="w-6 h-[1px] bg-[var(--border)] my-0.5" />
-          <div className="relative group">
+          <div className="w-6 h-[1px] bg-[var(--border)] my-0.5 shrink-0" />
+          <div className="relative group shrink-0">
             <button
               type="button"
               onClick={onDelete}
