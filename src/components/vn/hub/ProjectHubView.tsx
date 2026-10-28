@@ -137,6 +137,8 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
           </div>
         </div>
 
+        <div className="h-[1px] bg-[var(--border)] my-2" />
+
         {/* 3 CORE PILLAR WORKSPACE CARDS */}
         <div>
           <div className="flex items-center justify-between pb-3">
@@ -285,8 +287,10 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
         </div>
 
         {/* BOTTOM SECTION: PROJECT LOGIC & GLOBAL SETTINGS */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--panel)]/70 backdrop-blur-md p-4 shadow-sm">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border)]">
+        <div className="h-[1px] bg-[var(--border)] my-2" />
+
+        <div className="space-y-3">
+          <div className="flex items-center justify-between pb-1">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--muted)] flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
               <span>GLOBAL SETTINGS, LOGIC & AUDIT</span>

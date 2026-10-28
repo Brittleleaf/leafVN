@@ -52,43 +52,51 @@ export default function GalleryAssetsWorkspaceView() {
           </div>
         </div>
 
-        {/* WORKSPACE SEGMENTED SUB-TABS */}
-        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-0.5 rounded-lg shadow-inner">
+        {/* WORKSPACE SUB-TABS: Clean, borderless hover style with hairlines */}
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => {
               setActiveTab('characters');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'characters' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'characters'
+                ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5" />
             <span>Characters & Expressions</span>
           </button>
 
+          <div className="h-4 w-[1px] bg-[var(--border)]" />
+
           <button
             onClick={() => {
               setActiveTab('assets');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'assets' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'assets'
+                ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5" />
             <span>Multimedia Library (BGM / SFX / BG)</span>
           </button>
 
+          <div className="h-4 w-[1px] bg-[var(--border)]" />
+
           <button
             onClick={() => {
               setActiveTab('extras_preview');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'extras_preview'
-                ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-[var(--text)]'
+                ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />

@@ -566,15 +566,15 @@ export default function MenuGameToolModal({
           </div>
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        {/* Action Controls: Limpio con separadores en lugar de botones con bordes gruesos */}
+        <div className="flex items-center gap-1.5">
           {/* Menu Enabled Toggle */}
           <button
             onClick={handleToggleMenuEnabled}
-            className={`px-3 py-1.5 rounded-md border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
               isMenuEnabled
-                ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25'
-                : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-[var(--text)]'
+                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/25'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
             title="Toggle whether the game boots into Intro/Title Menu or directly into Chapter 1"
           >
@@ -582,10 +582,12 @@ export default function MenuGameToolModal({
             <span>{isMenuEnabled ? 'Menu Active in Game' : 'Menu Bypassed'}</span>
           </button>
 
+          <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
+
           {/* Playtest Menu Button */}
           <button
             onClick={handlePlaytestMenu}
-            className="px-3 py-1.5 rounded-md border border-sky-500/50 bg-sky-500/15 text-sky-700 dark:text-sky-300 hover:bg-sky-500/25 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-sky-600 dark:text-sky-300 hover:bg-sky-500/15 transition-all cursor-pointer flex items-center gap-1.5"
             title="Open live player to test menu experience in real-time"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-sky-400" />
@@ -596,7 +598,7 @@ export default function MenuGameToolModal({
           {configuredCount < 6 && (
             <button
               onClick={handleGenerateMissingScreens}
-              className="px-3 py-1.5 rounded-md border border-amber-500/50 bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-600 dark:text-amber-300 hover:bg-amber-500/15 transition-all cursor-pointer flex items-center gap-1.5"
               title="Automatically create missing menu screens in the project"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-3.5 h-3.5 text-amber-400" />
@@ -604,10 +606,12 @@ export default function MenuGameToolModal({
             </button>
           )}
 
+          <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
+
           {/* Auto Layout */}
           <button
             onClick={handleAutoLayout}
-            className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+            className="px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
             title="Organize nodes automatically"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.transform} className="w-3.5 h-3.5" />
@@ -617,43 +621,45 @@ export default function MenuGameToolModal({
           {/* Center on Menu */}
           <button
             onClick={handleCenterOnMenu}
-            className="px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+            className="px-2.5 py-1.5 rounded-lg hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
             title="Center view on Main Title Screen"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Center</span>
           </button>
 
+          <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
+
           {/* Zoom controls */}
-          <div className="flex items-center bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-0.5">
+          <div className="flex items-center gap-0.5">
             <button
               onClick={() => setZoom((z) => Math.max(0.4, z - 0.1))}
-              className="px-2 py-1 text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
+              className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-[var(--surface-strong)] text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
               title="Zoom Out"
             >
               -
             </button>
-            <span className="text-[10px] font-mono px-1.5 text-[var(--muted)]">
+            <span className="text-[10px] font-mono px-1 text-[var(--muted)]">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={() => setZoom((z) => Math.min(2.0, z + 0.1))}
-              className="px-2 py-1 text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
+              className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-[var(--surface-strong)] text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
               title="Zoom In"
             >
               +
             </button>
           </div>
 
-          <div className="h-4 w-[1px] bg-[var(--border)] mx-1" />
+          <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
 
           {/* Close */}
           <button
             onClick={onClose}
-            className="p-2 rounded-md text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] cursor-pointer transition-colors"
-            title="Close (Esc)"
+            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+            title="Close menu tool and return to editor"
           >
-            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-4 h-4" />
+            <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

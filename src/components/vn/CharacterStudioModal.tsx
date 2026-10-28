@@ -183,10 +183,10 @@ export default function CharacterStudioModal({
                   <div
                     key={ch.id}
                     onClick={() => setSelectedCharId(ch.id)}
-                    className={`p-2.5 rounded-md border transition-all cursor-pointer flex items-center gap-2.5 relative group ${
+                    className={`p-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2.5 relative group ${
                       isSelected
-                        ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40'
-                        : 'bg-[var(--card-bg)] border-[var(--border)] hover:border-[var(--border2)] hover:bg-[var(--btn-hover-bg)]'
+                        ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                        : 'hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)]'
                     }`}
                   >
                     <img

@@ -832,8 +832,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 onClick={() => handleTabChange('home')}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
                   activeTab === 'home'
-                    ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent-border)] font-bold shadow-sm'
-                    : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--panel-hover)]'
+                    ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                    : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
                 }`}
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.home} className="w-4 h-4 text-[var(--accent)]" />
@@ -844,8 +844,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 onClick={() => handleTabChange('templates')}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
                   activeTab === 'templates'
-                    ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent-border)] font-bold shadow-sm'
-                    : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--panel-hover)]'
+                    ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                    : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
                 }`}
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.palette} className="w-4 h-4 text-[var(--accent)]" />
@@ -856,8 +856,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 onClick={() => handleTabChange('settings')}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
                   activeTab === 'settings'
-                    ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent-border)] font-bold shadow-sm'
-                    : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--panel-hover)]'
+                    ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                    : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
                 }`}
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-[var(--accent)]" />
@@ -1260,8 +1260,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
               </div>
             </div>
           ) : (
-            /* PESTAÑA DE AJUSTES CON SELECTOR DE IDIOMAS RTTS Y TEMAS VISUALES */
-            <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-200">
+            /* PESTAÑA DE AJUSTES: DISEÑO LIMPIO CON SEPARADORES EN LUGAR DE CAJAS/MODALES ENORMES */
+            <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200">
               <div>
                 <h2 className="text-2xl font-light text-[var(--text)] tracking-tight">
                   Studio Settings
@@ -1271,9 +1271,11 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 </p>
               </div>
 
+              <div className="h-[1px] bg-[var(--border)]" />
+
               {/* 1. SECTOR DE IDIOMA POTENCIADO POR REALTIME TRANSLATION SYSTEM (RTTS) */}
-              <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-md backdrop-blur-md">
-                <div className="border-b border-[var(--border)] pb-3">
+              <div className="space-y-4">
+                <div>
                   <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">
                     <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-4 h-4 text-[var(--accent)]" />
                     <span>Interface Language (RTTS Realtime Translation)</span>
@@ -1283,7 +1285,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {SUPPORTED_LANGS.map((code) => {
                     const isSelected = currentLang === code;
                     const meta = LANGUAGE_LABELS[code] || { name: code.toUpperCase(), native: code.toUpperCase() };
@@ -1292,14 +1294,14 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       <button
                         key={code}
                         onClick={() => handleSwitchLanguage(code)}
-                        className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-2 ${
+                        className={`p-3 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between gap-2 ${
                           isSelected
-                            ? 'bg-[var(--accent-surface)] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-md font-bold'
-                            : 'bg-[var(--well-bg)] border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--btn-hover-bg)]'
+                            ? 'bg-[var(--surface-strong)] text-[var(--text)] font-semibold shadow-xs'
+                            : 'hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)]'
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-mono text-xs px-2 py-0.5 rounded bg-[var(--btn-bg)] border border-[var(--border)] font-bold text-[var(--accent)]">
+                          <span className="font-mono text-xs px-2 py-0.5 rounded-md bg-[var(--well-bg)] font-bold text-[var(--accent)]">
                             {code.toUpperCase()}
                           </span>
                           {isSelected && (
@@ -1318,9 +1320,11 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 </div>
               </div>
 
+              <div className="h-[1px] bg-[var(--border)]" />
+
               {/* 2. SECTOR DE TEMA VISUAL */}
-              <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-md backdrop-blur-md">
-                <div className="border-b border-[var(--border)] pb-3">
+              <div className="space-y-4">
+                <div>
                   <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">
                     <GuiIconRenderer icon={GUI_ICONS.general.palette} className="w-4 h-4 text-[var(--accent)]" />
                     <span>Engine Appearance & Visual Theme</span>
@@ -1330,17 +1334,17 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {VN_THEMES.map((th) => {
                     const isCurrent = editorTheme === th.id;
                     return (
                       <button
                         key={th.id}
                         onClick={() => handleSelectTheme(th.id)}
-                        className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 ${
+                        className={`p-3.5 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between gap-3 ${
                           isCurrent
-                            ? 'bg-[var(--accent-surface)] border-[var(--accent)] ring-1 ring-[var(--accent)] shadow-md'
-                            : 'bg-[var(--well-bg)] border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--btn-hover-bg)]'
+                            ? 'bg-[var(--surface-strong)] text-[var(--text)] font-semibold shadow-xs'
+                            : 'hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)]'
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -1384,9 +1388,11 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 </div>
               </div>
 
+              <div className="h-[1px] bg-[var(--border)]" />
+
               {/* 3. SECTOR DE INFORMACIÓN Y ALMACENAMIENTO */}
-              <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-md backdrop-blur-md">
-                <div className="border-b border-[var(--border)] pb-3">
+              <div className="space-y-4">
+                <div>
                   <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">
                     <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-4 h-4 text-[var(--accent)]" />
                     <span>Engine Architecture & URL Routes</span>
@@ -1397,7 +1403,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="p-3.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] space-y-1">
+                  <div className="p-3.5 rounded-xl hover:bg-[var(--surface-strong)] transition-colors space-y-1">
                     <div className="text-[10px] font-mono uppercase text-[var(--muted2)]">Engine Version</div>
                     <div className="font-bold text-[var(--text)]">Leaf VN Studio v2.1 (Standalone)</div>
                     <div className="text-[10px] text-emerald-500 font-medium flex items-center gap-1.5 pt-1">
@@ -1406,7 +1412,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] space-y-1">
+                  <div className="p-3.5 rounded-xl hover:bg-[var(--surface-strong)] transition-colors space-y-1">
                     <div className="text-[10px] font-mono uppercase text-[var(--muted2)]">Route Links</div>
                     <div className="font-mono text-[11px] text-[var(--accent)] space-y-0.5">
                       <div>/ (Home)</div>

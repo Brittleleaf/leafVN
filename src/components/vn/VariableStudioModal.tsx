@@ -314,7 +314,7 @@ export default function VariableStudioModal({
                 key={tmpl.key}
                 type="button"
                 onClick={() => handleStartCreate(tmpl)}
-                className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] rounded-lg text-[11px] font-bold text-[var(--text)] cursor-pointer transition-colors flex items-center gap-1.5 shadow-sm"
+                className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)] transition-colors flex items-center gap-1.5 cursor-pointer"
                 title={tmpl.desc}
               >
                 <GuiIconRenderer icon={tmpl.icon} size={12} className="text-[var(--accent)]" />
@@ -348,7 +348,7 @@ export default function VariableStudioModal({
 
             <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
               {filteredVariables.length === 0 ? (
-                <div className="p-6 border border-dashed border-[var(--border)] rounded-lg text-center space-y-2 my-auto bg-[var(--well-bg)]">
+                <div className="py-12 text-center space-y-3 my-auto">
                   <GuiIconRenderer icon={GUI_ICONS.general.folder} size={28} className="text-[var(--muted)] mx-auto block" />
                   <p className="text-xs text-[var(--muted)]">No variables found.</p>
                   <button
@@ -404,7 +404,7 @@ export default function VariableStudioModal({
           <div className="flex-1 overflow-y-auto space-y-4 pl-0 md:pl-2">
             {(isCreatingNew || activeVar) ? (
               <form onSubmit={handleSaveVariable} className="space-y-4 text-xs">
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3.5 shadow-sm">
+                <div className="space-y-3.5">
                   <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
                     <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider">
                       {isCreatingNew ? '+ Register New Variable' : `Edit: {${activeVar?.key}}`}
