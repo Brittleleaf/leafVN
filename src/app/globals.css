@@ -429,16 +429,16 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 .vn-engine-root .btn.primary,
 .vn-btn.primary,
 .vn-btn-action {
-  background: linear-gradient(135deg, #D17BF8 0%, #B15BE4 100%) !important;
-  border-color: #D17BF8 !important;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%) !important;
+  border-color: var(--accent) !important;
   color: #0F0503 !important;
   font-weight: 800 !important;
-  box-shadow: 0 4px 16px rgba(209, 123, 248, 0.45) !important;
+  box-shadow: 0 4px 16px var(--accent-glow) !important;
 }
 .vn-engine-root .btn.primary:hover,
 .vn-btn.primary:hover,
 .vn-btn-action:hover {
-  box-shadow: 0 8px 24px rgba(209, 123, 248, 0.65) !important;
+  box-shadow: 0 8px 24px var(--accent-glow) !important;
   transform: translateY(-1px);
 }
 
@@ -866,7 +866,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 .vn-btn-container-aura:hover {
   outline: 1.5px solid rgba(255, 255, 255, 0);
   outline-offset: 12px;
-  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.25), 0 0 25px rgba(209, 123, 248, 0.4) !important;
+  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.25), 0 0 25px var(--accent-glow) !important;
 }
 
 /* 5. Vector Circuit Trace (Perimeter Border Contour Draw) */

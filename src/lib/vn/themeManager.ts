@@ -18,7 +18,7 @@ export const VN_THEMES: VNThemeDefinition[] = [
   {
     id: 'default_dark',
     name: 'Modern Dark',
-    description: 'Obsidian & Deep Violet (#030207). Ambient acrylic glass, luminous accents and crisp icons.',
+    description: 'Obsidian & Deep Glass (#030207). Ambient acrylic glass, luminous accents and crisp icons.',
     badge: 'DARK',
     previewBg: '#030207',
     previewCard: 'rgba(46, 18, 86, 0.45)',
@@ -73,6 +73,7 @@ export const ACCENT_PRESETS: AccentPreset[] = [
 
 const THEME_STORAGE_KEY = 'vn_editor_theme';
 const CUSTOM_ACCENT_KEY = 'vn_custom_accent_hex';
+const DYNAMIC_STYLE_ID = 'vn-dynamic-theme-vars';
 
 // ==========================================
 // COLOR MATH & CONVERSION UTILITIES
@@ -188,7 +189,7 @@ export function hexToHue(hex: string): number {
 }
 
 // ==========================================
-// HARMONIC ACCENT & PALETTE DERIVATION
+// HARMONIC ACCENT & TOTAL PALETTE DERIVATION
 // ==========================================
 
 export interface DerivedThemeVariables {
@@ -200,34 +201,111 @@ export interface DerivedThemeVariables {
   border: string;
   border2: string;
   borderHover: string;
-  btnHoverBg: string;
-  focus: string;
+  panel: string;
+  panel2: string;
   panelHover: string;
+  btnBg: string;
+  btnHoverBg: string;
+  cardBg: string;
+  modalBg: string;
+  dropdownBg: string;
+  wellFocusBg: string;
+  muted: string;
+  muted2: string;
+  focus: string;
   glowColor1: string;
   glowColor2: string;
   glowColor3: string;
   vnActiveTabBg: string;
   vnActiveTabBorder: string;
+  vnAccentPrimary: string;
   vnAccentGradient: string;
+  vnCardSolid: string;
 }
 
-export function derivePaletteFromAccent(accentHex: string): DerivedThemeVariables | null {
+export function derivePaletteFromAccent(accentHex: string, isLightMode = false): DerivedThemeVariables | null {
   const rgb = hexToRgb(accentHex);
   if (!rgb) return null;
 
   const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
   const { r, g, b } = rgb;
 
-  // Secondary accent: slightly deeper or shifted lightness for depth
+  // Secondary accent: deeper and slightly higher saturation for contrast
   const accent2Hex = hslToHex(hsl.h, Math.min(1, hsl.s * 1.05), Math.max(0.2, hsl.l - 0.12));
 
   // Harmonic glow circles:
   // Glow 1: Analogous -30°
-  const glow1Hex = hslToHex((hsl.h - 30 + 360) % 360, Math.max(0.65, hsl.s), Math.max(0.4, hsl.l - 0.05));
+  const glow1Hex = hslToHex((hsl.h - 30 + 360) % 360, Math.max(0.7, hsl.s), 0.55);
   // Glow 2: Primary Accent
   const glow2Hex = accentHex;
   // Glow 3: Harmonic shift +75° (complementary/split vibe)
-  const glow3Hex = hslToHex((hsl.h + 75) % 360, Math.max(0.7, hsl.s), Math.min(0.75, hsl.l + 0.05));
+  const glow3Hex = hslToHex((hsl.h + 75) % 360, Math.max(0.75, hsl.s), 0.55);
+
+  if (isLightMode) {
+    // Light mode palette derivation
+    const mutedHex = hslToHex(hsl.h, 0.55, 0.20);
+    const muted2Hex = hslToHex(hsl.h, 0.45, 0.38);
+    const panelBg = 'rgba(255, 255, 255, 0.65)';
+    const panel2Bg = `rgba(${r}, ${g}, ${b}, 0.12)`;
+    const btnBg = 'rgba(255, 255, 255, 0.75)';
+    const cardBg = `linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(${Math.round(r * 0.15 + 215)}, ${Math.round(g * 0.15 + 215)}, ${Math.round(b * 0.15 + 215)}, 0.55) 100%)`;
+    const modalBg = `linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(${Math.round(r * 0.1 + 225)}, ${Math.round(g * 0.1 + 225)}, ${Math.round(b * 0.1 + 225)}, 0.98))`;
+    const dropdownBg = 'rgba(255, 255, 255, 0.97)';
+    const wellFocusBg = 'rgba(255, 255, 255, 0.92)';
+
+    return {
+      accent: accentHex,
+      accent2: accent2Hex,
+      accentGlow: `rgba(${r}, ${g}, ${b}, 0.30)`,
+      accentSurface: `rgba(${r}, ${g}, ${b}, 0.12)`,
+      accentBorder: `rgba(${r}, ${g}, ${b}, 0.40)`,
+      border: `rgba(${r}, ${g}, ${b}, 0.18)`,
+      border2: `rgba(${r}, ${g}, ${b}, 0.30)`,
+      borderHover: `rgba(${r}, ${g}, ${b}, 0.45)`,
+      panel: panelBg,
+      panel2: panel2Bg,
+      panelHover: 'rgba(255, 255, 255, 0.85)',
+      btnBg: btnBg,
+      btnHoverBg: 'rgba(255, 255, 255, 0.95)',
+      cardBg: cardBg,
+      modalBg: modalBg,
+      dropdownBg: dropdownBg,
+      wellFocusBg: wellFocusBg,
+      muted: mutedHex,
+      muted2: muted2Hex,
+      focus: `0 0 0 3px rgba(${r}, ${g}, ${b}, 0.25)`,
+      glowColor1: glow1Hex,
+      glowColor2: glow2Hex,
+      glowColor3: glow3Hex,
+      vnActiveTabBg: `rgba(${r}, ${g}, ${b}, 0.15)`,
+      vnActiveTabBorder: `rgba(${r}, ${g}, ${b}, 0.45)`,
+      vnAccentPrimary: accentHex,
+      vnAccentGradient: `linear-gradient(135deg, ${accentHex} 0%, ${accent2Hex} 100%)`,
+      vnCardSolid: '#ffffff',
+    };
+  }
+
+  // Dark mode palette derivation
+  // Deep surface tints aligned with the selected accent hue (never stuck in purple!)
+  const deepR = Math.round(r * 0.14 + 4);
+  const deepG = Math.round(g * 0.14 + 4);
+  const deepB = Math.round(b * 0.14 + 7);
+
+  // Muted and secondary texts derived from chosen hue:
+  // e.g. for Cyan: luminous ice cyan #A5F3FC and #22D3EE
+  // e.g. for Green: luminous mint #A7F3D0 and #34D399
+  // e.g. for Amber: luminous gold #FDE68A and #F59E0B
+  const mutedHex = hslToHex(hsl.h, 0.45, 0.82);
+  const muted2Hex = hslToHex(hsl.h, 0.60, 0.62);
+
+  const panelBg = `rgba(${deepR}, ${deepG}, ${deepB}, 0.25)`;
+  const panel2Bg = `rgba(${deepR}, ${deepG}, ${deepB}, 0.45)`;
+  const btnBg = `rgba(${deepR}, ${deepG}, ${deepB}, 0.55)`;
+  const cardBg = `linear-gradient(135deg, rgba(${deepR}, ${deepG}, ${deepB}, 0.55) 0%, rgba(1, 1, 3, 0.75) 100%)`;
+  const modalBg = `linear-gradient(180deg, rgba(${Math.round(deepR * 0.8 + 2)}, ${Math.round(deepG * 0.8 + 2)}, ${Math.round(deepB * 0.8 + 4)}, 0.96), rgba(1, 1, 3, 0.98))`;
+  const dropdownBg = `rgba(${Math.round(deepR * 0.4 + 6)}, ${Math.round(deepG * 0.4 + 6)}, ${Math.round(deepB * 0.4 + 8)}, 0.96)`;
+  const wellFocusBg = `rgba(${deepR}, ${deepG}, ${deepB}, 0.85)`;
+  const vnCardSolid = `rgb(${deepR}, ${deepG}, ${deepB})`;
 
   return {
     accent: accentHex,
@@ -238,15 +316,26 @@ export function derivePaletteFromAccent(accentHex: string): DerivedThemeVariable
     border: `rgba(${r}, ${g}, ${b}, 0.25)`,
     border2: `rgba(${r}, ${g}, ${b}, 0.40)`,
     borderHover: `rgba(${r}, ${g}, ${b}, 0.65)`,
-    btnHoverBg: `rgba(${r}, ${g}, ${b}, 0.25)`,
-    focus: `0 0 0 3px rgba(${r}, ${g}, ${b}, 0.35)`,
+    panel: panelBg,
+    panel2: panel2Bg,
     panelHover: `rgba(${r}, ${g}, ${b}, 0.15)`,
+    btnBg: btnBg,
+    btnHoverBg: `rgba(${r}, ${g}, ${b}, 0.25)`,
+    cardBg: cardBg,
+    modalBg: modalBg,
+    dropdownBg: dropdownBg,
+    wellFocusBg: wellFocusBg,
+    muted: mutedHex,
+    muted2: muted2Hex,
+    focus: `0 0 0 3px rgba(${r}, ${g}, ${b}, 0.35)`,
     glowColor1: glow1Hex,
     glowColor2: glow2Hex,
     glowColor3: glow3Hex,
     vnActiveTabBg: `rgba(${r}, ${g}, ${b}, 0.20)`,
     vnActiveTabBorder: `rgba(${r}, ${g}, ${b}, 0.50)`,
+    vnAccentPrimary: accentHex,
     vnAccentGradient: `linear-gradient(135deg, ${accentHex} 0%, ${accent2Hex} 100%)`,
+    vnCardSolid: vnCardSolid,
   };
 }
 
@@ -254,66 +343,74 @@ export function derivePaletteFromAccent(accentHex: string): DerivedThemeVariable
 // THEME & ACCENT DOM INJECTION
 // ==========================================
 
-const CUSTOM_STYLE_VARS = [
-  '--accent',
-  '--accent2',
-  '--accent-glow',
-  '--accent-surface',
-  '--accent-border',
-  '--border',
-  '--border2',
-  '--border-hover',
-  '--btn-hover-bg',
-  '--focus',
-  '--panel-hover',
-  '--glow-color-1',
-  '--glow-color-2',
-  '--glow-color-3',
-  '--vn-active-tab-bg',
-  '--vn-active-tab-border',
-  '--vn-accent-primary',
-  '--vn-accent-gradient',
-  '--vn-border-active',
-];
-
 export function applyCustomAccent(accentHex: string | null): void {
   if (typeof window === 'undefined') return;
 
   try {
-    const root = document.documentElement;
+    const existingStyle = document.getElementById(DYNAMIC_STYLE_ID);
 
     if (!accentHex) {
       localStorage.removeItem(CUSTOM_ACCENT_KEY);
-      for (const varName of CUSTOM_STYLE_VARS) {
-        root.style.removeProperty(varName);
+      if (existingStyle) {
+        existingStyle.remove();
       }
       return;
     }
 
-    const palette = derivePaletteFromAccent(accentHex);
+    const currentTheme = getStoredTheme();
+    const isLightMode = currentTheme === 'default_light';
+    const palette = derivePaletteFromAccent(accentHex, isLightMode);
     if (!palette) return;
 
     localStorage.setItem(CUSTOM_ACCENT_KEY, accentHex);
 
-    root.style.setProperty('--accent', palette.accent);
-    root.style.setProperty('--accent2', palette.accent2);
-    root.style.setProperty('--accent-glow', palette.accentGlow);
-    root.style.setProperty('--accent-surface', palette.accentSurface);
-    root.style.setProperty('--accent-border', palette.accentBorder);
-    root.style.setProperty('--border', palette.border);
-    root.style.setProperty('--border2', palette.border2);
-    root.style.setProperty('--border-hover', palette.borderHover);
-    root.style.setProperty('--btn-hover-bg', palette.btnHoverBg);
-    root.style.setProperty('--focus', palette.focus);
-    root.style.setProperty('--panel-hover', palette.panelHover);
-    root.style.setProperty('--glow-color-1', palette.glowColor1);
-    root.style.setProperty('--glow-color-2', palette.glowColor2);
-    root.style.setProperty('--glow-color-3', palette.glowColor3);
-    root.style.setProperty('--vn-active-tab-bg', palette.vnActiveTabBg);
-    root.style.setProperty('--vn-active-tab-border', palette.vnActiveTabBorder);
-    root.style.setProperty('--vn-accent-primary', palette.accent);
-    root.style.setProperty('--vn-accent-gradient', palette.vnAccentGradient);
-    root.style.setProperty('--vn-border-active', palette.accent);
+    // Inyectar hoja de estilo con máxima especificidad (!important) para garantizar
+    // que absolutamente todos los elementos del motor adopten el nuevo matiz y
+    // eliminen por completo cualquier color morado residual.
+    const cssRules = `
+:root,
+[data-vn-theme],
+[data-vn-engine="true"],
+.vn-engine-root {
+  --accent: ${palette.accent} !important;
+  --accent2: ${palette.accent2} !important;
+  --accent-glow: ${palette.accentGlow} !important;
+  --accent-surface: ${palette.accentSurface} !important;
+  --accent-border: ${palette.accentBorder} !important;
+  --border: ${palette.border} !important;
+  --border2: ${palette.border2} !important;
+  --border-hover: ${palette.borderHover} !important;
+  --panel: ${palette.panel} !important;
+  --panel2: ${palette.panel2} !important;
+  --panel-hover: ${palette.panelHover} !important;
+  --btn-bg: ${palette.btnBg} !important;
+  --btn-hover-bg: ${palette.btnHoverBg} !important;
+  --card-bg: ${palette.cardBg} !important;
+  --modal-bg: ${palette.modalBg} !important;
+  --dropdown-bg: ${palette.dropdownBg} !important;
+  --well-focus-bg: ${palette.wellFocusBg} !important;
+  --muted: ${palette.muted} !important;
+  --muted2: ${palette.muted2} !important;
+  --focus: ${palette.focus} !important;
+  --glow-color-1: ${palette.glowColor1} !important;
+  --glow-color-2: ${palette.glowColor2} !important;
+  --glow-color-3: ${palette.glowColor3} !important;
+  --vn-active-tab-bg: ${palette.vnActiveTabBg} !important;
+  --vn-active-tab-border: ${palette.vnActiveTabBorder} !important;
+  --vn-accent-primary: ${palette.accent} !important;
+  --vn-accent-gradient: ${palette.vnAccentGradient} !important;
+  --vn-border-active: ${palette.accent} !important;
+  --vn-card-solid: ${palette.vnCardSolid} !important;
+}
+`;
+
+    let styleEl = existingStyle as HTMLStyleElement | null;
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = DYNAMIC_STYLE_ID;
+      document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = cssRules;
   } catch {
     // ignore
   }
@@ -346,6 +443,11 @@ export function setStoredTheme(theme: VNEditorTheme): void {
   try {
     localStorage.setItem(THEME_STORAGE_KEY, theme);
     document.documentElement.setAttribute('data-vn-theme', theme);
+    // Si hay un acento personalizado activo, reaplicarlo para ajustar paleta de luz u oscuridad
+    const customAccent = getStoredCustomAccent();
+    if (customAccent) {
+      applyCustomAccent(customAccent);
+    }
   } catch {
     // ignore
   }
