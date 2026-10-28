@@ -132,7 +132,7 @@ export default function VNMakerHeader({
       </div>
 
       {/* ZONA CENTRAL: WORKSPACE SWITCHER (SOBER PHOTOSHOP STYLE) */}
-      <nav className="flex items-center gap-1 bg-[#131620] border border-[#282d3e] rounded-lg p-0.5 shadow-sm overflow-x-auto max-w-full" aria-label="Workspaces">
+      <nav className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg p-0.5 shadow-sm overflow-x-auto max-w-full" aria-label="Workspaces">
         {/* 1. Hub */}
         <button
           onClick={() => setCurrentWorkspace?.('hub')}

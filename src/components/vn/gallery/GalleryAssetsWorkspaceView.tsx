@@ -42,7 +42,7 @@ export default function GalleryAssetsWorkspaceView() {
               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-4 h-4 text-amber-400" />
             </div>
             <div>
-              <h2 className="text-xs font-bold tracking-wide uppercase text-white">
+              <h2 className="text-xs font-bold tracking-wide uppercase text-[var(--text)]">
                 Gallery & Asset Studio
               </h2>
               <span className="text-[10px] text-[var(--muted)] font-mono">
@@ -60,9 +60,7 @@ export default function GalleryAssetsWorkspaceView() {
               playUiSound('select', 0.4);
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'characters'
-                ? 'bg-[var(--accent-surface)] border border-[var(--accent)]/50 text-white font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-white'
+              activeTab === 'characters' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5" />
@@ -75,9 +73,7 @@ export default function GalleryAssetsWorkspaceView() {
               playUiSound('select', 0.4);
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'assets'
-                ? 'bg-[var(--accent-surface)] border border-[var(--accent)]/50 text-white font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-white'
+              activeTab === 'assets' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5" />

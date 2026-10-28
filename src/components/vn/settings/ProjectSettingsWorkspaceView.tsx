@@ -44,7 +44,7 @@ export default function ProjectSettingsWorkspaceView() {
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
             </div>
             <div>
-              <h2 className="text-xs font-bold tracking-wide uppercase text-white">
+              <h2 className="text-xs font-bold tracking-wide uppercase text-[var(--text)]">
                 Project Settings & Logic
               </h2>
               <span className="text-[10px] text-[var(--muted)] font-mono">
@@ -62,9 +62,7 @@ export default function ProjectSettingsWorkspaceView() {
               playUiSound('select', 0.4);
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'variables'
-                ? 'bg-amber-950/70 border border-amber-500/80 text-amber-200 font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-white'
+              activeTab === 'variables' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5" />
@@ -77,9 +75,7 @@ export default function ProjectSettingsWorkspaceView() {
               playUiSound('select', 0.4);
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'textbox'
-                ? 'bg-cyan-950/70 border border-cyan-500/80 text-cyan-200 font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-white'
+              activeTab === 'textbox' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
@@ -92,9 +88,7 @@ export default function ProjectSettingsWorkspaceView() {
               playUiSound('select', 0.4);
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'doctor'
-                ? 'bg-emerald-950/70 border border-emerald-500/80 text-emerald-200 font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-white'
+              activeTab === 'doctor' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
