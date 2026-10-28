@@ -90,7 +90,7 @@ export const FxClipInspectorSection: React.FC<FxClipInspectorSectionProps> = ({
               <button
                 type="button"
                 onClick={() => setShowGalleryModal(false)}
-                className="w-8 h-8 rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
               </button>

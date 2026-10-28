@@ -143,7 +143,7 @@ export const CinematicClipInspector: React.FC<CinematicClipInspectorProps> = ({
                     />
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] space-y-2 text-[11px]">
+                  <div className="p-2.5 rounded-md bg-[var(--well-bg)] border border-[var(--border)] space-y-2 text-[11px]">
                     <div className="flex justify-between items-center text-[var(--muted)]">
                       <span>Section:</span>
                       <span className="font-bold uppercase text-cyan-300 font-mono text-[10px]">
@@ -203,7 +203,7 @@ export const CinematicClipInspector: React.FC<CinematicClipInspectorProps> = ({
 
           return (
             <div className="flex flex-col items-center justify-center h-full p-6 text-center text-[var(--muted)] space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] flex items-center justify-center text-2xl shadow-inner">
+              <div className="w-12 h-12 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] flex items-center justify-center text-2xl shadow-inner">
                 <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-6 h-6 text-cyan-400 opacity-80" />
               </div>
               <div>
@@ -283,7 +283,7 @@ export const CinematicClipInspector: React.FC<CinematicClipInspectorProps> = ({
             </div>
 
             {/* Timing Block (Start, End, Duration) */}
-            <div className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
+            <div className="p-2.5 rounded-md border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
               <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center gap-1.5">
                 <GuiIconRenderer icon={GUI_ICONS.state.backwardTime} className="w-3 h-3 text-cyan-400" />
                 <span>Clip Timing</span>

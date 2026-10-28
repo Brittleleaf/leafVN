@@ -45,7 +45,7 @@ export function TextEffectShowcaseTab({
   return (
     <div className="space-y-4">
       {/* Category Pills & Interactive Tester Bar */}
-      <div className="p-4 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] space-y-3 shadow-lg backdrop-blur-md">
+      <div className="p-4 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] space-y-3 shadow-lg backdrop-blur-md">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider mr-1">
@@ -63,7 +63,7 @@ export function TextEffectShowcaseTab({
                 key={cat.id}
                 type="button"
                 onClick={() => setTextEffectCategory(cat.id)}
-                className={`px-2.5 py-1 rounded-xl text-xs font-medium transition-all cursor-pointer border ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer border ${
                   textEffectCategory === cat.id
                     ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] font-bold shadow-sm'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
@@ -145,7 +145,7 @@ export function TextEffectShowcaseTab({
             value={customFontSample}
             onChange={(e) => setCustomFontSample(e.target.value)}
             placeholder="Type words here to preview in real-time across all text effects..."
-            className="w-full bg-[var(--card-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl px-3 py-2 text-xs text-[var(--text)] outline-none font-bold"
+            className="w-full bg-[var(--card-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md px-3 py-2 text-xs text-[var(--text)] outline-none font-bold"
           />
         </div>
       </div>
@@ -165,7 +165,7 @@ export function TextEffectShowcaseTab({
             return (
               <div
                 key={fx.id}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
+                className="rounded-lg border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
               >
                 {/* Interactive Dark Stage for Text Animation */}
                 <div
@@ -250,7 +250,7 @@ export function TextEffectShowcaseTab({
                           onClose();
                           playSfx('/assets/sfx/success.mp3', false, 0.4);
                         }}
-                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-black rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow transition-all flex items-center justify-center gap-1.5"
+                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-black rounded-md text-xs uppercase tracking-wider cursor-pointer shadow transition-all flex items-center justify-center gap-1.5"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5" />
                         <span>Select This Text Effect</span>

@@ -42,7 +42,7 @@ export default function QuickCharacterPickerModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
             title="Close modal (Esc)"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -53,10 +53,10 @@ export default function QuickCharacterPickerModal({
           {/* Option for Narrator / System Log without bust */}
           <div
             onClick={() => onSelectCharacterEmotion(undefined, undefined, 'Narrator / System')}
-            className="p-3.5 bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-dashed border-[var(--border2)] hover:border-[var(--accent)] rounded-xl flex items-center justify-between cursor-pointer transition-all duration-150 group shadow-sm hover:shadow-md backdrop-blur-md"
+            className="p-3.5 bg-[var(--panel)] hover:bg-[var(--panel-hover)] border border-dashed border-[var(--border2)] hover:border-[var(--accent)] rounded-md flex items-center justify-between cursor-pointer transition-all duration-150 group shadow-sm hover:shadow-md backdrop-blur-md"
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 text-[var(--accent)] group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 text-[var(--accent)] group-hover:scale-105 transition-transform">
                 <GuiIconRenderer icon={GUI_ICONS.general.speaker} className="w-5 h-5 text-[var(--accent)]" />
               </div>
               <div>
@@ -74,18 +74,18 @@ export default function QuickCharacterPickerModal({
           </div>
 
           {safeCharacters.length === 0 ? (
-            <div className="p-6 text-center text-xs text-[var(--muted)] bg-[var(--panel)] border border-[var(--border)] rounded-xl">
+            <div className="p-6 text-center text-xs text-[var(--muted)] bg-[var(--panel)] border border-[var(--border)] rounded-md">
               No characters registered in this story yet. You can add characters from Character Studio.
             </div>
           ) : (
             safeCharacters.map((ch) => (
-            <div key={ch.id} className="p-3.5 bg-[var(--panel)] border border-[var(--border)] rounded-2xl space-y-2.5 backdrop-blur-md shadow-sm">
+            <div key={ch.id} className="p-3.5 bg-[var(--panel)] border border-[var(--border)] rounded-md space-y-2.5 backdrop-blur-md shadow-sm">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xs uppercase tracking-wide" style={{ color: ch.color || 'var(--accent)' }}>
                   {ch.name}
                 </span>
                 {ch.badgeTitle && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)]">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)]">
                     {ch.badgeTitle}
                   </span>
                 )}
@@ -94,7 +94,7 @@ export default function QuickCharacterPickerModal({
               <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 pt-1">
                 <div
                   onClick={() => onSelectCharacterEmotion(ch.id, 'neutral', `${ch.name} (Neutral)`)}
-                  className="p-2 bg-[var(--panel2)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-xl text-center cursor-pointer transition-all duration-150 hover:scale-105 shadow-sm group"
+                  className="p-2 bg-[var(--panel2)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-md text-center cursor-pointer transition-all duration-150 hover:scale-105 shadow-sm group"
                 >
                   <img
                     src={ch.avatarUrl || '/assets/image/characters/SUBJECT-TEMPLATE.png'}
@@ -102,7 +102,7 @@ export default function QuickCharacterPickerModal({
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src = '/assets/image/characters/SUBJECT-TEMPLATE.png';
                     }}
-                    className="w-16 h-16 object-cover mx-auto rounded-lg mb-1.5 border border-[var(--border)]"
+                    className="w-16 h-16 object-cover mx-auto rounded mb-1.5 border border-[var(--border)]"
                   />
                   <span className="text-[10px] text-[var(--muted)] group-hover:text-[var(--text)] font-bold uppercase block truncate transition-colors">
                     Neutral
@@ -116,7 +116,7 @@ export default function QuickCharacterPickerModal({
                     <div
                       key={emKey}
                       onClick={() => onSelectCharacterEmotion(ch.id, emKey, `${ch.name} (${emKey})`)}
-                      className="p-2 bg-[var(--panel2)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-xl text-center cursor-pointer transition-all duration-150 hover:scale-105 shadow-sm group"
+                      className="p-2 bg-[var(--panel2)] hover:bg-[var(--panel-hover)] border border-[var(--border)] hover:border-[var(--accent)] rounded-md text-center cursor-pointer transition-all duration-150 hover:scale-105 shadow-sm group"
                     >
                       <img
                         src={emUrl || ch.avatarUrl || '/assets/image/characters/SUBJECT-TEMPLATE.png'}
@@ -124,7 +124,7 @@ export default function QuickCharacterPickerModal({
                         onError={(e) => {
                           (e.currentTarget as HTMLImageElement).src = '/assets/image/characters/SUBJECT-TEMPLATE.png';
                         }}
-                        className="w-16 h-16 object-cover mx-auto rounded-lg mb-1.5 border border-[var(--border)]"
+                        className="w-16 h-16 object-cover mx-auto rounded mb-1.5 border border-[var(--border)]"
                       />
                       <span className="text-[10px] text-[var(--accent)] group-hover:text-[var(--text)] font-bold uppercase block truncate transition-colors">
                         {emKey}

@@ -15,7 +15,7 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
       <div className="space-y-3.5">
         <div className="text-center">
           <div
-            className="w-36 h-48 mx-auto rounded-2xl overflow-hidden border-2 shadow-xl relative transition-all group bg-[var(--card-bg)]"
+            className="w-36 h-48 mx-auto rounded-lg overflow-hidden border-2 shadow-xl relative transition-all group bg-[var(--card-bg)]"
             style={{
               borderColor: activeChar.color || '#ef4444',
               boxShadow: `0 0 25px ${(activeChar.color || '#ef4444')}33`,
@@ -40,7 +40,7 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
         </div>
 
         {/* Configuration summary */}
-        <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl space-y-2 text-xs">
+        <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-md space-y-2 text-xs">
           <div className="flex items-center justify-between text-[var(--muted)]">
             <span className="text-[10px] uppercase font-bold">Scene Shortcut:</span>
             <span className="px-1.5 py-0.2 bg-[var(--well-bg)] border border-[var(--border)] rounded font-mono text-[var(--text)] text-[10px]">
@@ -64,7 +64,7 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
         </div>
 
         {/* Quick Lore Guide */}
-        <div className="p-3 bg-[var(--accent-surface)] border border-[var(--border2)] rounded-xl space-y-1.5">
+        <div className="p-3 bg-[var(--accent-surface)] border border-[var(--border2)] rounded-md space-y-1.5">
           <div className="flex items-center justify-between text-[var(--accent)] text-[10px] font-bold uppercase tracking-wider">
             <span className="flex items-center gap-1.5">
               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />

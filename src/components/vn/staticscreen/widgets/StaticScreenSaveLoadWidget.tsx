@@ -71,7 +71,7 @@ export function StaticScreenSaveLoadWidget({
             <div
               key={slotNum}
               onClick={() => slot && handleSelectSlot(slot)}
-              className={`group relative rounded-xl border p-2.5 flex flex-col justify-between transition-all select-none backdrop-blur-md ${
+              className={`group relative rounded-md border p-2.5 flex flex-col justify-between transition-all select-none backdrop-blur-md ${
                 slot
                   ? 'bg-black/60 hover:bg-black/80 border-white/20 hover:border-cyan-400/80 cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:scale-[1.02]'
                   : 'bg-black/35 border-white/10 opacity-70'

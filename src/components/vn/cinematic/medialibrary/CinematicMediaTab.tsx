@@ -75,7 +75,7 @@ export const CinematicMediaTab: React.FC<CinematicMediaTabProps> = ({
             <button
               type="button"
               onClick={() => onOpenAssetStudio('background')}
-              className="px-3 py-1.5 rounded-xl bg-[var(--accent)] hover:opacity-90 text-white font-bold text-xs cursor-pointer shadow"
+              className="px-3 py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-bold text-xs cursor-pointer shadow"
             >
               Upload New Asset
             </button>
@@ -97,7 +97,7 @@ export const CinematicMediaTab: React.FC<CinematicMediaTabProps> = ({
                 };
                 e.dataTransfer.setData('application/json', JSON.stringify(payload));
               }}
-              className="relative rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--card-bg)] group shadow-md hover:border-[var(--accent)] transition-all flex flex-col justify-between cursor-grab active:cursor-grabbing"
+              className="relative rounded-lg overflow-hidden border border-[var(--border)] bg-[var(--card-bg)] group shadow-md hover:border-[var(--accent)] transition-all flex flex-col justify-between cursor-grab active:cursor-grabbing"
             >
               {/* Central Preview matching General Gallery card */}
               <div className="aspect-video w-full overflow-hidden bg-black/50 relative flex items-center justify-center">

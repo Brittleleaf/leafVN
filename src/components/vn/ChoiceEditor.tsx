@@ -109,7 +109,7 @@ export default function ChoiceEditor({
   return (
     <div className="space-y-4">
       {/* 1. HEADER: QUESTION & TOP CONTROLS */}
-      <div className="p-3 bg-[var(--card-bg)] border border-purple-500/40 rounded-xl space-y-2.5 backdrop-blur-md shadow-sm">
+      <div className="p-3 bg-[var(--card-bg)] border border-purple-500/40 rounded-md space-y-2.5 backdrop-blur-md shadow-sm">
         <div className="flex items-center justify-between">
           <label className="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-300 flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.questionSign} className="w-4 h-4 text-purple-500" />
@@ -309,7 +309,7 @@ export default function ChoiceEditor({
           <button
             type="button"
             onClick={handleAddOption}
-            className="px-2.5 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-xs uppercase cursor-pointer transition-all shadow-[0_4px_12px_rgba(209,123,248,0.4)] flex items-center gap-1"
+            className="px-2.5 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-xs uppercase cursor-pointer transition-all shadow-[0_4px_12px_rgba(209,123,248,0.4)] flex items-center gap-1"
           >
             <span>+</span> Add Option
           </button>
@@ -330,7 +330,7 @@ export default function ChoiceEditor({
                   setShowVisualLinePicker(false);
                   playSfx('/assets/sfx/click interface.mp3', true, 0.2);
                 }}
-                className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 shrink-0 cursor-pointer max-w-[220px] ${
+                className={`px-3 py-2 rounded-md text-xs font-bold border transition-all flex items-center gap-2 shrink-0 cursor-pointer max-w-[220px] ${
                   isSelected
                     ? 'bg-purple-500/20 border-purple-500 text-[var(--text)] shadow-[0_0_15px_rgba(168,85,247,0.3)] ring-1 ring-purple-500/50'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border2)]'
@@ -363,7 +363,7 @@ export default function ChoiceEditor({
 
       {/* 4. SELECTED OPTION EDITING PANEL */}
       {activeOption && (
-        <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl p-4 space-y-4 shadow-xl backdrop-blur-md">
+        <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-lg p-4 space-y-4 shadow-xl backdrop-blur-md">
           {/* Header of active option */}
           <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <div className="flex items-center gap-2">
@@ -395,12 +395,12 @@ export default function ChoiceEditor({
               value={activeOption.label}
               onChange={(e) => handleUpdateChoiceOption(selectedOptIndex, { label: e.target.value })}
               placeholder="Enter option text here..."
-              className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-purple-500 rounded-xl p-2.5 text-xs text-[var(--text)] font-bold outline-none"
+              className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-purple-500 rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none"
             />
           </div>
 
           {/* Individual option appearance override (optional) */}
-          <div className="flex items-center justify-between p-2 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] text-xs flex-wrap gap-2">
+          <div className="flex items-center justify-between p-2 rounded-md bg-[var(--well-bg)] border border-[var(--border)] text-xs flex-wrap gap-2">
             {/* Style Preset Selector */}
             <div className="flex items-center gap-1.5">
               <span className="text-[10px] font-bold text-[var(--muted)] uppercase">Style:</span>
@@ -507,7 +507,7 @@ export default function ChoiceEditor({
           </div>
 
           {/* Action / Destination selector */}
-          <div className="space-y-2 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-3">
+          <div className="space-y-2 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-3">
             <label className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider block">
               Where does this choice lead?:
             </label>
@@ -525,7 +525,7 @@ export default function ChoiceEditor({
                   setShowVisualScenePicker(false);
                   setShowVisualLinePicker(false);
                 }}
-                className={`p-2.5 rounded-xl border text-left flex flex-col gap-1 transition-all cursor-pointer ${
+                className={`p-2.5 rounded-md border text-left flex flex-col gap-1 transition-all cursor-pointer ${
                   activeDestMode === 'next'
                     ? 'bg-purple-500/20 border-purple-500 text-[var(--text)] shadow-sm ring-1 ring-purple-500/50'
                     : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--border2)] hover:text-[var(--text)]'
@@ -553,7 +553,7 @@ export default function ChoiceEditor({
                   });
                   setShowVisualLinePicker(false);
                 }}
-                className={`p-2.5 rounded-xl border text-left flex flex-col gap-1 transition-all cursor-pointer ${
+                className={`p-2.5 rounded-md border text-left flex flex-col gap-1 transition-all cursor-pointer ${
                   activeDestMode === 'scene'
                     ? 'bg-sky-500/20 border-sky-500 text-[var(--text)] shadow-sm ring-1 ring-sky-500/50'
                     : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--border2)] hover:text-[var(--text)]'
@@ -581,7 +581,7 @@ export default function ChoiceEditor({
                   });
                   setShowVisualScenePicker(false);
                 }}
-                className={`p-2.5 rounded-xl border text-left flex flex-col gap-1 transition-all cursor-pointer ${
+                className={`p-2.5 rounded-md border text-left flex flex-col gap-1 transition-all cursor-pointer ${
                   activeDestMode === 'line'
                     ? 'bg-emerald-500/20 border-emerald-500 text-[var(--text)] shadow-sm ring-1 ring-emerald-500/50'
                     : 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--border2)] hover:text-[var(--text)]'
@@ -615,7 +615,7 @@ export default function ChoiceEditor({
                 </div>
 
                 {targetScene ? (
-                  <div className="p-3 bg-[var(--card-bg)] border border-sky-500/30 rounded-xl flex items-center gap-3">
+                  <div className="p-3 bg-[var(--card-bg)] border border-sky-500/30 rounded-md flex items-center gap-3">
                     <div className="w-20 h-14 rounded-lg overflow-hidden border border-[var(--border)] bg-[var(--well-bg)] shrink-0">
                       {targetScene.backgroundUrl ? (
                         <img
@@ -695,7 +695,7 @@ export default function ChoiceEditor({
                 </div>
 
                 {targetLine ? (
-                  <div className="p-3 bg-[var(--card-bg)] border border-emerald-500/30 rounded-xl flex items-start gap-3">
+                  <div className="p-3 bg-[var(--card-bg)] border border-emerald-500/30 rounded-md flex items-start gap-3">
                     {/* Speaker Avatar */}
                     <div className="w-10 h-10 rounded-full overflow-hidden border border-emerald-500/50 bg-[var(--well-bg)] shrink-0 mt-0.5">
                       {targetAvatar ? (
@@ -776,7 +776,7 @@ export default function ChoiceEditor({
           />
 
           {/* 6. IMMEDIATE REACTION (OPTIONAL) */}
-          <div className="bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-3 space-y-2">
+          <div className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-3 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase text-[var(--muted)] flex items-center gap-1.5">
                 <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-3.5 h-3.5 text-purple-500" />
@@ -809,7 +809,7 @@ export default function ChoiceEditor({
             </div>
 
             {activeOption.reaction && (
-              <div className="p-2.5 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl space-y-2 text-xs">
+              <div className="p-2.5 bg-[var(--card-bg)] border border-[var(--border)] rounded-md space-y-2 text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] text-[var(--muted)] uppercase font-semibold">Who responds:</span>
                   <select
@@ -847,7 +847,7 @@ export default function ChoiceEditor({
       )}
 
       {/* 6. NARRATIVE CONVERGENCE: WHERE BRANCHES REJOIN AFTER CHOICE */}
-      <div className="bg-[var(--card-bg)] border border-purple-500/30 rounded-xl p-3.5 space-y-2 text-xs shadow-lg backdrop-blur-md">
+      <div className="bg-[var(--card-bg)] border border-purple-500/30 rounded-md p-3.5 space-y-2 text-xs shadow-lg backdrop-blur-md">
         <div className="flex items-center justify-between">
           <span className="font-bold text-purple-600 dark:text-purple-300 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.familyTree} className="w-3.5 h-3.5 text-purple-500" />

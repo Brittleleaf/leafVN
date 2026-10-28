@@ -94,7 +94,7 @@ export default function GlobalTextBoxModal({
         {/* HEADER */}
         <div className="flex items-center justify-between border-b vn-glass-header px-5 py-3.5 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-xl border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
+            <div className="w-8 h-8 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
               <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-4 h-4" />
             </div>
             <div>
@@ -108,7 +108,7 @@ export default function GlobalTextBoxModal({
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+            className="w-7 h-7 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
             title="Close window"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -119,7 +119,7 @@ export default function GlobalTextBoxModal({
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 custom-scrollbar">
           
           {/* NOTICE BANNER */}
-          <div className="p-3 bg-[var(--accent-surface)] border border-[var(--border2)] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[var(--text)]">
+          <div className="p-3 bg-[var(--accent-surface)] border border-[var(--border2)] rounded-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[var(--text)]">
             <p className="leading-relaxed">
               <strong className="text-[var(--accent)] inline-flex items-center gap-1.5 font-bold">
                 <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-3.5 h-3.5" /> System Base Style:
@@ -129,7 +129,7 @@ export default function GlobalTextBoxModal({
             <button
               type="button"
               onClick={onOpenCharacterStudio}
-              className="py-1.5 px-3 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase tracking-wide cursor-pointer transition-colors flex items-center gap-2 shrink-0 self-start sm:self-auto"
+              className="py-1.5 px-3 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase tracking-wide cursor-pointer transition-colors flex items-center gap-2 shrink-0 self-start sm:self-auto"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.palette} className="w-3.5 h-3.5 text-[var(--accent)]" />
               <span>Character Boxes</span>
@@ -155,7 +155,7 @@ export default function GlobalTextBoxModal({
             </div>
 
             {/* PREVIEW CONTAINER STYLED EXACTLY AS IN-GAME */}
-            <div className="p-4 bg-black/60 rounded-2xl border border-[var(--border)] shadow-inner flex flex-col justify-center min-h-[140px] relative overflow-hidden">
+            <div className="p-4 bg-black/60 rounded-lg border border-[var(--border)] shadow-inner flex flex-col justify-center min-h-[140px] relative overflow-hidden">
               <VNTextBoxRenderer
                 skinId={tb.theme || 'classified'}
                 speakerName="NARRATOR / SYSTEM LOG"
@@ -184,7 +184,7 @@ export default function GlobalTextBoxModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* COLUMN 1: TYPOGRAPHY & THEME */}
-            <div className="bg-[var(--well-bg)] p-4 rounded-xl border border-[var(--border)] space-y-3">
+            <div className="bg-[var(--well-bg)] p-4 rounded-md border border-[var(--border)] space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text)] flex items-center gap-2 border-b border-[var(--border)] pb-2">
                 <GuiIconRenderer icon={GUI_ICONS.general.fontFx} className="w-3.5 h-3.5 text-[var(--accent)]" />
                 <span>Typography & Layout</span>
@@ -199,7 +199,7 @@ export default function GlobalTextBoxModal({
                   <button
                     type="button"
                     onClick={() => setShowFontGallery(true)}
-                    className="flex-1 px-3 py-2 bg-[var(--card-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-xl text-left flex items-center justify-between cursor-pointer transition-colors group shadow-sm min-w-0"
+                    className="flex-1 px-3 py-2 bg-[var(--card-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-md text-left flex items-center justify-between cursor-pointer transition-colors group shadow-sm min-w-0"
                     title="Choose default font from Gallery"
                   >
                     <span
@@ -217,7 +217,7 @@ export default function GlobalTextBoxModal({
                     <button
                       type="button"
                       onClick={() => onUpdateStory({ ...story, defaultFontFamily: undefined })}
-                      className="p-2 bg-[var(--card-bg)] hover:bg-red-500/20 text-red-400 border border-[var(--border)] rounded-xl cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
+                      className="p-2 bg-[var(--card-bg)] hover:bg-red-500/20 text-red-400 border border-[var(--border)] rounded-md cursor-pointer transition-colors text-xs shrink-0 flex items-center justify-center"
                       title="Reset font"
                     >
                       <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -298,7 +298,7 @@ export default function GlobalTextBoxModal({
             </div>
 
             {/* COLUMN 2: COLORS, OPACITY & SPEED */}
-            <div className="bg-[var(--well-bg)] p-4 rounded-xl border border-[var(--border)] space-y-3">
+            <div className="bg-[var(--well-bg)] p-4 rounded-md border border-[var(--border)] space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text)] flex items-center gap-2 border-b border-[var(--border)] pb-2">
                 <GuiIconRenderer icon={GUI_ICONS.general.palette} className="w-3.5 h-3.5 text-[var(--accent)]" />
                 <span>Colors & Timing</span>
@@ -465,7 +465,7 @@ export default function GlobalTextBoxModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl font-bold uppercase text-xs cursor-pointer transition-colors shadow-sm"
+            className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md font-bold uppercase text-xs cursor-pointer transition-colors shadow-sm"
           >
             Done
           </button>

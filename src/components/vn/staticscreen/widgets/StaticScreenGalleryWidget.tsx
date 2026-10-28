@@ -98,7 +98,7 @@ export function StaticScreenGalleryWidget({
   return (
     <div className="w-full max-w-4xl px-4 py-1 z-30 pointer-events-auto flex flex-col items-center select-none">
       {/* Gallery Sub-Tabs */}
-      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/15 backdrop-blur-md mb-2 shadow-lg">
+      <div className="flex items-center gap-1.5 p-1 rounded-md bg-black/60 border border-white/15 backdrop-blur-md mb-2 shadow-lg">
         <button
           type="button"
           onClick={() => { setActiveTab('cinematics'); playUiSound('click', 0.2); }}
@@ -140,7 +140,7 @@ export function StaticScreenGalleryWidget({
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full bg-black/65 border border-white/15 rounded-2xl p-3 backdrop-blur-md shadow-2xl min-h-[240px] max-h-[310px] overflow-y-auto custom-scrollbar">
+      <div className="w-full bg-black/65 border border-white/15 rounded-lg p-3 backdrop-blur-md shadow-2xl min-h-[240px] max-h-[310px] overflow-y-auto custom-scrollbar">
         {/* 1. CINEMATICS TAB */}
         {activeTab === 'cinematics' && (
           <div className="space-y-4">
@@ -167,7 +167,7 @@ export function StaticScreenGalleryWidget({
                             playUiSound('select', 0.4);
                           }
                         }}
-                        className="group relative rounded-xl border border-white/10 hover:border-purple-400/80 bg-black/40 hover:bg-black/70 p-2 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex flex-col justify-between"
+                        className="group relative rounded-md border border-white/10 hover:border-purple-400/80 bg-black/40 hover:bg-black/70 p-2 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex flex-col justify-between"
                       >
                         <div className="w-full h-20 rounded-lg overflow-hidden bg-black/80 relative mb-1.5 border border-white/10">
                           <img
@@ -215,7 +215,7 @@ export function StaticScreenGalleryWidget({
                   setActivePreviewScenario(sc);
                   playUiSound('select', 0.3);
                 }}
-                className="group relative rounded-xl border border-white/10 hover:border-cyan-400/80 bg-black/40 hover:bg-black/70 p-1.5 transition-all cursor-pointer shadow flex flex-col justify-between"
+                className="group relative rounded-md border border-white/10 hover:border-cyan-400/80 bg-black/40 hover:bg-black/70 p-1.5 transition-all cursor-pointer shadow flex flex-col justify-between"
               >
                 <div className="w-full h-16 rounded-lg overflow-hidden bg-black relative mb-1 border border-white/10">
                   <img
@@ -245,7 +245,7 @@ export function StaticScreenGalleryWidget({
               return (
                 <div
                   key={char.id}
-                  className="rounded-xl border border-white/15 bg-black/50 p-3 flex gap-3 backdrop-blur-sm shadow-md"
+                  className="rounded-md border border-white/15 bg-black/50 p-3 flex gap-3 backdrop-blur-sm shadow-md"
                 >
                   <div className="w-20 h-24 rounded-lg overflow-hidden bg-black/80 border border-white/10 shrink-0 relative">
                     <img
@@ -320,7 +320,7 @@ export function StaticScreenGalleryWidget({
             <button
               type="button"
               onClick={() => setActiveCinematicScene(null)}
-              className="absolute top-4 right-4 z-50 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-black border border-white/30 text-white text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1.5 shadow-2xl backdrop-blur-md"
+              className="absolute top-4 right-4 z-50 px-3 py-1.5 rounded-md bg-black/80 hover:bg-black border border-white/30 text-white text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1.5 shadow-2xl backdrop-blur-md"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
               <span>Close Cinematic</span>
@@ -335,7 +335,7 @@ export function StaticScreenGalleryWidget({
           onClick={() => setActivePreviewScenario(null)}
           className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 cursor-pointer backdrop-blur-md"
         >
-          <div className="max-w-4xl max-h-[80vh] rounded-2xl overflow-hidden border border-white/20 shadow-2xl relative">
+          <div className="max-w-4xl max-h-[80vh] rounded-lg overflow-hidden border border-white/20 shadow-2xl relative">
             <img
               src={getProxiedImageUrl(activePreviewScenario.url)}
               alt={activePreviewScenario.name}

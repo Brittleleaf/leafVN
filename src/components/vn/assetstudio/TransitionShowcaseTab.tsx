@@ -58,7 +58,7 @@ export function TransitionShowcaseTab({
   return (
     <div className="space-y-4">
       {/* Header Banner - Matching ScreenFxShowcaseTab */}
-      <div className="p-4 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3 shadow-lg backdrop-blur-md">
+      <div className="p-4 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3 shadow-lg backdrop-blur-md">
         <div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-4 h-4 text-[var(--accent)]" />
@@ -99,7 +99,7 @@ export function TransitionShowcaseTab({
             return (
               <div
                 key={t.id}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
+                className="rounded-lg border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
               >
                 {/* 16:9 Live Preview Viewport over Scenario Background */}
                 <div
@@ -237,7 +237,7 @@ export function TransitionShowcaseTab({
                           onClose();
                           playSfx('/assets/sfx/success.mp3', false, 0.4);
                         }}
-                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-black rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow hover:opacity-90 transition-all flex items-center justify-center gap-1.5"
+                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-black rounded-md text-xs uppercase tracking-wider cursor-pointer shadow hover:opacity-90 transition-all flex items-center justify-center gap-1.5"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5" />
                         <span>Select This Transition</span>

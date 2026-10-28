@@ -78,7 +78,7 @@ export default function SceneAudioModal({
         {/* CABECERA */}
         <div className="p-4 sm:p-5 border-b vn-glass-header shrink-0 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)] shrink-0">
+            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)] shrink-0">
               <GuiIconRenderer icon={GUI_ICONS.media.volume} size={20} className="text-[var(--accent)]" />
             </div>
             <div>
@@ -92,7 +92,7 @@ export default function SceneAudioModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
             title="Close modal (Esc)"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -103,7 +103,7 @@ export default function SceneAudioModal({
         <div className="p-4 sm:p-5 flex-1 overflow-y-auto space-y-4 text-xs custom-scrollbar">
           
           {/* 1. SFX DE ENTRADA AL ESCENARIO */}
-          <div className="p-4 bg-[var(--panel)] border border-[var(--border)] rounded-2xl space-y-2.5 backdrop-blur-md shadow-sm">
+          <div className="p-4 bg-[var(--panel)] border border-[var(--border)] rounded-lg space-y-2.5 backdrop-blur-md shadow-sm">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                 <GuiIconRenderer icon={GUI_ICONS.general.folder} size={14} className="text-emerald-500" />
@@ -121,7 +121,7 @@ export default function SceneAudioModal({
                         playAudioPreview(entrySfx, 0.7);
                       }
                     }}
-                    className={`px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 cursor-pointer transition-colors text-xs border ${
+                    className={`px-2.5 py-1 rounded-md font-bold flex items-center gap-1 cursor-pointer transition-colors text-xs border ${
                       isPlaying
                         ? 'bg-rose-500/20 border-rose-500 text-rose-300 shadow-sm animate-pulse'
                         : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--text)]'
@@ -147,13 +147,13 @@ export default function SceneAudioModal({
                   value={entrySfx}
                   onChange={(e) => setEntrySfx(e.target.value)}
                   placeholder="/assets/sfx/... or choose from gallery"
-                  className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none"
+                  className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none"
                 />
                 {story && (
                   <button
                     type="button"
                     onClick={() => setGalleryPicker('sfx')}
-                    className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
+                    className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.gallery} size={14} />
                     <span>SFX Gallery</span>
@@ -164,7 +164,7 @@ export default function SceneAudioModal({
           </div>
 
           {/* 2. MÚSICA O SONIDO DE FONDO EN LOOP (BGM / AMBIENTE) */}
-          <div className="p-4 bg-[var(--panel)] border border-[var(--border)] rounded-2xl space-y-2.5 backdrop-blur-md shadow-sm">
+          <div className="p-4 bg-[var(--panel)] border border-[var(--border)] rounded-lg space-y-2.5 backdrop-blur-md shadow-sm">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                 <GuiIconRenderer icon={GUI_ICONS.media.volume} size={14} className="text-sky-500" />
@@ -208,13 +208,13 @@ export default function SceneAudioModal({
                   value={bgm}
                   onChange={(e) => setBgm(e.target.value)}
                   placeholder="/assets/sfx/... or choose from gallery"
-                  className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none"
+                  className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none"
                 />
                 {story && (
                   <button
                     type="button"
                     onClick={() => setGalleryPicker('bgm')}
-                    className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
+                    className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.gallery} size={14} />
                     <span>BGM Gallery</span>
@@ -231,14 +231,14 @@ export default function SceneAudioModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold cursor-pointer transition-colors"
+            className="px-4 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold cursor-pointer transition-colors"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-5 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-xs uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
+            className="px-5 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-xs uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.check} size={14} />
             <span>Save Scenario Audio</span>

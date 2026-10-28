@@ -308,7 +308,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                   setActiveSubStep(null);
                   setSubPickerSearch('');
                 }}
-                className="w-8 h-8 rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors shrink-0"
+                className="w-8 h-8 rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors shrink-0"
                 title="Back to all actions"
               >
                 ←
@@ -358,7 +358,7 @@ export default function AddActionModal(props: AddActionModalProps) {
 
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer text-sm transition-colors shrink-0"
             title="Close modal (Esc)"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -442,10 +442,10 @@ export default function AddActionModal(props: AddActionModalProps) {
                     <button
                       key={card.type}
                       onClick={() => handleCardClick(card)}
-                      className="p-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm hover:shadow-lg hover:shadow-[var(--accent-glow)]/15 flex items-start gap-3.5 backdrop-blur-md"
+                      className="p-3.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm hover:shadow-lg hover:shadow-[var(--accent-glow)]/15 flex items-start gap-3.5 backdrop-blur-md"
                     >
                       <div
-                        className={`w-9 h-9 rounded-xl ${card.badgeBg} border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[var(--accent)] transition-all shadow-sm mt-0.5`}
+                        className={`w-9 h-9 rounded-md ${card.badgeBg} border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[var(--accent)] transition-all shadow-sm mt-0.5`}
                       >
                         <GuiIconRenderer icon={card.icon} className={`w-4 h-4 ${card.iconColor}`} />
                       </div>
@@ -531,9 +531,9 @@ export default function AddActionModal(props: AddActionModalProps) {
               <button
                 type="button"
                 onClick={() => onInsertEvent('dialogue', { characterId: undefined })}
-                className="w-full p-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center gap-3.5 backdrop-blur-md"
+                className="w-full p-3.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center gap-3.5 backdrop-blur-md"
               >
-                <div className="w-10 h-10 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 text-[var(--accent)]">
+                <div className="w-10 h-10 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 text-[var(--accent)]">
                   <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -566,9 +566,9 @@ export default function AddActionModal(props: AddActionModalProps) {
                             characterScale: char.defaultScale ?? 1.0,
                           })
                         }
-                        className="p-3 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center gap-3 backdrop-blur-md"
+                        className="p-3 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center gap-3 backdrop-blur-md"
                       >
-                        <div className="w-10 h-10 rounded-xl overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] shrink-0 group-hover:border-[var(--accent)]">
+                        <div className="w-10 h-10 rounded-md overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] shrink-0 group-hover:border-[var(--accent)]">
                           {avatarUrl ? (
                             <img src={avatarUrl} alt={char.name} className="w-full h-full object-cover" />
                           ) : (
@@ -598,7 +598,7 @@ export default function AddActionModal(props: AddActionModalProps) {
            ========================================================= */}
         {activeSubStep === 'shake' && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 custom-scrollbar space-y-3">
-            <div className="p-3 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] text-xs text-[var(--text)] leading-relaxed">
+            <div className="p-3 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] text-xs text-[var(--text)] leading-relaxed">
               <strong className="text-[var(--accent)] font-bold">Screen Shake vs Screen Effect:</strong>{' '}
               Screen Shake is a one-shot instant tremor (0.3s - 0.8s) for sudden hits, gunshots, or explosions. For prolonged continuous atmospheric loops (e.g. ambient earthquakes or alarms), use <strong>Screen Effect</strong>.
             </div>
@@ -634,7 +634,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                   key={lvl.id}
                   type="button"
                   onClick={() => onInsertEvent('shake', { shakeIntensity: lvl.id as any })}
-                  className="w-full p-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center justify-between gap-3"
+                  className="w-full p-3.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center justify-between gap-3"
                 >
                   <div>
                     <span className={`text-xs font-bold uppercase block mb-0.5 group-hover:text-[var(--accent)] transition-colors ${lvl.color}`}>
@@ -713,7 +713,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                       key={sc.id}
                       type="button"
                       onClick={() => onInsertEvent('jump_scene', { targetSceneId: sc.id })}
-                      className="p-2 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-1.5"
+                      className="p-2 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-1.5"
                     >
                       <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)]">
                         {sc.backgroundUrl ? (
@@ -803,7 +803,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                         key={`scene-${sc.id}`}
                         type="button"
                         onClick={() => onInsertEvent('bg_change', { backgroundUrl: sc.backgroundUrl })}
-                        className="p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-2"
+                        className="p-2.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-2"
                       >
                         <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] relative">
                           <img src={sc.backgroundUrl} alt={sc.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
@@ -836,7 +836,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                         key={`asset-${bg.id}`}
                         type="button"
                         onClick={() => onInsertEvent('bg_change', { backgroundUrl: bg.url })}
-                        className="p-2.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-2"
+                        className="p-2.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-2"
                       >
                         <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] relative">
                           <img src={bg.url} alt={bg.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
@@ -935,7 +935,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                   return (
                     <div
                       key={track.url}
-                      className="p-3 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] transition-all duration-150 flex items-center justify-between gap-3 shadow-sm group"
+                      className="p-3 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] transition-all duration-150 flex items-center justify-between gap-3 shadow-sm group"
                     >
                       <button
                         type="button"
@@ -946,7 +946,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                             playAudioPreview(track.url, bgmVolume);
                           }
                         }}
-                        className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 cursor-pointer transition-all ${
+                        className={`w-9 h-9 rounded-md border flex items-center justify-center shrink-0 cursor-pointer transition-all ${
                           isPlaying
                             ? 'bg-rose-500/20 border-rose-500 text-rose-400 animate-pulse shadow-md shadow-rose-500/20'
                             : 'bg-[var(--accent-surface)] border-[var(--border2)] text-[var(--accent)] hover:scale-105'

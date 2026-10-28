@@ -311,7 +311,7 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
         </div>
 
         {/* TABS (5 SECTIONS) */}
-        <div className="grid grid-cols-5 gap-1 p-1 bg-[var(--well-bg)] rounded-xl border border-[var(--border)] text-[10px] font-bold">
+        <div className="grid grid-cols-5 gap-1 p-1 bg-[var(--well-bg)] rounded-md border border-[var(--border)] text-[10px] font-bold">
           {[
             { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.group, count: characters.length },
             { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.general.screenFx, count: Object.keys(SCREEN_FX_REGISTRY).length },

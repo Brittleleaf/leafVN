@@ -44,7 +44,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
       </div>
 
       {/* Quick mood suggestion chips */}
-      <div className="space-y-2 p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl">
+      <div className="space-y-2 p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-md">
         <span className="text-[10px] text-[var(--muted)] uppercase font-bold tracking-wider block">
           Quick Mood Suggestions:
         </span>
@@ -77,7 +77,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
       </div>
 
       {/* Form to add or edit mood */}
-      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3.5 shadow-md">
+      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3.5 shadow-md">
         <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
           <span className="text-xs font-extrabold uppercase tracking-wider text-[var(--text)] flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -95,7 +95,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
               placeholder="Enter expression name here..."
               value={newMoodName}
               onChange={(e) => setNewMoodName(e.target.value)}
-              className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-3 py-2 text-xs text-[var(--text)] font-bold outline-none focus:border-[var(--accent)] transition-colors"
+              className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-3 py-2 text-xs text-[var(--text)] font-bold outline-none focus:border-[var(--accent)] transition-colors"
             />
           </div>
 
@@ -109,7 +109,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
                 placeholder="Photo URL or choose from Gallery / PC..."
                 value={newMoodUrl}
                 onChange={(e) => setNewMoodUrl(e.target.value)}
-                className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-3 py-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] font-mono transition-colors"
+                className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-3 py-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] font-mono transition-colors"
               />
               
               <div className="flex items-center gap-2 shrink-0">
@@ -117,7 +117,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
                 <button
                   type="button"
                   onClick={() => onOpenMoodAssetPicker(null)}
-                  className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors shadow-sm"
+                  className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors shadow-sm"
                   title="Choose image from Asset Studio"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
@@ -125,7 +125,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
                 </button>
 
                 {/* PC Upload button */}
-                <label className="px-3 py-2 bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors shadow-sm">
+                <label className="px-3 py-2 bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors shadow-sm">
                   <input
                     type="file"
                     accept="image/*"
@@ -154,7 +154,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
               setNewMoodName('');
               setNewMoodUrl('');
             }}
-            className="px-3 py-1.5 rounded-xl text-xs font-bold text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+            className="px-3 py-1.5 rounded-md text-xs font-bold text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
           >
             Clear Form
           </button>
@@ -175,7 +175,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
               setNewMoodUrl('');
               playSfx('/assets/sfx/success.mp3', false, 0.4);
             }}
-            className="px-4 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-black cursor-pointer shadow transition-all active:scale-95 flex items-center gap-1.5"
+            className="px-4 py-1.5 rounded-md text-xs font-bold bg-amber-500 hover:bg-amber-600 text-black cursor-pointer shadow transition-all active:scale-95 flex items-center gap-1.5"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5" />
             <span>Save / Update Mood</span>
@@ -196,7 +196,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
           {/* Neutral expression card (always present) */}
-          <div className="p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-2xl flex flex-col justify-between items-center text-center relative group shadow-sm">
+          <div className="p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg flex flex-col justify-between items-center text-center relative group shadow-sm">
             <div className="w-full flex items-center justify-between mb-1.5">
               <span className="text-[9px] px-2 py-0.5 bg-blue-500/20 text-blue-600 dark:text-blue-300 border border-blue-500/40 rounded-full font-mono uppercase flex items-center gap-1 font-bold">
                 <span>Base</span>
@@ -204,7 +204,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
               <span className="text-[9px] text-[var(--muted2)] font-mono">Protected</span>
             </div>
 
-            <div className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2 border border-[var(--border)] bg-[var(--card-bg)]">
+            <div className="w-full aspect-[3/4] rounded-md overflow-hidden mb-2 border border-[var(--border)] bg-[var(--card-bg)]">
               <img
                 src={activeChar.expressions?.neutral || activeChar.avatarUrl || '/assets/image/characters/SUBJECT-TEMPLATE.png'}
                 alt="neutral"
@@ -229,7 +229,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
                 return (
                   <div
                     key={emKey}
-                    className="p-3 bg-[var(--card-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-2xl flex flex-col justify-between items-center text-center relative group transition-all shadow-sm hover:shadow-md"
+                    className="p-3 bg-[var(--card-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-lg flex flex-col justify-between items-center text-center relative group transition-all shadow-sm hover:shadow-md"
                   >
                     <div className="w-full flex items-center justify-between mb-1.5">
                       <span className="text-[9px] px-2 py-0.5 bg-[var(--accent-surface)] text-[var(--accent)] border border-[var(--border2)] rounded-full font-mono uppercase flex items-center gap-1 font-bold">
@@ -254,7 +254,7 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
                       </button>
                     </div>
 
-                    <div className="w-full aspect-[3/4] rounded-xl overflow-hidden mb-2 border border-[var(--border)] bg-[var(--well-bg)]">
+                    <div className="w-full aspect-[3/4] rounded-md overflow-hidden mb-2 border border-[var(--border)] bg-[var(--well-bg)]">
                       <img
                         src={emUrl}
                         alt={emKey}

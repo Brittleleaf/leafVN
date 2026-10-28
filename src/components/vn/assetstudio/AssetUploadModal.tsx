@@ -280,7 +280,7 @@ export function AssetUploadModal({
   return (
     <div className="p-4 bg-[var(--well-bg)] border-b border-[var(--border)] shrink-0 animate-fade-in space-y-4 backdrop-blur-md">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 p-1 bg-[var(--btn-bg)] border border-[var(--border)] rounded-xl">
+        <div className="flex items-center gap-1.5 p-0.5 bg-[var(--btn-bg)] border border-[var(--border)] rounded-md">
           <button
             type="button"
             onClick={() => setAddAssetMode('link')}
@@ -332,7 +332,7 @@ export function AssetUploadModal({
                 value={newAssetUrl}
                 onChange={(e) => handleUrlChange(e.target.value)}
                 placeholder="Paste image or audio URL here..."
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1.5 text-xs text-[var(--text)] outline-none focus:border-cyan-400 font-mono"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1.5 text-xs text-[var(--text)] outline-none focus:border-cyan-400 font-mono"
               />
             </div>
 
@@ -343,7 +343,7 @@ export function AssetUploadModal({
                 value={newAssetType}
                 onChange={(e) => setNewAssetType(e.target.value as VNAssetType)}
                 disabled={Boolean(initialFilterType)}
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2 py-1.5 text-xs text-cyan-600 dark:text-cyan-300 font-bold outline-none cursor-pointer disabled:opacity-75"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2 py-1.5 text-xs text-cyan-600 dark:text-cyan-300 font-bold outline-none cursor-pointer disabled:opacity-75"
               >
                 {initialFilterType ? (
                   <option value={initialFilterType}>
@@ -380,7 +380,7 @@ export function AssetUploadModal({
                 value={newAssetName}
                 onChange={(e) => setNewAssetName(e.target.value)}
                 placeholder="Enter asset name here..."
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-cyan-400"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-cyan-400"
               />
             </div>
 
@@ -392,12 +392,12 @@ export function AssetUploadModal({
                 value={newAssetCategory}
                 onChange={(e) => setNewAssetCategory(e.target.value)}
                 placeholder="Enter category or tag here..."
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-cyan-400"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-cyan-400"
               />
             </div>
 
             {/* Quick Helper notice */}
-            <div className="flex items-center gap-1.5 text-[10px] text-[var(--muted)] bg-cyan-500/10 border border-cyan-500/30 rounded-xl px-2.5 py-1">
+            <div className="flex items-center gap-1.5 text-[10px] text-[var(--muted)] bg-cyan-500/10 border border-cyan-500/30 rounded-md px-2.5 py-1">
               <GuiIconRenderer icon={GUI_ICONS.action.lightBulb} size={12} className="text-cyan-400 shrink-0" />
               <span>Indexed links save disk space and are loaded directly from the web or CDN without downloading to disk.</span>
             </div>
@@ -516,7 +516,7 @@ export function AssetUploadModal({
                 value={newAssetName}
                 onChange={(e) => setNewAssetName(e.target.value)}
                 placeholder="Enter asset name here..."
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-emerald-500"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-emerald-500"
               />
             </div>
 
@@ -526,7 +526,7 @@ export function AssetUploadModal({
                 value={newAssetType}
                 onChange={(e) => setNewAssetType(e.target.value as VNAssetType)}
                 disabled={Boolean(initialFilterType)}
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2 py-1 text-xs text-emerald-700 dark:text-emerald-300 font-bold outline-none cursor-pointer disabled:opacity-75"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2 py-1 text-xs text-emerald-700 dark:text-emerald-300 font-bold outline-none cursor-pointer disabled:opacity-75"
               >
                 {initialFilterType ? (
                   <option value={initialFilterType}>
@@ -560,7 +560,7 @@ export function AssetUploadModal({
             <button
               type="submit"
               disabled={isUploading || !newAssetFile}
-              className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white font-bold rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all shadow flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white font-bold rounded-md text-xs uppercase tracking-wider cursor-pointer transition-all shadow flex items-center gap-1.5"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5" />
               <span>{isUploading ? 'Saving to disk...' : 'Save File to Folder'}</span>

@@ -661,7 +661,7 @@ export default function CinematicSequencerStudio({
                   height: `${canvasDimensions.height}px`,
                   aspectRatio: '16 / 9',
                 }}
-                className="relative rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)] bg-black shrink-0 transition-none flex flex-col"
+                className="relative rounded-lg overflow-hidden shadow-2xl border border-[var(--border)] bg-black shrink-0 transition-none flex flex-col"
               >
                 <CinematicPlayerView
                   scene={scene}

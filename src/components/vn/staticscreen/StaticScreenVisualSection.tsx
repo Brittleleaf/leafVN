@@ -101,11 +101,11 @@ export function StaticScreenVisualSection({
     <>
       {/* 0. PURPOSE-SPECIFIC CONFIGURATION (GALLERY DEFAULT TAB) */}
       {config.purpose === 'gallery' && (
-        <div className="space-y-2 p-3 rounded-xl border border-amber-500/40 bg-amber-950/20 backdrop-blur-sm">
+        <div className="space-y-2 p-3 rounded-md border border-amber-500/40 bg-amber-950/20 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-amber-400" />
-              <span>Pestaña Inicial de Galería</span>
+              <span>PestaÃ±a Inicial de GalerÃ­a</span>
             </span>
             <span className="text-[9px] font-mono text-amber-300/80">Default Tab</span>
           </div>
@@ -124,7 +124,7 @@ export function StaticScreenVisualSection({
                     : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white'
                 }`}
               >
-                {tab === 'cinematics' ? 'Cinemáticas' : tab === 'scenarios' ? 'Escenarios' : 'Personajes'}
+                {tab === 'cinematics' ? 'CinemÃ¡ticas' : tab === 'scenarios' ? 'Escenarios' : 'Personajes'}
               </button>
             ))}
           </div>
@@ -132,7 +132,7 @@ export function StaticScreenVisualSection({
       )}
 
       {/* 1. MEDIA & BACKGROUND GALLERY SECTION */}
-      <div className="space-y-3 p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm shadow-sm">
+      <div className="space-y-3 p-3.5 rounded-lg border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm shadow-sm">
         <div className="flex items-center justify-between pb-1 border-b border-[var(--border)]">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
@@ -173,7 +173,7 @@ export function StaticScreenVisualSection({
                 onSelect: (asset) => onUpdateScene({ backgroundUrl: asset.url }),
               });
             }}
-            className="group relative w-full h-24 rounded-xl overflow-hidden border border-[var(--border)] hover:border-[var(--accent)] bg-black/60 cursor-pointer transition-all shadow"
+            className="group relative w-full h-24 rounded-md overflow-hidden border border-[var(--border)] hover:border-[var(--accent)] bg-black/60 cursor-pointer transition-all shadow"
           >
             <img
               src={scene.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg'}
@@ -193,7 +193,7 @@ export function StaticScreenVisualSection({
         </div>
 
         {/* Background Overlay Darkness Slider */}
-        <div className="space-y-1.5 p-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-sm">
+        <div className="space-y-1.5 p-2.5 rounded-md border border-[var(--border)] bg-[var(--surface)] shadow-sm">
           <div className="flex items-center justify-between text-[10px]">
             <span className="text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1">
               <GuiIconRenderer icon={GUI_ICONS.general.screenFx} size={12} className="text-cyan-400" />
@@ -241,7 +241,7 @@ export function StaticScreenVisualSection({
         {/* Entrance Impact SFX & Ambient BGM: Visual Audio Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {/* SFX Card */}
-          <div className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] space-y-1.5 shadow-sm">
+          <div className="p-2.5 rounded-md border border-[var(--border)] bg-[var(--surface)] space-y-1.5 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1">
                 <GuiIconRenderer icon={GUI_ICONS.general.sound} className="w-3.5 h-3.5" />
@@ -335,7 +335,7 @@ export function StaticScreenVisualSection({
           </div>
 
           {/* BGM Card */}
-          <div className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] space-y-1.5 shadow-sm">
+          <div className="p-2.5 rounded-md border border-[var(--border)] bg-[var(--surface)] space-y-1.5 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1">
                 <GuiIconRenderer icon={GUI_ICONS.general.soundOn} className="w-3.5 h-3.5" />
@@ -518,7 +518,7 @@ export function StaticScreenVisualSection({
       </div>
 
       {/* CUSTOM SCREEN CURSOR LIBRARY */}
-      <div className="space-y-2 p-3 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm">
+      <div className="space-y-2 p-3 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -551,7 +551,7 @@ export function StaticScreenVisualSection({
                   updateConfig({ cursorType: cur.id });
                   playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                 }}
-                className={`p-2 rounded-xl border text-left transition-all cursor-pointer flex flex-col items-center justify-center gap-1 shadow-sm ${
+                className={`p-2 rounded-md border text-left transition-all cursor-pointer flex flex-col items-center justify-center gap-1 shadow-sm ${
                   isSelected
                     ? 'border-cyan-400 bg-cyan-950/40 text-cyan-200 ring-1 ring-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.25)]'
                     : 'border-[var(--border)] bg-[var(--surface)] hover:border-white/20 text-gray-300 hover:text-white'

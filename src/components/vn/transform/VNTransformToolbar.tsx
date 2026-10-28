@@ -218,7 +218,7 @@ export const VNTransformToolbar: React.FC<VNTransformToolbarProps> = ({
     "pointer-events-none absolute left-full ml-2.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-[var(--modal-bg,var(--well-bg))] border border-[var(--border2)] text-[10px] font-medium text-[var(--text)] whitespace-nowrap shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity z-50 backdrop-blur-md";
 
   return (
-    <div className="flex flex-col items-center gap-1.5 p-2 bg-[var(--dropdown-bg,var(--panel))] backdrop-blur-2xl border border-[var(--border2)] rounded-2xl shadow-[0_16px_45px_rgba(0,0,0,0.65),0_0_24px_var(--accent-glow)] ring-1 ring-[var(--accent)]/30 select-none animate-in fade-in slide-in-from-left-3 duration-200 text-[var(--text)]">
+    <div className="flex flex-col items-center gap-1.5 p-2 bg-[var(--dropdown-bg,var(--panel))] backdrop-blur-2xl border border-[var(--border2)] rounded-lg shadow-[0_16px_45px_rgba(0,0,0,0.65),0_0_24px_var(--accent-glow)] ring-1 ring-[var(--accent)]/30 select-none animate-in fade-in slide-in-from-left-3 duration-200 text-[var(--text)]">
       {/* Header Tag & Live Telemetry Adaptado al Tema */}
       <div className="flex flex-col items-center gap-0.5 pb-2 border-b border-[var(--border)] w-full">
         <span className="text-[8px] font-mono font-bold tracking-widest uppercase text-[var(--accent)] bg-[var(--accent-surface)] px-2.5 py-0.5 rounded-full border border-[var(--accent-border)] shadow-sm">

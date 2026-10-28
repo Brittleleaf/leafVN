@@ -101,7 +101,7 @@ export default function CharacterStudioModal({
         {/* MAIN HEADER */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b vn-glass-header px-5 py-3.5 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-xl border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
+            <div className="w-9 h-9 flex items-center justify-center p-1.5 bg-[var(--accent-surface)] rounded-md border border-[var(--border2)] text-[var(--accent)] shrink-0 shadow-sm">
               <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-5 h-5" />
             </div>
             <div>
@@ -127,7 +127,7 @@ export default function CharacterStudioModal({
                 placeholder="Search by name, lore..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[var(--well-bg)] border border-[var(--border)] rounded-xl pl-7 pr-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] transition-colors w-40 sm:w-52 font-sans"
+                className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md pl-7 pr-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] transition-colors w-40 sm:w-52 font-sans"
               />
               <GuiIconRenderer icon={GUI_ICONS.general.search} className="absolute left-2 top-2 text-[var(--muted)] w-3.5 h-3.5 opacity-60" />
               {searchQuery && (
@@ -145,7 +145,7 @@ export default function CharacterStudioModal({
             <button
               type="button"
               onClick={handleCreateNewChar}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-xl text-xs uppercase font-extrabold cursor-pointer transition-all shadow flex items-center gap-1.5 shrink-0"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs uppercase font-extrabold cursor-pointer transition-all shadow flex items-center gap-1.5 shrink-0"
             >
               <span>+</span>
               <span>Create Character</span>
@@ -154,7 +154,7 @@ export default function CharacterStudioModal({
             <button
               type="button"
               onClick={onClose}
-              className="text-[var(--muted)] hover:text-[var(--text)] cursor-pointer p-1.5 hover:bg-[var(--btn-hover-bg)] rounded-xl border border-[var(--border)] transition-colors"
+              className="text-[var(--muted)] hover:text-[var(--text)] cursor-pointer p-1.5 hover:bg-[var(--btn-hover-bg)] rounded-md border border-[var(--border)] transition-colors"
               title="Close window"
             >
               <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-4 h-4 opacity-75 hover:opacity-100" />
@@ -181,7 +181,7 @@ export default function CharacterStudioModal({
                   <div
                     key={ch.id}
                     onClick={() => setSelectedCharId(ch.id)}
-                    className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center gap-2.5 relative group ${
+                    className={`p-2.5 rounded-md border transition-all cursor-pointer flex items-center gap-2.5 relative group ${
                       isSelected
                         ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40'
                         : 'bg-[var(--card-bg)] border-[var(--border)] hover:border-[var(--border2)] hover:bg-[var(--btn-hover-bg)]'
@@ -190,7 +190,7 @@ export default function CharacterStudioModal({
                     <img
                       src={ch.avatarUrl || '/assets/image/characters/SUBJECT-TEMPLATE.png'}
                       alt={ch.name}
-                      className="w-10 h-10 object-cover rounded-xl border shrink-0 transition-transform group-hover:scale-105"
+                      className="w-10 h-10 object-cover rounded-md border shrink-0 transition-transform group-hover:scale-105"
                       style={{ borderColor: ch.color || '#ef4444' }}
                     />
 
@@ -300,7 +300,7 @@ export default function CharacterStudioModal({
               
               {/* TABS DOCK */}
               <div className="border-b border-[var(--border)] px-4 py-2.5 bg-[var(--header-bg)] flex items-center justify-between gap-2 overflow-x-auto shrink-0">
-                <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-1 shadow-inner text-xs">
+                <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-1 shadow-inner text-xs">
                   <button
                     type="button"
                     onClick={() => setActiveTab('profile')}
@@ -357,7 +357,7 @@ export default function CharacterStudioModal({
                   </button>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs px-2.5 py-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl shrink-0">
+                <div className="flex items-center gap-2 text-xs px-2.5 py-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md shrink-0">
                   <span className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: activeChar.color || '#ef4444' }} />
                   <span className="text-[var(--muted2)] font-mono text-[10px] uppercase font-bold hidden sm:inline">EDITING:</span>
                   <span className="font-extrabold uppercase truncate" style={{ color: activeChar.color || '#ef4444' }}>
@@ -427,7 +427,7 @@ export default function CharacterStudioModal({
               <button
                 type="button"
                 onClick={handleCreateNewChar}
-                className="px-4 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-bold rounded-xl text-xs uppercase shadow"
+                className="px-4 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-bold rounded-md text-xs uppercase shadow"
               >
                 Create Character
               </button>

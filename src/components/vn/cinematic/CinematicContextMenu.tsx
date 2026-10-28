@@ -82,7 +82,7 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
     <div
       ref={menuRef}
       style={{ left: `${x}px`, top: `${y}px` }}
-      className="fixed z-50 min-w-[190px] rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-xs shadow-2xl backdrop-blur-xl p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-100 select-none"
+      className="fixed z-50 min-w-[190px] rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-xs shadow-2xl backdrop-blur-xl p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-100 select-none"
     >
       {menu.clip && (
         <div className="px-2.5 py-1 text-[10px] font-mono font-bold text-gray-400 border-b border-white/10 truncate max-w-[200px]">

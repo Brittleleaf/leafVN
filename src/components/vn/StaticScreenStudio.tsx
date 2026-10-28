@@ -295,7 +295,7 @@ export default function StaticScreenStudio({
                   <span>Menu Tool</span>
                 </button>
               )}
-              <div className="w-8 h-8 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
+              <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
                 <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-[var(--accent)]" />
               </div>
               <div>
@@ -309,7 +309,7 @@ export default function StaticScreenStudio({
             </div>
 
             {/* Quick Presets dropdown / pill */}
-            <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-xl flex-wrap">
+            <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-1 rounded-md flex-wrap">
               <span className="text-[9px] uppercase font-bold text-[var(--muted)] px-1 font-mono">Preset:</span>
               <button
                 type="button"
@@ -371,7 +371,7 @@ export default function StaticScreenStudio({
           </div>
 
           {/* Sleek Segmented Studio Navigation Tabs */}
-          <div className="flex items-center gap-1 p-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl">
+          <div className="flex items-center gap-1 p-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md">
             <button
               type="button"
               onClick={() => {
@@ -470,7 +470,7 @@ export default function StaticScreenStudio({
         className="flex-1 relative flex flex-col items-center justify-center p-4 xl:pr-24 bg-black/60 overflow-hidden"
       >
         {/* Sleek Workspace Top Bar OUTSIDE the canvas */}
-        <div className="w-full max-w-4xl mb-2.5 flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] text-xs backdrop-blur-md shadow-sm shrink-0">
+        <div className="w-full max-w-4xl mb-2.5 flex items-center justify-between px-3.5 py-1.5 rounded-md bg-[var(--well-bg)] border border-[var(--border)] text-xs backdrop-blur-md shadow-sm shrink-0">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]" />
             <span className="font-bold tracking-wider uppercase text-[11px] text-[var(--text)]">Static Screen Studio</span>
@@ -528,7 +528,7 @@ export default function StaticScreenStudio({
           }}
           className="relative w-full h-full max-w-4xl max-h-[640px] flex items-center justify-center"
         >
-          <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border border-[var(--border)]">
+          <div className="relative w-full h-full rounded-lg overflow-hidden shadow-2xl border border-[var(--border)]">
             <StaticScreenView
               scene={scene}
               story={story}

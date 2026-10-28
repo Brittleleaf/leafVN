@@ -275,7 +275,7 @@ export default function ChapterStudioModal({
           <div className="flex items-center gap-3">
             <button
               onClick={handleCreateChapter}
-              className="px-3 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5 shadow transition-all cursor-pointer"
+              className="px-3 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-xs uppercase tracking-wider flex items-center gap-1.5 shadow transition-all cursor-pointer"
             >
               <span>+</span>
               <span>New Chapter</span>
@@ -283,7 +283,7 @@ export default function ChapterStudioModal({
 
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
             </button>
@@ -303,7 +303,7 @@ export default function ChapterStudioModal({
                   placeholder="Search chapters..."
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)]"
+                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)]"
                 />
                 {searchFilter && (
                   <button
@@ -331,7 +331,7 @@ export default function ChapterStudioModal({
                       setSelectedChId(ch.id);
                       playSfx('/assets/sfx/click intro.mp3', false, 0.1);
                     }}
-                    className={`p-3 rounded-xl border transition-all cursor-pointer relative group ${
+                    className={`p-3 rounded-md border transition-all cursor-pointer relative group ${
                       isSelected
                         ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40'
                         : 'bg-[var(--card-bg)] border-[var(--border)] hover:border-[var(--border2)] hover:bg-[var(--btn-hover-bg)]'
@@ -473,7 +473,7 @@ export default function ChapterStudioModal({
                     playSfx('/assets/sfx/start after click intro.mp3', false, 0.3);
                     notify(`Editing on canvas: "${selectedChapter.title}"`);
                   }}
-                  className="w-full py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all"
+                  className="w-full py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-[#0F0503]" />
                   <span>Edit this Chapter on Screen</span>
@@ -490,7 +490,7 @@ export default function ChapterStudioModal({
               <div className="h-11 border-b border-[var(--border)] bg-[var(--header-bg)] px-4 flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => setActiveTab('identity')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'identity'
                       ? 'bg-[var(--accent-surface)] border border-[var(--accent)] text-[var(--text)] shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -502,7 +502,7 @@ export default function ChapterStudioModal({
 
                 <button
                   onClick={() => setActiveTab('loading')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'loading'
                       ? 'bg-[var(--accent-surface)] border border-[var(--accent)] text-[var(--text)] shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -517,7 +517,7 @@ export default function ChapterStudioModal({
 
                 <button
                   onClick={() => setActiveTab('scenes')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'scenes'
                       ? 'bg-[var(--accent-surface)] border border-[var(--accent)] text-[var(--text)] shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -529,7 +529,7 @@ export default function ChapterStudioModal({
 
                 <button
                   onClick={() => setActiveTab('atmosphere')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'atmosphere'
                       ? 'bg-[var(--accent-surface)] border border-[var(--accent)] text-[var(--text)] shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -556,7 +556,7 @@ export default function ChapterStudioModal({
                           min={1}
                           value={selectedChapter.number}
                           onChange={(e) => handleUpdateCurrentChapter({ number: Number(e.target.value) || 1 })}
-                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-mono font-bold outline-none focus:border-[var(--accent)] transition-colors"
+                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--accent)] font-mono font-bold outline-none focus:border-[var(--accent)] transition-colors"
                         />
                       </div>
 
@@ -569,7 +569,7 @@ export default function ChapterStudioModal({
                           value={selectedChapter.title}
                           onChange={(e) => handleUpdateCurrentChapter({ title: e.target.value })}
                           placeholder="Enter chapter title here..."
-                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-[var(--accent)] transition-colors"
+                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-[var(--accent)] transition-colors"
                         />
                       </div>
                     </div>
@@ -583,12 +583,12 @@ export default function ChapterStudioModal({
                         value={selectedChapter.summary || ''}
                         onChange={(e) => handleUpdateCurrentChapter({ summary: e.target.value })}
                         placeholder="Enter chapter synopsis here..."
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] resize-none transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] resize-none transition-colors"
                       />
                     </div>
 
                     {/* Starting scene of the chapter */}
-                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                       <div className="flex items-center justify-between">
                         <div>
                           <h4 className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
@@ -604,7 +604,7 @@ export default function ChapterStudioModal({
                       <select
                         value={selectedChapter.startSceneId || selectedChapter.scenes[0]?.id || ''}
                         onChange={(e) => handleUpdateCurrentChapter({ startSceneId: e.target.value })}
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] cursor-pointer transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)] cursor-pointer transition-colors"
                       >
                         {selectedChapter.scenes.map((sc) => (
                           <option key={sc.id} value={sc.id}>
@@ -616,28 +616,28 @@ export default function ChapterStudioModal({
 
                     {/* Metric cards */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl text-center space-y-1 shadow-sm">
+                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-md text-center space-y-1 shadow-sm">
                         <span className="text-[10px] text-[var(--muted)] uppercase font-bold block">Scenarios</span>
                         <span className="text-xl font-bold text-[var(--accent)] font-mono">
                           {selectedChapter.scenes?.length || 0}
                         </span>
                       </div>
 
-                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl text-center space-y-1 shadow-sm">
+                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-md text-center space-y-1 shadow-sm">
                         <span className="text-[10px] text-[var(--muted)] uppercase font-bold block">Dialogues / Events</span>
                         <span className="text-xl font-bold text-[var(--text)] font-mono">
                           {totalEventsInCurrentChapter}
                         </span>
                       </div>
 
-                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl text-center space-y-1 shadow-sm">
+                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-md text-center space-y-1 shadow-sm">
                         <span className="text-[10px] text-[var(--muted)] uppercase font-bold block">Action Points</span>
                         <span className="text-xl font-bold text-amber-500 font-mono">
                           {totalHotspotsInCurrentChapter}
                         </span>
                       </div>
 
-                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl text-center space-y-1 shadow-sm">
+                      <div className="p-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-md text-center space-y-1 shadow-sm">
                         <span className="text-[10px] text-[var(--muted)] uppercase font-bold block">Approx. Reading</span>
                         <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">
                           ~{Math.max(1, Math.round(totalEventsInCurrentChapter / 12))} min
@@ -651,7 +651,7 @@ export default function ChapterStudioModal({
                 {activeTab === 'loading' && (
                   <div className="space-y-6 max-w-2xl">
                     {/* Toggle Switch */}
-                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl flex items-center justify-between shadow-sm">
+                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg flex items-center justify-between shadow-sm">
                       <div className="space-y-1">
                         <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider block">
                           Enable Cinematic Loading Screen
@@ -673,7 +673,7 @@ export default function ChapterStudioModal({
                     </div>
 
                     {selectedChapter.loadingScreen?.enabled && (
-                      <div className="space-y-4 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl shadow-sm animate-fade-in">
+                      <div className="space-y-4 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg shadow-sm animate-fade-in">
                         {/* Loading title and subtitle */}
                         <div className="space-y-1.5">
                           <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
@@ -684,7 +684,7 @@ export default function ChapterStudioModal({
                             value={selectedChapter.loadingScreen.title || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ title: e.target.value })}
                             placeholder="Enter loading title here..."
-                            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] font-mono font-bold outline-none focus:border-[var(--accent)] transition-colors"
+                            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-mono font-bold outline-none focus:border-[var(--accent)] transition-colors"
                           />
                         </div>
 
@@ -697,7 +697,7 @@ export default function ChapterStudioModal({
                             value={selectedChapter.loadingScreen.subtitle || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ subtitle: e.target.value })}
                             placeholder="Enter loading subtitle here..."
-                            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
+                            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--accent)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                           />
                         </div>
 
@@ -714,7 +714,7 @@ export default function ChapterStudioModal({
                             value={selectedChapter.loadingScreen.loreTip || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ loreTip: e.target.value })}
                             placeholder="Enter lore quote or text here..."
-                            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] italic outline-none focus:border-[var(--accent)] resize-none transition-colors"
+                            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] italic outline-none focus:border-[var(--accent)] resize-none transition-colors"
                           />
 
                           {/* Quick presets */}
@@ -746,19 +746,19 @@ export default function ChapterStudioModal({
                               value={selectedChapter.loadingScreen.bgImageUrl || ''}
                               onChange={(e) => handleUpdateLoadingConfig({ bgImageUrl: e.target.value })}
                               placeholder="Or enter custom background URL..."
-                              className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
+                              className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                             />
                             <div className="flex items-center gap-2 shrink-0">
                               <button
                                 type="button"
                                 onClick={() => setShowBgGallery(true)}
-                                className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-xl cursor-pointer shrink-0 flex items-center gap-1.5 transition-colors shadow-sm"
+                                className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-md cursor-pointer shrink-0 flex items-center gap-1.5 transition-colors shadow-sm"
                                 title="Choose background from Asset Gallery (Backgrounds Only)"
                               >
                                 <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
                                 <span>Gallery</span>
                               </button>
-                              <label className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-xl cursor-pointer shrink-0 transition-colors shadow-sm">
+                              <label className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-md cursor-pointer shrink-0 transition-colors shadow-sm">
                                 <span>Upload</span>
                                 <input
                                   type="file"
@@ -797,7 +797,7 @@ export default function ChapterStudioModal({
                           <button
                             type="button"
                             onClick={() => setShowLiveLoadingPreview(true)}
-                            className="w-full py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm"
+                            className="w-full py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] font-bold rounded-md text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm"
                           >
                             <GuiIconRenderer icon={GUI_ICONS.action.lookAt} className="w-3.5 h-3.5" />
                             <span>Test Live Preview of Loading Screen</span>
@@ -831,11 +831,11 @@ export default function ChapterStudioModal({
                         return (
                           <div
                             key={sc.id}
-                            className={`p-3 bg-[var(--card-bg)] rounded-2xl border flex flex-col justify-between space-y-2 relative group overflow-hidden shadow-sm transition-all ${
+                            className={`p-3 bg-[var(--card-bg)] rounded-lg border flex flex-col justify-between space-y-2 relative group overflow-hidden shadow-sm transition-all ${
                               isStart ? 'border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40' : 'border-[var(--border)] hover:border-[var(--border2)]'
                             }`}
                           >
-                            <div className="relative h-24 rounded-xl overflow-hidden border border-[var(--border)] mb-1">
+                            <div className="relative h-24 rounded-md overflow-hidden border border-[var(--border)] mb-1">
                               <img
                                 src={sc.backgroundUrl}
                                 alt={sc.name}
@@ -905,7 +905,7 @@ export default function ChapterStudioModal({
                 {/* TAB 4: ATMOSPHERE & AUDIO */}
                 {activeTab === 'atmosphere' && (
                   <div className="space-y-6 max-w-xl">
-                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                       <div>
                         <h4 className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                           <GuiIconRenderer icon={GUI_ICONS.action.soundOn} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -921,12 +921,12 @@ export default function ChapterStudioModal({
                           type="text"
                           placeholder="/assets/sfx/bg-tvnoise.mp3 or external URL..."
                           defaultValue="/assets/sfx/bg-tvnoise.mp3"
-                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2.5 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
+                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                         />
                         <button
                           type="button"
                           onClick={() => playSfx('/assets/sfx/bg-tvnoise.mp3', false, 0.4)}
-                          className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
+                          className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3 h-3" />
                           <span>Test Sound</span>
@@ -934,7 +934,7 @@ export default function ChapterStudioModal({
                       </div>
                     </div>
 
-                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                       <div>
                         <h4 className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                           <GuiIconRenderer icon={GUI_ICONS.general.speaker} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -949,7 +949,7 @@ export default function ChapterStudioModal({
                         <button
                           type="button"
                           onClick={() => playSfx('/assets/sfx/start after click intro.mp3', false, 0.5)}
-                          className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
+                          className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3 h-3" />
                           <span>Cinematic Impact</span>
@@ -957,7 +957,7 @@ export default function ChapterStudioModal({
                         <button
                           type="button"
                           onClick={() => playSfx('/assets/sfx/Interactions/open door.mp3', false, 0.5)}
-                          className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
+                          className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3 h-3" />
                           <span>Blast Door Opening</span>

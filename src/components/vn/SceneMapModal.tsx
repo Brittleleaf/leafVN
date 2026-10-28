@@ -561,7 +561,7 @@ export default function SceneMapModal({
             <select
               value={activeChapterId}
               onChange={(e) => setActiveChapterId(e.target.value)}
-              className="bg-[var(--well-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] font-bold focus:outline-none"
+              className="bg-[var(--well-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] font-bold focus:outline-none"
             >
               {story.chapters.map((ch) => (
                 <option key={ch.id} value={ch.id}>
@@ -573,7 +573,7 @@ export default function SceneMapModal({
 
           <button
             onClick={handleAddNewScene}
-            className="px-3 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] text-xs font-extrabold rounded-xl flex items-center gap-1.5 transition-all shadow cursor-pointer"
+            className="px-3 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] text-xs font-extrabold rounded-md flex items-center gap-1.5 transition-all shadow cursor-pointer"
           >
             <span>+</span> New Scene
           </button>
@@ -581,7 +581,7 @@ export default function SceneMapModal({
           {unplacedScenarios.length > 0 && (
             <button
               onClick={() => setShowLibraryModal(true)}
-              className="px-2.5 py-1 bg-sky-950/80 hover:bg-sky-900 border border-sky-600/80 text-sky-200 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow cursor-pointer"
+              className="px-2.5 py-1 bg-sky-950/80 hover:bg-sky-900 border border-sky-600/80 text-sky-200 text-xs font-bold rounded-md flex items-center gap-1.5 transition-all shadow cursor-pointer"
               title="Insert scenario saved in library that is not in this chapter"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5 text-sky-400" />
@@ -591,7 +591,7 @@ export default function SceneMapModal({
 
           <button
             onClick={handleAutoLayout}
-            className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-md flex items-center gap-1.5 transition-all cursor-pointer"
             title="Automatically organize nodes into visual hierarchy"
           >
             <GuiIconRenderer icon={GUI_ICONS.track.branch} size={12} />
@@ -600,7 +600,7 @@ export default function SceneMapModal({
 
           <button
             onClick={handleCenterOnStart}
-            className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-amber-500 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-amber-500 text-xs font-bold rounded-md flex items-center gap-1.5 transition-all cursor-pointer"
             title="Center camera on starting scenario"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.target} size={12} />
@@ -613,7 +613,7 @@ export default function SceneMapModal({
           {/* Pan Hand Toggle */}
           <button
             onClick={() => setIsHandTool(!isHandTool)}
-            className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1 rounded-md text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
               isHandTool || isSpacePressed
                 ? 'bg-amber-500 text-black border-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.5)]'
                 : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] border-[var(--border)]'
@@ -625,7 +625,7 @@ export default function SceneMapModal({
           </button>
 
           {/* Zoom controls */}
-          <div className="flex items-center bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2 py-0.5 gap-1">
+          <div className="flex items-center bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2 py-0.5 gap-1">
             <button
               onClick={() => setZoom((z) => Math.max(0.35, z - 0.15))}
               className="px-1.5 py-0.5 text-xs text-[var(--muted)] hover:text-[var(--text)] cursor-pointer font-bold"
@@ -654,7 +654,7 @@ export default function SceneMapModal({
           {/* Exit / Return */}
           <button
             onClick={onClose}
-            className="px-3.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-3.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] text-xs font-bold rounded-md flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
             <span>Return to Editor</span>
@@ -837,7 +837,7 @@ export default function SceneMapModal({
                   top: `${pos.y}px`,
                   width: `${NODE_WIDTH}px`,
                 }}
-                className={`absolute pointer-events-auto rounded-xl border backdrop-blur-xl shadow-2xl transition-shadow flex flex-col overflow-hidden ${
+                className={`absolute pointer-events-auto rounded-md border backdrop-blur-xl shadow-2xl transition-shadow flex flex-col overflow-hidden ${
                   isSelected
                     ? 'border-[var(--accent)] shadow-[0_0_25px_var(--accent-glow)] ring-2 ring-[var(--accent)]/50 bg-[var(--modal-bg)] text-[var(--text)]'
                     : isStart
@@ -975,7 +975,7 @@ export default function SceneMapModal({
 
         {/* 3. MINIMAP OVERLAY (BOTTOM LEFT) */}
         {minimapData && (
-          <div className="absolute bottom-4 left-4 w-52 h-36 bg-[var(--card-bg)] backdrop-blur-lg border border-[var(--border)] rounded-xl shadow-2xl p-2 pointer-events-auto flex flex-col z-30">
+          <div className="absolute bottom-4 left-4 w-52 h-36 bg-[var(--card-bg)] backdrop-blur-lg border border-[var(--border)] rounded-md shadow-2xl p-2 pointer-events-auto flex flex-col z-30">
             <div className="flex items-center justify-between text-[10px] text-[var(--muted)] font-bold mb-1 pb-1 border-b border-[var(--border)]">
               <span className="flex items-center gap-1">
                 <GuiIconRenderer icon={GUI_ICONS.general.sitemap} size={12} className="text-[var(--accent)]" />
@@ -1064,7 +1064,7 @@ export default function SceneMapModal({
         )}
 
         {/* 4. FLOATING HINT HELPER (BOTTOM RIGHT) */}
-        <div className="absolute bottom-4 right-4 bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border)] text-[10px] text-[var(--muted)] px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-4 z-20 pointer-events-none">
+        <div className="absolute bottom-4 right-4 bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border)] text-[10px] text-[var(--muted)] px-3 py-1.5 rounded-md shadow-lg flex items-center gap-4 z-20 pointer-events-none">
           <span>
             <strong className="text-[var(--text)]">Space + Drag:</strong> Pan canvas
           </span>
@@ -1080,10 +1080,10 @@ export default function SceneMapModal({
       {/* LIBRARY INSERTION MODAL */}
       {showLibraryModal && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in font-sans">
-          <div className="max-w-2xl w-full bg-[var(--card-bg)] border border-[var(--border2)] rounded-2xl shadow-2xl flex flex-col max-h-[80vh] overflow-hidden backdrop-blur-xl">
+          <div className="max-w-2xl w-full bg-[var(--card-bg)] border border-[var(--border2)] rounded-lg shadow-2xl flex flex-col max-h-[80vh] overflow-hidden backdrop-blur-xl">
             <div className="p-4 bg-[var(--well-bg)] border-b border-[var(--border)] flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[var(--accent-surface)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
+                <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--border)] flex items-center justify-center text-[var(--accent)] shadow-sm">
                   <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-4 h-4 text-[var(--accent)]" />
                 </div>
                 <div>
@@ -1097,7 +1097,7 @@ export default function SceneMapModal({
               </div>
               <button
                 onClick={() => setShowLibraryModal(false)}
-                className="w-7 h-7 flex items-center justify-center rounded-lg text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] text-base font-bold cursor-pointer transition-colors"
+                className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] text-base font-bold cursor-pointer transition-colors"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
               </button>
@@ -1108,7 +1108,7 @@ export default function SceneMapModal({
                 <div
                   key={sc.id}
                   onClick={() => handleInsertFromLibrary(sc)}
-                  className="p-3 bg-[var(--well-bg)] hover:bg-[var(--card-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-xl flex items-center gap-3 cursor-pointer transition-all shadow-sm hover:shadow group"
+                  className="p-3 bg-[var(--well-bg)] hover:bg-[var(--card-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-md flex items-center gap-3 cursor-pointer transition-all shadow-sm hover:shadow group"
                 >
                   <div className="w-16 h-12 rounded-lg overflow-hidden bg-[var(--card-bg)] border border-[var(--border)] shrink-0">
                     {sc.backgroundUrl ? (

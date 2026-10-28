@@ -29,7 +29,7 @@ export function StaticScreenTypographySection({
   setAssetPickerConfig,
 }: StaticScreenTypographySectionProps) {
   return (
-    <div className="space-y-3 p-3 rounded-xl border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm">
+    <div className="space-y-3 p-3 rounded-md border border-[var(--border)] bg-[var(--btn-bg)] backdrop-blur-sm">
       <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
         <GuiIconRenderer icon={GUI_ICONS.general.fontFx} className="w-3.5 h-3.5 text-[var(--accent)]" />
         <span>Text & Typography</span>

@@ -31,7 +31,7 @@ export function FontShowcaseTab({
   return (
     <div className="space-y-4">
       {/* Category Pills & Interactive Tester Bar */}
-      <div className="p-4 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] space-y-3 shadow-lg backdrop-blur-md">
+      <div className="p-4 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] space-y-3 shadow-lg backdrop-blur-md">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider mr-1">
@@ -49,7 +49,7 @@ export function FontShowcaseTab({
                 key={cat.id}
                 type="button"
                 onClick={() => setFontCategoryFilter(cat.id)}
-                className={`px-2.5 py-1 rounded-xl text-xs font-medium transition-all cursor-pointer border ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer border ${
                   fontCategoryFilter === cat.id
                     ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] font-bold shadow-sm'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -61,7 +61,7 @@ export function FontShowcaseTab({
           </div>
 
           {story.defaultFontFamily && (
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-xs text-emerald-700 dark:text-emerald-300 font-mono">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-md text-xs text-emerald-700 dark:text-emerald-300 font-mono">
               <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5 text-emerald-500" />
               <span>Current Project Font:</span>
               <strong className="text-[var(--text)] uppercase">{story.defaultFontFamily}</strong>
@@ -108,7 +108,7 @@ export function FontShowcaseTab({
             value={customFontSample}
             onChange={(e) => setCustomFontSample(e.target.value)}
             placeholder="Type sample text to test across all fonts..."
-            className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl px-3 py-2 text-xs text-[var(--text)] outline-none font-sans"
+            className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md px-3 py-2 text-xs text-[var(--text)] outline-none font-sans"
           />
         </div>
       </div>
@@ -135,7 +135,7 @@ export function FontShowcaseTab({
           return (
             <div
               key={font.id}
-              className={`rounded-2xl border p-4 bg-[var(--card-bg)] flex flex-col justify-between gap-3 transition-all backdrop-blur-md ${
+              className={`rounded-lg border p-4 bg-[var(--card-bg)] flex flex-col justify-between gap-3 transition-all backdrop-blur-md ${
                 isCurrentDefault
                   ? 'border-emerald-500/80 shadow-[0_0_20px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500/50'
                   : 'border-[var(--border)] hover:border-[var(--border2)]'
@@ -159,7 +159,7 @@ export function FontShowcaseTab({
                 </div>
 
                 {isCurrentDefault && (
-                  <span className="px-2 py-0.5 rounded-xl text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 shrink-0 flex items-center gap-1">
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 shrink-0 flex items-center gap-1">
                     <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3 h-3 text-emerald-500" />
                     <span>ACTIVE</span>
                   </span>
@@ -168,7 +168,7 @@ export function FontShowcaseTab({
 
               {/* Live Text Sample Box */}
               <div
-                className="p-3.5 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] min-h-[70px] flex items-center justify-center text-center transition-all overflow-hidden"
+                className="p-3.5 rounded-md bg-[var(--well-bg)] border border-[var(--border)] min-h-[70px] flex items-center justify-center text-center transition-all overflow-hidden"
                 style={{ fontFamily: font.fontFamily }}
               >
                 <p className="text-base text-[var(--text)] leading-relaxed break-words max-w-full">
@@ -199,9 +199,9 @@ export function FontShowcaseTab({
                         onClose();
                         playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                       }}
-                      className="px-4 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-black rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow transition-all flex items-center gap-1.5"
+                      className="px-4 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-black rounded-md text-xs uppercase tracking-wider cursor-pointer shadow transition-all flex items-center gap-1.5"
                     >
-                      <span>✓</span>
+                      <span>âœ“</span>
                       <span>Select Font</span>
                     </button>
                   ) : (
@@ -216,13 +216,13 @@ export function FontShowcaseTab({
                           notify(`Set "${font.name}" as the default project font.`);
                           playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                         }}
-                        className={`px-3 py-1 rounded-xl text-xs font-bold cursor-pointer transition-all border ${
+                        className={`px-3 py-1 rounded-md text-xs font-bold cursor-pointer transition-all border ${
                           isCurrentDefault
                             ? 'bg-emerald-500/20 border-emerald-500 text-emerald-700 dark:text-emerald-300 font-bold'
                             : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--text)]'
                         }`}
                       >
-                        {isCurrentDefault ? '✓ Project Default' : 'Set as Project Font'}
+                        {isCurrentDefault ? 'âœ“ Project Default' : 'Set as Project Font'}
                       </button>
                     )
                   )}

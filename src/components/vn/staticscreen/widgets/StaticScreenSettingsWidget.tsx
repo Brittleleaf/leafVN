@@ -70,7 +70,7 @@ export function StaticScreenSettingsWidget({
   return (
     <div className="w-full max-w-3xl px-4 py-2 z-30 pointer-events-auto flex flex-col items-center select-none">
       {/* Settings Sub-Nav Tabs */}
-      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/15 backdrop-blur-md mb-3 shadow-lg">
+      <div className="flex items-center gap-1.5 p-1 rounded-md bg-black/60 border border-white/15 backdrop-blur-md mb-3 shadow-lg">
         <button
           type="button"
           onClick={() => { setActiveTab('audio'); playUiSound('click', 0.2); }}
@@ -125,7 +125,7 @@ export function StaticScreenSettingsWidget({
       </div>
 
       {/* Tab Panels */}
-      <div className="w-full bg-black/60 border border-white/15 rounded-2xl p-4 backdrop-blur-md shadow-2xl min-h-[220px] max-h-[300px] overflow-y-auto custom-scrollbar">
+      <div className="w-full bg-black/60 border border-white/15 rounded-lg p-4 backdrop-blur-md shadow-2xl min-h-[220px] max-h-[300px] overflow-y-auto custom-scrollbar">
         {/* AUDIO PANEL */}
         {activeTab === 'audio' && (
           <div className="space-y-3.5">
@@ -208,7 +208,7 @@ export function StaticScreenSettingsWidget({
         {/* DISPLAY PANEL */}
         {activeTab === 'display' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-2.5 rounded-xl border border-white/10 bg-white/5">
+            <div className="flex items-center justify-between p-2.5 rounded-md border border-white/10 bg-white/5">
               <div>
                 <span className="text-xs font-bold text-white block uppercase tracking-wider">Fullscreen Mode</span>
                 <span className="text-[11px] text-gray-400">Expand story presentation to occupy full monitor view</span>
@@ -226,7 +226,7 @@ export function StaticScreenSettingsWidget({
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-xl border border-white/10 bg-white/5">
+            <div className="flex items-center justify-between p-2.5 rounded-md border border-white/10 bg-white/5">
               <div>
                 <span className="text-xs font-bold text-white block uppercase tracking-wider">Aspect Ratio Locking</span>
                 <span className="text-[11px] text-gray-400">Fixed 16:9 cinematic proportional scaling</span>
@@ -302,15 +302,15 @@ export function StaticScreenSettingsWidget({
         {activeTab === 'language' && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
-              { id: 'es', label: 'Español', desc: 'Spanish Translation' },
+              { id: 'es', label: 'EspaÃ±ol', desc: 'Spanish Translation' },
               { id: 'en', label: 'English', desc: 'English Localization' },
-              { id: 'ja', label: '日本語', desc: 'Japanese Localization' },
+              { id: 'ja', label: 'æ—¥æœ¬èªž', desc: 'Japanese Localization' },
             ].map((lang) => (
               <button
                 key={lang.id}
                 type="button"
                 onClick={() => { setSelectedLanguage(lang.id as any); playUiSound('select', 0.4); }}
-                className={`p-3 rounded-xl border text-left transition-all cursor-pointer backdrop-blur-sm ${
+                className={`p-3 rounded-md border text-left transition-all cursor-pointer backdrop-blur-sm ${
                   selectedLanguage === lang.id
                     ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)]'
                     : 'bg-white/5 border-white/10 hover:border-white/25 hover:bg-white/10'

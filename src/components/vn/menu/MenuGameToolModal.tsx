@@ -246,8 +246,8 @@ export default function MenuGameToolModal({
     playUiSound('select', 0.5);
     notify(
       nextState
-        ? 'Sistema de Menú Activado: El juego iniciará desde Intro / Menú Principal'
-        : 'Sistema de Menú Desactivado: El juego iniciará directo en el Capítulo 1'
+        ? 'Sistema de MenÃº Activado: El juego iniciarÃ¡ desde Intro / MenÃº Principal'
+        : 'Sistema de MenÃº Desactivado: El juego iniciarÃ¡ directo en el CapÃ­tulo 1'
     );
   };
 
@@ -386,7 +386,7 @@ export default function MenuGameToolModal({
     });
     setPan({ x: 80, y: 80 });
     setZoom(0.95);
-    notify('Distribución automática de menús aplicada');
+    notify('DistribuciÃ³n automÃ¡tica de menÃºs aplicada');
   };
 
   // Center view on Main Menu
@@ -782,7 +782,7 @@ export default function MenuGameToolModal({
                   transform: `translate(${pos.x}px, ${pos.y}px)`,
                   width: `${NODE_WIDTH}px`,
                 }}
-                className={`absolute z-20 pointer-events-auto rounded-2xl border transition-shadow duration-150 select-none ${
+                className={`absolute z-20 pointer-events-auto rounded-lg border transition-shadow duration-150 select-none ${
                   def.role === 'main_menu'
                     ? 'border-emerald-500/80 shadow-[0_0_24px_rgba(16,185,129,0.25)] ring-2 ring-emerald-500/30'
                     : def.borderColor
@@ -844,7 +844,7 @@ export default function MenuGameToolModal({
                         playSfx('/assets/sfx/click intro.mp3', false, 0.3);
                       }
                     }}
-                    className={`h-24 rounded-xl relative overflow-hidden border border-[var(--border)] bg-black/60 flex flex-col justify-between p-2 group transition-all ${
+                    className={`h-24 rounded-md relative overflow-hidden border border-[var(--border)] bg-black/60 flex flex-col justify-between p-2 group transition-all ${
                       assignedScene ? 'cursor-pointer hover:border-[var(--accent)] hover:scale-[1.01]' : 'opacity-60'
                     }`}
                   >
@@ -885,7 +885,7 @@ export default function MenuGameToolModal({
                       {assignedScene && (
                         <span className="text-cyan-400 group-hover:underline flex items-center gap-0.5">
                           <span>Edit</span>
-                          <span>➜</span>
+                          <span>âžœ</span>
                         </span>
                       )}
                     </div>
@@ -935,7 +935,7 @@ export default function MenuGameToolModal({
                           title="Open this narrative scenario in the story editor"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5" />
-                          <span>Edit Scenario ➜</span>
+                          <span>Edit Scenario âžœ</span>
                         </button>
                       )
                     ) : (

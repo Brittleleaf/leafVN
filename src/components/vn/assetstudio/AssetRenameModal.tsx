@@ -79,19 +79,19 @@ export function AssetRenameModal({
             value={renameInputName}
             onChange={(e) => setRenameInputName(e.target.value)}
             placeholder="Enter new file name here..."
-            className="bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-amber-400 w-full sm:w-64"
+            className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] outline-none focus:border-amber-400 w-full sm:w-64"
           />
           <button
             type="submit"
             disabled={isRenaming || !renameInputName.trim()}
-            className="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs uppercase cursor-pointer"
+            className="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-md text-xs uppercase cursor-pointer"
           >
             {isRenaming ? 'Renaming...' : 'Confirm'}
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] rounded-xl text-xs cursor-pointer border border-[var(--border)]"
+            className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] rounded-md text-xs cursor-pointer border border-[var(--border)]"
           >
             Cancel
           </button>

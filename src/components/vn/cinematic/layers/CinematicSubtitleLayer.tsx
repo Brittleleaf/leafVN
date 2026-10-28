@@ -98,7 +98,7 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
                 </div>
               )}
 
-              {/* 2. Cyberpunk VN Textbox in the middle-bottom ("el diálogo en medio") */}
+              {/* 2. Cyberpunk VN Textbox in the middle-bottom ("el diÃ¡logo en medio") */}
               <div
                 className="absolute bottom-3.5 inset-x-6 z-30 pointer-events-auto select-none"
                 onClick={(e) => {
@@ -114,7 +114,7 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
                 }}
               >
                 <div
-                  className={`relative w-full border-2 rounded-xl p-3.5 shadow-[0_0_40px_rgba(0,0,0,0.95)] backdrop-blur-md transition-all ${
+                  className={`relative w-full border-2 rounded-md p-3.5 shadow-[0_0_40px_rgba(0,0,0,0.95)] backdrop-blur-md transition-all ${
                     isSelected ? 'ring-2 ring-cyan-400 shadow-[0_0_25px_rgba(34,211,238,0.7)]' : ''
                   }`}
                   style={{

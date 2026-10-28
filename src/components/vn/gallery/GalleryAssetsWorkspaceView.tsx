@@ -128,15 +128,15 @@ export default function GalleryAssetsWorkspaceView() {
 
         {activeTab === 'extras_preview' && (
           <div className="w-full h-full p-6 overflow-y-auto custom-scrollbar flex flex-col items-center justify-center bg-black/80">
-            <div className="w-full max-w-5xl h-[620px] rounded-3xl border border-amber-500/30 bg-[#12100d] p-6 shadow-2xl relative overflow-hidden flex flex-col">
+            <div className="w-full max-w-5xl h-[620px] rounded-xl border border-amber-500/30 bg-[#12100d] p-6 shadow-2xl relative overflow-hidden flex flex-col">
               <div className="flex items-center justify-between pb-3 border-b border-amber-900/40 mb-4">
                 <div>
                   <h3 className="text-sm font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
                     <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-4 h-4 text-amber-400" />
-                    <span>Visor de Galería en Vivo (Simulación del Menú de Juego)</span>
+                    <span>Visor de GalerÃ­a en Vivo (SimulaciÃ³n del MenÃº de Juego)</span>
                   </h3>
                   <p className="text-[10px] text-gray-400">
-                    Así es como se visualizan las cinemáticas, escenarios y fichas de personajes para el jugador final.
+                    AsÃ­ es como se visualizan las cinemÃ¡ticas, escenarios y fichas de personajes para el jugador final.
                   </p>
                 </div>
                 <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 border border-amber-700/50 px-2 py-0.5 rounded-full">
@@ -144,7 +144,7 @@ export default function GalleryAssetsWorkspaceView() {
                 </span>
               </div>
 
-              <div className="flex-1 relative overflow-hidden rounded-2xl border border-white/10 bg-black/60 p-4">
+              <div className="flex-1 relative overflow-hidden rounded-lg border border-white/10 bg-black/60 p-4">
                 <StaticScreenGalleryWidget
                   story={story}
                   isInteractive={true}

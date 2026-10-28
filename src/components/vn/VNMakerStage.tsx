@@ -479,7 +479,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
       </div>
 
       {/* STUDIO ACTION BAR (OUTSIDE CANVAS — 100% CLEAN UNOBSTRUCTED VIEWPORT) */}
-      <div className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-md bg-[var(--surface)] border border-[var(--border)] shadow-sm">
         {/* Left: Button / Hotspot placement and alignment guides */}
         <div className="flex items-center gap-1.5 flex-wrap">
           <button
@@ -488,7 +488,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setIsPlacingButton(true);
               playSfx('/assets/sfx/click interface.mp3', true, 0.4);
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer border shadow-sm ${
+            className={`px-3 py-1 rounded-md text-xs font-bold uppercase transition-all cursor-pointer border shadow-sm ${
               isPlacingButton
                 ? 'bg-amber-500/20 border-amber-400 text-amber-700 dark:text-amber-300 animate-pulse'
                 : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)]'
@@ -503,7 +503,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setShowHotspotStudio(true);
               playSfx('/assets/sfx/click intro.mp3', false, 0.3);
             }}
-            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
+            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
             title="Open navigation hotspot manager and editor"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -517,7 +517,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setShowGuides(!showGuides);
               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
             }}
-            className={`px-2.5 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 ${
+            className={`px-2.5 py-1 rounded-md text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 ${
               showGuides
                 ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.3)]'
                 : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--muted2)] hover:text-[var(--text)]'
@@ -534,7 +534,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               setSnapToGuides(!snapToGuides);
               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
             }}
-            className={`px-2.5 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 ${
+            className={`px-2.5 py-1 rounded-md text-[10px] font-bold border transition-all cursor-pointer shadow-sm flex items-center gap-1.5 ${
               snapToGuides
                 ? 'bg-[#ff007f]/20 border-[#ff007f] text-pink-200 shadow-[0_0_12px_rgba(255,0,127,0.3)]'
                 : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--muted2)] hover:text-[var(--text)]'
@@ -551,7 +551,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
           {currentLine?.type === 'dialogue' ? (
             <button
               onClick={() => setShowCanvasTextbox?.(!showCanvasTextbox)}
-              className={`px-3 py-1 rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border ${
+              className={`px-3 py-1 rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border ${
                 showCanvasTextbox
                   ? 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)]'
                   : 'bg-amber-500/20 border-amber-500 text-amber-700 dark:text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
@@ -596,7 +596,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   notify?.("Layout changed to free transformable mode");
                 }
               }}
-              className="px-3 py-1 rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border border-purple-500/50 bg-purple-950/40 text-purple-200 hover:bg-purple-900/60"
+              className="px-3 py-1 rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5 border border-purple-500/50 bg-purple-950/40 text-purple-200 hover:bg-purple-900/60"
               title="Toggle between stacked column or free transformable mode"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
@@ -607,7 +607,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               </span>
             </button>
           ) : (
-            <div className="px-2.5 py-1 rounded-xl text-[10px] uppercase font-mono font-bold bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--text)] shadow-sm flex items-center gap-1.5">
+            <div className="px-2.5 py-1 rounded-md text-[10px] uppercase font-mono font-bold bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--text)] shadow-sm flex items-center gap-1.5">
               <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
               <span>
                 {currentLine?.type === 'fx_start'
@@ -621,7 +621,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
 
           <button
             onClick={() => setShowSceneAudioModal?.(true)}
-            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
+            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
             title="Configure background BGM and entrance SFX for this scenario"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.soundOn} className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
@@ -641,14 +641,14 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 setActiveGlobalModal('scenes');
               }
             }}
-            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
+            className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5"
             title="Select scenario background from Gallery"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
             <span>Background</span>
           </button>
 
-          <label className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5">
+          <label className="px-3 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] rounded-md text-xs uppercase font-bold cursor-pointer transition-all shadow-sm flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-3.5 h-3.5 text-[var(--accent)]" />
             <span>Upload</span>
             <input type="file" accept="image/*" onChange={handleUploadBackground} className="hidden" />
@@ -687,7 +687,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
             setIsEditingPromptText(false);
           }}
           style={{ aspectRatio: '16 / 9', containerType: 'size' }}
-          className={`relative w-full aspect-video shrink-0 rounded-2xl overflow-hidden border border-[var(--border2)] bg-black shadow-2xl transition-all ${
+          className={`relative w-full aspect-video shrink-0 rounded-lg overflow-hidden border border-[var(--border2)] bg-black shadow-2xl transition-all ${
             previewShake
           } ${isPlacingButton ? 'cursor-crosshair' : 'cursor-default'}`}
         >
@@ -781,7 +781,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
               }}
               className={`group flex flex-col items-center justify-center select-none cursor-pointer ${
                 isSelected
-                  ? 'ring-2 ring-sky-400 rounded-xl shadow-[0_0_24px_rgba(56,189,248,0.5)]'
+                  ? 'ring-2 ring-sky-400 rounded-md shadow-[0_0_24px_rgba(56,189,248,0.5)]'
                   : 'hover:brightness-110'
               }`}
               title="Click to select & transform / Double-click to open Hotspot Studio"
@@ -1017,7 +1017,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                               setIsEditingPromptText(true);
                               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                             }}
-                            className="px-2.5 py-1.5 rounded-xl bg-cyan-950/95 hover:bg-cyan-900 border border-cyan-400/80 hover:border-cyan-300 text-cyan-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.7)] cursor-pointer whitespace-nowrap transition-all group"
+                            className="px-2.5 py-1.5 rounded-md bg-cyan-950/95 hover:bg-cyan-900 border border-cyan-400/80 hover:border-cyan-300 text-cyan-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.7)] cursor-pointer whitespace-nowrap transition-all group"
                             title="Edit question text on screen (or press Enter / Double Click)"
                           >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform">
@@ -1036,7 +1036,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                               notify?.("Question updated");
                               if (recordHistorySnapshot) recordHistorySnapshot();
                             }}
-                            className="px-2.5 py-1.5 rounded-xl bg-emerald-950/95 hover:bg-emerald-900 border border-emerald-400/80 hover:border-emerald-300 text-emerald-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer whitespace-nowrap transition-all"
+                            className="px-2.5 py-1.5 rounded-md bg-emerald-950/95 hover:bg-emerald-900 border border-emerald-400/80 hover:border-emerald-300 text-emerald-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer whitespace-nowrap transition-all"
                             title="Confirm changes (Enter)"
                           >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-emerald-400">
@@ -1246,7 +1246,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
 
               <div
                 ref={textboxRef}
-                className="relative rounded-xl p-3 border-2 shadow-2xl transition-all"
+                className="relative rounded-md p-3 border-2 shadow-2xl transition-all"
                 style={{
                   borderColor: activeBorderColor,
                   backgroundColor: activeBgColor,
@@ -1599,7 +1599,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
             <span>SFX:</span>
           </span>
 
-          <div className="flex items-center gap-1.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2 py-1 max-w-[260px] backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2 py-1 max-w-[260px] backdrop-blur-sm">
             {currentLine?.sfx ? (
               <>
                 <button

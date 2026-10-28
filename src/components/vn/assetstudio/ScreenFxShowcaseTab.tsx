@@ -32,7 +32,7 @@ export function ScreenFxShowcaseTab({
   return (
     <div className="space-y-4">
       {/* Header Banner */}
-      <div className="p-4 rounded-2xl bg-[var(--well-bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3 shadow-lg backdrop-blur-md">
+      <div className="p-4 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3 shadow-lg backdrop-blur-md">
         <div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-4 h-4 text-[var(--accent)]" />
@@ -86,7 +86,7 @@ export function ScreenFxShowcaseTab({
             return (
               <div
                 key={fx.id}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
+                className="rounded-lg border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-lg hover:border-[var(--accent)] transition-all flex flex-col group"
               >
                 {/* 16:9 Live Preview Viewport over Scenario Template */}
                 <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
@@ -249,7 +249,7 @@ export function ScreenFxShowcaseTab({
                             <GuiIconRenderer icon={GUI_ICONS.general.palette} size={11} className="text-cyan-400" />
                             <span>Color Tint & Hue:</span>
                           </span>
-                          <span className="font-mono text-cyan-300 font-bold">{currentHue}°</span>
+                          <span className="font-mono text-cyan-300 font-bold">{currentHue}Â°</span>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -280,7 +280,7 @@ export function ScreenFxShowcaseTab({
                               onClick={() => setFxHueRotates((prev) => ({ ...prev, [fx.id]: 0 }))}
                               className="text-[9px] text-[var(--muted2)] hover:text-white px-1 font-mono"
                             >
-                              0°
+                              0Â°
                             </button>
                           )}
                         </div>
@@ -298,7 +298,7 @@ export function ScreenFxShowcaseTab({
                               <span>Pixel Grid Size:</span>
                             </span>
                             <span className="font-mono text-amber-300 font-bold">
-                              {currentPixelSize === 0 ? 'Smooth (0)' : `${1 + currentPixelSize * 4}×${1 + currentPixelSize * 4} px`}
+                              {currentPixelSize === 0 ? 'Smooth (0)' : `${1 + currentPixelSize * 4}Ã—${1 + currentPixelSize * 4} px`}
                             </span>
                           </div>
                           <input
@@ -373,7 +373,7 @@ export function ScreenFxShowcaseTab({
                           onClose();
                           playSfx('/assets/sfx/success.mp3', false, 0.4);
                         }}
-                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-black rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow hover:opacity-90 transition-all flex items-center justify-center gap-1.5"
+                        className="w-full py-2 px-3 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] text-[#0F0503] font-black rounded-md text-xs uppercase tracking-wider cursor-pointer shadow hover:opacity-90 transition-all flex items-center justify-center gap-1.5"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5" />
                         <span>Select This FX</span>

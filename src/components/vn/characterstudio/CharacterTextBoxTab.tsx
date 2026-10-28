@@ -32,7 +32,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
       {/* Style controls grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
         {/* Border Color */}
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Border & Corners
           </label>
@@ -55,7 +55,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
         </div>
 
         {/* Nameplate Color */}
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Name Color
           </label>
@@ -78,7 +78,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
         </div>
 
         {/* Font Color */}
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Font Color
           </label>
@@ -101,7 +101,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
         </div>
 
         {/* Background / Tint */}
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Background (Tint)
           </label>
@@ -155,7 +155,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
 
       {/* Opacity, Blip Sound, and Speed */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Opacity ({Math.round((activeChar.textBoxConfig?.opacity ?? story.textBoxConfig.opacity ?? 0.92) * 100)}%)
           </label>
@@ -175,7 +175,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
           />
         </div>
 
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Text Speed ({activeChar.textBoxConfig?.typewriterSpeedMs ?? story.textBoxConfig.typewriterSpeedMs ?? 25}ms)
           </label>
@@ -195,7 +195,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
           />
         </div>
 
-        <div className="bg-[var(--card-bg)] p-3 rounded-xl border border-[var(--border)] space-y-1">
+        <div className="bg-[var(--card-bg)] p-3 rounded-md border border-[var(--border)] space-y-1">
           <label className="block text-[10px] text-[var(--muted)] font-bold uppercase">
             Font Size
           </label>
@@ -207,7 +207,7 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
                 textBoxConfig: { ...existing, fontSize: e.target.value as any },
               });
             }}
-            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none cursor-pointer focus:border-[var(--accent)] transition-colors"
+            className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none cursor-pointer focus:border-[var(--accent)] transition-colors"
           >
             <option value="sm">Small (sm)</option>
             <option value="base">Normal (base)</option>
@@ -246,9 +246,9 @@ export const CharacterTextBoxTab: React.FC<CharacterTextBoxTabProps> = ({
           const sizeClass = effSize === 'sm' ? 'text-xs' : effSize === 'lg' ? 'text-sm sm:text-base' : 'text-xs sm:text-sm';
 
           return (
-            <div className="p-4 bg-black/60 rounded-2xl border border-[var(--border)] shadow-inner relative overflow-hidden">
+            <div className="p-4 bg-black/60 rounded-lg border border-[var(--border)] shadow-inner relative overflow-hidden">
               <div
-                className="relative w-full border-2 rounded-xl p-3.5 shadow-2xl transition-all"
+                className="relative w-full border-2 rounded-md p-3.5 shadow-2xl transition-all"
                 style={{
                   borderColor: effBorder,
                   backgroundColor: effBg,

@@ -429,7 +429,7 @@ export default function ProjectDoctorModal({
         {/* HEADER */}
         <div className="p-4 md:px-6 border-b vn-glass-header flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-md bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center shadow-sm">
               <GuiIconRenderer icon={GUI_ICONS.general.briefcase} className="w-5 h-5 text-emerald-500" />
             </div>
             <div>
@@ -453,7 +453,7 @@ export default function ProjectDoctorModal({
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
+            className="w-8 h-8 rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
           </button>
@@ -505,7 +505,7 @@ export default function ProjectDoctorModal({
               return (
                 <div
                   key={issue.id}
-                  className={`p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
+                  className={`p-3.5 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
                     isError
                       ? 'bg-red-500/10 border-red-500/30 hover:border-red-500/60'
                       : isWarning
@@ -546,7 +546,7 @@ export default function ProjectDoctorModal({
                         onNavigateToIssue(issue.chapterId || story.chapters[0]?.id, issue.sceneId!, issue.lineIndex);
                         onClose();
                       }}
-                      className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-emerald-500 text-[var(--text)] rounded-xl text-xs font-semibold cursor-pointer shrink-0 transition-colors flex items-center gap-1.5 self-start sm:self-auto shadow-sm"
+                      className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-emerald-500 text-[var(--text)] rounded-md text-xs font-semibold cursor-pointer shrink-0 transition-colors flex items-center gap-1.5 self-start sm:self-auto shadow-sm"
                     >
                       <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5 text-emerald-500" />
                       <span>Jump to Issue</span>
@@ -562,7 +562,7 @@ export default function ProjectDoctorModal({
         <div className="p-3.5 bg-[var(--well-bg)] border-t border-[var(--border)] flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow-sm"
+            className="px-4 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-md text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow-sm"
           >
             Close
           </button>

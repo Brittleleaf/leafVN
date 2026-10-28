@@ -198,7 +198,7 @@ export default function HotspotStudioModal({
         {/* HEADER */}
         <div className="p-4 vn-glass-header border-b flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)] shrink-0">
+            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)] shrink-0">
               <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-5 h-5" />
             </div>
             <div>
@@ -215,7 +215,7 @@ export default function HotspotStudioModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
             title="Close"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -228,7 +228,7 @@ export default function HotspotStudioModal({
           {/* LEFT COLUMN: BUTTON LIST */}
           <div className="w-full md:w-1/3 flex flex-col gap-2 border-b md:border-b-0 md:border-r border-[var(--border)] pr-0 md:pr-4">
             {onUpdateSceneDisplayMode && (
-              <div className="p-2.5 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-1.5 shrink-0 shadow-sm">
+              <div className="p-2.5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-1.5 shrink-0 shadow-sm">
                 <span className="text-[10px] font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                   <GuiIconRenderer icon={GUI_ICONS.action.lookAt} className="w-3.5 h-3.5 text-[var(--accent)]" />
                   <span>Button Visibility in Scene:</span>
@@ -240,7 +240,7 @@ export default function HotspotStudioModal({
                       onUpdateSceneDisplayMode('always');
                       notify('Buttons configured as permanent on screen');
                     }}
-                    className={`p-1.5 rounded-xl border text-center font-bold transition-all cursor-pointer ${
+                    className={`p-1.5 rounded-md border text-center font-bold transition-all cursor-pointer ${
                       (currentScene.hotspotsDisplayMode || 'always') === 'always'
                         ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                         : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -254,7 +254,7 @@ export default function HotspotStudioModal({
                       onUpdateSceneDisplayMode('after_timeline');
                       notify('Buttons configured for exploration mode after script');
                     }}
-                    className={`p-1.5 rounded-xl border text-center font-bold transition-all cursor-pointer ${
+                    className={`p-1.5 rounded-md border text-center font-bold transition-all cursor-pointer ${
                       currentScene.hotspotsDisplayMode === 'after_timeline'
                         ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                         : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -281,13 +281,13 @@ export default function HotspotStudioModal({
 
             <div className="flex-1 overflow-y-auto space-y-1.5 pr-1">
               {hotspots.length === 0 ? (
-                <div className="p-4 border border-dashed border-[var(--border)] rounded-2xl text-center space-y-2 my-auto bg-[var(--well-bg)]">
+                <div className="p-4 border border-dashed border-[var(--border)] rounded-lg text-center space-y-2 my-auto bg-[var(--well-bg)]">
                   <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-8 h-8 mx-auto text-[var(--accent)] opacity-60" />
                   <p className="text-xs text-[var(--muted)]">No buttons in this scene.</p>
                   <button
                     type="button"
                     onClick={handleCreateNewHotspot}
-                    className="px-3 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-xl text-xs cursor-pointer shadow"
+                    className="px-3 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-md text-xs cursor-pointer shadow"
                   >
                     + Create First Button
                   </button>
@@ -304,14 +304,14 @@ export default function HotspotStudioModal({
                         setSelectedHsId(hs.id);
                         playSfx('/assets/sfx/click interface.mp3', true, 0.2);
                       }}
-                      className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 cursor-pointer transition-all ${
+                      className={`p-2.5 rounded-md border flex items-center justify-between gap-2 cursor-pointer transition-all ${
                         isSelected
                           ? 'border-[var(--accent)] bg-[var(--accent-surface)] ring-1 ring-[var(--accent)]/40 shadow-sm'
                           : 'border-[var(--border)] bg-[var(--panel)] hover:border-[var(--border2)] hover:bg-[var(--panel-hover)]'
                       }`}
                     >
                       <div className="flex items-center gap-2 truncate">
-                        <div className="w-7 h-7 flex items-center justify-center shrink-0 bg-[var(--well-bg)] rounded-xl border border-[var(--border)] p-1 text-[var(--accent)]">
+                        <div className="w-7 h-7 flex items-center justify-center shrink-0 bg-[var(--well-bg)] rounded-md border border-[var(--border)] p-1 text-[var(--accent)]">
                           <GuiIconRenderer icon={hs.icon || GUI_ICONS.action.entryDoor} className="w-5 h-5" />
                         </div>
                         <div className="truncate">
@@ -354,7 +354,7 @@ export default function HotspotStudioModal({
             {activeHs ? (
               <div className="space-y-4 text-xs">
                 {/* 1. Name & Style */}
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3.5 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3.5 shadow-sm">
                   <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
                     <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider">
                       Button Visual Identity:
@@ -379,7 +379,7 @@ export default function HotspotStudioModal({
                         value={activeHs.label}
                         onChange={(e) => handleUpdateActiveHs({ label: e.target.value })}
                         placeholder="Enter hotspot label here..."
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] font-bold outline-none transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none transition-colors"
                       />
                     </div>
 
@@ -388,7 +388,7 @@ export default function HotspotStudioModal({
                         Vector GUI Icon:
                       </label>
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-xl bg-[var(--well-bg)] border border-[var(--border)] flex items-center justify-center shrink-0 p-1 text-[var(--accent)]">
+                        <div className="w-8 h-8 rounded-md bg-[var(--well-bg)] border border-[var(--border)] flex items-center justify-center shrink-0 p-1 text-[var(--accent)]">
                           <GuiIconRenderer icon={activeHs.icon || GUI_ICONS.action.entryDoor} className="w-6 h-6" />
                         </div>
                         <input
@@ -396,7 +396,7 @@ export default function HotspotStudioModal({
                           value={activeHs.icon || ''}
                           placeholder="SVG Path or Icon..."
                           onChange={(e) => handleUpdateActiveHs({ icon: e.target.value })}
-                          className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
+                          className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                         />
                       </div>
                     </div>
@@ -418,7 +418,7 @@ export default function HotspotStudioModal({
                               handleUpdateActiveHs({ icon: preset.url });
                               playSfx('/assets/sfx/click interface.mp3', true, 0.2);
                             }}
-                            className={`p-1.5 rounded-xl border text-left flex items-center gap-2 cursor-pointer transition-all ${
+                            className={`p-1.5 rounded-md border text-left flex items-center gap-2 cursor-pointer transition-all ${
                               isChosen
                                 ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] ring-1 ring-[var(--accent)]/40'
                                 : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:border-[var(--border2)] hover:text-[var(--text)]'
@@ -444,7 +444,7 @@ export default function HotspotStudioModal({
                       <button
                         type="button"
                         onClick={() => setShowScenePreview(true)}
-                        className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-[11px] font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
+                        className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-[11px] font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.action.lookAt} className="w-3.5 h-3.5" />
                         <span>Preview in Scene</span>
@@ -495,7 +495,7 @@ export default function HotspotStudioModal({
                     </div>
 
                     {/* Interactive preview with scene background */}
-                    <div className="mt-2 rounded-xl overflow-hidden border border-gray-800 relative bg-black/90 aspect-video max-h-48 flex items-center justify-center group shadow-inner">
+                    <div className="mt-2 rounded-md overflow-hidden border border-gray-800 relative bg-black/90 aspect-video max-h-48 flex items-center justify-center group shadow-inner">
                       {currentScene.backgroundUrl && (
                         <div
                           className="absolute inset-0 bg-cover bg-center opacity-65"
@@ -531,7 +531,7 @@ export default function HotspotStudioModal({
                 </div>
 
                 {/* 2. Action when pressed */}
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3.5 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3.5 shadow-sm">
                   <span className="text-[10px] font-bold text-[var(--text)] uppercase tracking-wider block">
                     What happens when pressed? *:
                   </span>
@@ -540,7 +540,7 @@ export default function HotspotStudioModal({
                     <button
                       type="button"
                       onClick={() => handleUpdateActiveHs({ actionType: 'jump_scene' })}
-                      className={`p-2.5 rounded-xl border text-center font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+                      className={`p-2.5 rounded-md border text-center font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
                         activeHs.actionType === 'jump_scene'
                           ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                           : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -552,7 +552,7 @@ export default function HotspotStudioModal({
                     <button
                       type="button"
                       onClick={() => handleUpdateActiveHs({ actionType: 'inspect' })}
-                      className={`p-2.5 rounded-xl border text-center font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+                      className={`p-2.5 rounded-md border text-center font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
                         activeHs.actionType === 'inspect'
                           ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                           : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -564,7 +564,7 @@ export default function HotspotStudioModal({
                     <button
                       type="button"
                       onClick={() => handleUpdateActiveHs({ actionType: 'trigger_dialogue' })}
-                      className={`p-2.5 rounded-xl border text-center font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
+                      className={`p-2.5 rounded-md border text-center font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
                         activeHs.actionType === 'trigger_dialogue'
                           ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                           : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -584,7 +584,7 @@ export default function HotspotStudioModal({
                       <select
                         value={activeHs.targetSceneId || ''}
                         onChange={(e) => handleUpdateActiveHs({ targetSceneId: e.target.value })}
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-bold outline-none transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--accent)] font-bold outline-none transition-colors"
                       >
                         <option value="">-- Choose target scene --</option>
                         {story?.chapters && story.chapters.length > 1
@@ -617,14 +617,14 @@ export default function HotspotStudioModal({
                         value={activeHs.inspectText || ''}
                         onChange={(e) => handleUpdateActiveHs({ inspectText: e.target.value })}
                         placeholder="Enter inspection text here..."
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none resize-none transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none resize-none transition-colors"
                       />
                     </div>
                   )}
                 </div>
 
                 {/* 2.5 Persistence / Interaction Frequency (Permanent vs Once) */}
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-2 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-2 shadow-sm">
                   <span className="text-[10px] font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                     <GuiIconRenderer icon={GUI_ICONS.general.transform} className="w-3.5 h-3.5 text-[var(--accent)]" />
                     <span>Persistence / Interaction Frequency:</span>
@@ -633,7 +633,7 @@ export default function HotspotStudioModal({
                     <button
                       type="button"
                       onClick={() => handleUpdateActiveHs({ interactionLimit: 'permanent' })}
-                      className={`p-2.5 rounded-xl border text-left font-bold text-xs transition-colors cursor-pointer flex flex-col gap-1 ${
+                      className={`p-2.5 rounded-md border text-left font-bold text-xs transition-colors cursor-pointer flex flex-col gap-1 ${
                         (activeHs.interactionLimit || 'permanent') === 'permanent'
                           ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                           : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
@@ -651,7 +651,7 @@ export default function HotspotStudioModal({
                     <button
                       type="button"
                       onClick={() => handleUpdateActiveHs({ interactionLimit: 'once' })}
-                      className={`p-2.5 rounded-xl border text-left font-bold text-xs transition-colors cursor-pointer flex flex-col gap-1 ${
+                      className={`p-2.5 rounded-md border text-left font-bold text-xs transition-colors cursor-pointer flex flex-col gap-1 ${
                         activeHs.interactionLimit === 'once'
                           ? 'bg-amber-500/20 border-amber-500 text-amber-800 dark:text-amber-200 shadow-sm'
                           : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
@@ -669,7 +669,7 @@ export default function HotspotStudioModal({
                 </div>
 
                 {/* 3. Sound Effect (SFX on press) */}
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-2 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-2 shadow-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                       <GuiIconRenderer icon={GUI_ICONS.general.speaker} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -698,7 +698,7 @@ export default function HotspotStudioModal({
                           handleUpdateActiveHs({ sfxUrl: chosen || undefined });
                           if (chosen) playSfx(chosen, false, 0.6);
                         }}
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none"
                       >
                         <option value="">-- No special sound (Default) --</option>
                         {HOTSPOT_SFX_PRESETS.map((p, pIdx) => (
@@ -727,13 +727,13 @@ export default function HotspotStudioModal({
                           value={activeHs.sfxUrl || ''}
                           onChange={(e) => handleUpdateActiveHs({ sfxUrl: e.target.value })}
                           placeholder="/assets/sfx/... or https://..."
-                          className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)]"
+                          className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)]"
                         />
                         {activeHs.sfxUrl && (
                           <button
                             type="button"
                             onClick={() => playSfx(activeHs.sfxUrl!, false, 0.6)}
-                            className="px-2.5 py-1.5 bg-[var(--well-bg)] border border-[var(--border)] hover:bg-[var(--btn-hover-bg)] text-[var(--accent)] rounded-xl text-xs cursor-pointer flex items-center justify-center"
+                            className="px-2.5 py-1.5 bg-[var(--well-bg)] border border-[var(--border)] hover:bg-[var(--btn-hover-bg)] text-[var(--accent)] rounded-md text-xs cursor-pointer flex items-center justify-center"
                             title="Test sound"
                           >
                             <GuiIconRenderer icon={GUI_ICONS.media.play} size={11} />
@@ -745,7 +745,7 @@ export default function HotspotStudioModal({
                 </div>
 
                 {/* 4. Screen Position with Free and Interactive Drag */}
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <GuiIconRenderer icon={GUI_ICONS.general.grab} className="w-4 h-4 text-[var(--accent)]" />
@@ -763,7 +763,7 @@ export default function HotspotStudioModal({
                     ref={miniCanvasRef}
                     onClick={handleMiniCanvasClick}
                     style={{ aspectRatio: '16 / 9' }}
-                    className="relative w-full aspect-video shrink-0 rounded-2xl overflow-hidden border border-[var(--border)] bg-[var(--well-bg)] shadow-inner cursor-crosshair group select-none"
+                    className="relative w-full aspect-video shrink-0 rounded-lg overflow-hidden border border-[var(--border)] bg-[var(--well-bg)] shadow-inner cursor-crosshair group select-none"
                     title="Click anywhere to place the button or drag it freely"
                   >
                     {/* Scene background */}
@@ -991,7 +991,7 @@ export default function HotspotStudioModal({
                             handleUpdateActiveHs({ flipX: next });
                             playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                           }}
-                          className={`flex-1 py-1.5 px-2 rounded-xl text-[10px] font-bold border transition-all cursor-pointer text-center ${
+                          className={`flex-1 py-1.5 px-2 rounded-md text-[10px] font-bold border transition-all cursor-pointer text-center ${
                             activeHs.flipX
                               ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200'
                               : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
@@ -1007,7 +1007,7 @@ export default function HotspotStudioModal({
                             handleUpdateActiveHs({ locked: next });
                             playSfx(next ? '/assets/sfx/click intro.mp3' : '/assets/sfx/click interface.mp3', false, 0.2);
                           }}
-                          className={`flex-1 py-1.5 px-2 rounded-xl text-[10px] font-bold border transition-all cursor-pointer text-center ${
+                          className={`flex-1 py-1.5 px-2 rounded-md text-[10px] font-bold border transition-all cursor-pointer text-center ${
                             activeHs.locked
                               ? 'bg-amber-500/20 border-amber-400 text-amber-300'
                               : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
@@ -1024,7 +1024,7 @@ export default function HotspotStudioModal({
                 </div>
 
                 {/* 5. Requirements and Locks (Conditions) */}
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-2 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-2 shadow-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-1.5">
                       <GuiIconRenderer icon={GUI_ICONS.security.lockClosed} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -1058,7 +1058,7 @@ export default function HotspotStudioModal({
                   </div>
 
                   {activeHs.condition && (
-                    <div className="p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl space-y-2 text-xs">
+                    <div className="p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-md space-y-2 text-xs">
                       <div className="grid grid-cols-3 gap-2">
                         <div>
                           <label className="text-[9px] text-[var(--muted)] uppercase">Required Variable:</label>
@@ -1071,7 +1071,7 @@ export default function HotspotStudioModal({
                               })
                             }
                             placeholder="Enter variable key here..."
-                            className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none"
+                            className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none"
                           />
                         </div>
                         <div>
@@ -1083,7 +1083,7 @@ export default function HotspotStudioModal({
                                 condition: { ...activeHs.condition!, operator: e.target.value as any },
                               })
                             }
-                            className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none"
+                            className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none"
                           >
                             <option value="==">== (Equal to)</option>
                             <option value="!=">!= (Not equal)</option>
@@ -1104,7 +1104,7 @@ export default function HotspotStudioModal({
                               });
                             }}
                             placeholder="true, 10, etc."
-                            className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none"
+                            className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none"
                           />
                         </div>
                       </div>
@@ -1127,7 +1127,7 @@ export default function HotspotStudioModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-xl text-xs uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
+            className="px-5 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-md text-xs uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.check} size={14} className="text-[#0F0503]" />
             <span>Save and Close</span>
@@ -1140,7 +1140,7 @@ export default function HotspotStudioModal({
       {showScenePreview && (
         <div className="fixed inset-0 z-60 bg-black/95 flex flex-col items-center justify-between p-4 md:p-8 animate-fade-in font-sans">
           {/* Top preview control bar */}
-          <div className="w-full max-w-5xl bg-black/90 border border-sky-600/70 rounded-2xl p-3 flex items-center justify-between backdrop-blur-md shadow-2xl z-20">
+          <div className="w-full max-w-5xl bg-black/90 border border-sky-600/70 rounded-lg p-3 flex items-center justify-between backdrop-blur-md shadow-2xl z-20">
             <div className="flex items-center gap-3">
               <GuiIconRenderer icon={GUI_ICONS.general.eye} size={20} className="text-sky-400" />
               <div>
@@ -1154,7 +1154,7 @@ export default function HotspotStudioModal({
             </div>
 
             {activeHs && (
-              <div className="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-800">
+              <div className="flex items-center gap-3 bg-gray-950 px-3 py-1.5 rounded-md border border-gray-800">
                 <span className="text-[11px] text-gray-300 font-bold whitespace-nowrap">
                   Size ({activeHs.iconSize || 64}px):
                 </span>
@@ -1173,7 +1173,7 @@ export default function HotspotStudioModal({
             <button
               type="button"
               onClick={() => setShowScenePreview(false)}
-              className="px-4 py-1.5 bg-red-950/80 hover:bg-red-800 border border-red-600 text-red-200 rounded-xl text-xs font-bold uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-red-950/80 hover:bg-red-800 border border-red-600 text-red-200 rounded-md text-xs font-bold uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
               <span>Close Preview</span>
@@ -1194,7 +1194,7 @@ export default function HotspotStudioModal({
               playSfx('/assets/sfx/click interface.mp3', true, 0.2);
             }}
             style={{ aspectRatio: '16 / 9' }}
-            className="relative w-full max-w-5xl aspect-video shrink-0 rounded-2xl overflow-hidden border-2 border-sky-600/50 shadow-[0_0_50px_rgba(0,0,0,0.9)] my-auto bg-black cursor-crosshair select-none"
+            className="relative w-full max-w-5xl aspect-video shrink-0 rounded-lg overflow-hidden border-2 border-sky-600/50 shadow-[0_0_50px_rgba(0,0,0,0.9)] my-auto bg-black cursor-crosshair select-none"
           >
             {currentScene.backgroundUrl && (
               <div

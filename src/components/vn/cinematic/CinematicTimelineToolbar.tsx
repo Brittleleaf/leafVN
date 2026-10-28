@@ -134,7 +134,7 @@ export const CinematicTimelineToolbar: React.FC<CinematicTimelineToolbarProps> =
             className="w-5 h-5 flex items-center justify-center text-[12px] font-bold text-[var(--muted)] hover:text-[var(--text)] disabled:opacity-30 cursor-pointer transition-colors"
             title="Zoom Out"
           >
-            −
+            âˆ’
           </button>
           <button
             onClick={() => {

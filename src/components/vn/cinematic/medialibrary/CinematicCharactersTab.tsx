@@ -63,7 +63,7 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
                   setSelectedExpression('default');
                   playUiSound('click', 0.15);
                 }}
-                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer shrink-0 ${
+                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md border transition-all cursor-pointer shrink-0 ${
                   selectedCharId === ch.id
                     ? 'border-[#E21345] bg-[#E21345]/20 text-[var(--text)] shadow-md font-black'
                     : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -101,11 +101,11 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
                 };
                 e.dataTransfer.setData('application/json', JSON.stringify(payload));
               }}
-              className="p-3.5 rounded-2xl border border-[#E21345]/40 bg-[var(--card-bg)] space-y-3 shadow-lg group hover:border-[#E21345] transition-all"
+              className="p-3.5 rounded-lg border border-[#E21345]/40 bg-[var(--card-bg)] space-y-3 shadow-lg group hover:border-[#E21345] transition-all"
             >
               <div className="flex items-start gap-3">
                 {/* Character Avatar Preview */}
-                <div className="relative w-16 h-16 rounded-xl overflow-hidden border-2 border-[#E21345] bg-black/50 shrink-0 shadow">
+                <div className="relative w-16 h-16 rounded-md overflow-hidden border-2 border-[#E21345] bg-black/50 shrink-0 shadow">
                   {currentAvatarUrl ? (
                     <img
                       src={currentAvatarUrl}
@@ -174,7 +174,7 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
                   value={characterDialogueText}
                   onChange={(e) => setCharacterDialogueText(e.target.value)}
                   placeholder="Enter dialogue text here..."
-                  className="w-full px-2.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] text-[var(--text)] text-xs resize-none focus:outline-none focus:border-[#E21345] transition-all placeholder-[var(--muted2)]"
+                  className="w-full px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--well-bg)] text-[var(--text)] text-xs resize-none focus:outline-none focus:border-[#E21345] transition-all placeholder-[var(--muted2)]"
                 />
               </div>
 
@@ -209,7 +209,7 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
                       });
                       playUiSound('open', 0.35);
                     }}
-                    className="flex-1 py-1.5 rounded-xl bg-purple-950/70 hover:bg-purple-900 border border-purple-500/50 text-purple-200 font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
+                    className="flex-1 py-1.5 rounded-md bg-purple-950/70 hover:bg-purple-900 border border-purple-500/50 text-purple-200 font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
                     <span>Add Sprite</span>
@@ -228,7 +228,7 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
                     });
                     playUiSound('open', 0.35);
                   }}
-                  className="flex-1 py-1.5 rounded-xl bg-[#E21345] hover:bg-rose-600 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"
+                  className="flex-1 py-1.5 rounded-md bg-[#E21345] hover:bg-rose-600 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-2.5 h-2.5" />
                   <span>Add Dialogue Clip</span>

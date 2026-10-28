@@ -62,7 +62,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
       </div>
 
       {/* 2. Speaking Character Selector from Story Roster */}
-      <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] space-y-2.5">
+      <div className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] space-y-2.5">
         <div className="flex items-center justify-between">
           <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.idCard} className="w-3.5 h-3.5 text-cyan-400" />
@@ -246,7 +246,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
           rows={3}
           value={clip.text || ''}
           onChange={(e) => onUpdateClip(clip.id, { text: e.target.value })}
-          className="w-full px-3 py-2 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] text-[var(--text)] text-xs resize-none outline-none focus:border-[var(--accent)] leading-relaxed"
+          className="w-full px-3 py-2 rounded-md border border-[var(--border)] bg-[var(--well-bg)] text-[var(--text)] text-xs resize-none outline-none focus:border-[var(--accent)] leading-relaxed"
           placeholder="Enter dialogue text here..."
         />
         {/* Quick presets */}
@@ -271,7 +271,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
       </div>
 
       {/* 5. Speaking Voice / Sound Effect (SFX) with Audio Presets */}
-      <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
+      <div className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
         <div className="flex items-center justify-between">
           <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.sound} className="w-3.5 h-3.5 text-cyan-400" />
@@ -378,7 +378,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
       </div>
 
       {/* 6. Font Selection (Google Font Catalog) */}
-      <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
+      <div className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
         <div className="flex items-center justify-between">
           <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.general.texts} className="w-3.5 h-3.5 text-cyan-400" />
@@ -468,7 +468,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
 
         {/* Live animated preview of the chosen text effect */}
         {clip.textEffect && clip.textEffect !== 'none' && (
-          <div className="p-2.5 rounded-xl bg-black/60 border border-purple-500/30 flex items-center justify-center min-h-[44px] overflow-hidden shadow-inner">
+          <div className="p-2.5 rounded-md bg-black/60 border border-purple-500/30 flex items-center justify-center min-h-[44px] overflow-hidden shadow-inner">
             <VNTextEffectRenderer
               effectId={clip.textEffect}
               text={clip.text ? clip.text.slice(0, 35) : 'Dynamic Animated Typography'}
@@ -518,7 +518,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
       </div>
 
       {/* 9. Direct Positioning & Alignment */}
-      <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
+      <div className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
         <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider block">
           Placement & Positioning:
         </label>
@@ -591,7 +591,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
       </div>
 
       {/* 10. Optional Cursor Override */}
-      <div className="p-3 rounded-xl border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
+      <div className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] space-y-2">
         <div className="flex items-center justify-between">
           <label className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1.5">
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5 text-cyan-400" />
@@ -691,7 +691,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
               <button
                 type="button"
                 onClick={() => setActiveShowcaseModal(null)}
-                className="w-8 h-8 rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center cursor-pointer transition-colors"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
               </button>

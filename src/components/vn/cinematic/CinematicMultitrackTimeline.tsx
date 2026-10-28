@@ -659,7 +659,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                         >
                           <div className="flex items-center gap-1.5 min-w-0 flex-1 mr-1">
                             <span className="text-white/60 group-hover:text-white text-[10px] cursor-grab shrink-0">
-                              ⋮⋮
+                              â‹®â‹®
                             </span>
                             {editingTrackId === track.id ? (
                               <input
@@ -851,7 +851,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   className="absolute left-0 top-0 bottom-0 w-2.5 bg-white/25 hover:bg-white/70 cursor-ew-resize rounded-l-md opacity-0 group-hover/clip:opacity-100 transition-opacity z-20 flex items-center justify-center text-[8px] font-bold"
                                   title="Trim start"
                                 >
-                                  ⋮
+                                  â‹®
                                 </div>
 
                                 {/* Clip Label */}
@@ -875,7 +875,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   className="absolute right-0 top-0 bottom-0 w-2.5 bg-white/25 hover:bg-white/70 cursor-ew-resize rounded-r-md opacity-0 group-hover/clip:opacity-100 transition-opacity z-20 flex items-center justify-center text-[8px] font-bold"
                                   title="Trim end"
                                 >
-                                  ⋮
+                                  â‹®
                                 </div>
                               </div>
                             );

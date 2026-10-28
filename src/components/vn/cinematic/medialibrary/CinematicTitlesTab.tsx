@@ -80,7 +80,7 @@ export const CinematicTitlesTab: React.FC<CinematicTitlesTabProps> = ({
               };
               e.dataTransfer.setData('application/json', JSON.stringify(payload));
             }}
-            className="p-3 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex flex-col justify-between group shadow-sm cursor-grab active:cursor-grabbing"
+            className="p-3 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex flex-col justify-between group shadow-sm cursor-grab active:cursor-grabbing"
           >
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
@@ -106,7 +106,7 @@ export const CinematicTitlesTab: React.FC<CinematicTitlesTabProps> = ({
                   onAddTextClip(tmpl.preset);
                   playUiSound('open', 0.35);
                 }}
-                className="w-full py-1.5 rounded-xl bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
+                className="w-full py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
                 <span>Add to Media</span>

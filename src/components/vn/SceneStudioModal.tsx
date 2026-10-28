@@ -312,7 +312,7 @@ export default function SceneStudioModal({
         {/* GENERAL HEADER */}
         <header className="h-14 vn-glass-header border-b px-5 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
+            <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
               <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-4 h-4" />
             </div>
             <div>
@@ -349,14 +349,14 @@ export default function SceneStudioModal({
                 }
                 onClose();
               }}
-              className="px-4 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-xl text-xs font-extrabold uppercase transition-all shadow cursor-pointer flex items-center gap-1.5"
+              className="px-4 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs font-extrabold uppercase transition-all shadow cursor-pointer flex items-center gap-1.5"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.confirmed} className="w-3.5 h-3.5 text-[#0F0503]" />
               <span>Load on Screen and Close</span>
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
             </button>
@@ -405,7 +405,7 @@ export default function SceneStudioModal({
               </div>
 
               {/* Quick Filters: All | In Chapter | Reserve */}
-              <div className="grid grid-cols-3 gap-1 bg-[var(--well-bg)] p-1 rounded-xl border border-[var(--border)] text-[10px] font-bold">
+              <div className="grid grid-cols-3 gap-1 bg-[var(--well-bg)] p-1 rounded-md border border-[var(--border)] text-[10px] font-bold">
                 <button
                   type="button"
                   onClick={() => setFilterMode('all')}
@@ -448,7 +448,7 @@ export default function SceneStudioModal({
                 placeholder="Search scenario..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)]"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)]"
               />
             </div>
 
@@ -470,7 +470,7 @@ export default function SceneStudioModal({
                         setActiveSceneId(sc.id);
                         playSfx('/assets/sfx/click interface.mp3', true, 0.2);
                       }}
-                      className={`p-2 rounded-xl border flex items-center gap-2.5 cursor-pointer transition-all ${
+                      className={`p-2 rounded-md border flex items-center gap-2.5 cursor-pointer transition-all ${
                         isSelected
                           ? 'border-[var(--accent)] bg-[var(--accent-surface)] ring-1 ring-[var(--accent)]/40 shadow-md'
                           : 'border-[var(--border)] bg-[var(--card-bg)] hover:border-[var(--border2)] hover:bg-[var(--btn-hover-bg)]'
@@ -540,7 +540,7 @@ export default function SceneStudioModal({
                     <button
                       type="button"
                       onClick={() => setActiveTab('identity')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
                         activeTab === 'identity'
                           ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                           : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -553,7 +553,7 @@ export default function SceneStudioModal({
                     <button
                       type="button"
                       onClick={() => setActiveTab('audio')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
                         activeTab === 'audio'
                           ? 'bg-emerald-500/20 border-emerald-500 text-emerald-800 dark:text-emerald-200 shadow-sm'
                           : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -569,7 +569,7 @@ export default function SceneStudioModal({
                     <button
                       type="button"
                       onClick={() => setActiveTab('hotspots')}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                      className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
                         activeTab === 'hotspots'
                           ? 'bg-amber-500/20 border-amber-500 text-amber-800 dark:text-amber-200 shadow-sm'
                           : 'border-transparent text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -643,7 +643,7 @@ export default function SceneStudioModal({
                           type="text"
                           value={currentScene.name}
                           onChange={(e) => handleUpdateCurrentScene({ name: e.target.value })}
-                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-sm text-[var(--text)] font-bold outline-none transition-colors"
+                          className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-sm text-[var(--text)] font-bold outline-none transition-colors"
                         />
                       </div>
 
@@ -656,7 +656,7 @@ export default function SceneStudioModal({
                           <button
                             type="button"
                             onClick={() => handleUpdateCurrentScene({ sceneType: 'standard', eventSubtype: undefined })}
-                            className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                               !currentScene.sceneType || currentScene.sceneType === 'standard'
                                 ? 'border-[var(--accent)] bg-[var(--accent-surface)] text-[var(--text)] shadow ring-2 ring-[var(--accent)]/40 font-bold'
                                 : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border2)]'
@@ -680,7 +680,7 @@ export default function SceneStudioModal({
                                 cinematicConfig: currentScene.cinematicConfig || DEFAULT_CINEMATIC_CONFIG,
                               })
                             }
-                            className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                               currentScene.sceneType === 'event' && currentScene.eventSubtype === 'cinematic'
                                 ? 'border-sky-500 bg-sky-950/40 text-sky-200 shadow ring-2 ring-sky-500/40 font-bold'
                                 : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border2)]'
@@ -704,7 +704,7 @@ export default function SceneStudioModal({
                                 staticScreenConfig: currentScene.staticScreenConfig || DEFAULT_DEATH_CONFIG,
                               })
                             }
-                            className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                               currentScene.sceneType === 'event' && currentScene.eventSubtype === 'static'
                                 ? 'border-red-500 bg-red-950/40 text-red-200 shadow ring-2 ring-red-500/40 font-bold'
                                 : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border2)]'
@@ -722,7 +722,7 @@ export default function SceneStudioModal({
                       </div>
 
                       {/* Preview and Background Upload */}
-                      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider">
                             Scenario Background Image:
@@ -731,13 +731,13 @@ export default function SceneStudioModal({
                             <button
                               type="button"
                               onClick={() => setShowBgAssetPicker(true)}
-                              className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
+                              className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-md text-xs uppercase font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
                             >
                               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5 text-[var(--accent)]" />
                               <span>Project Gallery</span>
                             </button>
 
-                            <label className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-xl text-xs uppercase font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5">
+                            <label className="px-3 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-md text-xs uppercase font-bold cursor-pointer transition-colors shadow-sm flex items-center gap-1.5">
                               <GuiIconRenderer icon={GUI_ICONS.general.load} className="w-3.5 h-3.5 text-[var(--accent)]" />
                               <span>Upload PC</span>
                               <input
@@ -776,7 +776,7 @@ export default function SceneStudioModal({
                                 handleUpdateCurrentScene({ backgroundUrl: '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg' });
                                 notify('Background reset to official template');
                               }}
-                              className="px-2.5 py-1.5 bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] rounded-xl text-xs font-mono border border-[var(--border)] cursor-pointer transition-colors"
+                              className="px-2.5 py-1.5 bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] rounded-md text-xs font-mono border border-[var(--border)] cursor-pointer transition-colors"
                               title="Reset to official template"
                             >
                               Template
@@ -784,7 +784,7 @@ export default function SceneStudioModal({
                           </div>
                         </div>
 
-                        <div className="relative aspect-video rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--well-bg)]">
+                        <div className="relative aspect-video rounded-md overflow-hidden border border-[var(--border)] bg-[var(--well-bg)]">
                           {currentScene.backgroundUrl ? (
                             <img
                               src={currentScene.backgroundUrl}
@@ -806,7 +806,7 @@ export default function SceneStudioModal({
                     <div className="space-y-6 text-xs max-w-3xl animate-fade-in">
                       
                       {/* 1. ENTRY SFX */}
-                      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-2">
                             <GuiIconRenderer icon={GUI_ICONS.general.folder} size={14} className="text-[var(--accent)]" />
@@ -817,7 +817,7 @@ export default function SceneStudioModal({
                               <button
                                 type="button"
                                 onClick={() => playSfx(currentScene.entrySfxUrl!, false, 0.7)}
-                                className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+                                className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
                                 title="Test entry sound"
                               >
                                 <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3 h-3 text-[var(--accent)]" />
@@ -849,7 +849,7 @@ export default function SceneStudioModal({
                               value={currentScene.entrySfxUrl || ''}
                               onChange={(e) => handleUpdateCurrentScene({ entrySfxUrl: e.target.value || undefined })}
                               placeholder="/assets/sfx/... or choose from gallery"
-                              className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
+                              className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                             />
                             <button
                               type="button"
@@ -863,7 +863,7 @@ export default function SceneStudioModal({
                                   },
                                 })
                               }
-                              className="px-3.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
+                              className="px-3.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
                               title="Open Asset Gallery filtered strictly to SFX"
                             >
                               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -874,7 +874,7 @@ export default function SceneStudioModal({
                       </div>
 
                       {/* 2. BACKGROUND MUSIC / AMBIENT IN LOOP */}
-                      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3 shadow-sm">
+                      <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3 shadow-sm">
                         <div className="flex items-center justify-between">
                           <label className="text-xs font-bold text-[var(--text)] uppercase tracking-wider flex items-center gap-2">
                             <GuiIconRenderer icon={GUI_ICONS.media.volume} size={14} className="text-[var(--accent)]" />
@@ -885,7 +885,7 @@ export default function SceneStudioModal({
                               <button
                                 type="button"
                                 onClick={() => playSfx(currentScene.bgmUrl!, false, 0.5)}
-                                className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+                                className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
                                 title="Test ambient sound"
                               >
                                 <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3 h-3 text-[var(--accent)]" />
@@ -917,7 +917,7 @@ export default function SceneStudioModal({
                               value={currentScene.bgmUrl || ''}
                               onChange={(e) => handleUpdateCurrentScene({ bgmUrl: e.target.value || undefined })}
                               placeholder="/assets/sfx/... or choose from gallery"
-                              className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
+                              className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] font-mono outline-none focus:border-[var(--accent)] transition-colors"
                             />
                             <button
                               type="button"
@@ -931,7 +931,7 @@ export default function SceneStudioModal({
                                   },
                                 })
                               }
-                              className="px-3.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
+                              className="px-3.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors shadow-sm"
                               title="Open Asset Gallery filtered strictly to BGM"
                             >
                               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -964,7 +964,7 @@ export default function SceneStudioModal({
                         <button
                           type="button"
                           onClick={handleAddHotspotToScene}
-                          className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-xl text-xs font-extrabold uppercase transition-all shadow cursor-pointer flex items-center gap-1.5"
+                          className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs font-extrabold uppercase transition-all shadow cursor-pointer flex items-center gap-1.5"
                         >
                           <span>+</span> Add Constant Hotspot
                         </button>
@@ -972,7 +972,7 @@ export default function SceneStudioModal({
 
                       {/* Hotspots List */}
                       {(!currentScene.hotspots || currentScene.hotspots.length === 0) ? (
-                        <div className="p-8 border-2 border-dashed border-[var(--border)] rounded-2xl text-center space-y-3 bg-[var(--well-bg)]">
+                        <div className="p-8 border-2 border-dashed border-[var(--border)] rounded-lg text-center space-y-3 bg-[var(--well-bg)]">
                           <GuiIconRenderer icon={GUI_ICONS.action.target} size={32} className="text-[var(--muted)] mx-auto block" />
                           <p className="text-xs text-[var(--muted)]">
                             This scenario has no constant interaction hotspots yet.
@@ -980,7 +980,7 @@ export default function SceneStudioModal({
                           <button
                             type="button"
                             onClick={handleAddHotspotToScene}
-                            className="px-4 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-xl text-xs uppercase cursor-pointer transition-all shadow"
+                            className="px-4 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-md text-xs uppercase cursor-pointer transition-all shadow"
                           >
                             + Create First Constant Hotspot
                           </button>
@@ -995,11 +995,11 @@ export default function SceneStudioModal({
                             return (
                               <div
                                 key={hs.id}
-                                className="p-4 bg-[var(--card-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-2xl space-y-3 transition-colors shadow-sm"
+                                className="p-4 bg-[var(--card-bg)] border border-[var(--border)] hover:border-[var(--accent)] rounded-lg space-y-3 transition-colors shadow-sm"
                               >
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center gap-2">
-                                    <div className="w-7 h-7 flex items-center justify-center shrink-0 bg-[var(--well-bg)] rounded-xl border border-[var(--border)] p-1 text-[var(--accent)]">
+                                    <div className="w-7 h-7 flex items-center justify-center shrink-0 bg-[var(--well-bg)] rounded-md border border-[var(--border)] p-1 text-[var(--accent)]">
                                       <GuiIconRenderer icon={hs.icon || GUI_ICONS.action.entryDoor} className="w-5 h-5" />
                                     </div>
                                     <select
@@ -1007,7 +1007,7 @@ export default function SceneStudioModal({
                                       onChange={(e) =>
                                         handleUpdateHotspotInScene(hs.id, { icon: e.target.value })
                                       }
-                                      className="bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2 py-1 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
+                                      className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2 py-1 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                                     >
                                       {HOTSPOT_ICON_PRESETS.map((ic) => (
                                         <option key={ic.label} value={ic.url}>
@@ -1021,7 +1021,7 @@ export default function SceneStudioModal({
                                       onChange={(e) =>
                                         handleUpdateHotspotInScene(hs.id, { label: e.target.value })
                                       }
-                                      className="bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] font-bold outline-none transition-colors"
+                                      className="bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] font-bold outline-none transition-colors"
                                       placeholder="Enter hotspot button text here..."
                                     />
                                   </div>
@@ -1030,7 +1030,7 @@ export default function SceneStudioModal({
                                     <button
                                       type="button"
                                       onClick={() => handleRemoveHotspotFromScene(hs.id)}
-                                      className="p-1.5 hover:bg-rose-500/20 text-[var(--muted2)] hover:text-rose-500 rounded-xl transition-colors cursor-pointer"
+                                      className="p-1.5 hover:bg-rose-500/20 text-[var(--muted2)] hover:text-rose-500 rounded-md transition-colors cursor-pointer"
                                       title="Delete hotspot"
                                     >
                                       <GuiIconRenderer icon={GUI_ICONS.general.trash} className="w-3.5 h-3.5" />
@@ -1050,7 +1050,7 @@ export default function SceneStudioModal({
                                           actionType: e.target.value as any,
                                         })
                                       }
-                                      className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
+                                      className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                                     >
                                       <option value="jump_scene">Jump to another Scenario</option>
                                       <option value="inspect">Inspect / Examine object</option>
@@ -1069,7 +1069,7 @@ export default function SceneStudioModal({
                                             targetSceneId: e.target.value,
                                           })
                                         }
-                                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--accent)] outline-none focus:border-[var(--accent)]"
+                                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--accent)] outline-none focus:border-[var(--accent)]"
                                       >
                                         {allScenarios.map((sc) => (
                                           <option key={sc.id} value={sc.id}>
@@ -1092,7 +1092,7 @@ export default function SceneStudioModal({
                                           })
                                         }
                                         placeholder="Enter inspection text here..."
-                                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
+                                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none focus:border-[var(--accent)]"
                                       />
                                     </div>
                                   )}
@@ -1108,7 +1108,7 @@ export default function SceneStudioModal({
                                           sfxUrl: e.target.value || undefined,
                                         })
                                       }
-                                      className="bg-[var(--well-bg)] border border-[var(--border)] rounded-xl p-1 text-xs text-[var(--text)] outline-none"
+                                      className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-1 text-xs text-[var(--text)] outline-none"
                                     >
                                       <option value="">Default (open folder)</option>
                                       <option value="/assets/sfx/open folder.mp3">Door / Folder</option>
@@ -1129,7 +1129,7 @@ export default function SceneStudioModal({
                                           },
                                         })
                                       }
-                                      className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-xl text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+                                      className="px-2.5 py-1 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] rounded-md text-[11px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
                                       title="Choose sound effect from Gallery"
                                     >
                                       <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3 h-3 text-[var(--accent)]" />

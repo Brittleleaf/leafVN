@@ -276,7 +276,7 @@ export default function VariableStudioModal({
         {/* CABECERA */}
         <div className="p-4 vn-glass-header border-b flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center p-1.5 shrink-0 text-[var(--accent)]">
+            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center p-1.5 shrink-0 text-[var(--accent)]">
               <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-5 h-5" />
             </div>
             <div>
@@ -293,7 +293,7 @@ export default function VariableStudioModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-xl bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
             title="Close"
           >
             <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -332,12 +332,12 @@ export default function VariableStudioModal({
                 placeholder="Search key or label..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] font-mono"
+                className="flex-1 bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] font-mono"
               />
               <button
                 type="button"
                 onClick={() => handleStartCreate()}
-                className="px-3 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-xs uppercase cursor-pointer transition-colors shrink-0 shadow"
+                className="px-3 py-1 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-xs uppercase cursor-pointer transition-colors shrink-0 shadow"
               >
                 + Create
               </button>
@@ -345,13 +345,13 @@ export default function VariableStudioModal({
 
             <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
               {filteredVariables.length === 0 ? (
-                <div className="p-6 border border-dashed border-[var(--border)] rounded-2xl text-center space-y-2 my-auto bg-[var(--well-bg)]">
+                <div className="p-6 border border-dashed border-[var(--border)] rounded-lg text-center space-y-2 my-auto bg-[var(--well-bg)]">
                   <GuiIconRenderer icon={GUI_ICONS.general.folder} size={28} className="text-[var(--muted)] mx-auto block" />
                   <p className="text-xs text-[var(--muted)]">No variables found.</p>
                   <button
                     type="button"
                     onClick={() => handleStartCreate()}
-                    className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-xl text-xs font-extrabold cursor-pointer transition-all shadow"
+                    className="px-3.5 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs font-extrabold cursor-pointer transition-all shadow"
                   >
                     + Create New Variable
                   </button>
@@ -363,7 +363,7 @@ export default function VariableStudioModal({
                     <div
                       key={v.id}
                       onClick={() => handleSelectToEdit(v)}
-                      className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 cursor-pointer transition-all ${
+                      className={`p-2.5 rounded-md border flex items-center justify-between gap-2 cursor-pointer transition-all ${
                         isSelected
                           ? 'border-[var(--accent)] bg-[var(--accent-surface)] ring-1 ring-[var(--accent)]/40 shadow-sm'
                           : 'border-[var(--border)] bg-[var(--panel)] hover:border-[var(--border2)] hover:bg-[var(--panel-hover)]'
@@ -401,7 +401,7 @@ export default function VariableStudioModal({
           <div className="flex-1 overflow-y-auto space-y-4 pl-0 md:pl-2">
             {(isCreatingNew || activeVar) ? (
               <form onSubmit={handleSaveVariable} className="space-y-4 text-xs">
-                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl space-y-3.5 shadow-sm">
+                <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg space-y-3.5 shadow-sm">
                   <div className="flex items-center justify-between border-b border-[var(--border)] pb-2">
                     <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider">
                       {isCreatingNew ? '+ Register New Variable' : `Edit: {${activeVar?.key}}`}
@@ -428,7 +428,7 @@ export default function VariableStudioModal({
                       value={formKey}
                       onChange={(e) => setFormKey(e.target.value)}
                       placeholder="Enter variable key here..."
-                      className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-mono font-bold outline-none transition-colors"
+                      className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--accent)] font-mono font-bold outline-none transition-colors"
                     />
                     <p className="text-[10px] text-[var(--muted2)]">
                       Letters, numbers, and underscores only. Write it in dialogue as <code className="text-[var(--accent)] font-bold">{`{${formKey || 'key'}}`}</code> to display its live value.
@@ -445,7 +445,7 @@ export default function VariableStudioModal({
                       value={formLabel}
                       onChange={(e) => setFormLabel(e.target.value)}
                       placeholder="Enter variable label here..."
-                      className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none transition-colors"
+                      className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none transition-colors"
                     />
                   </div>
 
@@ -461,7 +461,7 @@ export default function VariableStudioModal({
                           setFormType('boolean');
                           setFormDefaultVal(false);
                         }}
-                        className={`p-2 rounded-xl border text-center font-bold text-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5 ${
+                        className={`p-2 rounded-md border text-center font-bold text-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5 ${
                           formType === 'boolean'
                             ? 'bg-purple-500/20 border-purple-500 text-purple-700 dark:text-purple-300 shadow-sm'
                             : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -476,7 +476,7 @@ export default function VariableStudioModal({
                           setFormType('number');
                           setFormDefaultVal(0);
                         }}
-                        className={`p-2 rounded-xl border text-center font-bold text-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5 ${
+                        className={`p-2 rounded-md border text-center font-bold text-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5 ${
                           formType === 'number'
                             ? 'bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-300 shadow-sm'
                             : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -491,7 +491,7 @@ export default function VariableStudioModal({
                           setFormType('string');
                           setFormDefaultVal('');
                         }}
-                        className={`p-2 rounded-xl border text-center font-bold text-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5 ${
+                        className={`p-2 rounded-md border text-center font-bold text-xs cursor-pointer transition-colors flex items-center justify-center gap-1.5 ${
                           formType === 'string'
                             ? 'bg-emerald-500/20 border-emerald-500 text-emerald-700 dark:text-emerald-300 shadow-sm'
                             : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -510,7 +510,7 @@ export default function VariableStudioModal({
                     </label>
                     {formType === 'boolean' ? (
                       <div className="flex flex-wrap items-center gap-3 pt-1">
-                        <label className="flex items-center gap-2 cursor-pointer bg-[var(--well-bg)] px-3 py-2 rounded-xl border border-[var(--border)] hover:border-[var(--border2)] transition-colors">
+                        <label className="flex items-center gap-2 cursor-pointer bg-[var(--well-bg)] px-3 py-2 rounded-md border border-[var(--border)] hover:border-[var(--border2)] transition-colors">
                           <input
                             type="radio"
                             name="defaultVal"
@@ -520,7 +520,7 @@ export default function VariableStudioModal({
                           />
                           <span className="text-emerald-600 dark:text-emerald-400 font-bold font-mono text-xs">true (Enabled / Obtained)</span>
                         </label>
-                        <label className="flex items-center gap-2 cursor-pointer bg-[var(--well-bg)] px-3 py-2 rounded-xl border border-[var(--border)] hover:border-[var(--border2)] transition-colors">
+                        <label className="flex items-center gap-2 cursor-pointer bg-[var(--well-bg)] px-3 py-2 rounded-md border border-[var(--border)] hover:border-[var(--border2)] transition-colors">
                           <input
                             type="radio"
                             name="defaultVal"
@@ -536,7 +536,7 @@ export default function VariableStudioModal({
                         type="number"
                         value={formDefaultVal}
                         onChange={(e) => setFormDefaultVal(Number(e.target.value))}
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--accent)] font-mono outline-none transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--accent)] font-mono outline-none transition-colors"
                       />
                     ) : (
                       <input
@@ -544,7 +544,7 @@ export default function VariableStudioModal({
                         value={formDefaultVal}
                         onChange={(e) => setFormDefaultVal(e.target.value)}
                         placeholder="Enter initial value here..."
-                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-xl p-2.5 text-xs text-[var(--text)] outline-none transition-colors"
+                        className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none transition-colors"
                       />
                     )}
                   </div>
@@ -552,7 +552,7 @@ export default function VariableStudioModal({
                   <div className="pt-2 flex items-center justify-end gap-2 border-t border-[var(--border)]">
                     <button
                       type="submit"
-                      className="px-5 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-xl text-xs font-extrabold uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
+                      className="px-5 py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs font-extrabold uppercase cursor-pointer transition-all shadow flex items-center gap-1.5"
                     >
                       <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5" />
                       <span>{isCreatingNew ? 'Save & Register' : 'Update Variable'}</span>
@@ -561,7 +561,7 @@ export default function VariableStudioModal({
                 </div>
 
                 {/* Tarjeta de Guía Rápida de Uso */}
-                <div className="p-3.5 bg-[var(--accent-surface)] border border-[var(--border2)] rounded-2xl space-y-1.5 text-[var(--muted)] leading-relaxed text-[11px]">
+                <div className="p-3.5 bg-[var(--accent-surface)] border border-[var(--border2)] rounded-lg space-y-1.5 text-[var(--muted)] leading-relaxed text-[11px]">
                   <span className="text-[var(--accent)] font-bold uppercase flex items-center gap-1.5">
                     <GuiIconRenderer icon={GUI_ICONS.action.lightBulb} size={14} />
                     <span>How to use this variable in your story?</span>
@@ -585,7 +585,7 @@ export default function VariableStudioModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] font-bold rounded-xl text-xs uppercase cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
+            className="px-5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] font-bold rounded-md text-xs uppercase cursor-pointer transition-colors shadow-sm flex items-center gap-1.5"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.check} size={14} className="text-[var(--accent)]" />
             <span>Done / Return to Editor</span>

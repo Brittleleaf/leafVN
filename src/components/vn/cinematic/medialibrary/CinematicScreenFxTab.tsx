@@ -62,7 +62,7 @@ export const CinematicScreenFxTab: React.FC<CinematicScreenFxTabProps> = ({
                   };
                   e.dataTransfer.setData('application/json', JSON.stringify(payload));
                 }}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden flex flex-col justify-between hover:border-[var(--accent)] transition-all group shadow-lg cursor-grab active:cursor-grabbing backdrop-blur-sm"
+                className="rounded-lg border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden flex flex-col justify-between hover:border-[var(--accent)] transition-all group shadow-lg cursor-grab active:cursor-grabbing backdrop-blur-sm"
               >
                 {/* 16:9 Live Preview Viewport over Scenario Template */}
                 <div className="relative w-full aspect-video bg-black overflow-hidden border-b border-[var(--border)]">
@@ -159,7 +159,7 @@ export const CinematicScreenFxTab: React.FC<CinematicScreenFxTabProps> = ({
                         onAddFxClip(fx.id);
                         playUiSound('open', 0.35);
                       }}
-                      className="w-full py-1.5 rounded-xl bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md active:scale-95"
+                      className="w-full py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md active:scale-95"
                     >
                       <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
                       <span>Add to Media</span>

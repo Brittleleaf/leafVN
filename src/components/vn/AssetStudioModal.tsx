@@ -194,7 +194,7 @@ export default function AssetStudioModal({
         {/* 1. GALLERY HEADER */}
         <div className="p-4 vn-glass-header border-b flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
+            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-5 h-5" />
             </div>
             <div>
@@ -219,7 +219,7 @@ export default function AssetStudioModal({
 
           <div className="flex items-center gap-2">
             {onSelectAsset && (
-              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 rounded-xl text-[11px] text-amber-800 dark:text-amber-200 font-mono">
+              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 rounded-md text-[11px] text-amber-800 dark:text-amber-200 font-mono">
                 <GuiIconRenderer icon={GUI_ICONS.general.info} className="w-3.5 h-3.5 text-amber-500" />
                 <span>Selection Mode ({initialFilterType || 'General'})</span>
               </div>
@@ -228,7 +228,7 @@ export default function AssetStudioModal({
             {/* Upload / Add Asset button */}
             <button
               onClick={() => setShowUploadForm(!showUploadForm)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all shadow flex items-center gap-1.5 cursor-pointer ${
                 showUploadForm
                   ? 'bg-emerald-700 text-white border border-emerald-400'
                   : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-emerald-600 dark:text-emerald-300'
@@ -241,7 +241,7 @@ export default function AssetStudioModal({
 
             <button
               onClick={onClose}
-              className="text-[var(--muted)] hover:text-[var(--text)] px-2 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] rounded-xl border border-[var(--border)] cursor-pointer flex items-center justify-center transition-colors"
+              className="text-[var(--muted)] hover:text-[var(--text)] px-2 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] rounded-md border border-[var(--border)] cursor-pointer flex items-center justify-center transition-colors"
               title="Close gallery"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -280,7 +280,7 @@ export default function AssetStudioModal({
                 placeholder="Search by name, category, or tag..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] transition-colors"
+                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-3 py-1.5 text-xs text-[var(--text)] placeholder-[var(--muted2)] outline-none focus:border-[var(--accent)] transition-colors"
               />
               {searchQuery && (
                 <button
@@ -298,7 +298,7 @@ export default function AssetStudioModal({
               <button
                 type="button"
                 onClick={() => setActiveOriginFilter('all')}
-                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer border ${
                   activeOriginFilter === 'all'
                     ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] shadow-sm'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -309,7 +309,7 @@ export default function AssetStudioModal({
               <button
                 type="button"
                 onClick={() => setActiveOriginFilter('system')}
-                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
                   activeOriginFilter === 'system'
                     ? 'bg-sky-500/25 border-sky-500 text-sky-800 dark:text-sky-200 shadow-sm'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-sky-600 dark:text-sky-400 hover:bg-[var(--btn-hover-bg)]'
@@ -322,7 +322,7 @@ export default function AssetStudioModal({
               <button
                 type="button"
                 onClick={() => setActiveOriginFilter('local')}
-                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
                   activeOriginFilter === 'local'
                     ? 'bg-emerald-500/25 border-emerald-500 text-emerald-800 dark:text-emerald-200 shadow-sm'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-emerald-600 dark:text-emerald-400 hover:bg-[var(--btn-hover-bg)]'
@@ -335,7 +335,7 @@ export default function AssetStudioModal({
               <button
                 type="button"
                 onClick={() => setActiveOriginFilter('web')}
-                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
                   activeOriginFilter === 'web'
                     ? 'bg-cyan-500/25 border-cyan-500 text-cyan-800 dark:text-cyan-200 shadow-sm'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-cyan-600 dark:text-cyan-400 hover:bg-[var(--btn-hover-bg)]'
@@ -392,7 +392,7 @@ export default function AssetStudioModal({
               <button
                 key={tab.id}
                 onClick={() => setActiveTypeTab(tab.id as any)}
-                className={`px-3 py-1 rounded-xl font-medium text-[11px] whitespace-nowrap transition-all cursor-pointer border flex items-center gap-1.5 ${
+                className={`px-3 py-1 rounded-md font-medium text-[11px] whitespace-nowrap transition-all cursor-pointer border flex items-center gap-1.5 ${
                   activeTypeTab === tab.id
                     ? 'bg-[var(--accent-surface)] border-[var(--accent)] text-[var(--text)] font-bold shadow-sm ring-1 ring-[var(--accent)]/40'
                     : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
@@ -473,7 +473,7 @@ export default function AssetStudioModal({
                         playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                       }
                     }}
-                    className={`rounded-2xl border p-3 flex flex-col justify-between gap-2.5 transition-all bg-[var(--card-bg)] backdrop-blur-md ${
+                    className={`rounded-lg border p-3 flex flex-col justify-between gap-2.5 transition-all bg-[var(--card-bg)] backdrop-blur-md ${
                       onSelectAsset ? 'cursor-pointer hover:border-[var(--accent)] hover:ring-1 hover:ring-[var(--accent)]/50' : ''
                     } ${
                       isSystem
@@ -524,7 +524,7 @@ export default function AssetStudioModal({
                     </div>
 
                     {/* Central Preview */}
-                    <div className="h-28 rounded-xl overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] flex items-center justify-center relative group">
+                    <div className="h-28 rounded-md overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] flex items-center justify-center relative group">
                       {isAudio && (
                         <div className="flex flex-col items-center justify-center gap-2 p-2 w-full text-center">
                           <button
@@ -593,7 +593,7 @@ export default function AssetStudioModal({
                             onClose();
                             playSfx('/assets/sfx/click intro.mp3', false, 0.2);
                           }}
-                          className="flex-1 py-1 px-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-xl text-[11px] uppercase tracking-wider cursor-pointer transition-all shadow-md flex items-center justify-center gap-1.5"
+                          className="flex-1 py-1 px-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-[11px] uppercase tracking-wider cursor-pointer transition-all shadow-md flex items-center justify-center gap-1.5"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.check} className="w-3.5 h-3.5" />
                           <span>Select</span>
@@ -607,7 +607,7 @@ export default function AssetStudioModal({
                             notify('Path copied to clipboard');
                             playSfx('/assets/sfx/click interface.mp3', true, 0.2);
                           }}
-                          className="text-[10px] text-[var(--muted)] hover:text-[var(--text)] flex items-center gap-1.5 cursor-pointer bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] px-2.5 py-1 rounded-xl border border-[var(--border)] transition-colors shadow-sm"
+                          className="text-[10px] text-[var(--muted)] hover:text-[var(--text)] flex items-center gap-1.5 cursor-pointer bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] px-2.5 py-1 rounded-md border border-[var(--border)] transition-colors shadow-sm"
                           title="Copy asset path"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3 h-3 text-[var(--accent)]" />

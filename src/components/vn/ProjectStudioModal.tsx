@@ -172,7 +172,7 @@ export default function ProjectStudioModal({
         {/* ENCABEZADO */}
         <div className="p-4 vn-glass-header border-b flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
+            <div className="w-9 h-9 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
               <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-5 h-5" />
             </div>
             <div>
@@ -193,7 +193,7 @@ export default function ProjectStudioModal({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowCreateForm(!showCreateForm)}
-              className="px-3 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all shadow flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] rounded-md text-xs font-extrabold uppercase tracking-wider transition-all shadow flex items-center gap-1.5 cursor-pointer"
             >
               <span>+</span>
               <span>New Project</span>
@@ -201,7 +201,7 @@ export default function ProjectStudioModal({
 
             <button
               onClick={onClose}
-              className="text-[var(--muted)] hover:text-[var(--text)] px-2 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] rounded-xl border border-[var(--border)] cursor-pointer flex items-center justify-center transition-colors"
+              className="text-[var(--muted)] hover:text-[var(--text)] px-2 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] rounded-md border border-[var(--border)] cursor-pointer flex items-center justify-center transition-colors"
               title="Close"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3.5 h-3.5" />
@@ -314,7 +314,7 @@ export default function ProjectStudioModal({
                 return (
                   <div
                     key={proj.id}
-                    className={`rounded-2xl border p-4 flex flex-col justify-between gap-3 transition-all bg-[var(--well-bg)] shadow-sm ${
+                    className={`rounded-lg border p-4 flex flex-col justify-between gap-3 transition-all bg-[var(--well-bg)] shadow-sm ${
                       isActive
                         ? 'border-emerald-500/80 shadow-[0_0_15px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500/40'
                         : 'border-[var(--border)] hover:border-[var(--border2)]'
@@ -409,7 +409,7 @@ export default function ProjectStudioModal({
           <span>Each project is stored independently with its own folder for assets, chapters, and characters.</span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-xl text-xs cursor-pointer font-bold transition-colors shadow-sm"
+            className="px-4 py-1.5 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] rounded-md text-xs cursor-pointer font-bold transition-colors shadow-sm"
           >
             Close
           </button>
