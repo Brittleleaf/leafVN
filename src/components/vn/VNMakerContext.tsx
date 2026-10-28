@@ -65,6 +65,8 @@ export interface VNMakerContextType {
   // Navegación y Espacios de Trabajo (Workspaces)
   currentWorkspace: VNWorkspaceView;
   setCurrentWorkspace: (view: VNWorkspaceView) => void;
+  projectSettingsTab: 'variables' | 'textbox' | 'doctor' | 'general';
+  setProjectSettingsTab: (tab: 'variables' | 'textbox' | 'doctor' | 'general') => void;
   selectedChapterId: string;
   setSelectedChapterId: (id: string) => void;
   selectedSceneId: string;

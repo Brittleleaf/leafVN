@@ -221,32 +221,34 @@ export default function VNMakerSceneTabs() {
       </div>
 
       {/* RIGHT: Fixed Navigation & Creation Action Group */}
-      <div className="flex items-center gap-2 shrink-0 pl-2">
+      <div className="flex items-center gap-1.5 shrink-0 pl-2">
         {/* 1. View Map */}
         <button
           onClick={() => setActiveGlobalModal('scene_map')}
-          className="px-2.5 py-1 rounded-md text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border border-[var(--accent-border)] bg-[var(--accent-surface)] text-[var(--text)] hover:shadow-md transition-all shadow-sm active:scale-95"
+          className="px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer shrink-0 flex items-center gap-1.5 text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)] transition-all"
           title="Open interactive scene and branch map (Shortcut: M)"
         >
-          <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-3.5 h-3.5 text-[var(--accent)]" />
-          <span>View Map</span>
+          <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-3.5 h-3.5 text-purple-400" />
+          <span className="hidden xl:inline">Map</span>
         </button>
 
         {/* 2. Menu Game Tool */}
         <button
           onClick={() => setCurrentWorkspace('menu_tool')}
-          className="px-2.5 py-1 rounded-md text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25 transition-all shadow-sm active:scale-95"
+          className="px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer shrink-0 flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 transition-all"
           title="Open Menu Game Tool flow map"
         >
           <GuiIconRenderer icon={GUI_ICONS.general.gameMenu} className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Menu Tool</span>
+          <span className="hidden xl:inline">Menu Tool</span>
         </button>
+
+        <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
 
         {/* 3. Dropdown Menu for '+ New Scene' */}
         <div className="relative" ref={newSceneDropdownRef}>
           <button
             onClick={() => setIsNewSceneOpen(!isNewSceneOpen)}
-            className="px-3 py-1 rounded-md text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border border-[var(--accent)] bg-[var(--accent)] hover:opacity-90 text-white transition-all shadow-md active:scale-95"
+            className="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer shrink-0 flex items-center gap-1.5 bg-[var(--accent)] hover:opacity-90 text-white transition-all shadow-xs active:scale-95"
             title="Create a new scenario, static screen or cinematic event"
           >
             <span>+ New Scene</span>
@@ -254,7 +256,7 @@ export default function VNMakerSceneTabs() {
           </button>
 
           {isNewSceneOpen && (
-            <div className="absolute right-0 top-full mt-2 w-64 rounded-lg border border-[var(--border)] bg-[var(--modal-bg)] backdrop-blur-xl shadow-2xl p-2 z-50 flex flex-col gap-1.5 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1.5 z-50 flex flex-col gap-0.5 text-xs animate-in fade-in zoom-in-95 duration-150">
               {/* + Scenario */}
               <button
                 onClick={() => {
@@ -262,16 +264,18 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-[var(--btn-hover-bg)] text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-lg flex items-center gap-2.5 hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
-                <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-110 transition-transform">
+                <div className="w-7 h-7 rounded-md bg-purple-500/15 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-105 transition-transform">
                   +
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col min-w-0">
                   <span className="font-bold text-xs text-[var(--text)]">+ Scenario</span>
-                  <span className="text-[10px] text-[var(--muted)]">Standard story & dialogue scene</span>
+                  <span className="text-[10px] text-[var(--muted)] truncate">Standard story & dialogue scene</span>
                 </div>
               </button>
+
+              <div className="h-[1px] bg-[var(--border)] my-0.5" />
 
               {/* + Static Screen */}
               <button
@@ -280,16 +284,18 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-[var(--btn-hover-bg)] text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-lg flex items-center gap-2.5 hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
-                <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-purple-300" />
+                <div className="w-7 h-7 rounded-md bg-purple-500/15 text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-purple-400" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-bold text-xs text-purple-300">+ Static Screen</span>
-                  <span className="text-[10px] text-[var(--muted)]">Title, intro, load, settings or death</span>
+                <div className="flex flex-col min-w-0">
+                  <span className="font-bold text-xs text-purple-600 dark:text-purple-300">+ Static Screen</span>
+                  <span className="text-[10px] text-[var(--muted)] truncate">Title, intro, load, settings or death</span>
                 </div>
               </button>
+
+              <div className="h-[1px] bg-[var(--border)] my-0.5" />
 
               {/* + Cinematic */}
               <button
@@ -298,19 +304,21 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-[var(--btn-hover-bg)] text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-lg flex items-center gap-2.5 hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
-                <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-4 h-4 text-sky-300" />
+                <div className="w-7 h-7 rounded-md bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-4 h-4 text-sky-400" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-bold text-xs text-sky-300">+ Cinematic</span>
-                  <span className="text-[10px] text-[var(--muted)]">Multitrack video-editor sequencer</span>
+                <div className="flex flex-col min-w-0">
+                  <span className="font-bold text-xs text-sky-600 dark:text-sky-300">+ Cinematic</span>
+                  <span className="text-[10px] text-[var(--muted)] truncate">Multitrack video-editor sequencer</span>
                 </div>
               </button>
             </div>
           )}
         </div>
+
+        <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
 
         {/* 4. Fullscreen Workspace Toggle (Far Right Corner Button) */}
         <button

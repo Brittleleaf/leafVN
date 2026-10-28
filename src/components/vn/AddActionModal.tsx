@@ -385,10 +385,10 @@ export default function AddActionModal(props: AddActionModalProps) {
                     key={cat.id}
                     type="button"
                     onClick={() => setActiveCategory(cat.id as any)}
-                    className={`px-2.5 py-1 rounded-lg cursor-pointer transition-colors whitespace-nowrap border ${
+                    className={`px-3 py-1.5 rounded-lg cursor-pointer transition-colors whitespace-nowrap ${
                       activeCategory === cat.id
-                        ? 'bg-[var(--accent-surface)] text-[var(--accent)] border-[var(--accent)] font-bold shadow-sm'
-                        : 'bg-[var(--btn-bg)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
+                        ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                        : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
                     }`}
                   >
                     {cat.label}
@@ -442,10 +442,10 @@ export default function AddActionModal(props: AddActionModalProps) {
                     <button
                       key={card.type}
                       onClick={() => handleCardClick(card)}
-                      className="p-3.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm hover:shadow-lg hover:shadow-[var(--accent-glow)]/15 flex items-start gap-3.5 backdrop-blur-md"
+                      className="p-3 rounded-xl hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-all duration-150 group flex items-start gap-3.5"
                     >
                       <div
-                        className={`w-9 h-9 rounded-md ${card.badgeBg} border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[var(--accent)] transition-all shadow-sm mt-0.5`}
+                        className={`w-9 h-9 rounded-lg ${card.badgeBg} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform mt-0.5`}
                       >
                         <GuiIconRenderer icon={card.icon} className={`w-4 h-4 ${card.iconColor}`} />
                       </div>
@@ -531,9 +531,9 @@ export default function AddActionModal(props: AddActionModalProps) {
               <button
                 type="button"
                 onClick={() => onInsertEvent('dialogue', { characterId: undefined })}
-                className="w-full p-3.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center gap-3.5 backdrop-blur-md"
+                className="w-full p-3 rounded-xl hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-all duration-150 group flex items-center gap-3.5"
               >
-                <div className="w-10 h-10 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center shrink-0 group-hover:scale-105 text-[var(--accent)]">
+                <div className="w-10 h-10 rounded-lg bg-[var(--accent-surface)] flex items-center justify-center shrink-0 group-hover:scale-105 text-[var(--accent)] transition-transform">
                   <GuiIconRenderer icon={GUI_ICONS.general.conversation} className="w-5 h-5" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -566,9 +566,9 @@ export default function AddActionModal(props: AddActionModalProps) {
                             characterScale: char.defaultScale ?? 1.0,
                           })
                         }
-                        className="p-3 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center gap-3 backdrop-blur-md"
+                        className="p-2.5 rounded-xl hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-all duration-150 group flex items-center gap-3"
                       >
-                        <div className="w-10 h-10 rounded-md overflow-hidden bg-[var(--well-bg)] border border-[var(--border)] shrink-0 group-hover:border-[var(--accent)]">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-[var(--well-bg)] shrink-0 group-hover:scale-105 transition-transform">
                           {avatarUrl ? (
                             <img src={avatarUrl} alt={char.name} className="w-full h-full object-cover" />
                           ) : (
@@ -634,7 +634,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                   key={lvl.id}
                   type="button"
                   onClick={() => onInsertEvent('shake', { shakeIntensity: lvl.id as any })}
-                  className="w-full p-3.5 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex items-center justify-between gap-3"
+                  className="w-full p-3 rounded-xl hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-all duration-150 group flex items-center justify-between gap-3"
                 >
                   <div>
                     <span className={`text-xs font-bold uppercase block mb-0.5 group-hover:text-[var(--accent)] transition-colors ${lvl.color}`}>
@@ -713,7 +713,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                       key={sc.id}
                       type="button"
                       onClick={() => onInsertEvent('jump_scene', { targetSceneId: sc.id })}
-                      className="p-2 rounded-md border border-[var(--border)] hover:border-[var(--accent)] bg-[var(--panel)] hover:bg-[var(--panel-hover)] text-left cursor-pointer transition-all duration-150 group shadow-sm flex flex-col gap-1.5"
+                      className="p-2 rounded-xl hover:bg-[var(--surface-strong)] text-left cursor-pointer transition-all duration-150 group flex flex-col gap-1.5"
                     >
                       <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--well-bg)] border border-[var(--border)]">
                         {sc.backgroundUrl ? (

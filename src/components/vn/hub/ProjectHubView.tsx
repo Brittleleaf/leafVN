@@ -15,6 +15,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
     story,
     setStory,
     setCurrentWorkspace,
+    setProjectSettingsTab,
     setActiveGlobalModal,
     handleManualSave,
     handleExport,
@@ -284,8 +285,8 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
         </div>
 
         {/* BOTTOM SECTION: PROJECT LOGIC & GLOBAL SETTINGS */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-4 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--panel)]/70 backdrop-blur-md p-4 shadow-sm">
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-[var(--border)]">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--muted)] flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-cyan-400" />
               <span>GLOBAL SETTINGS, LOGIC & AUDIT</span>
@@ -295,56 +296,97 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 pt-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-1 sm:gap-2">
+            {/* 1. Variables & Flags */}
             <button
-              onClick={() => setActiveGlobalModal('variables')}
-              className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-amber-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              type="button"
+              onClick={() => {
+                setProjectSettingsTab('variables');
+                setCurrentWorkspace('project_settings');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className="flex-1 flex items-center gap-3 p-2.5 rounded-lg hover:bg-[var(--surface-strong)] transition-all cursor-pointer group text-left"
+              title="Open Variables & Flags logic"
             >
-              <div className="w-8 h-8 rounded-md bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:scale-105 transition-transform shrink-0">
                 <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-4 h-4" />
               </div>
-              <div>
-                <h4 className="text-xs font-bold text-[var(--text)] group-hover:text-amber-600 dark:group-hover:text-amber-300">Variables & Flags</h4>
-                <p className="text-[10px] text-[var(--muted)]">Branching logic & conditions</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-semibold text-[var(--text)] group-hover:text-amber-500 transition-colors">
+                  Variables & Flags
+                </h4>
+                <p className="text-[10px] text-[var(--muted)] truncate">Branching logic & conditions</p>
               </div>
             </button>
 
+            <div className="hidden sm:block h-7 w-[1px] bg-[var(--border)] shrink-0" />
+
+            {/* 2. Global Text Box */}
             <button
-              onClick={() => setActiveGlobalModal('textbox')}
-              className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-cyan-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              type="button"
+              onClick={() => {
+                setProjectSettingsTab('textbox');
+                setCurrentWorkspace('project_settings');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className="flex-1 flex items-center gap-3 p-2.5 rounded-lg hover:bg-[var(--surface-strong)] transition-all cursor-pointer group text-left"
+              title="Open Global Text Box typography & style"
             >
-              <div className="w-8 h-8 rounded-md bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-500 group-hover:scale-105 transition-transform shrink-0">
                 <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-4 h-4" />
               </div>
-              <div>
-                <h4 className="text-xs font-bold text-[var(--text)] group-hover:text-cyan-600 dark:group-hover:text-cyan-300">Global Text Box</h4>
-                <p className="text-[10px] text-[var(--muted)]">Dialogue style & typography</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-semibold text-[var(--text)] group-hover:text-cyan-500 transition-colors">
+                  Global Text Box
+                </h4>
+                <p className="text-[10px] text-[var(--muted)] truncate">Dialogue style & typography</p>
               </div>
             </button>
 
+            <div className="hidden sm:block h-7 w-[1px] bg-[var(--border)] shrink-0" />
+
+            {/* 3. Project Doctor */}
             <button
-              onClick={() => setActiveGlobalModal('doctor')}
-              className="p-3 rounded-md border border-emerald-500/30 bg-emerald-950/40 hover:bg-emerald-950/60 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              type="button"
+              onClick={() => {
+                setProjectSettingsTab('doctor');
+                setCurrentWorkspace('project_settings');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className="flex-1 flex items-center gap-3 p-2.5 rounded-lg hover:bg-[var(--surface-strong)] transition-all cursor-pointer group text-left"
+              title="Open Project Doctor diagnostics"
             >
-              <div className="w-8 h-8 rounded-md bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:scale-105 transition-transform shrink-0">
                 <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-4 h-4" />
               </div>
-              <div>
-                <h4 className="text-xs font-bold text-emerald-700 dark:text-emerald-300">Project Doctor</h4>
-                <p className="text-[10px] text-[var(--muted)]">Health audit & broken links</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-semibold text-[var(--text)] group-hover:text-emerald-500 transition-colors">
+                  Project Doctor
+                </h4>
+                <p className="text-[10px] text-[var(--muted)] truncate">Health audit & diagnostics</p>
               </div>
             </button>
 
+            <div className="hidden sm:block h-7 w-[1px] bg-[var(--border)] shrink-0" />
+
+            {/* 4. Narrative Map */}
             <button
-              onClick={() => setActiveGlobalModal('scene_map')}
-              className="p-3 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-purple-500/50 text-left transition-all cursor-pointer group flex items-center gap-2.5"
+              type="button"
+              onClick={() => {
+                setActiveGlobalModal('scene_map');
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className="flex-1 flex items-center gap-3 p-2.5 rounded-lg hover:bg-[var(--surface-strong)] transition-all cursor-pointer group text-left"
+              title="Open full scene narrative map"
             >
-              <div className="w-8 h-8 rounded-md bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-600 dark:text-purple-400 group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 group-hover:scale-105 transition-transform shrink-0">
                 <GuiIconRenderer icon={GUI_ICONS.general.map} className="w-4 h-4" />
               </div>
-              <div>
-                <h4 className="text-xs font-bold text-[var(--text)] group-hover:text-purple-600 dark:group-hover:text-purple-300">Narrative Map</h4>
-                <p className="text-[10px] text-[var(--muted)]">Full scene graph & flow</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-semibold text-[var(--text)] group-hover:text-purple-500 transition-colors">
+                  Narrative Map
+                </h4>
+                <p className="text-[10px] text-[var(--muted)] truncate">Full scene graph & flow</p>
               </div>
             </button>
           </div>

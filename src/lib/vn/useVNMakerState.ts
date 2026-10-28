@@ -68,6 +68,7 @@ export function useVNMakerState(
 
   // Navegación activa y Espacio de Trabajo Principal (Hub por defecto)
   const [currentWorkspace, setCurrentWorkspaceState] = useState<VNWorkspaceView>('hub');
+  const [projectSettingsTab, setProjectSettingsTab] = useState<'variables' | 'textbox' | 'doctor' | 'general'>('variables');
 
   const setCurrentWorkspace = useCallback((ws: VNWorkspaceView) => {
     setCurrentWorkspaceState(ws);
@@ -1555,6 +1556,8 @@ export function useVNMakerState(
     handleSelectTheme,
     currentWorkspace,
     setCurrentWorkspace,
+    projectSettingsTab,
+    setProjectSettingsTab,
     selectedChapterId,
     setSelectedChapterId,
     selectedSceneId,

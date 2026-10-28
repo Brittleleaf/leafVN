@@ -12,13 +12,15 @@ export default function ProjectSettingsWorkspaceView() {
     story,
     setStory,
     setCurrentWorkspace,
+    projectSettingsTab,
+    setProjectSettingsTab,
     setSelectedChapterId,
     setSelectedSceneId,
     setSelectedLineIndex,
     notify,
   } = useVNMaker();
 
-  const [activeTab, setActiveTab] = useState<'variables' | 'textbox' | 'doctor' | 'general'>('variables');
+  const activeTab = projectSettingsTab || 'variables';
 
   return (
     <div className="flex-1 w-full h-full flex flex-col bg-transparent select-none overflow-hidden relative z-10">
@@ -54,41 +56,51 @@ export default function ProjectSettingsWorkspaceView() {
           </div>
         </div>
 
-        {/* WORKSPACE SEGMENTED SUB-TABS */}
-        <div className="flex items-center gap-1 bg-[var(--well-bg)] border border-[var(--border)] p-0.5 rounded-lg shadow-inner">
+        {/* WORKSPACE SUB-TABS: Clean, borderless hover style with hairlines */}
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => {
-              setActiveTab('variables');
+              setProjectSettingsTab('variables');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'variables' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'variables'
+                ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5" />
             <span>Variables & Logic ({story.variables?.length || 0})</span>
           </button>
 
+          <div className="h-4 w-[1px] bg-[var(--border)]" />
+
           <button
             onClick={() => {
-              setActiveTab('textbox');
+              setProjectSettingsTab('textbox');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'textbox' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'textbox'
+                ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5" />
             <span>Global Text Box Style</span>
           </button>
 
+          <div className="h-4 w-[1px] bg-[var(--border)]" />
+
           <button
             onClick={() => {
-              setActiveTab('doctor');
+              setProjectSettingsTab('doctor');
               playUiSound('select', 0.4);
             }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'doctor' ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm' : 'text-[var(--muted)] hover:text-[var(--text)]'
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'doctor'
+                ? 'bg-[var(--surface-strong)] text-[var(--accent)] font-semibold shadow-xs'
+                : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-3.5 h-3.5" />
