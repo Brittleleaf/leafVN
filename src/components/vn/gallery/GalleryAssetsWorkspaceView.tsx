@@ -87,8 +87,8 @@ export default function GalleryAssetsWorkspaceView() {
             }}
             className={`px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'extras_preview'
-                ? 'bg-amber-950/70 border border-amber-500/80 text-amber-200 font-semibold shadow-sm'
-                : 'text-[var(--muted)] hover:text-white'
+                ? 'bg-[var(--btn-bg)] border border-[var(--border2)] text-[var(--text)] font-semibold shadow-sm'
+                : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
             <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
@@ -125,24 +125,24 @@ export default function GalleryAssetsWorkspaceView() {
         )}
 
         {activeTab === 'extras_preview' && (
-          <div className="w-full h-full p-4 overflow-hidden flex flex-col bg-[#0b0e17]">
-            <div className="w-full h-full rounded-lg border border-amber-500/30 bg-[#12100d] p-4 shadow-xl relative overflow-hidden flex flex-col">
-              <div className="flex items-center justify-between pb-3 border-b border-amber-900/40 mb-3 shrink-0">
+          <div className="w-full h-full p-4 overflow-hidden flex flex-col bg-transparent">
+            <div className="w-full h-full rounded-lg border border-[var(--border)] bg-[var(--panel)] backdrop-blur-md p-4 shadow-xl relative overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--border)] mb-3 shrink-0">
                 <div>
-                  <h3 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-2">
                     <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-4 h-4 text-amber-400" />
                     <span>Live Gallery Viewer (In-Game Menu Simulation)</span>
                   </h3>
-                  <p className="text-[10px] text-gray-400">
+                  <p className="text-[10px] text-[var(--muted)]">
                     Real-time player preview for cinematics, unlockable scenarios, and character dossiers.
                   </p>
                 </div>
-                <span className="text-[10px] font-mono text-amber-400 bg-amber-950/60 border border-amber-700/50 px-2.5 py-0.5 rounded-md font-bold">
+                <span className="text-[10px] font-mono text-amber-700 dark:text-amber-300 bg-amber-500/15 border border-amber-500/40 px-2.5 py-0.5 rounded-md font-bold">
                   Interactive Preview
                 </span>
               </div>
 
-              <div className="flex-1 relative overflow-hidden rounded-md border border-white/10 bg-black/60 p-3">
+              <div className="flex-1 relative overflow-hidden rounded-md border border-[var(--border)] bg-[var(--well-bg)] p-3">
                 <StaticScreenGalleryWidget
                   story={story}
                   isInteractive={true}

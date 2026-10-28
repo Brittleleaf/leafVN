@@ -98,14 +98,14 @@ export function StaticScreenGalleryWidget({
   return (
     <div className="w-full max-w-4xl px-4 py-1 z-30 pointer-events-auto flex flex-col items-center select-none">
       {/* Gallery Sub-Tabs */}
-      <div className="flex items-center gap-1.5 p-1 rounded-md bg-black/60 border border-white/15 backdrop-blur-md mb-2 shadow-lg">
+      <div className="flex items-center gap-1.5 p-1 rounded-md bg-[var(--well-bg)] border border-[var(--border)] backdrop-blur-md mb-2 shadow-sm">
         <button
           type="button"
           onClick={() => { setActiveTab('cinematics'); playUiSound('click', 0.2); }}
           className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
             activeTab === 'cinematics'
               ? 'bg-purple-600 text-white shadow-md'
-              : 'text-gray-300 hover:text-white hover:bg-white/10'
+              : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
           }`}
         >
           <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5" />
@@ -118,7 +118,7 @@ export function StaticScreenGalleryWidget({
           className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
             activeTab === 'scenarios'
               ? 'bg-cyan-600 text-white shadow-md'
-              : 'text-gray-300 hover:text-white hover:bg-white/10'
+              : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
           }`}
         >
           <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5" />
@@ -131,7 +131,7 @@ export function StaticScreenGalleryWidget({
           className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
             activeTab === 'characters'
               ? 'bg-amber-600 text-white shadow-md'
-              : 'text-gray-300 hover:text-white hover:bg-white/10'
+              : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
           }`}
         >
           <GuiIconRenderer icon={GUI_ICONS.general.masks} className="w-3.5 h-3.5" />
@@ -140,17 +140,17 @@ export function StaticScreenGalleryWidget({
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full bg-black/65 border border-white/15 rounded-lg p-3 backdrop-blur-md shadow-2xl min-h-[240px] max-h-[310px] overflow-y-auto custom-scrollbar">
+      <div className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-lg p-3 backdrop-blur-md shadow-lg min-h-[240px] max-h-[310px] overflow-y-auto custom-scrollbar">
         {/* 1. CINEMATICS TAB */}
         {activeTab === 'cinematics' && (
           <div className="space-y-4">
             {fallbackCinematics.map((group, gIdx) => (
               <div key={gIdx} className="space-y-2">
-                <div className="flex items-center gap-2 pb-1 border-b border-white/10">
+                <div className="flex items-center gap-2 pb-1 border-b border-[var(--border)]">
                   <span className="text-[10px] font-mono text-purple-400 font-bold uppercase tracking-widest">
                     [ CHAPTER {group.chapterNumber < 10 ? `0${group.chapterNumber}` : group.chapterNumber} ]
                   </span>
-                  <span className="text-xs font-bold text-gray-200">{group.chapterTitle}</span>
+                  <span className="text-xs font-bold text-[var(--text)]">{group.chapterTitle}</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
@@ -167,9 +167,9 @@ export function StaticScreenGalleryWidget({
                             playUiSound('select', 0.4);
                           }
                         }}
-                        className="group relative rounded-md border border-white/10 hover:border-purple-400/80 bg-black/40 hover:bg-black/70 p-2 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex flex-col justify-between"
+                        className="group relative rounded-md border border-[var(--border)] hover:border-purple-400/80 bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] p-2 transition-all cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex flex-col justify-between"
                       >
-                        <div className="w-full h-20 rounded-lg overflow-hidden bg-black/80 relative mb-1.5 border border-white/10">
+                        <div className="w-full h-20 rounded-lg overflow-hidden bg-black/80 relative mb-1.5 border border-[var(--border)]">
                           <img
                             src={getProxiedImageUrl(bg)}
                             alt={cine.name}
@@ -186,7 +186,7 @@ export function StaticScreenGalleryWidget({
                           </div>
                         </div>
 
-                        <div className="text-xs font-bold text-gray-100 truncate group-hover:text-purple-300 transition-colors">
+                        <div className="text-xs font-bold text-[var(--text)] truncate group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors">
                           {cine.name}
                         </div>
                       </div>
@@ -215,9 +215,9 @@ export function StaticScreenGalleryWidget({
                   setActivePreviewScenario(sc);
                   playUiSound('select', 0.3);
                 }}
-                className="group relative rounded-md border border-white/10 hover:border-cyan-400/80 bg-black/40 hover:bg-black/70 p-1.5 transition-all cursor-pointer shadow flex flex-col justify-between"
+                className="group relative rounded-md border border-[var(--border)] hover:border-cyan-400/80 bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] p-1.5 transition-all cursor-pointer shadow-sm flex flex-col justify-between"
               >
-                <div className="w-full h-16 rounded-lg overflow-hidden bg-black relative mb-1 border border-white/10">
+                <div className="w-full h-16 rounded-lg overflow-hidden bg-black relative mb-1 border border-[var(--border)]">
                   <img
                     src={getProxiedImageUrl(sc.url)}
                     alt={sc.name}
@@ -225,10 +225,10 @@ export function StaticScreenGalleryWidget({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                 </div>
-                <div className="text-[11px] font-bold text-gray-200 truncate group-hover:text-cyan-300">
+                <div className="text-[11px] font-bold text-[var(--text)] truncate group-hover:text-cyan-500 dark:group-hover:text-cyan-300">
                   {sc.name}
                 </div>
-                <div className="text-[9px] font-mono text-gray-400 truncate">{sc.chapterName}</div>
+                <div className="text-[9px] font-mono text-[var(--muted2)] truncate">{sc.chapterName}</div>
               </div>
             ))}
           </div>
@@ -245,9 +245,9 @@ export function StaticScreenGalleryWidget({
               return (
                 <div
                   key={char.id}
-                  className="rounded-md border border-white/15 bg-black/50 p-3 flex gap-3 backdrop-blur-sm shadow-md"
+                  className="rounded-md border border-[var(--border)] bg-[var(--well-bg)] p-3 flex gap-3 backdrop-blur-sm shadow-sm"
                 >
-                  <div className="w-20 h-24 rounded-lg overflow-hidden bg-black/80 border border-white/10 shrink-0 relative">
+                  <div className="w-20 h-24 rounded-lg overflow-hidden bg-black/80 border border-[var(--border)] shrink-0 relative">
                     <img
                       src={getProxiedImageUrl(displayAvatar)}
                       alt={char.name}
@@ -262,7 +262,7 @@ export function StaticScreenGalleryWidget({
                           className="w-2 h-2 rounded-full shrink-0"
                           style={{ backgroundColor: char.color || '#38bdf8' }}
                         />
-                        <span className="font-bold text-xs text-white truncate">{char.name}</span>
+                        <span className="font-bold text-xs text-[var(--text)] truncate">{char.name}</span>
                       </div>
 
                       {char.badgeTitle && (
@@ -271,15 +271,15 @@ export function StaticScreenGalleryWidget({
                         </span>
                       )}
 
-                      <p className="text-[10px] text-gray-300 line-clamp-2 leading-relaxed">
+                      <p className="text-[10px] text-[var(--muted)] line-clamp-2 leading-relaxed">
                         {char.description || 'No biographical records available for this operative.'}
                       </p>
                     </div>
 
                     {/* Expressions Pills */}
                     {char.expressions && Object.keys(char.expressions).length > 0 && (
-                      <div className="flex items-center gap-1 pt-1 border-t border-white/10 overflow-x-auto custom-scrollbar">
-                        <span className="text-[8px] font-mono text-gray-400 uppercase">Faces:</span>
+                      <div className="flex items-center gap-1 pt-1 border-t border-[var(--border)] overflow-x-auto custom-scrollbar">
+                        <span className="text-[8px] font-mono text-[var(--muted2)] uppercase">Faces:</span>
                         {Object.keys(char.expressions).map((expr) => (
                           <button
                             key={expr}
@@ -291,7 +291,7 @@ export function StaticScreenGalleryWidget({
                             className={`px-1.5 py-0.5 rounded text-[8px] font-mono uppercase font-bold border transition-colors cursor-pointer ${
                               (activeExpr || 'neutral') === expr
                                 ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
-                                : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+                                : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted2)] hover:text-[var(--text)]'
                             }`}
                           >
                             {expr}

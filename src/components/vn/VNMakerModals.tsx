@@ -51,6 +51,8 @@ export default function VNMakerModals() {
     handlePatchCurrentScene,
     recordHistorySnapshot,
     notify,
+    handleSelectScene,
+    setCurrentWorkspace,
   } = useVNMaker();
 
 
@@ -103,14 +105,18 @@ export default function VNMakerModals() {
           currentChapterId={selectedChapterId}
           selectedSceneId={selectedSceneId}
           onSelectScene={(sceneId) => {
-            setSelectedSceneId(sceneId);
-            setSelectedLineIndex(0);
+            handleSelectScene(sceneId);
+            setCurrentWorkspace('story_tool');
+            setActiveGlobalModal(null);
           }}
           onUpdateStory={(updatedStory) => {
             setStory(updatedStory);
             saveActiveStory(updatedStory);
           }}
-          onClose={() => setActiveGlobalModal(null)}
+          onClose={() => {
+            setCurrentWorkspace('story_tool');
+            setActiveGlobalModal(null);
+          }}
           notify={notify}
         />
       )}
@@ -120,8 +126,9 @@ export default function VNMakerModals() {
         <MenuGameToolModal
           story={story}
           onSelectScene={(sceneId) => {
-            setSelectedSceneId(sceneId);
-            setSelectedLineIndex(0);
+            handleSelectScene(sceneId);
+            setCurrentWorkspace('story_tool');
+            setActiveGlobalModal(null);
           }}
           onUpdateStory={(updatedStory) => {
             setStory(updatedStory);
