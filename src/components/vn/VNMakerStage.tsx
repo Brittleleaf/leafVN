@@ -1609,7 +1609,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                 <button
                   type="button"
                   onClick={() => playSfx(currentLine.sfx!, false, 0.8)}
-                  className="w-5 h-5 flex items-center justify-center rounded-lg bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-white text-[10px] cursor-pointer shrink-0 transition-colors"
+                  className="w-5 h-5 flex items-center justify-center rounded-lg bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] text-[10px] cursor-pointer shrink-0 transition-colors"
                   title="Listen to assigned sound"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-2.5 h-2.5" />

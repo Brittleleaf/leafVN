@@ -209,7 +209,7 @@ export function ScreenFxShowcaseTab({
                               }}
                               className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase font-bold transition-all cursor-pointer ${
                                 currentIntensity === lvl
-                                  ? 'bg-[var(--accent)] text-white shadow'
+                                  ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow'
                                   : 'bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
                               }`}
                             >

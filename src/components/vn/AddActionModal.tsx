@@ -981,7 +981,7 @@ export default function AddActionModal(props: AddActionModalProps) {
                           stopAudioPreview();
                           onInsertEvent('bgm', { audioUrl: track.url, audioVolume: bgmVolume });
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-white border border-[var(--border)] hover:border-[var(--accent)] text-xs font-bold uppercase cursor-pointer transition-all shrink-0 shadow-sm"
+                        className="px-3 py-1.5 rounded-lg bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-bold uppercase cursor-pointer transition-all shrink-0 shadow-sm"
                       >
                         Select
                       </button>

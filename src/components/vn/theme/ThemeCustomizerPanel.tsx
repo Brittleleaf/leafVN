@@ -290,7 +290,7 @@ export default function ThemeCustomizerPanel({
                     title={`${p.name} (${p.hex})`}
                   >
                     <span
-                      className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
+                      className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs border border-[var(--border2)]"
                       style={{ backgroundColor: p.hex }}
                     />
                     <span className="truncate">{p.name.split(' ')[0]}</span>

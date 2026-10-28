@@ -630,7 +630,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         <div className="flex items-center gap-4">
           {/* Logo Estilo Photoshop Adaptativo */}
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] rounded-md flex items-center justify-center font-bold text-white text-sm shadow-[0_0_12px_var(--accent-glow)]">
+            <div className="w-7 h-7 bg-gradient-to-br from-[var(--accent)] to-[var(--accent2)] rounded-md flex items-center justify-center font-bold text-[var(--accent-contrast)] text-sm shadow-[0_0_12px_var(--accent-glow)]">
               Lv
             </div>
             <span className="font-semibold tracking-wide text-[var(--text)]">Leaf VN Studio</span>
@@ -746,9 +746,9 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 playSfx('/assets/sfx/click interface.mp3', false, 0.4);
                 setShowNewModal(true);
               }}
-              className="w-full py-2 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 active:brightness-95 text-white font-bold text-xs rounded-full shadow-[0_4px_16px_var(--accent-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 active:brightness-95 text-[var(--accent-contrast)] font-bold text-xs rounded-full shadow-[0_4px_16px_var(--accent-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3.5 h-3.5 text-white" />
+              <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3.5 h-3.5 text-[var(--accent-contrast)]" />
               <span>New Project</span>
             </button>
 
@@ -935,9 +935,9 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                   </p>
                   <button
                     onClick={() => setShowNewModal(true)}
-                    className="mt-2 px-4 py-2 bg-[var(--accent)] hover:brightness-110 text-white text-xs font-medium rounded-lg shadow transition-all cursor-pointer flex items-center gap-1.5"
+                    className="mt-2 px-4 py-2 bg-[var(--accent)] hover:brightness-110 text-[var(--accent-contrast)] text-xs font-bold rounded-lg shadow transition-all cursor-pointer flex items-center gap-1.5"
                   >
-                    <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3 h-3 text-white" />
+                    <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3 h-3 text-[var(--accent-contrast)]" />
                     <span>Create New Project</span>
                   </button>
                 </div>
@@ -972,9 +972,9 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                               handleOpenProject(proj.id, 'editor');
                             }}
                             title="Edit Project"
-                            className="px-2.5 py-1 bg-[var(--accent)] hover:brightness-110 text-white rounded text-[11px] font-medium shadow transition-transform hover:scale-105 cursor-pointer flex items-center gap-1"
+                            className="px-2.5 py-1 bg-[var(--accent)] hover:brightness-110 text-[var(--accent-contrast)] rounded text-[11px] font-bold shadow transition-transform hover:scale-105 cursor-pointer flex items-center gap-1"
                           >
-                            <GuiIconRenderer icon={GUI_ICONS.general.pencil} className="w-3 h-3 text-white" />
+                            <GuiIconRenderer icon={GUI_ICONS.general.pencil} className="w-3 h-3 text-[var(--accent-contrast)]" />
                             <span>Edit</span>
                           </button>
                           <button
@@ -1150,7 +1150,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       An empty canvas with a single initial scene to structure your story from scratch.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-[var(--accent-contrast)] rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
                     Use Template
                   </button>
                 </div>
@@ -1174,7 +1174,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       Includes pre-configured characters, emotions, screen effects, background music, and decision branches.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-[var(--accent-contrast)] rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
                     Use Template
                   </button>
                 </div>
@@ -1198,7 +1198,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       Focused on background video tracks, animated subtitles, and synchronized audio transitions.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-[var(--accent-contrast)] rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
                     Use Template
                   </button>
                 </div>
@@ -1405,7 +1405,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 <button
                   type="submit"
                   disabled={isCreating || !newTitle.trim()}
-                  className="px-5 py-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 disabled:opacity-50 text-white font-bold rounded-lg shadow-[0_0_15px_var(--accent-glow)] transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-5 py-2 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 disabled:opacity-50 text-[var(--accent-contrast)] font-bold rounded-lg shadow-[0_0_15px_var(--accent-glow)] transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   {isCreating ? 'Creating...' : 'Create Project'}
                 </button>

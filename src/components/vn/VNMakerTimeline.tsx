@@ -231,7 +231,7 @@ export default function VNMakerTimeline(props: VNMakerTimelineProps) {
 
           <button
             onClick={() => setShowAddActionModal(true)}
-            className="h-7 px-3 rounded-lg bg-[var(--accent)] hover:opacity-90 active:scale-95 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all shadow-sm shrink-0 whitespace-nowrap"
+            className="h-7 px-3 rounded-lg bg-[var(--accent)] hover:opacity-90 active:scale-95 text-[var(--accent-contrast)] font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all shadow-sm shrink-0 whitespace-nowrap"
             title="Add event or dialogue line to scenario (Insert)"
           >
             <span className="text-sm leading-none">+</span>

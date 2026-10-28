@@ -48,6 +48,7 @@
   --accent-glow: rgba(209, 123, 248, 0.45);
   --accent-surface: rgba(209, 123, 248, 0.18);
   --accent-border: rgba(209, 123, 248, 0.50);
+  --accent-contrast: #07040B;
   --danger: #ff4d5e;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.60);
   --focus: 0 0 0 3px rgba(209, 123, 248, 0.30);
@@ -109,6 +110,7 @@
   --accent-glow: rgba(104, 81, 223, 0.30);
   --accent-surface: rgba(104, 81, 223, 0.12);
   --accent-border: rgba(104, 81, 223, 0.40);
+  --accent-contrast: #FFFFFF;
   --danger: #dc2626;
   --shadow: 0 10px 30px rgba(104, 81, 223, 0.08);
   --focus: 0 0 0 3px rgba(104, 81, 223, 0.25);
@@ -170,6 +172,7 @@
   --accent-glow: rgba(220, 38, 38, 0.50);
   --accent-surface: rgba(220, 38, 38, 0.15);
   --accent-border: rgba(220, 38, 38, 0.50);
+  --accent-contrast: #FFFFFF;
   --danger: #ef4444;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.60);
   --focus: 0 0 0 3px rgba(220, 38, 38, 0.35);
@@ -431,7 +434,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
 .vn-btn-action {
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%) !important;
   border-color: var(--accent) !important;
-  color: #0F0503 !important;
+  color: var(--accent-contrast, #07040B) !important;
   font-weight: 800 !important;
   box-shadow: 0 4px 16px var(--accent-glow) !important;
 }
