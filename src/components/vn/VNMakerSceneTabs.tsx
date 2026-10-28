@@ -253,7 +253,7 @@ export default function VNMakerSceneTabs() {
           </button>
 
           {isNewSceneOpen && (
-            <div className="absolute right-0 top-full mt-2 w-64 rounded-lg border border-[var(--border)] bg-[#100c1e]/95 backdrop-blur-xl shadow-2xl p-2 z-50 flex flex-col gap-1.5 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="absolute right-0 top-full mt-2 w-64 rounded-lg border border-[var(--border)] bg-[var(--modal-bg)] backdrop-blur-xl shadow-2xl p-2 z-50 flex flex-col gap-1.5 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
               {/* + Scenario */}
               <button
                 onClick={() => {
@@ -261,14 +261,14 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-white/10 text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-[var(--btn-hover-bg)] text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
                 <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center font-bold text-sm shrink-0 group-hover:scale-110 transition-transform">
                   +
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-xs text-white">+ Scenario</span>
-                  <span className="text-[10px] text-gray-400">Standard story & dialogue scene</span>
+                  <span className="font-bold text-xs text-[var(--text)]">+ Scenario</span>
+                  <span className="text-[10px] text-[var(--muted)]">Standard story & dialogue scene</span>
                 </div>
               </button>
 
@@ -279,14 +279,14 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-purple-950/40 text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-[var(--btn-hover-bg)] text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
                 <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <GuiIconRenderer icon={GUI_ICONS.general.staticScreen} className="w-4 h-4 text-purple-300" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-bold text-xs text-purple-300">+ Static Screen</span>
-                  <span className="text-[10px] text-gray-400">Title, intro, load, settings or death</span>
+                  <span className="text-[10px] text-[var(--muted)]">Title, intro, load, settings or death</span>
                 </div>
               </button>
 
@@ -297,14 +297,14 @@ export default function VNMakerSceneTabs() {
                   setIsNewSceneOpen(false);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                 }}
-                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-sky-950/40 text-left cursor-pointer transition-colors text-[var(--text)] group"
+                className="w-full p-2 rounded-md flex items-center gap-3 hover:bg-[var(--btn-hover-bg)] text-left cursor-pointer transition-colors text-[var(--text)] group"
               >
                 <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-4 h-4 text-sky-300" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-bold text-xs text-sky-300">+ Cinematic</span>
-                  <span className="text-[10px] text-gray-400">Multitrack video-editor sequencer</span>
+                  <span className="text-[10px] text-[var(--muted)]">Multitrack video-editor sequencer</span>
                 </div>
               </button>
             </div>
@@ -316,7 +316,7 @@ export default function VNMakerSceneTabs() {
           onClick={toggleFullscreenWorkspace}
           className={`px-2.5 py-1 rounded-md text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1.5 border transition-all shadow-sm active:scale-95 ${
             isFullscreenWorkspace
-              ? 'border-cyan-400 bg-cyan-950/70 text-cyan-300 hover:bg-cyan-900 shadow-[0_0_12px_rgba(34,211,238,0.4)] animate-pulse'
+              ? 'border-cyan-500/60 bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-500/25 shadow-[0_0_12px_rgba(34,211,238,0.4)]'
               : 'border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)]'
           }`}
           title={

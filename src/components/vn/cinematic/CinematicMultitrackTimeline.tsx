@@ -507,7 +507,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
         {/* Top-Right: Time Ruler Viewport (Synchronized horizontally with tracks body) */}
         <div
           ref={rulerScrollRef}
-          className="flex-1 overflow-hidden relative bg-[#0b0914] select-none"
+          className="flex-1 overflow-hidden relative bg-[var(--well-bg)] select-none"
         >
           <div
             style={{ width: `${lanesWidth}px` }}
@@ -636,8 +636,8 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                         key={track.id}
                         style={{
                           width: `${totalRowWidth}px`,
-                          backgroundColor: 'rgba(4, 2, 11, 0.65)',
-                          borderLeft: isTrackActive ? '3px solid #ffffff' : '3px solid transparent',
+                          backgroundColor: 'var(--panel)',
+                          borderLeft: isTrackActive ? '3px solid var(--accent)' : '3px solid transparent',
                         }}
                         className={`flex h-9 border-b border-black/20 text-xs transition-colors shrink-0 ${
                           draggedTrackId === track.id ? 'opacity-30' : ''
@@ -654,7 +654,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                           onContextMenu={(e) => {
                             if (onContextMenuLane) onContextMenuLane(e, track);
                           }}
-                          className="sticky left-0 z-20 shrink-0 px-2 flex items-center justify-between bg-[#080612] border-r border-white/10 select-none group cursor-grab active:cursor-grabbing"
+                          className="sticky left-0 z-20 shrink-0 px-2 flex items-center justify-between bg-[var(--well-bg)] border-r border-[var(--border)] select-none group cursor-grab active:cursor-grabbing"
                           title="Drag to reorder track priority | Double-click to rename"
                         >
                           <div className="flex items-center gap-1.5 min-w-0 flex-1 mr-1">
@@ -678,7 +678,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                 }}
                                 onBlur={() => handleCommitTrackName(track.id)}
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-full px-1.5 py-0.5 rounded bg-black border border-cyan-400 text-white font-bold text-[10px] outline-none shadow-inner"
+                                className="w-full px-1.5 py-0.5 rounded bg-[var(--well-bg)] border border-[var(--accent)] text-[var(--text)] font-bold text-[10px] outline-none shadow-inner"
                               />
                             ) : (
                               <div
@@ -689,7 +689,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                 }}
                                 title="Double-click to rename track"
                               >
-                                <span className="font-bold text-[11px] truncate tracking-wide text-white group-hover/name:text-cyan-300">
+                                <span className="font-bold text-[11px] truncate tracking-wide text-[var(--text)] group-hover/name:text-[var(--accent)]">
                                   {track.name || `${theme.label} ${track.index}`}
                                 </span>
                                 <button
@@ -890,26 +890,26 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                     <div
                       style={{
                         width: `${totalRowWidth}px`,
-                        backgroundColor: 'rgba(4, 2, 11, 0.65)',
+                        backgroundColor: 'var(--well-bg)',
                       }}
                       className="flex h-8 border-b border-black/20 italic shrink-0"
                     >
                       <div
                         style={{ width: `${headerWidth}px` }}
-                        className="sticky left-0 z-20 shrink-0 px-2.5 flex items-center justify-between text-[10px] text-white/80 bg-[#080612] border-r border-white/10"
+                        className="sticky left-0 z-20 shrink-0 px-2.5 flex items-center justify-between text-[10px] text-[var(--muted)] bg-[var(--well-bg)] border-r border-[var(--border)]"
                       >
                         <span>No tracks</span>
                         <button
                           type="button"
                           onClick={() => handleAddTrackToSection(secKey)}
-                          className="text-white hover:underline font-bold text-[10px] cursor-pointer"
+                          className="text-[var(--accent)] hover:underline font-bold text-[10px] cursor-pointer"
                         >
                           + Add track
                         </button>
                       </div>
                       <div
                         style={{ width: `${lanesWidth}px` }}
-                        className="h-full flex items-center px-4 text-xs text-white/80 shrink-0"
+                        className="h-full flex items-center px-4 text-xs text-[var(--muted2)] shrink-0"
                       >
                         Drag assets here or create a new track with +
                       </div>

@@ -47,7 +47,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
     description: 'Cinematic or static opening sequence played on game start',
     color: '#38bdf8',
     borderColor: 'border-sky-500/50',
-    bgColor: 'bg-sky-950/20',
+    bgColor: 'bg-sky-500/10',
     icon: GUI_ICONS.media.video,
     defaultPos: { x: 100, y: 300 },
   },
@@ -58,7 +58,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
     description: 'Home menu screen with customizable buttons, soundtrack and background',
     color: '#10b981',
     borderColor: 'border-emerald-500/70',
-    bgColor: 'bg-emerald-950/25',
+    bgColor: 'bg-emerald-500/10',
     icon: GUI_ICONS.general.gameMenu,
     defaultPos: { x: 440, y: 260 },
   },
@@ -69,7 +69,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
     description: 'Entry point of the narrative story or game prologue',
     color: '#a855f7',
     borderColor: 'border-purple-500/50',
-    bgColor: 'bg-purple-950/20',
+    bgColor: 'bg-purple-500/10',
     icon: GUI_ICONS.action.play,
     defaultPos: { x: 860, y: 70 },
   },
@@ -80,7 +80,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
     description: 'Interactive save & load slots with visual snapshots and timestamps',
     color: '#06b6d4',
     borderColor: 'border-cyan-500/50',
-    bgColor: 'bg-cyan-950/20',
+    bgColor: 'bg-cyan-500/10',
     icon: GUI_ICONS.general.save,
     defaultPos: { x: 860, y: 220 },
   },
@@ -91,7 +91,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
     description: 'Volume sliders, display mode, text speed and language controls',
     color: '#ec4899',
     borderColor: 'border-pink-500/50',
-    bgColor: 'bg-pink-950/20',
+    bgColor: 'bg-pink-500/10',
     icon: GUI_ICONS.general.gear,
     defaultPos: { x: 860, y: 370 },
   },
@@ -102,7 +102,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
     description: 'Unlocked cinematics by chapter, scenario backgrounds and character profiles',
     color: '#f59e0b',
     borderColor: 'border-amber-500/50',
-    bgColor: 'bg-amber-950/20',
+    bgColor: 'bg-amber-500/10',
     icon: GUI_ICONS.general.gallery,
     defaultPos: { x: 860, y: 520 },
   },
@@ -544,7 +544,7 @@ export default function MenuGameToolModal({
   const configuredCount = Object.values(resolvedRoleScenes).filter(Boolean).length;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#030207]/85 backdrop-blur-md flex flex-col select-none animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 bg-[var(--bg)] flex flex-col select-none animate-in fade-in duration-150">
       {/* HEADER / TOOLBAR */}
       <div className="h-14 border-b border-[var(--border)] bg-[var(--surface)] px-4 flex items-center justify-between shrink-0 z-20">
         <div className="flex items-center gap-3">
@@ -556,7 +556,7 @@ export default function MenuGameToolModal({
               <h2 className="text-sm font-bold tracking-wide uppercase text-[var(--text)]">
                 Menu Game Tool
               </h2>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-950/50 border border-emerald-600/40 text-emerald-300 font-mono font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 font-mono font-bold">
                 {configuredCount} / 6 Screens
               </span>
             </div>
@@ -573,8 +573,8 @@ export default function MenuGameToolModal({
             onClick={handleToggleMenuEnabled}
             className={`px-3 py-1.5 rounded-md border text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm ${
               isMenuEnabled
-                ? 'border-emerald-500/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/50'
-                : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-white'
+                ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25'
+                : 'border-[var(--border)] bg-[var(--btn-bg)] text-[var(--muted)] hover:text-[var(--text)]'
             }`}
             title="Toggle whether the game boots into Intro/Title Menu or directly into Chapter 1"
           >
@@ -585,7 +585,7 @@ export default function MenuGameToolModal({
           {/* Playtest Menu Button */}
           <button
             onClick={handlePlaytestMenu}
-            className="px-3 py-1.5 rounded-md border border-sky-500/60 bg-sky-950/40 text-sky-300 hover:bg-sky-900/50 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+            className="px-3 py-1.5 rounded-md border border-sky-500/50 bg-sky-500/15 text-sky-700 dark:text-sky-300 hover:bg-sky-500/25 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
             title="Open live player to test menu experience in real-time"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-sky-400" />
@@ -596,7 +596,7 @@ export default function MenuGameToolModal({
           {configuredCount < 6 && (
             <button
               onClick={handleGenerateMissingScreens}
-              className="px-3 py-1.5 rounded-md border border-amber-500/50 bg-amber-950/30 text-amber-300 hover:bg-amber-900/40 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 rounded-md border border-amber-500/50 bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               title="Automatically create missing menu screens in the project"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-3.5 h-3.5 text-amber-400" />
@@ -665,10 +665,10 @@ export default function MenuGameToolModal({
         onMouseMove={handleCanvasMouseMove}
         onMouseUp={handleCanvasMouseUp}
         onWheel={handleCanvasWheel}
-        className="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing bg-[#090b10]"
+        className="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing bg-[var(--bg)]"
         style={{
           backgroundImage:
-            'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
+            'radial-gradient(circle, var(--border2) 1px, transparent 1px)',
           backgroundSize: '24px 24px',
         }}
       >
@@ -762,7 +762,7 @@ export default function MenuGameToolModal({
                     className="opacity-80 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]"
                   />
                   <circle cx={x1} cy={y1} r="3.5" fill="#10b981" />
-                  <circle cx={x2} cy={y2} r="3.5" fill="#ffffff" />
+                  <circle cx={x2} cy={y2} r="3.5" fill="var(--text)" />
                 </g>
               );
             })}
@@ -786,7 +786,7 @@ export default function MenuGameToolModal({
                   def.role === 'main_menu'
                     ? 'border-emerald-500/80 shadow-[0_0_24px_rgba(16,185,129,0.25)] ring-2 ring-emerald-500/30'
                     : def.borderColor
-                } bg-[#11141c]/95 backdrop-blur-xl ${
+                } bg-[var(--panel)] backdrop-blur-xl border border-[var(--border)] ${
                   isDragging ? 'shadow-2xl scale-[1.02] cursor-grabbing' : 'shadow-lg hover:shadow-xl'
                 }`}
               >
@@ -811,7 +811,7 @@ export default function MenuGameToolModal({
                       <GuiIconRenderer icon={def.icon} className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-white tracking-wide leading-tight">
+                      <h4 className="text-xs font-bold text-[var(--text)] tracking-wide leading-tight">
                         {def.title}
                       </h4>
                       <span
@@ -826,8 +826,8 @@ export default function MenuGameToolModal({
                   <span
                     className={`text-[9px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
                       isConfigured
-                        ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-600/40'
-                        : 'bg-amber-950/60 text-amber-300 border border-amber-600/40'
+                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40'
+                        : 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/40'
                     }`}
                   >
                     {isConfigured ? 'Activo' : 'Sin vincular'}
@@ -844,7 +844,8 @@ export default function MenuGameToolModal({
                         playSfx('/assets/sfx/click intro.mp3', false, 0.3);
                       }
                     }}
-                    className={`h-24 rounded-md relative overflow-hidden border border-[var(--border)] bg-black/60 flex flex-col justify-between p-2 group transition-all ${
+                    className={`h-24 rounded-md relative overflow-hidden border border-[var(--border)] bg-[var(--well-bg)] flex flex-col justify-between p-2 group transition-all ${
+
                       assignedScene ? 'cursor-pointer hover:border-[var(--accent)] hover:scale-[1.01]' : 'opacity-60'
                     }`}
                   >
@@ -856,7 +857,7 @@ export default function MenuGameToolModal({
                     )}
 
                     <div className="relative z-10 flex items-start justify-between">
-                      <span className="text-[10px] font-bold text-white drop-shadow truncate max-w-[170px]">
+                      <span className="text-[10px] font-bold text-[var(--text)] truncate max-w-[170px]">
                         {assignedScene ? assignedScene.name : 'Unlinked Screen'}
                       </span>
                       {assignedScene?.staticScreenConfig?.screenFx && (
@@ -871,19 +872,19 @@ export default function MenuGameToolModal({
                       {(assignedScene?.staticScreenConfig?.buttons || []).slice(0, 3).map((b) => (
                         <div
                           key={b.id}
-                          className="w-full max-w-[180px] h-3 rounded bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center px-1"
+                          className="w-full max-w-[180px] h-3 rounded bg-[var(--panel)]/80 backdrop-blur-sm border border-[var(--border)] flex items-center justify-center px-1"
                         >
-                          <span className="text-[8px] font-mono text-gray-200 truncate uppercase">
+                          <span className="text-[8px] font-mono text-[var(--text)] truncate uppercase">
                             {b.label}
                           </span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="relative z-10 flex items-center justify-between text-[9px] text-gray-400">
+                    <div className="relative z-10 flex items-center justify-between text-[9px] text-[var(--muted2)]">
                       <span>{assignedScene?.sceneType === 'event' ? 'Static Screen' : 'Story Scenario'}</span>
                       {assignedScene && (
-                        <span className="text-cyan-400 group-hover:underline flex items-center gap-0.5">
+                        <span className="text-cyan-600 dark:text-cyan-400 group-hover:underline flex items-center gap-0.5">
                           <span>Edit</span>
                           <span>âžœ</span>
                         </span>
@@ -931,7 +932,7 @@ export default function MenuGameToolModal({
                             onClose();
                             playSfx('/assets/sfx/click intro.mp3', false, 0.3);
                           }}
-                          className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-purple-500/50 bg-purple-950/30 text-purple-300 hover:bg-purple-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                          className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-purple-500/50 bg-purple-500/15 text-purple-700 dark:text-purple-300 hover:bg-purple-500/25 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
                           title="Open this narrative scenario in the story editor"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5" />
@@ -941,7 +942,7 @@ export default function MenuGameToolModal({
                     ) : (
                       <button
                         onClick={handleGenerateMissingScreens}
-                        className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-emerald-500/40 bg-emerald-950/30 text-emerald-300 hover:bg-emerald-900/40 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                        className="flex-1 py-1.5 px-2 rounded-md text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25 transition-all cursor-pointer flex items-center justify-center gap-1.5"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3.5 h-3.5" />
                         <span>Create Screen</span>
@@ -956,8 +957,8 @@ export default function MenuGameToolModal({
 
         {/* FLOATING INFORMATIVE HUD */}
         <div className="absolute bottom-4 left-4 z-30 pointer-events-none">
-          <div className="bg-[var(--surface)]/90 backdrop-blur-md border border-[var(--border)] p-3 rounded-lg shadow-xl flex items-center gap-3">
-            <div className="w-8 h-8 rounded-md bg-cyan-950/50 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+          <div className="bg-[var(--panel)] backdrop-blur-md border border-[var(--border)] p-3 rounded-lg shadow-xl flex items-center gap-3">
+            <div className="w-8 h-8 rounded-md bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
               <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-4 h-4" />
             </div>
             <div>

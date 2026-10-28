@@ -85,7 +85,7 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
       className="fixed z-50 min-w-[190px] rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-xs shadow-2xl backdrop-blur-xl p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-100 select-none"
     >
       {menu.clip && (
-        <div className="px-2.5 py-1 text-[10px] font-mono font-bold text-gray-400 border-b border-white/10 truncate max-w-[200px]">
+        <div className="px-2.5 py-1 text-[10px] font-mono font-bold text-[var(--muted2)] border-b border-[var(--border)] truncate max-w-[200px]">
           {menu.clip.name || menu.clip.text || 'Clip'}
         </div>
       )}
@@ -97,13 +97,13 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
               onCut(menu.clip!);
               onClose();
             }}
-            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
           >
             <span className="flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.cut} className="w-3.5 h-3.5" />
               <span>Cut</span>
             </span>
-            <span className="text-[10px] font-mono text-gray-400">Ctrl+X</span>
+            <span className="text-[10px] font-mono text-[var(--muted2)]">Ctrl+X</span>
           </button>
 
           <button
@@ -111,13 +111,13 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
               onCopy(menu.clip!);
               onClose();
             }}
-            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
           >
             <span className="flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
               <span>Copy</span>
             </span>
-            <span className="text-[10px] font-mono text-gray-400">Ctrl+C</span>
+            <span className="text-[10px] font-mono text-[var(--muted2)]">Ctrl+C</span>
           </button>
 
           <button
@@ -125,13 +125,13 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
               onDuplicate(menu.clip!);
               onClose();
             }}
-            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+            className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
           >
             <span className="flex items-center gap-2">
               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
               <span>Duplicate</span>
             </span>
-            <span className="text-[10px] font-mono text-gray-400">Ctrl+D</span>
+            <span className="text-[10px] font-mono text-[var(--muted2)]">Ctrl+D</span>
           </button>
 
           {canSplit && (
@@ -146,7 +146,7 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
                 <GuiIconRenderer icon={GUI_ICONS.general.split} className="w-3.5 h-3.5" />
                 <span>Split at Playhead</span>
               </span>
-              <span className="text-[10px] font-mono text-gray-400">S</span>
+              <span className="text-[10px] font-mono text-[var(--muted2)]">S</span>
             </button>
           )}
 
@@ -192,8 +192,8 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
             if (!track) return null;
             return (
               <>
-                <div className="px-2.5 py-1 text-[10px] font-mono font-bold text-gray-400 border-b border-white/10 flex items-center justify-between">
-                  <span className="truncate max-w-[130px] text-white">{track.name || 'Track'}</span>
+                <div className="px-2.5 py-1 text-[10px] font-mono font-bold text-[var(--muted2)] border-b border-[var(--border)] flex items-center justify-between">
+                  <span className="truncate max-w-[130px] text-[var(--text)]">{track.name || 'Track'}</span>
                   <span className="uppercase text-[9px] text-cyan-400 font-bold px-1 rounded bg-cyan-950/40">
                     {track.section}
                   </span>
@@ -205,7 +205,7 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
                       onRenameTrack(track.id);
                       onClose();
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+                    className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
                   >
                     <span className="flex items-center gap-2">
                       <GuiIconRenderer icon={GUI_ICONS.general.pencil} className="w-3.5 h-3.5" />
@@ -220,7 +220,7 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
                       onToggleTrackMute(track.id);
                       onClose();
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+                    className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
                   >
                     <span className="flex items-center gap-2">
                       <GuiIconRenderer
@@ -238,7 +238,7 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
                       onToggleTrackVisibility(track.id);
                       onClose();
                     }}
-                    className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+                    className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
                   >
                     <span className="flex items-center gap-2">
                       <GuiIconRenderer
@@ -276,13 +276,13 @@ export const CinematicContextMenu: React.FC<CinematicContextMenuProps> = ({
             onPaste();
             onClose();
           }}
-          className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/10 hover:text-white transition-colors cursor-pointer text-left"
+          className="w-full px-2.5 py-1.5 rounded-lg flex items-center justify-between hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)] transition-colors cursor-pointer text-left"
         >
           <span className="flex items-center gap-2">
             <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
             <span>Paste at Playhead</span>
           </span>
-          <span className="text-[10px] font-mono text-gray-400">Ctrl+V</span>
+          <span className="text-[10px] font-mono text-[var(--muted2)]">Ctrl+V</span>
         </button>
       )}
     </div>
