@@ -326,10 +326,10 @@ export default function VNMakerHeader({
         {/* Botón Probar Historia */}
         <button
           onClick={() => onPlayStory(story)}
-          className="h-8 px-3.5 bg-[var(--accent-grad)] hover:opacity-95 text-[#07070a] font-extrabold rounded-md text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_4px_16px_var(--accent-glow)] flex items-center gap-1.5 shrink-0"
+          className="h-8 px-3.5 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-bold rounded-md text-xs uppercase tracking-wider transition-all cursor-pointer shadow-sm flex items-center gap-1.5 shrink-0"
           title="Play and test story in visual player"
         >
-          <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3.5 h-3.5 text-[#07070a]" />
+          <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3.5 h-3.5 text-[#0F0503]" />
           <span className="hidden sm:inline">TEST</span>
         </button>
 
@@ -383,7 +383,7 @@ export default function VNMakerHeader({
                       setShowProjectMenu(false);
                       setActiveGlobalModal('projects');
                     }}
-                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] rounded-md text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-100 flex items-center gap-2 cursor-pointer transition-colors text-left font-semibold backdrop-blur-md"
+                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] rounded-xl text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-100 flex items-center gap-2 cursor-pointer transition-colors text-left font-semibold backdrop-blur-md"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-emerald-500" />
                     <span>Project Manager</span>
@@ -392,7 +392,7 @@ export default function VNMakerHeader({
 
                   <button
                     onClick={onExport}
-                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] rounded-md text-[var(--text)] flex items-center gap-2 cursor-pointer transition-colors text-left font-medium backdrop-blur-md"
+                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-[var(--border2)] rounded-xl text-[var(--text)] flex items-center gap-2 cursor-pointer transition-colors text-left font-medium backdrop-blur-md"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.download} className="w-3.5 h-3.5 text-sky-500" />
                     <span>Export Story (JSON)</span>
@@ -402,7 +402,7 @@ export default function VNMakerHeader({
 
                   <button
                     onClick={onReset}
-                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-red-500/50 rounded-md text-red-600 dark:text-red-400 flex items-center gap-2 cursor-pointer transition-colors text-left font-medium backdrop-blur-md"
+                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-red-500/50 rounded-xl text-red-600 dark:text-red-400 flex items-center gap-2 cursor-pointer transition-colors text-left font-medium backdrop-blur-md"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.refresh} className="w-3.5 h-3.5" />
                     <span>Reset to Sample Story</span>
@@ -410,7 +410,7 @@ export default function VNMakerHeader({
 
                   <button
                     onClick={onExit}
-                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-red-500/50 rounded-md text-[var(--muted)] hover:text-red-500 flex items-center gap-2 cursor-pointer transition-colors text-left backdrop-blur-md"
+                    className="w-full px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] hover:border-red-500/50 rounded-xl text-[var(--muted)] hover:text-red-500 flex items-center gap-2 cursor-pointer transition-colors text-left backdrop-blur-md"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.action.exitDoor} className="w-3.5 h-3.5 text-red-500" />
                     <span>Exit Editor</span>
