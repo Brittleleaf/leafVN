@@ -29,8 +29,8 @@
 
 [data-vn-theme="default_dark"],
 :root {
-  --bg: #010103;
-  --bg-gradient: linear-gradient(135deg, #010103 0%, #2E1256 50%, #010103 100%);
+  --bg: #030207;
+  --bg-gradient: #030207;
   --panel: rgba(46, 18, 86, 0.20);
   --panel2: rgba(46, 18, 86, 0.35);
   --panel-hover: rgba(177, 91, 228, 0.15);
@@ -1207,10 +1207,11 @@ body:has(.vn-engine-root) #global-vhs-overlay {
    ======================================================== */
 [data-vn-theme="default_dark"] .vn-engine-root,
 :root:not([data-vn-theme="default_light"]):not([data-vn-theme="rotp"]) .vn-engine-root {
+  background-color: #030207 !important;
   background-image: 
-    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    var(--bg-gradient) !important;
-  background-size: 26px 26px, 250% 250% !important;
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+  background-size: 26px 26px !important;
+  animation: none !important;
 }
 
 [data-vn-theme="default_light"] .vn-engine-root {

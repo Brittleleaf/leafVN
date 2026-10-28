@@ -18,9 +18,9 @@ export const VN_THEMES: VNThemeDefinition[] = [
   {
     id: 'default_dark',
     name: 'Modern Dark',
-    description: 'Obsidian & Deep Violet (#010103 & #2E1256). Ambient acrylic glass, luminous #D17BF8 accents and #F7F6FE icons.',
+    description: 'Obsidian & Deep Violet (#030207). Ambient acrylic glass, luminous #D17BF8 accents and #F7F6FE icons.',
     badge: 'GLASS',
-    previewBg: '#010103',
+    previewBg: '#030207',
     previewCard: 'rgba(46, 18, 86, 0.45)',
     previewBorder: '#B15BE4',
     previewAccent: '#D17BF8',
