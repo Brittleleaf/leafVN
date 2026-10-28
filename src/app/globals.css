@@ -1256,7 +1256,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   left: 20%;
   filter: blur(95px);
   opacity: 0.16;
-  background: radial-gradient(circle, #6366f1, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-1, #6366f1), transparent 70%);
   mix-blend-mode: screen;
   animation: vn-glow-drift-1 20s ease-in-out infinite alternate;
 }
@@ -1269,7 +1269,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   right: 15%;
   filter: blur(105px);
   opacity: 0.14;
-  background: radial-gradient(circle, #a78bfa, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-2, #a78bfa), transparent 70%);
   mix-blend-mode: screen;
   animation: vn-glow-drift-2 24s ease-in-out infinite alternate;
 }
@@ -1282,7 +1282,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   left: 35%;
   filter: blur(125px);
   opacity: 0.11;
-  background: radial-gradient(circle, #22d3ee, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-3, #22d3ee), transparent 70%);
   mix-blend-mode: screen;
   animation: vn-glow-drift-3 28s ease-in-out infinite alternate;
 }
@@ -1295,7 +1295,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   left: 15%;
   filter: blur(120px);
   opacity: 0.08;
-  background: radial-gradient(circle, #6366f1, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-1, #6366f1), transparent 70%);
   animation: vn-glow-drift-1 20s ease-in-out infinite alternate;
 }
 
@@ -1306,7 +1306,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   right: 10%;
   filter: blur(125px);
   opacity: 0.07;
-  background: radial-gradient(circle, #a78bfa, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-2, #a78bfa), transparent 70%);
   animation: vn-glow-drift-2 24s ease-in-out infinite alternate;
 }
 
@@ -1317,7 +1317,7 @@ body:has(.vn-engine-root) #global-vhs-overlay {
   left: 35%;
   filter: blur(130px);
   opacity: 0.06;
-  background: radial-gradient(circle, #22d3ee, transparent 70%);
+  background: radial-gradient(circle, var(--glow-color-3, #22d3ee), transparent 70%);
   animation: vn-glow-drift-3 28s ease-in-out infinite alternate;
 }
 

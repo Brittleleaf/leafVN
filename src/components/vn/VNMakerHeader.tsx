@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { VNStory, VNChapter, VNWorkspaceView } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES } from '@/lib/vn/themeManager';
+import ThemeCustomizerPanel from './theme/ThemeCustomizerPanel';
 
 interface VNMakerHeaderProps {
   story: VNStory;
@@ -240,69 +241,14 @@ export default function VNMakerHeader({
                 onClick={() => setShowThemeMenu(false)}
               />
               <div
-                className="absolute right-0 top-10 w-80 z-[70] flex flex-col rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl p-2 shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in fade-in zoom-in-95 duration-150 select-none"
+                className="absolute right-0 top-10 z-[70] rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in fade-in zoom-in-95 duration-150 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="px-2 py-1.5 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)] mb-1">
-                  <span className="flex items-center gap-1.5">
-                    <GuiIconRenderer icon={GUI_ICONS.general.lightBulb} className="w-3.5 h-3.5 text-[var(--accent)]" />
-                    <span>Appearance & Theme</span>
-                  </span>
-                  <span className="text-[var(--muted2)] font-mono text-[9px]">ENGINE UI</span>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  {VN_THEMES.map((th) => {
-                    const isCurrent = editorTheme === th.id;
-                    return (
-                      <button
-                        key={th.id}
-                        onClick={() => {
-                          onSelectTheme?.(th.id);
-                          setShowThemeMenu(false);
-                        }}
-                        className={`flex items-start gap-2.5 p-2 rounded-lg text-left transition-all cursor-pointer ${
-                          isCurrent
-                            ? 'bg-[var(--surface-strong)] text-[var(--text)] font-bold shadow-xs'
-                            : 'hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)]'
-                        }`}
-                      >
-                        <div
-                          className="w-7 h-7 rounded-md mt-0.5 shrink-0 border flex items-center justify-center shadow-inner"
-                          style={{
-                            backgroundColor: th.previewBg,
-                            borderColor: th.previewBorder,
-                            color: th.previewAccent,
-                          }}
-                        >
-                          <GuiIconRenderer
-                            icon={
-                              th.id === 'default_light'
-                                ? GUI_ICONS.general.lightBulb
-                                : th.id === 'rotp'
-                                ? GUI_ICONS.general.hazard
-                                : GUI_ICONS.general.circle
-                            }
-                            className="w-3.5 h-3.5"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-1">
-                            <span className={`text-xs ${isCurrent ? 'font-bold text-[var(--accent)]' : 'font-medium text-[var(--text)]'}`}>
-                              {th.name}
-                            </span>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded font-mono bg-[var(--well-bg)] text-[var(--muted)]">
-                              {th.fontName}
-                            </span>
-                          </div>
-                          <p className="text-[10px] text-[var(--muted2)] line-clamp-1 mt-0.5 leading-snug">
-                            {th.description}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                <ThemeCustomizerPanel
+                  currentTheme={editorTheme}
+                  onSelectTheme={(th) => onSelectTheme?.(th)}
+                  onClose={() => setShowThemeMenu(false)}
+                />
               </div>
             </>
           )}

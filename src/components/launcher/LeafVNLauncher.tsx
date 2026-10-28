@@ -7,7 +7,8 @@ import { playSfx } from '@/lib/audioSettings';
 import { exportStoryToJson, importStoryFromJson } from '@/lib/vn/storage';
 import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
-import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme } from '@/lib/vn/themeManager';
+import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
+import ThemeCustomizerPanel from '@/components/vn/theme/ThemeCustomizerPanel';
 import { i18n, SUPPORTED_LANGS } from '@/lib/i18n';
 import VNMaker from '@/components/vn/VNMaker';
 import VNPlayer from '@/components/vn/VNPlayer';
@@ -74,9 +75,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
   const [showThemeMenu, setShowThemeMenu] = useState(false);
 
   useEffect(() => {
-    const currentTheme = getStoredTheme();
-    setEditorTheme(currentTheme);
-    document.documentElement.setAttribute('data-vn-theme', currentTheme);
+    const { theme } = initStoredThemeAndAccent();
+    setEditorTheme(theme);
   }, []);
 
   const handleSelectTheme = (theme: VNEditorTheme) => {
@@ -703,69 +703,14 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
               <>
                 <div className="fixed inset-0 z-[60]" onClick={() => setShowThemeMenu(false)} />
                 <div
-                  className="absolute right-0 top-9 w-80 z-[70] flex flex-col animate-in fade-in zoom-in-95 duration-150 select-none drop-shadow-2xl"
+                  className="absolute right-0 top-9 z-[70] rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] animate-in fade-in zoom-in-95 duration-150 overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-center justify-between px-3.5 py-1.5 rounded-t-xl vn-dossier-tab text-[10px] font-bold tracking-wider uppercase text-[var(--accent)]">
-                    <span className="flex items-center gap-1.5">
-                      <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--accent)]" />
-                      <span>THEME SELECTOR</span>
-                    </span>
-                    <span className="text-[9px] font-mono text-[var(--muted2)]">CLASSIFIED</span>
-                  </div>
-
-                  <div className="rounded-b-2xl rounded-tl-2xl p-2.5 vn-dossier-card flex flex-col gap-1.5">
-                    {VN_THEMES.map((th) => {
-                      const isCurrent = editorTheme === th.id;
-                      return (
-                        <button
-                          key={th.id}
-                          onClick={() => {
-                            handleSelectTheme(th.id);
-                            setShowThemeMenu(false);
-                          }}
-                          className={`flex items-start gap-2.5 p-2 rounded-xl text-left transition-all cursor-pointer border backdrop-blur-md ${
-                            isCurrent
-                              ? 'bg-[var(--accent-surface)] border-[var(--accent)] shadow-md ring-1 ring-[var(--accent)]/40 font-bold'
-                              : 'bg-[var(--btn-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--border2)] text-[var(--muted)] hover:text-[var(--text)]'
-                          }`}
-                        >
-                          <div
-                            className="w-7 h-7 rounded-lg mt-0.5 shrink-0 border flex items-center justify-center shadow-inner"
-                            style={{
-                              backgroundColor: th.previewBg,
-                              borderColor: th.previewBorder,
-                              color: th.previewAccent,
-                            }}
-                          >
-                            <GuiIconRenderer
-                              icon={
-                                th.id === 'default_light'
-                                  ? GUI_ICONS.general.lightBulb
-                                  : th.id === 'rotp'
-                                  ? GUI_ICONS.general.hazard
-                                  : GUI_ICONS.general.circle
-                              }
-                              className="w-3.5 h-3.5"
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-[var(--text)] flex items-center gap-1.5">
-                                <span>{th.name}</span>
-                              </span>
-                              <span className="text-[9px] px-1.5 py-0.2 rounded font-mono uppercase bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted2)]">
-                                {th.badge}
-                              </span>
-                            </div>
-                            <p className="text-[10px] text-[var(--muted2)] mt-0.5 line-clamp-1">
-                              {th.description}
-                            </p>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <ThemeCustomizerPanel
+                    currentTheme={editorTheme}
+                    onSelectTheme={handleSelectTheme}
+                    onClose={() => setShowThemeMenu(false)}
+                  />
                 </div>
               </>
             )}
@@ -1334,63 +1279,16 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {VN_THEMES.map((th) => {
-                    const isCurrent = editorTheme === th.id;
-                    return (
-                      <button
-                        key={th.id}
-                        onClick={() => handleSelectTheme(th.id)}
-                        className={`p-3.5 rounded-xl text-left transition-all cursor-pointer flex flex-col justify-between gap-3 ${
-                          isCurrent
-                            ? 'bg-[var(--surface-strong)] text-[var(--text)] font-semibold shadow-xs'
-                            : 'hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)]'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div
-                            className="w-8 h-8 rounded-lg border flex items-center justify-center shadow-inner"
-                            style={{
-                              backgroundColor: th.previewBg,
-                              borderColor: th.previewBorder,
-                              color: th.previewAccent,
-                            }}
-                          >
-                            <GuiIconRenderer
-                              icon={
-                                th.id === 'default_light'
-                                  ? GUI_ICONS.general.lightBulb
-                                  : th.id === 'rotp'
-                                  ? GUI_ICONS.general.hazard
-                                  : GUI_ICONS.general.circle
-                              }
-                              className="w-4 h-4"
-                            />
-                          </div>
-                          {isCurrent && (
-                            <span className="text-[10px] font-mono font-bold text-[var(--accent)] uppercase">
-                              Active
-                            </span>
-                          )}
-                        </div>
-
-                        <div>
-                          <div className="font-bold text-xs text-[var(--text)] flex items-center gap-1.5">
-                            <span>{th.name}</span>
-                          </div>
-                          <div className="text-[10px] text-[var(--muted2)] mt-0.5 line-clamp-2">
-                            {th.description}
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2">
+                  <ThemeCustomizerPanel
+                    compact={true}
+                    currentTheme={editorTheme}
+                    onSelectTheme={handleSelectTheme}
+                  />
                 </div>
               </div>
 
-              <div className="h-[1px] bg-[var(--border)]" />
-
-              {/* 3. SECTOR DE INFORMACIÓN Y ALMACENAMIENTO */}
+              <div className="h-[1px] bg-[var(--border)]" />             {/* 3. SECTOR DE INFORMACIÓN Y ALMACENAMIENTO */}
               <div className="space-y-4">
                 <div>
                   <h3 className="text-sm font-bold text-[var(--text)] flex items-center gap-2">

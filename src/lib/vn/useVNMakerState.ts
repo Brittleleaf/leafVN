@@ -22,7 +22,7 @@ import {
 } from '@/lib/vn/storage';
 import { fileToBase64, getCharacterAvatar, syncChoiceJumpsInTimeline } from '@/lib/vn/engineUtils';
 import { GUI_ICONS } from '@/lib/vn/guiIcons';
-import { VNEditorTheme, getStoredTheme, setStoredTheme } from '@/lib/vn/themeManager';
+import { VNEditorTheme, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
 import { DEFAULT_DEATH_CONFIG } from '@/components/vn/StaticScreenView';
 import { DEFAULT_CINEMATIC_CONFIG } from '@/components/vn/CinematicPlayerView';
 import { SCREEN_FX_CONFIGS } from '@/components/vn/VNScreenFxOverlay';
@@ -43,6 +43,10 @@ export function useVNMakerState(
 
   // Tema visual del motor (Modern Dark / Light / ROTP Theme)
   const [editorTheme, setEditorTheme] = useState<VNEditorTheme>(() => story.editorTheme || getStoredTheme());
+
+  useEffect(() => {
+    initStoredThemeAndAccent();
+  }, []);
 
   useEffect(() => {
     setStoredTheme(editorTheme);
