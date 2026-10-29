@@ -22,6 +22,8 @@ import {
   VNSnapTarget,
 } from './transform';
 import VNUniversalButton from './ui/VNUniversalButton';
+import StageStudioActionBar from './stage/StageStudioActionBar';
+import StageTransportControls from './stage/StageTransportControls';
 import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 export interface VNMakerStageProps {
@@ -479,187 +481,29 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         </button>
       </div>
 
-      {/* STUDIO ACTION BAR (OUTSIDE CANVAS — 100% CLEAN UNOBSTRUCTED VIEWPORT) */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-1 py-1">
-        {/* Left: Button / Hotspot placement and alignment guides */}
-        <div className="flex items-center gap-1 flex-wrap">
-          <button
-            onClick={() => {
-              setPendingButtonType('door');
-              setIsPlacingButton(true);
-              playSfx('/assets/sfx/click interface.mp3', true, 0.4);
-            }}
-            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer flex items-center gap-1.5 ${
-              isPlacingButton
-                ? 'bg-amber-500/20 text-amber-600 dark:text-amber-300 animate-pulse'
-                : 'text-[var(--text)] hover:bg-[var(--surface-strong)]'
-            }`}
-          >
-            {isPlacingButton ? 'Click on canvas...' : '+ Place Button'}
-          </button>
-
-          <button
-            onClick={() => {
-              setEditingHotspotId(null);
-              setShowHotspotStudio(true);
-              playSfx('/assets/sfx/click intro.mp3', false, 0.3);
-            }}
-            className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5"
-            title="Open navigation hotspot manager and editor"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.action.select} className="w-3.5 h-3.5 text-[var(--accent)]" />
-            <span>Manage Buttons ({currentScene?.hotspots?.length || 0})</span>
-          </button>
-
-          <div className="h-4 w-[1px] bg-[var(--border)] mx-1" />
-
-          {/* Guides & Snapping Controls */}
-          <button
-            type="button"
-            onClick={() => {
-              setShowGuides(!showGuides);
-              playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-            }}
-            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              showGuides
-                ? 'bg-cyan-500/20 text-cyan-400 font-bold'
-                : 'text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
-            }`}
-            title="Show or hide center alignment guides on canvas"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.general.ruler} className="w-3.5 h-3.5" />
-            <span>{showGuides ? 'Guides: ON' : 'Guides'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setSnapToGuides(!snapToGuides);
-              playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-            }}
-            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              snapToGuides
-                ? 'bg-pink-500/20 text-pink-400 font-bold'
-                : 'text-[var(--muted2)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
-            }`}
-            title="Toggle magnetic snap to center and alignments"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.general.pin} className="w-3.5 h-3.5" />
-            <span>{snapToGuides ? 'Snap: ON' : 'Snap: OFF'}</span>
-          </button>
-        </div>
-
-        {/* Right: Stage Media, Textbox Visibility, Audio, Background & Upload */}
-        <div className="flex items-center gap-1 flex-wrap justify-end">
-          {currentLine?.type === 'dialogue' ? (
-            <button
-              onClick={() => setShowCanvasTextbox?.(!showCanvasTextbox)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
-                showCanvasTextbox
-                  ? 'text-[var(--text)] hover:bg-[var(--surface-strong)]'
-                  : 'bg-amber-500/20 text-amber-600 dark:text-amber-300'
-              }`}
-              title={showCanvasTextbox ? 'Hide textbox to view full canvas' : 'Show textbox'}
-            >
-              <GuiIconRenderer icon={GUI_ICONS.action.lookAt} className="w-3.5 h-3.5" />
-              <span>{showCanvasTextbox ? 'Textbox: Visible' : 'Textbox: Hidden'}</span>
-            </button>
-          ) : currentLine?.type === 'choice' ? (
-            <button
-              type="button"
-              onClick={() => {
-                const isFree = currentLine.choiceLayout === 'free' || currentLine.options?.some((o) => o.xPercent !== undefined);
-                if (isFree) {
-                  const resetOpts = (currentLine.options || []).map((o) => ({
-                    ...o,
-                    xPercent: undefined,
-                    yPercent: undefined,
-                    rotation: 0,
-                    scale: 1,
-                  }));
-                  handlePatchCurrentLine?.({
-                    choiceLayout: 'stacked',
-                    options: resetOpts,
-                    promptXPercent: undefined,
-                    promptYPercent: undefined,
-                    promptRotation: 0,
-                    promptScale: 1,
-                  });
-                  if (recordHistorySnapshot) recordHistorySnapshot();
-                  notify?.("Layout changed to stacked column");
-                } else {
-                  const total = currentLine.options?.length || 1;
-                  const freeOpts = (currentLine.options || []).map((o, idx) => ({
-                    ...o,
-                    xPercent: o.xPercent ?? 50,
-                    yPercent: o.yPercent ?? (Math.round((50 + (idx - (total - 1) / 2) * 12) * 10) / 10),
-                  }));
-                  handlePatchCurrentLine?.({ choiceLayout: 'free', options: freeOpts });
-                  if (recordHistorySnapshot) recordHistorySnapshot();
-                  notify?.("Layout changed to free transformable mode");
-                }
-              }}
-              className="px-2.5 py-1.5 rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25"
-              title="Toggle between stacked column or free transformable mode"
-            >
-              <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
-              <span>
-                {currentLine.choiceLayout === 'free' || currentLine.options?.some((o) => o.xPercent !== undefined)
-                  ? 'Layout: Free'
-                  : 'Layout: Stacked'}
-              </span>
-            </button>
-          ) : (
-            <div className="px-2.5 py-1.5 rounded-lg text-xs uppercase font-mono font-bold text-[var(--muted)] flex items-center gap-1.5">
-              <GuiIconRenderer icon={GUI_ICONS.general.screenFx} className="w-3.5 h-3.5 text-purple-400" />
-              <span>
-                {currentLine?.type === 'fx_start'
-                  ? 'FX Start'
-                  : currentLine?.type === 'fx_end'
-                  ? 'FX End'
-                  : `Event: ${currentLine?.type || 'Control'}`}
-              </span>
-            </div>
-          )}
-
-          <div className="h-4 w-[1px] bg-[var(--border)] mx-1" />
-
-          <button
-            onClick={() => setShowSceneAudioModal?.(true)}
-            className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5"
-            title="Configure background BGM and entrance SFX for this scenario"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.general.soundOn} className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-            <span>Audio</span>
-            {currentScene?.entrySfxUrl && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>}
-          </button>
-
-          <button
-            onClick={() => {
-              if (openAssetPicker && handleUpdateCurrentScene) {
-                openAssetPicker('background', (url) => {
-                  handleUpdateCurrentScene('backgroundUrl', url);
-                  playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  notify?.('Scenario background updated');
-                });
-              } else if (setActiveGlobalModal) {
-                setActiveGlobalModal('scenes');
-              }
-            }}
-            className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5"
-            title="Select scenario background from Gallery"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
-            <span>Background</span>
-          </button>
-
-          <label className="px-2.5 py-1.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-xs uppercase font-bold cursor-pointer transition-all flex items-center gap-1.5">
-            <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-3.5 h-3.5 text-[var(--accent)]" />
-            <span>Upload</span>
-            <input type="file" accept="image/*" onChange={handleUploadBackground} className="hidden" />
-          </label>
-        </div>
-      </div>
+      <StageStudioActionBar
+        showGuides={showGuides}
+        setShowGuides={setShowGuides}
+        snapToGuides={snapToGuides}
+        setSnapToGuides={setSnapToGuides}
+        currentLine={currentLine}
+        currentScene={currentScene}
+        isPlacingButton={isPlacingButton}
+        setIsPlacingButton={setIsPlacingButton}
+        setPendingButtonType={setPendingButtonType}
+        setEditingHotspotId={setEditingHotspotId}
+        setShowHotspotStudio={setShowHotspotStudio}
+        showCanvasTextbox={showCanvasTextbox}
+        setShowCanvasTextbox={setShowCanvasTextbox}
+        handlePatchCurrentLine={handlePatchCurrentLine}
+        recordHistorySnapshot={recordHistorySnapshot}
+        notify={notify}
+        setShowSceneAudioModal={setShowSceneAudioModal}
+        openAssetPicker={openAssetPicker}
+        handleUpdateCurrentScene={handleUpdateCurrentScene}
+        setActiveGlobalModal={setActiveGlobalModal}
+        handleUploadBackground={handleUploadBackground}
+      />
 
       {/* GAME SCREEN CANVAS WRAPPER WITH DOCKED TOOLBAR RAIL */}
       <div
@@ -1568,83 +1412,18 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
         })()}
       </div>
 
-      {/* 5. LIVE MINI-PLAYER CONTROLS */}
-      <div className="vn-card p-3 flex items-center justify-between gap-3 text-xs shrink-0">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handlePrevLine}
-            disabled={selectedLineIndex === 0}
-            className="vn-btn px-3 py-1.5 text-xs font-bold disabled:opacity-30 flex items-center gap-1"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.state.backwardTime} className="w-3 h-3 text-[var(--muted)]" />
-            <span>Previous</span>
-          </button>
-
-          <button
-            onClick={playCurrentLinePreview}
-            className="vn-btn primary px-4 py-1.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-          >
-            <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-3.5 h-3.5" />
-            <span>{isPlayingPreview ? 'Playing...' : 'PLAY LINE'}</span>
-          </button>
-
-          <button
-            onClick={handleNextLine}
-            disabled={selectedLineIndex === (currentScene?.timeline?.length || 1) - 1}
-            className="vn-btn px-3 py-1.5 text-xs font-bold disabled:opacity-30 flex items-center gap-1"
-          >
-            <span>Next</span>
-            <GuiIconRenderer icon={GUI_ICONS.action.nextButton} className="w-3 h-3 text-[var(--muted)]" />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] text-[var(--muted)] font-bold uppercase tracking-wider flex items-center gap-1.5 shrink-0">
-            <GuiIconRenderer icon={GUI_ICONS.general.speaker} className="w-3.5 h-3.5 text-[var(--muted)]" />
-            <span>SFX:</span>
-          </span>
-
-          <div className="flex items-center gap-1.5 bg-[var(--well-bg)] rounded-lg px-2 py-1 max-w-[260px]">
-            {currentLine?.sfx ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => playSfx(currentLine.sfx!, false, 0.8)}
-                  className="w-5 h-5 flex items-center justify-center rounded-lg bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] text-[10px] cursor-pointer shrink-0 transition-colors"
-                  title="Listen to assigned sound"
-                >
-                  <GuiIconRenderer icon={GUI_ICONS.state.play} className="w-2.5 h-2.5" />
-                </button>
-                <span className="text-xs text-[var(--text)] font-mono truncate max-w-[120px]" title={currentLine.sfx}>
-                  {getDisplayAssetName(currentLine.sfx)}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleUpdateCurrentLine('sfx', undefined)}
-                  className="text-[var(--muted2)] hover:text-red-500 text-xs cursor-pointer ml-1"
-                  title="Remove sound from this line"
-                >
-                  <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
-                </button>
-              </>
-            ) : (
-              <span className="text-xs text-[var(--muted2)] italic">-- No SFX --</span>
-            )}
-
-            <button
-              type="button"
-              onClick={() =>
-                openAssetPicker('sfx', (url) => handleUpdateCurrentLine('sfx', url || undefined))
-              }
-              className="ml-1 px-2 py-0.5 hover:bg-[var(--surface-strong)] text-[var(--text)] rounded-lg text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-colors flex items-center gap-1 shrink-0"
-              title="Open Asset Gallery to select an SFX (sound effects only)"
-            >
-              <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3 h-3 text-[var(--accent)]" />
-              <span>Gallery</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <StageTransportControls
+        currentLine={currentLine}
+        selectedLineIndex={selectedLineIndex}
+        currentScene={currentScene}
+        isPlayingPreview={isPlayingPreview}
+        handlePrevLine={handlePrevLine}
+        playCurrentLinePreview={playCurrentLinePreview}
+        handleNextLine={handleNextLine}
+        getDisplayAssetName={getDisplayAssetName}
+        handleUpdateCurrentLine={handleUpdateCurrentLine}
+        openAssetPicker={openAssetPicker}
+      />
     </div>
   );
 }
