@@ -13,6 +13,7 @@ import {
   VNAssetItem,
   VNScreenFxType,
   VNWorkspaceView,
+  VNActiveGlobalModal,
 } from '@/types/vn';
 import { VNEditorTheme } from '@/lib/vn/themeManager';
 import { DraggedTimelineItem } from './VNMakerTimeline';
@@ -55,24 +56,17 @@ export interface VNAssetPickerConfig {
   onSelect: (url: string, assetName?: string) => void;
 }
 
-export interface VNMakerContextType {
+export interface VNMakerStateType {
   // Estado básico
   story: VNStory;
-  setStory: React.Dispatch<React.SetStateAction<VNStory>>;
   editorTheme: VNEditorTheme;
-  handleSelectTheme: (theme: VNEditorTheme) => void;
 
   // Navegación y Espacios de Trabajo (Workspaces)
   currentWorkspace: VNWorkspaceView;
-  setCurrentWorkspace: (view: VNWorkspaceView) => void;
   projectSettingsTab: 'variables' | 'textbox' | 'doctor' | 'general';
-  setProjectSettingsTab: (tab: 'variables' | 'textbox' | 'doctor' | 'general') => void;
   selectedChapterId: string;
-  setSelectedChapterId: (id: string) => void;
   selectedSceneId: string;
-  setSelectedSceneId: (id: string) => void;
   selectedLineIndex: number;
-  setSelectedLineIndex: (idx: number | ((prev: number) => number)) => void;
 
   // Objetos computados activos
   currentChapter?: VNChapter;
@@ -93,70 +87,87 @@ export interface VNMakerContextType {
   isPlayingPreview: boolean;
   animatedPreviewText: string;
   isTypingPreview: boolean;
-  playCurrentLinePreview: () => void;
   showCanvasTextbox: boolean;
-  setShowCanvasTextbox: (show: boolean) => void;
   currentSelectedFx: VNActiveSelectedFx | null;
 
   // Hotspots / Botones interactivos
   isPlacingButton: boolean;
-  setIsPlacingButton: (placing: boolean) => void;
   pendingButtonType: VNHotspotStyle;
-  setPendingButtonType: (type: VNHotspotStyle) => void;
   showHotspotStudio: boolean;
-  setShowHotspotStudio: (show: boolean) => void;
   editingHotspotId: string | null;
-  setEditingHotspotId: (id: string | null) => void;
   draggingHotspotId: string | null;
-  handleCanvasClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  handleHotspotPointerDown: (e: React.PointerEvent, hs: VNHotspot) => void;
-  handleRemoveHotspot: (id: string) => void;
 
   // Línea de tiempo y saltos
   timelineFilter: string;
-  setTimelineFilter: (filter: string) => void;
   timelineFxStatus: VNTimelineFxStatus;
   incomingJumpsByEventId: Record<string, { choiceIndex: number; optionLabel: string }[]>;
   incomingJumpsByIndex: Record<number, { choiceIndex: number; optionLabel: string }[]>;
 
   // Drag and Drop en Timeline & Tabs de Escenas
   draggedTimelineItem: DraggedTimelineItem | null;
-  setDraggedTimelineItem: (item: DraggedTimelineItem | null) => void;
   draggedTimelineIndex: number | null;
-  setDraggedTimelineIndex: (idx: number | null) => void;
   dragOverTimelineIndex: number | null;
-  setDragOverTimelineIndex: (idx: number | null) => void;
   dragOverSceneTabId: string | null;
-  setDragOverSceneTabId: (id: string | null) => void;
   draggedSceneIndex: number | null;
-  setDraggedSceneIndex: (idx: number | null) => void;
   dragOverSceneIndex: number | null;
-  setDragOverSceneIndex: (idx: number | null) => void;
-  handleDragCancel: () => void;
-  handleMoveSceneTab: (fromIndex: number, toIndex: number) => void;
 
   // Undo / Redo
   canUndo: boolean;
   canRedo: boolean;
+
+  // Modales y Pickers
+  activeGlobalModal: VNActiveGlobalModal;
+  showCharacterPicker: boolean;
+  showAddActionModal: boolean;
+  showSceneAudioModal: boolean;
+  showHelpGuide: boolean;
+  isFullscreenWorkspace: boolean;
+  assetPickerConfig: VNAssetPickerConfig | null;
+
+  // Feedback y utilidades
+  feedbackMsg: string;
+}
+
+export interface VNMakerActionsType {
+  setStory: React.Dispatch<React.SetStateAction<VNStory>>;
+  handleSelectTheme: (theme: VNEditorTheme) => void;
+  setCurrentWorkspace: (view: VNWorkspaceView) => void;
+  setProjectSettingsTab: (tab: 'variables' | 'textbox' | 'doctor' | 'general') => void;
+  setSelectedChapterId: (id: string) => void;
+  setSelectedSceneId: (id: string) => void;
+  setSelectedLineIndex: (idx: number | ((prev: number) => number)) => void;
+
+  playCurrentLinePreview: () => void;
+  setShowCanvasTextbox: (show: boolean) => void;
+  setIsPlacingButton: (placing: boolean) => void;
+  setPendingButtonType: (type: VNHotspotStyle) => void;
+  setShowHotspotStudio: (show: boolean) => void;
+  setEditingHotspotId: (id: string | null) => void;
+  handleCanvasClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  handleHotspotPointerDown: (e: React.PointerEvent, hs: VNHotspot) => void;
+  handleRemoveHotspot: (id: string) => void;
+
+  setTimelineFilter: (filter: string) => void;
+  setDraggedTimelineItem: (item: DraggedTimelineItem | null) => void;
+  setDraggedTimelineIndex: (idx: number | null) => void;
+  setDragOverTimelineIndex: (idx: number | null) => void;
+  setDragOverSceneTabId: (id: string | null) => void;
+  setDraggedSceneIndex: (idx: number | null) => void;
+  setDragOverSceneIndex: (idx: number | null) => void;
+  handleDragCancel: () => void;
+  handleMoveSceneTab: (fromIndex: number, toIndex: number) => void;
+
   handleUndo: () => void;
   handleRedo: () => void;
   recordHistorySnapshot: () => void;
 
-  // Modales y Pickers
-  activeGlobalModal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null;
-  setActiveGlobalModal: (modal: 'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null) => void;
-  showCharacterPicker: boolean;
+  setActiveGlobalModal: (modal: VNActiveGlobalModal) => void;
   setShowCharacterPicker: (show: boolean) => void;
-  showAddActionModal: boolean;
   setShowAddActionModal: (show: boolean) => void;
-  showSceneAudioModal: boolean;
   setShowSceneAudioModal: (show: boolean) => void;
-  showHelpGuide: boolean;
   setShowHelpGuide: React.Dispatch<React.SetStateAction<boolean>>;
-  isFullscreenWorkspace: boolean;
   setIsFullscreenWorkspace: React.Dispatch<React.SetStateAction<boolean>>;
   toggleFullscreenWorkspace: () => void;
-  assetPickerConfig: VNAssetPickerConfig | null;
   setAssetPickerConfig: (cfg: VNAssetPickerConfig | null) => void;
   openAssetPicker: (
     filterType: VNAssetType,
@@ -165,17 +176,13 @@ export interface VNMakerContextType {
     previewBackgroundUrl?: string
   ) => void;
 
-  // Feedback y utilidades
-  feedbackMsg: string;
   notify: (msg: string) => void;
   getDisplayAssetName: (url: string | undefined, defaultPlaceholder?: string) => string;
 
-  // Guardado y exportación
   handleManualSave: () => Promise<void>;
   handleExport: () => void;
   handleReset: () => void;
 
-  // Mutaciones de Línea / Evento
   handleUpdateCurrentLine: (field: keyof VNEvent, value: unknown) => void;
   handlePatchCurrentLine: (patch: Partial<VNEvent>) => void;
   handleDeleteCurrentLine: () => void;
@@ -188,7 +195,6 @@ export interface VNMakerContextType {
   handleMoveLineToScene: (fromIndex: number, targetSceneId: string) => void;
   handleMoveLineBetweenScenes: (fromSceneId: string, fromIndex: number, toSceneId: string, toIndex?: number) => void;
 
-  // Mutaciones de Escena / Capítulo / Personaje
   handleSelectScene: (sceneId: string) => void;
   handleAddScene: (
     name?: string,
@@ -207,12 +213,46 @@ export interface VNMakerContextType {
   handleUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
 }
 
+export type VNMakerContextType = VNMakerStateType & VNMakerActionsType;
+
+export const VNMakerStateContext = createContext<VNMakerStateType | null>(null);
+export const VNMakerActionsContext = createContext<VNMakerActionsType | null>(null);
 export const VNMakerContext = createContext<VNMakerContextType | null>(null);
 
+/**
+ * Hook unificado 100% compatible con todos los componentes existentes
+ */
 export function useVNMaker(): VNMakerContextType {
-  const context = useContext(VNMakerContext);
-  if (!context) {
+  const combined = useContext(VNMakerContext);
+  if (combined) return combined;
+
+  const state = useContext(VNMakerStateContext);
+  const actions = useContext(VNMakerActionsContext);
+  if (!state || !actions) {
     throw new Error('useVNMaker must be used within a VNMakerProvider');
   }
-  return context;
+  return { ...state, ...actions };
+}
+
+/**
+ * Hook optimizado que consume exclusivamente las acciones memoizadas
+ * Cero re-renders cuando el estado, texto de tecleo o animación cambian.
+ */
+export function useVNMakerActions(): VNMakerActionsType {
+  const actions = useContext(VNMakerActionsContext);
+  if (actions) return actions;
+  const combined = useContext(VNMakerContext);
+  if (combined) return combined;
+  throw new Error('useVNMakerActions must be used within a VNMakerProvider');
+}
+
+/**
+ * Hook optimizado que consume exclusivamente el estado
+ */
+export function useVNMakerStateContext(): VNMakerStateType {
+  const state = useContext(VNMakerStateContext);
+  if (state) return state;
+  const combined = useContext(VNMakerContext);
+  if (combined) return combined;
+  throw new Error('useVNMakerStateContext must be used within a VNMakerProvider');
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { VNStory } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
-import { VNMakerContext } from './VNMakerContext';
+import { VNMakerContext, VNMakerActionsContext, VNMakerStateContext } from './VNMakerContext';
 import { useVNMakerState } from '@/lib/vn/useVNMakerState';
 import VNMakerHeader from './VNMakerHeader';
 import VNMakerSceneTabs from './VNMakerSceneTabs';
@@ -56,7 +56,9 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
   } = contextValue;
 
   return (
-    <VNMakerContext.Provider value={contextValue}>
+    <VNMakerActionsContext.Provider value={contextValue}>
+      <VNMakerStateContext.Provider value={contextValue}>
+        <VNMakerContext.Provider value={contextValue}>
       <div
         data-vn-engine="true"
         data-vn-theme={editorTheme}
@@ -209,6 +211,8 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
         {/* GLOBAL MODALS OVERLAY */}
         <VNMakerModals />
       </div>
-    </VNMakerContext.Provider>
+        </VNMakerContext.Provider>
+      </VNMakerStateContext.Provider>
+    </VNMakerActionsContext.Provider>
   );
 }
