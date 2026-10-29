@@ -80,7 +80,7 @@ export function StaticScreenGalleryWidget({
           name: 'Elena Rostova',
           color: '#38bdf8',
           badgeTitle: 'FIELD INVESTIGATOR',
-          avatarUrl: '/assets/image/characters/default-avatar.png',
+          avatarUrl: '/assets/image/characters/SUBJECT-TEMPLATE.png',
           description: 'Special operative trained in cognitive anomaly containment and counter-espionage.',
           expressions: { neutral: '', focused: '', alarmed: '' },
         },
@@ -89,7 +89,7 @@ export function StaticScreenGalleryWidget({
           name: 'Kaelen Vance',
           color: '#f59e0b',
           badgeTitle: 'SYSTEM ARCHITECT',
-          avatarUrl: '/assets/image/characters/default-avatar.png',
+          avatarUrl: '/assets/image/characters/SUBJECT-TEMPLATE.png',
           description: 'Chief programmer of the neural link interface. Distrustful of corporate oversight.',
           expressions: { neutral: '', smile: '', serious: '' },
         },
@@ -240,7 +240,7 @@ export function StaticScreenGalleryWidget({
             {characters.map((char) => {
               const activeExpr = selectedCharExpr[char.id];
               const displayAvatar =
-                (activeExpr && char.expressions?.[activeExpr]) || char.avatarUrl || '/assets/image/characters/default-avatar.png';
+                (activeExpr && char.expressions?.[activeExpr]) || char.avatarUrl || '/assets/image/characters/SUBJECT-TEMPLATE.png';
 
               return (
                 <div
