@@ -100,6 +100,39 @@ export function useVNMakerState(
   const [showCharacterPicker, setShowCharacterPicker] = useState<boolean>(false);
   const [showAddActionModal, setShowAddActionModal] = useState<boolean>(false);
   const [activeGlobalModal, setActiveGlobalModal] = useState<VNActiveGlobalModal>(null);
+
+  // Redirigir modales legados de configuración y assets a sus respectivos Workspaces dedicados
+  const handleSetActiveGlobalModal = useCallback((modal: VNActiveGlobalModal) => {
+    if (modal === 'variables') {
+      setProjectSettingsTab('variables');
+      setCurrentWorkspace('project_settings');
+      setActiveGlobalModal(null);
+      return;
+    }
+    if (modal === 'textbox') {
+      setProjectSettingsTab('textbox');
+      setCurrentWorkspace('project_settings');
+      setActiveGlobalModal(null);
+      return;
+    }
+    if (modal === 'doctor') {
+      setProjectSettingsTab('doctor');
+      setCurrentWorkspace('project_settings');
+      setActiveGlobalModal(null);
+      return;
+    }
+    if (modal === 'characters' || modal === 'assets') {
+      setCurrentWorkspace('gallery_assets');
+      setActiveGlobalModal(null);
+      return;
+    }
+    if (modal === 'chapter') {
+      setCurrentWorkspace('story_tool');
+      setActiveGlobalModal(null);
+      return;
+    }
+    setActiveGlobalModal(modal);
+  }, []);
   const [showHelpGuide, setShowHelpGuide] = useState<boolean>(true);
   const [isFullscreenWorkspace, setIsFullscreenWorkspace] = useState<boolean>(false);
 
@@ -1585,7 +1618,7 @@ export function useVNMakerState(
     handleUndo,
     handleRedo,
     recordHistorySnapshot,
-    setActiveGlobalModal,
+    setActiveGlobalModal: handleSetActiveGlobalModal,
     setShowCharacterPicker,
     setShowAddActionModal,
     setShowSceneAudioModal,

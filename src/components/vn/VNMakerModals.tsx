@@ -4,15 +4,10 @@ import { useVNMaker } from './VNMakerContext';
 import { playSfx } from '@/lib/audioSettings';
 import { saveActiveStory } from '@/lib/vn/storage';
 
-// Modals
+// Modales activos del editor
 import QuickCharacterPickerModal from './QuickCharacterPickerModal';
 import AddActionModal from './AddActionModal';
-import CharacterStudioModal from './CharacterStudioModal';
 import SceneMapModal from './SceneMapModal';
-import VariableStudioModal from './VariableStudioModal';
-import ChapterStudioModal from './ChapterStudioModal';
-import GlobalTextBoxModal from './GlobalTextBoxModal';
-import ProjectDoctorModal from './ProjectDoctorModal';
 import SceneStudioModal from './SceneStudioModal';
 import AssetStudioModal from './AssetStudioModal';
 import ProjectStudioModal from './ProjectStudioModal';
@@ -49,13 +44,10 @@ export default function VNMakerModals() {
     handleInsertEvent,
     handleUpdateCurrentScene,
     handlePatchCurrentScene,
-    recordHistorySnapshot,
     notify,
     handleSelectScene,
     setCurrentWorkspace,
   } = useVNMaker();
-
-
 
   return (
     <>
@@ -85,20 +77,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 3. STUDIO DE PERSONAJES */}
-      {activeGlobalModal === 'characters' && (
-        <CharacterStudioModal
-          story={story}
-          onUpdateStory={(updatedStory) => {
-            setStory(updatedStory);
-            saveActiveStory(updatedStory);
-          }}
-          onClose={() => setActiveGlobalModal(null)}
-          notify={notify}
-        />
-      )}
-
-      {/* 4. MAPA NARRATIVO Y BIFURCACIONES */}
+      {/* 3. MAPA NARRATIVO Y BIFURCACIONES */}
       {activeGlobalModal === 'scene_map' && (
         <SceneMapModal
           story={story}
@@ -121,7 +100,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 4.5 MENU GAME TOOL (SISTEMA DE PANTALLAS DE MENÚ) */}
+      {/* 4. MENU GAME TOOL (SISTEMA DE PANTALLAS DE MENÚ) */}
       {activeGlobalModal === 'menu_tool' && (
         <MenuGameToolModal
           story={story}
@@ -139,75 +118,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 5. STUDIO DE VARIABLES */}
-      {activeGlobalModal === 'variables' && (
-        <VariableStudioModal
-          story={story}
-          onUpdateStory={(updatedStory) => {
-            setStory(updatedStory);
-            saveActiveStory(updatedStory);
-          }}
-          onClose={() => setActiveGlobalModal(null)}
-          notify={notify}
-        />
-      )}
-
-      {/* 6. STUDIO DE CAPÍTULOS */}
-      {activeGlobalModal === 'chapter' && (
-        <ChapterStudioModal
-          story={story}
-          currentChapterId={selectedChapterId}
-          onSelectChapter={(chId) => {
-            setSelectedChapterId(chId);
-            const ch = story.chapters.find((c) => c.id === chId);
-            if (ch?.scenes[0]) {
-              setSelectedSceneId(ch.startSceneId || ch.scenes[0].id);
-              setSelectedLineIndex(0);
-            }
-            setCurrentWorkspace('story_tool');
-            setActiveGlobalModal(null);
-          }}
-          onUpdateStory={(updatedStory) => {
-            setStory(updatedStory);
-            saveActiveStory(updatedStory);
-          }}
-          onClose={() => setActiveGlobalModal(null)}
-          notify={notify}
-        />
-      )}
-
-      {/* 7. CONFIGURACIÓN GLOBAL DEL TEXTBOX */}
-      {activeGlobalModal === 'textbox' && (
-        <GlobalTextBoxModal
-          story={story}
-          onUpdateStory={(updatedStory) => {
-            recordHistorySnapshot();
-            setStory(updatedStory);
-            saveActiveStory(updatedStory);
-          }}
-          onOpenCharacterStudio={() => setActiveGlobalModal('characters')}
-          onClose={() => setActiveGlobalModal(null)}
-        />
-      )}
-
-      {/* 8. DOCTOR DE PROYECTO (VALIDADOR Y DIAGNÓSTICO) */}
-      {activeGlobalModal === 'doctor' && (
-        <ProjectDoctorModal
-          story={story}
-          onNavigateToIssue={(chapterId, sceneId, lineIndex) => {
-            setSelectedChapterId(chapterId);
-            setSelectedSceneId(sceneId);
-            if (typeof lineIndex === 'number') {
-              setSelectedLineIndex(lineIndex);
-            }
-            setCurrentWorkspace('story_tool');
-            setActiveGlobalModal(null);
-          }}
-          onClose={() => setActiveGlobalModal(null)}
-        />
-      )}
-
-      {/* 9. STUDIO DE ESCENARIOS */}
+      {/* 5. STUDIO DE ESCENARIOS */}
       {activeGlobalModal === 'scenes' && currentChapter && (
         <SceneStudioModal
           story={story}
@@ -228,25 +139,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 10. GALERÍA GLOBAL DE ASSETS */}
-      {activeGlobalModal === 'assets' && (
-        <AssetStudioModal
-          story={story}
-          onUpdateStory={(updatedStory) => {
-            setStory(updatedStory);
-            saveActiveStory(updatedStory);
-          }}
-          onUpdateStoryCustomAssets={(updatedAssets) => {
-            const updatedStory = { ...story, customAssets: updatedAssets };
-            setStory(updatedStory);
-            saveActiveStory(updatedStory);
-          }}
-          onClose={() => setActiveGlobalModal(null)}
-          notify={notify}
-        />
-      )}
-
-      {/* 11. GESTOR DE PROYECTOS */}
+      {/* 6. GESTOR DE PROYECTOS */}
       {activeGlobalModal === 'projects' && (
         <ProjectStudioModal
           currentStory={story}
@@ -270,7 +163,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 12. SELECTOR MODAL DE ASSET (PICKER MODE) */}
+      {/* 7. SELECTOR MODAL DE ASSET (MODO PICKER) */}
       {assetPickerConfig && (
         <AssetStudioModal
           story={story}
@@ -303,7 +196,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 13. STUDIO DE BOTONES E INTERACCIONES (HOTSPOTS) */}
+      {/* 8. STUDIO DE BOTONES E INTERACCIONES (HOTSPOTS) */}
       {showHotspotStudio && currentChapter && currentScene && (
         <HotspotStudioModal
           story={story}
@@ -325,7 +218,7 @@ export default function VNMakerModals() {
         />
       )}
 
-      {/* 14. MODAL DE AUDIO DEL ESCENARIO */}
+      {/* 9. MODAL DE AUDIO DEL ESCENARIO */}
       {showSceneAudioModal && currentScene && (
         <SceneAudioModal
           scene={currentScene}
