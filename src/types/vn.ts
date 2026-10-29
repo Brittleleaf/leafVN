@@ -17,6 +17,19 @@ export type VNTransitionType =
 
 export type VNPosition = 'left' | 'center' | 'right';
 
+export type VNActiveGlobalModal =
+  | 'characters'
+  | 'variables'
+  | 'chapter'
+  | 'textbox'
+  | 'scenes'
+  | 'scene_map'
+  | 'assets'
+  | 'projects'
+  | 'doctor'
+  | 'menu_tool'
+  | null;
+
 export type VNConditionOperator =
   | '=='
   | '!='

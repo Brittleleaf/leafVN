@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { VNStory, VNVariableDefinition } from '@/types/vn';
+import { VNStory, VNVariableDefinition, VNScene, VNEvent, VNHotspot, VNChoiceOption, VNVariableMutation } from '@/types/vn';
 import { playSfx } from '@/lib/audioSettings';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 
@@ -37,7 +37,7 @@ export default function VariableStudioModal({
   const [formKey, setFormKey] = useState('');
   const [formLabel, setFormLabel] = useState('');
   const [formType, setFormType] = useState<'boolean' | 'number' | 'string'>('boolean');
-  const [formDefaultVal, setFormDefaultVal] = useState<any>(false);
+  const [formDefaultVal, setFormDefaultVal] = useState<string | number | boolean>(false);
 
   const activeVar = variables.find((v) => v.id === selectedVarId);
 
@@ -139,8 +139,8 @@ export default function VariableStudioModal({
       let updatedStory = { ...story, variables: updatedVariables };
 
       if (keyChanged) {
-        const cascadeScene = (sc: any) => {
-          const updatedTimeline = (sc.timeline || []).map((ev: any) => {
+        const cascadeScene = (sc: VNScene): VNScene => {
+          const updatedTimeline = (sc.timeline || []).map((ev: VNEvent) => {
             let modEv = { ...ev };
             if (modEv.condition && modEv.condition.variableKey === oldKey) {
               modEv.condition = { ...modEv.condition, variableKey: cleanKey };
@@ -155,19 +155,19 @@ export default function VariableStudioModal({
               modEv.prompt = modEv.prompt.replace(new RegExp(`\\{${oldKey}(\\||\\})`, 'g'), `{${cleanKey}$1`);
             }
             if (modEv.type === 'choice' && modEv.options) {
-              modEv.options = modEv.options.map((opt: any) => ({
+              modEv.options = modEv.options.map((opt: VNChoiceOption) => ({
                 ...opt,
                 label: typeof opt.label === 'string' && opt.label.includes(`{${oldKey}`)
                   ? opt.label.replace(new RegExp(`\\{${oldKey}(\\||\\})`, 'g'), `{${cleanKey}$1`)
                   : opt.label,
                 condition: opt.condition?.variableKey === oldKey ? { ...opt.condition, variableKey: cleanKey } : opt.condition,
-                mutations: opt.mutations?.map((m: any) => (m.key === oldKey ? { ...m, key: cleanKey } : m)),
+                mutations: opt.mutations?.map((m: VNVariableMutation) => (m.key === oldKey ? { ...m, key: cleanKey } : m)),
               }));
             }
             return modEv;
           });
 
-          const updatedHotspots = (sc.hotspots || []).map((hs: any) => {
+          const updatedHotspots = (sc.hotspots || []).map((hs: VNHotspot) => {
             let modHs = { ...hs };
             if (modHs.label && typeof modHs.label === 'string' && modHs.label.includes(`{${oldKey}`)) {
               modHs.label = modHs.label.replace(new RegExp(`\\{${oldKey}(\\||\\})`, 'g'), `{${cleanKey}$1`);
@@ -213,8 +213,8 @@ export default function VariableStudioModal({
     if (confirm(`Delete variable '${keyName}'? Events or choices that depend on it will lose their condition.`)) {
       const filtered = variables.filter((v) => v.id !== id);
 
-      const cleanupScene = (sc: any) => {
-        const updatedTimeline = (sc.timeline || []).map((ev: any) => {
+      const cleanupScene = (sc: VNScene): VNScene => {
+        const updatedTimeline = (sc.timeline || []).map((ev: VNEvent) => {
           let modEv = { ...ev };
           if (modEv.condition && modEv.condition.variableKey === keyName) {
             modEv.condition = undefined;
@@ -223,16 +223,16 @@ export default function VariableStudioModal({
             modEv.variableMutation = undefined;
           }
           if (modEv.type === 'choice' && modEv.options) {
-            modEv.options = modEv.options.map((opt: any) => ({
+            modEv.options = modEv.options.map((opt: VNChoiceOption) => ({
               ...opt,
               condition: opt.condition?.variableKey === keyName ? undefined : opt.condition,
-              mutations: opt.mutations?.filter((m: any) => m.key !== keyName),
+              mutations: opt.mutations?.filter((m: VNVariableMutation) => m.key !== keyName),
             }));
           }
           return modEv;
         });
 
-        const updatedHotspots = (sc.hotspots || []).map((hs: any) => ({
+        const updatedHotspots = (sc.hotspots || []).map((hs: VNHotspot) => ({
           ...hs,
           condition: hs.condition?.variableKey === keyName ? undefined : hs.condition,
           mutation: hs.mutation?.key === keyName ? undefined : hs.mutation,
@@ -537,14 +537,14 @@ export default function VariableStudioModal({
                     ) : formType === 'number' ? (
                       <input
                         type="number"
-                        value={formDefaultVal}
+                        value={typeof formDefaultVal === 'number' ? formDefaultVal : 0}
                         onChange={(e) => setFormDefaultVal(Number(e.target.value))}
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--accent)] font-mono outline-none transition-colors"
                       />
                     ) : (
                       <input
                         type="text"
-                        value={formDefaultVal}
+                        value={typeof formDefaultVal === 'string' ? formDefaultVal : ''}
                         onChange={(e) => setFormDefaultVal(e.target.value)}
                         placeholder="Enter initial value here..."
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none transition-colors"

@@ -12,6 +12,7 @@ import {
   VNAssetItem,
   VNScreenFxType,
   VNWorkspaceView,
+  VNActiveGlobalModal,
 } from '@/types/vn';
 import { SYSTEM_ASSETS } from '@/lib/vn/systemAssets';
 import { playSfx, playAudioPreview, stopAudioPreview } from '@/lib/audioSettings';
@@ -95,9 +96,7 @@ export function useVNMakerState(
   // Modales interactivos de edición directa
   const [showCharacterPicker, setShowCharacterPicker] = useState<boolean>(false);
   const [showAddActionModal, setShowAddActionModal] = useState<boolean>(false);
-  const [activeGlobalModal, setActiveGlobalModal] = useState<
-    'characters' | 'variables' | 'chapter' | 'textbox' | 'scenes' | 'scene_map' | 'assets' | 'projects' | 'doctor' | 'menu_tool' | null
-  >(null);
+  const [activeGlobalModal, setActiveGlobalModal] = useState<VNActiveGlobalModal>(null);
   const [showHelpGuide, setShowHelpGuide] = useState<boolean>(true);
   const [isFullscreenWorkspace, setIsFullscreenWorkspace] = useState<boolean>(false);
 
@@ -613,8 +612,9 @@ export function useVNMakerState(
 
   // Escuchar avisos de cuota de almacenamiento y notificar limpiamente sin bloquear la UI
   useEffect(() => {
-    const handleQuotaWarning = (e: any) => {
-      const msg = e.detail?.message || 'Storage quota reached in browser.';
+    const handleQuotaWarning = (e: Event) => {
+      const customEv = e as CustomEvent<{ message?: string }>;
+      const msg = customEv.detail?.message || 'Storage quota reached in browser.';
       notify(msg);
       playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
     };
@@ -688,7 +688,7 @@ export function useVNMakerState(
     });
   }, [selectedChapterId, selectedSceneId]);
 
-  const handleUpdateCurrentScene = useCallback((key: keyof VNScene, value: any) => {
+  const handleUpdateCurrentScene = useCallback((key: keyof VNScene, value: unknown) => {
     handlePatchCurrentScene({ [key]: value });
   }, [handlePatchCurrentScene]);
 
@@ -727,7 +727,7 @@ export function useVNMakerState(
     });
   }, [selectedChapterId, selectedSceneId, selectedLineIndex]);
 
-  const handleUpdateCurrentLine = useCallback((key: keyof VNEvent, value: any) => {
+  const handleUpdateCurrentLine = useCallback((key: keyof VNEvent, value: unknown) => {
     handlePatchCurrentLine({ [key]: value });
   }, [handlePatchCurrentLine]);
 

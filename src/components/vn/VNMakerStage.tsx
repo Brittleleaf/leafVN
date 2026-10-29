@@ -8,6 +8,7 @@ import {
   VNHotspotStyle,
   VNAssetType,
   VNScreenFxType,
+  VNActiveGlobalModal,
 } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { playSfx } from '@/lib/audioSettings';
@@ -54,12 +55,12 @@ export interface VNMakerStageProps {
   handlePrevLine?: () => void;
   handleNextLine?: () => void;
   playCurrentLinePreview?: () => void;
-  handleUpdateCurrentLine?: (field: keyof VNEvent, value: any) => void;
+  handleUpdateCurrentLine?: (field: keyof VNEvent, value: unknown) => void;
   handlePatchCurrentLine?: (patch: Partial<VNEvent>) => void;
-  handleUpdateCurrentScene?: (field: keyof VNScene, value: any) => void;
+  handleUpdateCurrentScene?: (field: keyof VNScene, value: unknown) => void;
   recordHistorySnapshot?: () => void;
   setShowSceneAudioModal?: (show: boolean) => void;
-  setActiveGlobalModal?: (modal: any) => void;
+  setActiveGlobalModal?: (modal: VNActiveGlobalModal) => void;
   setShowHotspotStudio?: (show: boolean) => void;
   setEditingHotspotId?: (id: string | null) => void;
   setPendingButtonType?: (type: VNHotspotStyle) => void;

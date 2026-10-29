@@ -53,7 +53,17 @@ export function StaticScreenSaveLoadWidget({
         chapterTitle: num === 1 ? 'Act I: Awakening' : 'Prologue',
         sceneName: num === 1 ? 'Secret Laboratory' : 'Hallway Encounter',
         previewBg: '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
-        gameState: {} as any,
+        gameState: {
+          currentChapterId: 'chap-1',
+          currentSceneId: 'scene-1',
+          eventIndex: 0,
+          variablesState: {},
+          history: [],
+          activeCharacters: [],
+          isHotspotMode: false,
+          consumedHotspots: [],
+          customSceneBg: null,
+        },
       };
     }
     return { slotNumber: num, isEmpty: true };

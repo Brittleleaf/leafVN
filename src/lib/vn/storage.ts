@@ -11,11 +11,31 @@ const STORAGE_KEYS = {
  * Sanitiza y normaliza cualquier objeto de historia para asegurar que todos los campos
  * requeridos (characters, variables, scenarios, textBoxConfig, chapters) existan siempre como arrays válidos.
  */
-export function sanitizeStory(raw: any): VNStory {
+interface RawStoryData {
+  id?: string;
+  version?: string;
+  title?: string;
+  author?: string;
+  description?: string;
+  coverImageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  defaultFontFamily?: string;
+  editorTheme?: any;
+  textBoxConfig?: Record<string, unknown>;
+  variables?: VNStory['variables'];
+  characters?: VNStory['characters'];
+  scenarios?: Array<Record<string, unknown>>;
+  customAssets?: VNStory['customAssets'];
+  chapters?: Array<Record<string, unknown>>;
+}
+
+export function sanitizeStory(raw: unknown): VNStory {
+  const storyObj = (raw && typeof raw === 'object' ? raw : {}) as RawStoryData;
   if (!raw || typeof raw !== 'object') return SAMPLE_STORY;
 
-  const chapters = Array.isArray(raw.chapters) && raw.chapters.length > 0
-    ? raw.chapters.map((ch: any, idx: number) => {
+  const chapters = Array.isArray(storyObj.chapters) && storyObj.chapters.length > 0
+    ? (storyObj.chapters as Array<Record<string, any>>).map((ch, idx: number) => {
         const rawScenes = Array.isArray(ch.scenes) && ch.scenes.length > 0
           ? ch.scenes
           : [
@@ -35,7 +55,7 @@ export function sanitizeStory(raw: any): VNStory {
               },
             ];
 
-        const scenes = rawScenes.map((s: any, sIdx: number) => ({
+        const scenes = rawScenes.map((s: Record<string, any>, sIdx: number) => ({
           ...s,
           id: s.id || `scene-${idx + 1}-${sIdx + 1}`,
           name: s.name || `Scene ${sIdx + 1}`,
@@ -58,7 +78,7 @@ export function sanitizeStory(raw: any): VNStory {
           number: typeof ch.number === 'number' ? ch.number : idx + 1,
           title: ch.title || `Capítulo ${idx + 1}`,
           summary: ch.summary || '',
-          startSceneId: ch.startSceneId && scenes.some((s: any) => s.id === ch.startSceneId)
+          startSceneId: ch.startSceneId && scenes.some((s: { id: string }) => s.id === ch.startSceneId)
             ? ch.startSceneId
             : scenes[0]?.id || '',
           loadingScreen: ch.loadingScreen || { enabled: false, title: ch.title || '' },
@@ -68,24 +88,24 @@ export function sanitizeStory(raw: any): VNStory {
     : SAMPLE_STORY.chapters;
 
   return {
-    id: typeof raw.id === 'string' && raw.id ? raw.id : SAMPLE_STORY.id,
-    version: raw.version || '1.0.0',
-    title: raw.title || SAMPLE_STORY.title,
-    author: raw.author || SAMPLE_STORY.author,
-    description: raw.description || '',
-    coverImageUrl: raw.coverImageUrl || SAMPLE_STORY.coverImageUrl,
-    createdAt: raw.createdAt || new Date().toISOString(),
-    updatedAt: raw.updatedAt || new Date().toISOString(),
-    defaultFontFamily: raw.defaultFontFamily || undefined,
-    editorTheme: raw.editorTheme || undefined,
+    id: typeof storyObj.id === 'string' && storyObj.id ? storyObj.id : SAMPLE_STORY.id,
+    version: storyObj.version || '1.0.0',
+    title: storyObj.title || SAMPLE_STORY.title,
+    author: storyObj.author || SAMPLE_STORY.author,
+    description: storyObj.description || '',
+    coverImageUrl: storyObj.coverImageUrl || SAMPLE_STORY.coverImageUrl,
+    createdAt: storyObj.createdAt || new Date().toISOString(),
+    updatedAt: storyObj.updatedAt || new Date().toISOString(),
+    defaultFontFamily: storyObj.defaultFontFamily || undefined,
+    editorTheme: storyObj.editorTheme || undefined,
     textBoxConfig: {
       ...SAMPLE_STORY.textBoxConfig,
-      ...(raw.textBoxConfig || {}),
+      ...(storyObj.textBoxConfig || {}),
     },
-    variables: Array.isArray(raw.variables) ? raw.variables : SAMPLE_STORY.variables || [],
-    characters: Array.isArray(raw.characters) ? raw.characters : SAMPLE_STORY.characters || [],
-    scenarios: Array.isArray(raw.scenarios)
-      ? raw.scenarios.map((s: any, sIdx: number) => ({
+    variables: Array.isArray(storyObj.variables) ? storyObj.variables : SAMPLE_STORY.variables || [],
+    characters: Array.isArray(storyObj.characters) ? storyObj.characters : SAMPLE_STORY.characters || [],
+    scenarios: Array.isArray(storyObj.scenarios)
+      ? (storyObj.scenarios as Array<Record<string, any>>).map((s, sIdx: number) => ({
           ...s,
           id: s.id || `scenario-${sIdx + 1}`,
           name: s.name || `Scenario ${sIdx + 1}`,
@@ -103,7 +123,7 @@ export function sanitizeStory(raw: any): VNStory {
           hotspots: Array.isArray(s.hotspots) ? s.hotspots : [],
         }))
       : [],
-    customAssets: Array.isArray(raw.customAssets) ? raw.customAssets : [],
+    customAssets: Array.isArray(storyObj.customAssets) ? storyObj.customAssets : [],
     chapters,
   };
 }
@@ -130,7 +150,7 @@ export function getActiveStory(): VNStory {
   return SAMPLE_STORY;
 }
 
-let saveDebounceTimer: any = null;
+let saveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 let pendingStoryToSave: VNStory | null = null;
 
 function executeDirectSave(story: VNStory): void {
@@ -140,9 +160,10 @@ function executeDirectSave(story: VNStory): void {
     if (story?.id) {
       localStorage.setItem('vn_active_project_id', story.id);
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorObj = err as { name?: string; code?: number };
     console.error('Error saving active story:', err);
-    if (err?.name === 'QuotaExceededError' || err?.code === 22) {
+    if (errorObj?.name === 'QuotaExceededError' || errorObj?.code === 22) {
       console.warn('Storage Quota reached in browser localStorage');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
@@ -324,8 +345,9 @@ export function saveGameStateToSlot(slotNumber: number, story: VNStory, state: V
 
   try {
     localStorage.setItem(STORAGE_KEYS.SAVE_SLOTS, JSON.stringify(updatedAll));
-  } catch (err: any) {
-    if (err?.name === 'QuotaExceededError' || err?.code === 22) {
+  } catch (err: unknown) {
+    const errorObj = err as { name?: string; code?: number };
+    if (errorObj?.name === 'QuotaExceededError' || errorObj?.code === 22) {
       if (newSlot.previewBg && newSlot.previewBg.startsWith('data:')) {
         newSlot.previewBg = undefined;
       }

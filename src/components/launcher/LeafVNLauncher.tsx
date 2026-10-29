@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { VNStory } from '@/types/vn';
-import { VNProjectSummary } from '@/lib/vn/projectFs';
+import type { VNProjectSummary } from '@/lib/vn/projectFs';
 import { playSfx } from '@/lib/audioSettings';
 import { exportStoryToJson, importStoryFromJson } from '@/lib/vn/storage';
 import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
@@ -108,6 +108,16 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
   const [isCreating, setIsCreating] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Notificaciones Toast del Launcher
+  const [launcherToast, setLauncherToast] = useState<{ message: string; type: 'error' | 'success' | 'info' } | null>(null);
+
+  const showToast = (message: string, type: 'error' | 'success' | 'info' = 'info') => {
+    setLauncherToast({ message, type });
+    setTimeout(() => {
+      setLauncherToast((curr) => (curr?.message === message ? null : curr));
+    }, 4500);
+  };
 
   // Cargar lista de proyectos de disco + localStorage
   const fetchProjects = async () => {
@@ -338,8 +348,10 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       localStorage.setItem('leafvn_active_project_id', importedStory.id);
       playSfx('/assets/sfx/success.mp3', false, 0.6);
       router.push(`/editor?id=${importedStory.id}`);
-    } catch (err: any) {
-      alert(`Error importing project: ${err?.message || err}`);
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err || 'Unknown error');
+      showToast(`Error importing project: ${errMsg}`, 'error');
+      playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
     } finally {
       if (e.target) e.target.value = '';
     }
@@ -1420,6 +1432,23 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
               </div>
             </form>
           </div>
+        </div>
+      )}
+      {launcherToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--window-bg)]/95 backdrop-blur-xl shadow-2xl transition-all duration-200">
+          <div className={`p-1.5 rounded-lg ${launcherToast.type === 'error' ? 'bg-red-500/10 text-red-400' : 'bg-[var(--accent)]/10 text-[var(--accent)]'}`}>
+            <GuiIconRenderer icon={launcherToast.type === 'error' ? GUI_ICONS.action.danger : GUI_ICONS.action.check} className="w-5 h-5" />
+          </div>
+          <div className="text-sm font-medium text-[var(--text)] max-w-sm break-words">
+            {launcherToast.message}
+          </div>
+          <button
+            type="button"
+            onClick={() => setLauncherToast(null)}
+            className="p-1 hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] rounded-lg transition-colors cursor-pointer"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-4 h-4" />
+          </button>
         </div>
       )}
     </div>

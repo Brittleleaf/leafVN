@@ -176,7 +176,7 @@ export interface VNMakerContextType {
   handleReset: () => void;
 
   // Mutaciones de Línea / Evento
-  handleUpdateCurrentLine: (field: keyof VNEvent, value: any) => void;
+  handleUpdateCurrentLine: (field: keyof VNEvent, value: unknown) => void;
   handlePatchCurrentLine: (patch: Partial<VNEvent>) => void;
   handleDeleteCurrentLine: () => void;
   handlePrevLine: () => void;
@@ -198,7 +198,7 @@ export interface VNMakerContextType {
   ) => void;
   handleDuplicateScene: (sceneId: string) => void;
   handleDeleteScene: (sceneId: string) => void;
-  handleUpdateCurrentScene: (field: keyof VNScene, value: any) => void;
+  handleUpdateCurrentScene: (field: keyof VNScene, value: unknown) => void;
   handlePatchCurrentScene: (patch: Partial<VNScene>) => void;
   handleUploadBackground: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleApplyBackgroundToCurrentScene: (bgUrl: string) => void;

@@ -51,23 +51,60 @@ const LEGACY_UI_SOUND_MAP: Record<string, string> = {
  *  @param isNav   - true if this is a navigation/UI click sound
  *  @param baseVol - base volume 0..1 (will be scaled by user setting)
  */
-export function playSfx(src: string, isNav = false, baseVol = 1) {
+// Pool para reciclar instancias de efectos de sonido frecuentes (tecleo, clics) y evitar fugas de memoria
+const sfxPool = new Map<string, HTMLAudioElement[]>();
+const MAX_POOL_PER_SRC = 4;
+
+export function playSfx(src: string, isNav = false, baseVol = 1): HTMLAudioElement | undefined {
   if (!src) return;
   const { muteAll, muteNav, volume } = getAudioSettings();
   if (muteAll) return;
   if (isNav && muteNav) return;
+
   try {
-    // Map legacy cartoon/harsh sound paths to serious UI sounds
     const resolvedSrc = LEGACY_UI_SOUND_MAP[src] || src;
-    const safeUrl = resolvedSrc.startsWith('http') || resolvedSrc.startsWith('/') ? encodeURI(decodeURI(resolvedSrc)) : resolvedSrc;
-    const audio = new Audio(safeUrl);
+    const safeUrl = resolvedSrc.startsWith('http') || resolvedSrc.startsWith('/')
+      ? encodeURI(decodeURI(resolvedSrc))
+      : resolvedSrc;
+
+    // Buscar una instancia inactiva en el pool
+    const pool = sfxPool.get(safeUrl) || [];
+    let audio = pool.find((a) => a.paused || a.ended);
+
+    if (!audio) {
+      audio = new Audio(safeUrl);
+      if (pool.length < MAX_POOL_PER_SRC) {
+        pool.push(audio);
+        sfxPool.set(safeUrl, pool);
+      }
+    } else {
+      audio.currentTime = 0;
+    }
+
     audio.volume = Math.max(0, Math.min(1, baseVol * (volume / 100)));
-    audio.play().catch((err: any) => {
-      // Navegador puede requerir interacción previa del usuario (NotAllowedError) o superposición (AbortError)
-      if (err?.name !== 'NotAllowedError' && err?.name !== 'AbortError') {
+
+    const handleRelease = () => {
+      if (audio && !pool.includes(audio)) {
+        audio.onended = null;
+        audio.onerror = null;
+        try {
+          audio.removeAttribute('src');
+          audio.load();
+        } catch {}
+      }
+    };
+
+    audio.onended = handleRelease;
+    audio.onerror = handleRelease;
+
+    audio.play().catch((err: unknown) => {
+      const errorName = err && typeof err === 'object' && 'name' in err ? (err as { name: string }).name : '';
+      if (errorName !== 'NotAllowedError' && errorName !== 'AbortError') {
         console.warn('Audio play blocked or unavailable:', err, resolvedSrc);
       }
+      handleRelease();
     });
+
     return audio;
   } catch (err) {
     console.warn('Error inicializando Audio:', err, src);
@@ -171,8 +208,9 @@ export function playAudioPreview(src: string, volume = 0.8): HTMLAudioElement | 
       }
     };
 
-    audio.play().catch((err: any) => {
-      if (err?.name !== 'NotAllowedError' && err?.name !== 'AbortError') {
+    audio.play().catch((err: unknown) => {
+      const errorName = err && typeof err === 'object' && 'name' in err ? (err as { name: string }).name : '';
+      if (errorName !== 'NotAllowedError' && errorName !== 'AbortError') {
         console.warn('Audio preview play blocked or unavailable:', err, src);
       }
       if (activePreviewAudio === audio) {
@@ -200,3 +238,18 @@ export function getCurrentlyPlayingPreviewUrl(): string | null {
 }
 
 export const getActivePreviewUrl = getCurrentlyPlayingPreviewUrl;
+
+/**
+ * Detiene inmediatamente todas las reproducciones de audio activas (preview, pools, etc.)
+ */
+export function stopAllAudio(): void {
+  stopAudioPreview();
+  sfxPool.forEach((pool) => {
+    pool.forEach((audio) => {
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+      } catch {}
+    });
+  });
+}
