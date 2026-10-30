@@ -5,6 +5,7 @@ import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES } from '@/lib/vn/themeManager';
 import ThemeCustomizerPanel from './theme/ThemeCustomizerPanel';
 import UserAuthButton from '@/components/auth/UserAuthButton';
+import AboutModal from '@/components/common/AboutModal';
 import { useAuth } from '@/lib/firebase/authContext';
 import { saveProjectToGoogleDrive } from '@/lib/firebase/cloudProjects';
 import { playSfx } from '@/lib/audioSettings';
@@ -58,6 +59,7 @@ export default function VNMakerHeader({
 }: VNMakerHeaderProps) {
   const [showProjectMenu, setShowProjectMenu] = useState<boolean>(false);
   const [showThemeMenu, setShowThemeMenu] = useState<boolean>(false);
+  const [showAboutModal, setShowAboutModal] = useState<boolean>(false);
   const [isSavingDrive, setIsSavingDrive] = useState<boolean>(false);
 
   const { googleAccessToken, signInWithGoogle } = useAuth();
@@ -406,6 +408,20 @@ export default function VNMakerHeader({
                     <GuiIconRenderer icon={GUI_ICONS.action.exitDoor} className="w-4 h-4 text-red-500 shrink-0" />
                     <span>Exit Editor</span>
                   </button>
+
+                  <div className="h-[1px] bg-[var(--border)] my-1" />
+
+                  <button
+                    onClick={() => {
+                      playSfx('/assets/sfx/click interface.mp3', true, 0.3);
+                      setShowProjectMenu(false);
+                      setShowAboutModal(true);
+                    }}
+                    className="w-full px-3 py-2 rounded-lg text-[var(--text)] hover:bg-[var(--surface-strong)] flex items-center gap-2.5 cursor-pointer transition-colors text-left font-medium"
+                  >
+                    <GuiIconRenderer icon={GUI_ICONS.general.info} className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <span>About Leaf VN...</span>
+                  </button>
                 </div>
               </div>
             </>
@@ -413,6 +429,12 @@ export default function VNMakerHeader({
         </div>
 
       </div>
+
+      {/* About Leaf VN Modal (Photoshop Style) */}
+      <AboutModal
+        isOpen={showAboutModal}
+        onClose={() => setShowAboutModal(false)}
+      />
     </header>
   );
 }

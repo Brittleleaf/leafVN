@@ -12,6 +12,7 @@ import ThemeCustomizerPanel from '@/components/vn/theme/ThemeCustomizerPanel';
 import { useAuth } from '@/lib/firebase/authContext';
 import { getCloudProjects, saveProjectToCloud } from '@/lib/firebase/cloudProjects';
 import UserAuthButton from '@/components/auth/UserAuthButton';
+import AboutModal from '@/components/common/AboutModal';
 import { i18n, SUPPORTED_LANGS } from '@/lib/i18n';
 import VNMaker from '@/components/vn/VNMaker';
 import VNPlayer from '@/components/vn/VNPlayer';
@@ -105,6 +106,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
 
   // Modal Nuevo Proyecto
   const [showNewModal, setShowNewModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showHelpMenu, setShowHelpMenu] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newAuthor, setNewAuthor] = useState('');
   const [newDescription, setNewDescription] = useState('');
@@ -678,9 +681,6 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
               className="w-7 h-7 object-contain rounded-md filter drop-shadow-[0_0_8px_var(--accent-glow)] select-none pointer-events-none"
             />
             <span className="font-semibold tracking-wide text-[var(--text)]">Leaf VN Studio</span>
-            <span className="text-[10px] font-mono bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted2)] px-1.5 py-0.5 rounded">
-              v2.1
-            </span>
           </div>
 
           {/* Menú de Archivo / Acciones (Sin duplicar las pestañas principales de la barra lateral) */}
@@ -703,6 +703,54 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
             >
               Refresh
             </button>
+
+            {/* Menú de Ayuda / Help Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowHelpMenu((prev) => !prev)}
+                className="hover:text-[var(--text)] cursor-pointer transition-colors bg-transparent border-0 p-0 text-xs font-inherit text-inherit flex items-center gap-1"
+                title="Help and engine information"
+              >
+                <span>Help</span>
+                <svg className="w-2.5 h-2.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showHelpMenu && (
+                <>
+                  <div className="fixed inset-0 z-[60]" onClick={() => setShowHelpMenu(false)} />
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute left-0 top-6 z-[70] w-48 rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-1.5 text-xs animate-in fade-in zoom-in-95 duration-150"
+                  >
+                    <button
+                      onClick={() => {
+                        playSfx('/assets/sfx/click interface.mp3', true, 0.3);
+                        setShowHelpMenu(false);
+                        setShowAboutModal(true);
+                      }}
+                      className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-[var(--accent)] hover:text-[var(--accent-contrast)] text-[var(--text)] transition-colors cursor-pointer flex items-center justify-between font-medium"
+                    >
+                      <span>About Leaf VN...</span>
+                    </button>
+                    <div className="my-1 border-t border-[var(--border)]" />
+                    <a
+                      href="https://github.com/Brittleleaf/leafVN"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setShowHelpMenu(false)}
+                      className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] transition-colors cursor-pointer flex items-center justify-between"
+                    >
+                      <span>Documentation</span>
+                      <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                </>
+              )}
+            </div>
           </nav>
         </div>
 
@@ -855,19 +903,6 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-4 h-4 text-[var(--accent)]" />
                 <span>Settings</span>
               </button>
-            </div>
-          </div>
-
-          {/* Información del sistema en la parte inferior */}
-          <div className="text-[11px] text-[var(--muted2)] border-t border-[var(--border)] pt-3 space-y-1">
-            <p className="font-semibold text-[var(--text)]">Leaf VN Studio</p>
-            <p className="truncate text-[10px]">Autonomous Visual Novel Engine</p>
-            <div className="flex items-center gap-1.5 pt-1 text-[10px] text-[var(--accent)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_8px_var(--accent-glow)]"></span>
-              <span className="font-mono">Theme: {editorTheme === 'rotp' ? 'ROTP' : editorTheme === 'default_light' ? 'Light' : 'Dark'}</span>
-            </div>
-            <div className="text-[10px] text-[var(--muted)] font-mono">
-              LANG: {currentLang.toUpperCase()}
             </div>
           </div>
         </aside>
@@ -1464,8 +1499,15 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
           </div>
         </div>
       )}
+
+      {/* About Leaf VN Modal (Photoshop Style) */}
+      <AboutModal
+        isOpen={showAboutModal}
+        onClose={() => setShowAboutModal(false)}
+      />
+
       {launcherToast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--window-bg)]/95 backdrop-blur-xl shadow-2xl transition-all duration-200">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl shadow-2xl transition-all duration-200">
           <div className={`p-1.5 rounded-lg ${launcherToast.type === 'error' ? 'bg-red-500/10 text-red-400' : 'bg-[var(--accent)]/10 text-[var(--accent)]'}`}>
             <GuiIconRenderer icon={launcherToast.type === 'error' ? GUI_ICONS.action.danger : GUI_ICONS.action.check} className="w-5 h-5" />
           </div>
