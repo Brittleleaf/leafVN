@@ -9,6 +9,9 @@ import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
 import ThemeCustomizerPanel from '@/components/vn/theme/ThemeCustomizerPanel';
+import { useAuth } from '@/lib/firebase/authContext';
+import { getCloudProjects, saveProjectToCloud } from '@/lib/firebase/cloudProjects';
+import UserAuthButton from '@/components/auth/UserAuthButton';
 import { i18n, SUPPORTED_LANGS } from '@/lib/i18n';
 import VNMaker from '@/components/vn/VNMaker';
 import VNPlayer from '@/components/vn/VNPlayer';
@@ -30,6 +33,7 @@ const LANGUAGE_LABELS: Record<string, { name: string; native: string }> = {
 
 export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherProps) {
   const router = useRouter();
+  const { user } = useAuth();
 
   const [projects, setProjects] = useState<VNProjectSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -148,9 +152,20 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         console.warn('Error leyendo registro local de proyectos:', localErr);
       }
 
+      // Proyectos en la nube de Firebase si el usuario está autenticado
+      let cloudProjects: VNProjectSummary[] = [];
+      if (user?.uid) {
+        try {
+          cloudProjects = await getCloudProjects(user.uid);
+        } catch (cloudErr) {
+          console.warn('Aviso cargando proyectos de la nube:', cloudErr);
+        }
+      }
+
       const mergedMap = new Map<string, VNProjectSummary>();
       serverProjects.forEach((p) => mergedMap.set(p.id, p));
       localProjects.forEach((p) => mergedMap.set(p.id, p));
+      cloudProjects.forEach((p) => mergedMap.set(p.id, p));
 
       if (mergedMap.size === 0) {
         mergedMap.set(SAMPLE_STORY.id || 'el-renacer-del-pintor', {
@@ -179,7 +194,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [user]);
 
   // Abrir proyecto por ID
   const handleOpenProject = async (id: string, mode: 'editor' | 'player' = 'editor') => {
@@ -295,6 +310,13 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       // Ignorar fallo de API en entornos read-only
     }
 
+    if (user?.uid) {
+      try {
+        await saveProjectToCloud(user.uid, newStory);
+      } catch (cloudSaveErr) {
+        console.warn('Aviso guardando en nube:', cloudSaveErr);
+      }
+    }
     setShowNewModal(false);
     setNewTitle('');
     setNewAuthor('');
@@ -345,6 +367,11 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         });
       } catch {}
 
+      if (user?.uid) {
+        try {
+          await saveProjectToCloud(user.uid, importedStory);
+        } catch (_) {}
+      }
       localStorage.setItem('leafvn_active_project_id', importedStory.id);
       playSfx('/assets/sfx/success.mp3', false, 0.6);
       router.push(`/editor?id=${importedStory.id}`);
@@ -732,6 +759,9 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
               </>
             )}
           </div>
+
+          {/* Botón de Autenticación de Usuario */}
+          <UserAuthButton />
 
           <button
             onClick={() => {

@@ -4,6 +4,7 @@ import { VNStory, VNChapter, VNWorkspaceView } from '@/types/vn';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES } from '@/lib/vn/themeManager';
 import ThemeCustomizerPanel from './theme/ThemeCustomizerPanel';
+import UserAuthButton from '@/components/auth/UserAuthButton';
 
 interface VNMakerHeaderProps {
   story: VNStory;
@@ -290,6 +291,9 @@ export default function VNMakerHeader({
           <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-3.5 h-3.5 text-[var(--accent)]" />
           <span className="hidden md:inline">Save</span>
         </button>
+
+        {/* Botón Usuario / Auth */}
+        <UserAuthButton compact />
 
         {/* Menú Desplegable Archivo / Proyecto */}
         <div className="relative">

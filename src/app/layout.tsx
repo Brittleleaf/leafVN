@@ -23,6 +23,7 @@ const headstone = localFont({
 });
 
 import I18nInitializer from "@/components/i18n/I18nInitializer";
+import { AuthProvider } from "@/lib/firebase/authContext";
 
 export const metadata: Metadata = {
   title: "Leaf VN Studio - Visual Novel Engine",
@@ -46,7 +47,7 @@ export default function RootLayout({
         className={`${specialElite.variable} ${headstone.variable} ${barlow.variable} font-sans antialiased min-h-screen relative bg-[#0b0b10] text-gray-100 overflow-x-hidden selection:bg-purple-900 selection:text-white`}
       >
         <I18nInitializer />
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { VNStory } from '@/types/vn';
 import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
-import { getStoredTheme } from '@/lib/vn/themeManager';
+import { useAuth } from '@/lib/firebase/authContext';
+import { loadProjectFromCloud } from '@/lib/firebase/cloudProjects';
 import VNMaker from '@/components/vn/VNMaker';
 
 export default function EditorClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { user } = useAuth();
   const projectId = searchParams.get('id') || (typeof window !== 'undefined' ? localStorage.getItem('leafvn_active_project_id') : null);
 
   const [story, setStory] = useState<VNStory | null>(null);
@@ -18,7 +20,7 @@ export default function EditorClient() {
     const loadStory = async () => {
       try {
         if (projectId) {
-          // 1. Intentar desde API
+          // 1. Intentar desde API de servidor local
           try {
             const res = await fetch(`/api/projects/${projectId}`);
             if (res.ok) {
@@ -40,9 +42,21 @@ export default function EditorClient() {
               return;
             }
           } catch (_) {}
+
+          // 3. Intentar desde Cloud Firestore si el usuario está autenticado
+          if (user?.uid) {
+            try {
+              const cloudStory = await loadProjectFromCloud(user.uid, projectId);
+              if (cloudStory) {
+                setStory(cloudStory);
+                setLoading(false);
+                return;
+              }
+            } catch (_) {}
+          }
         }
 
-        // 3. Fallback a muestra
+        // 4. Fallback a muestra
         setStory(SAMPLE_STORY);
       } catch (err) {
         console.error('Error loading project for editor:', err);
@@ -53,7 +67,7 @@ export default function EditorClient() {
     };
 
     loadStory();
-  }, [projectId]);
+  }, [projectId, user]);
 
   if (loading || !story) {
     return (

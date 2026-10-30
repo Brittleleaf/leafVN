@@ -37,6 +37,8 @@ import {
   VNAssetPickerConfig,
 } from '@/components/vn/VNMakerContext';
 import { DraggedTimelineItem } from '@/components/vn/VNMakerTimeline';
+import { auth } from '@/lib/firebase/config';
+import { saveProjectToCloud } from '@/lib/firebase/cloudProjects';
 
 export function useVNMakerState(
   initialStory: VNStory,
@@ -686,6 +688,17 @@ export function useVNMakerState(
   // Guardado manual
   const handleManualSave = useCallback(async () => {
     saveActiveStory(story, true);
+
+    let savedToCloud = false;
+    if (auth.currentUser) {
+      try {
+        await saveProjectToCloud(auth.currentUser.uid, story);
+        savedToCloud = true;
+      } catch (cloudErr) {
+        console.warn('Error guardando en Firestore:', cloudErr);
+      }
+    }
+
     try {
       const res = await fetch(`/api/projects/${story.id}`, {
         method: 'POST',
@@ -694,12 +707,12 @@ export function useVNMakerState(
       });
       if (res.ok) {
         playSfx('/assets/sfx/success.mp3', false, 0.5);
-        notify(`Project saved to disk: public/projects/${story.id}!`);
+        notify(savedToCloud ? `Project saved to Cloud & Disk (${story.id})!` : `Project saved to disk: public/projects/${story.id}!`);
       } else {
-        notify('Saved to browser (server unavailable)');
+        notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser (server unavailable)');
       }
     } catch {
-      notify('Saved to browser');
+      notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser');
     }
   }, [story, notify]);
 
