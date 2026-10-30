@@ -399,6 +399,29 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                 <p className="text-[10px] text-[var(--muted)] truncate">Full scene graph & flow</p>
               </div>
             </button>
+
+            <div className="hidden sm:block h-7 w-[1px] bg-[var(--border)] shrink-0" />
+
+            {/* 5. Chapter Studio & Screens */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveGlobalModal('chapter');
+                playSfx('/assets/sfx/open folder.mp3', false, 0.35);
+              }}
+              className="flex-1 flex items-center gap-3 p-2.5 rounded-lg hover:bg-[var(--surface-strong)] transition-all cursor-pointer group text-left"
+              title="Configure Chapters: Loading Screens, Episode Intros and End Screens"
+            >
+              <div className="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 group-hover:scale-105 transition-transform shrink-0">
+                <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-4 h-4 text-pink-400" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs font-semibold text-[var(--text)] group-hover:text-pink-400 transition-colors">
+                  Chapter Studio
+                </h4>
+                <p className="text-[10px] text-[var(--muted)] truncate">Loading, Intro & End Screens</p>
+              </div>
+            </button>
           </div>
         </div>
 

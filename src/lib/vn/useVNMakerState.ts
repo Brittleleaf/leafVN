@@ -129,11 +129,6 @@ export function useVNMakerState(
       setActiveGlobalModal(null);
       return;
     }
-    if (modal === 'chapter') {
-      setCurrentWorkspace('story_tool');
-      setActiveGlobalModal(null);
-      return;
-    }
     setActiveGlobalModal(modal);
   }, []);
   const [showHelpGuide, setShowHelpGuide] = useState<boolean>(true);

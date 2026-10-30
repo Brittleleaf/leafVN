@@ -14,6 +14,7 @@ import ProjectStudioModal from './ProjectStudioModal';
 import HotspotStudioModal from './HotspotStudioModal';
 import SceneAudioModal from './SceneAudioModal';
 import MenuGameToolModal from './menu/MenuGameToolModal';
+import ChapterStudioModal from './ChapterStudioModal';
 
 export default function VNMakerModals() {
   const {
@@ -108,6 +109,29 @@ export default function VNMakerModals() {
             handleSelectScene(sceneId);
             setCurrentWorkspace('story_tool');
             setActiveGlobalModal(null);
+          }}
+          onUpdateStory={(updatedStory) => {
+            setStory(updatedStory);
+            saveActiveStory(updatedStory);
+          }}
+          onClose={() => setActiveGlobalModal(null)}
+          notify={notify}
+        />
+      )}
+
+      {/* 4.5. CHAPTER STUDIO (CONFIGURACIÓN DE CAPÍTULO, LOADING, INTRO & END SCREEN) */}
+      {activeGlobalModal === 'chapter' && (
+        <ChapterStudioModal
+          story={story}
+          currentChapterId={selectedChapterId}
+          onSelectChapter={(chapterId) => {
+            setSelectedChapterId(chapterId);
+            const ch = story.chapters.find((c) => c.id === chapterId);
+            const firstScene = ch?.scenes.find((s) => s.id === ch.startSceneId) || ch?.scenes[0];
+            if (firstScene) {
+              setSelectedSceneId(firstScene.id);
+              setSelectedLineIndex(0);
+            }
           }}
           onUpdateStory={(updatedStory) => {
             setStory(updatedStory);

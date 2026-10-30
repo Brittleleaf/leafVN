@@ -78,6 +78,19 @@ export default function VNMakerSceneTabs() {
             </option>
           ))}
         </select>
+
+        {/* Chapter Settings Button */}
+        <button
+          onClick={() => {
+            playSfx('/assets/sfx/open folder.mp3', false, 0.35);
+            setActiveGlobalModal('chapter');
+          }}
+          className="h-7 px-2 rounded-md border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-purple-400 text-[var(--text)] text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer shadow-sm shrink-0"
+          title="Configure Chapter: Loading Screen, Episode Intro, End Screen & Scenes"
+        >
+          <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-3.5 h-3.5 text-purple-400" />
+          <span className="hidden sm:inline font-mono text-[11px] font-bold">Chapter Settings</span>
+        </button>
       </div>
 
       {/* CENTER: Scenario Tabs (Scrollable) */}
