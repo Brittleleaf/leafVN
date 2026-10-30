@@ -142,32 +142,31 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           WebkitBackdropFilter: 'blur(32px)',
         }}
       >
-        {/* Encabezado con Logo */}
-        <div className="p-6 pb-4 border-b border-[var(--border)] vn-glass-header flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img
-              src="/assets/logo/LeafVN.png"
-              alt="Leaf VN"
-              className="w-8 h-8 object-contain filter drop-shadow-[0_0_8px_var(--accent-glow)]"
-            />
-            <div>
-              <h2 className="text-sm font-bold text-[var(--text)] tracking-wide">
-                {mode === 'signin' ? 'Iniciar Sesión en Leaf VN' : 'Crear Cuenta en Leaf VN'}
-              </h2>
-              <p className="text-[11px] text-[var(--muted2)]">
-                Guarda tus historias en la nube y accede desde cualquier lugar.
-              </p>
-            </div>
-          </div>
+        {/* Encabezado con Logo Centrado */}
+        <div className="relative pt-7 pb-5 px-6 border-b border-[var(--border)] vn-glass-header flex flex-col items-center text-center">
           <button
             onClick={() => {
               playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               onClose();
             }}
-            className="p-1.5 text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)] rounded-lg transition-colors cursor-pointer"
+            className="absolute top-4 right-4 p-1.5 text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)] rounded-lg transition-colors cursor-pointer"
+            title="Cerrar"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-4 h-4" />
           </button>
+
+          <img
+            src="/assets/logo/LeafVN.png"
+            alt="Leaf VN"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain mb-3 filter drop-shadow-[0_0_16px_var(--accent-glow)] transition-transform hover:scale-105 duration-200"
+          />
+
+          <h2 className="text-base font-bold text-[var(--text)] tracking-wide">
+            {mode === 'signin' ? 'Iniciar Sesión en Leaf VN' : 'Crear Cuenta en Leaf VN'}
+          </h2>
+          <p className="text-xs text-[var(--muted2)] mt-1 max-w-xs">
+            Guarda tus historias en la nube y accede desde cualquier lugar.
+          </p>
         </div>
 
         {/* Contenido */}
