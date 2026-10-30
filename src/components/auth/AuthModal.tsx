@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/lib/firebase/authContext';
 import { playSfx, playUiSound } from '@/lib/audioSettings';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
@@ -14,6 +15,7 @@ interface AuthModalProps {
 export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
   const { signInWithGoogle, signInWithGithub, signInWithEmail, signUpWithEmail } = useAuth();
 
+  const [mounted, setMounted] = useState(false);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +23,11 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -30,7 +36,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleGoogleLogin = async () => {
     try {
@@ -104,7 +110,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     }
   };
 
-  return (
+  return createPortal(
     <div
       onClick={(e) => {
         if (e.target === e.currentTarget) {
@@ -112,10 +118,15 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           onClose();
         }
       }}
-      className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center bg-black/80 backdrop-blur-2xl animate-fade-in font-sans"
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto font-sans"
+      style={{
+        backgroundColor: 'rgba(2, 1, 6, 0.82)',
+        backdropFilter: 'blur(28px) saturate(130%)',
+        WebkitBackdropFilter: 'blur(28px) saturate(130%)',
+      }}
     >
       <div
-        className="fixed inset-0 -z-10 bg-black/50 backdrop-blur-3xl"
+        className="fixed inset-0 -z-10"
         onClick={() => {
           playSfx('/assets/sfx/click intro.mp3', false, 0.2);
           onClose();
@@ -124,9 +135,11 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md vn-modal-card rounded-2xl border border-[var(--border2)] shadow-[0_30px_90px_rgba(0,0,0,0.85)] backdrop-blur-3xl overflow-hidden z-10 text-[var(--text)]"
+        className="relative w-full max-w-md my-auto max-h-[92vh] overflow-y-auto vn-modal-card rounded-2xl border border-[var(--border2)] shadow-[0_30px_90px_rgba(0,0,0,0.95)] z-10 text-[var(--text)] flex flex-col"
         style={{
-          background: 'var(--modal-bg, linear-gradient(180deg, rgba(35, 14, 60, 0.96), rgba(1, 1, 3, 0.98)))',
+          background: 'var(--modal-bg, linear-gradient(180deg, rgba(35, 14, 60, 0.98), rgba(1, 1, 3, 0.99)))',
+          backdropFilter: 'blur(32px)',
+          WebkitBackdropFilter: 'blur(32px)',
         }}
       >
         {/* Encabezado con Logo */}
@@ -309,6 +322,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
