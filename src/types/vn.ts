@@ -542,8 +542,8 @@ export interface VNChapter {
   title: string;
   summary?: string;
   loadingScreen: VNLoadingScreenConfig;
-  introScreen?: VNChapterScreenConfig; // Episode Intro Screen (Pantalla de Inicio de Episodio)
-  endScreen?: VNChapterScreenConfig;   // Episode End Screen (Pantalla de Fin de Episodio)
+  introScreen?: VNChapterScreenConfig; // Episode Intro Screen
+  endScreen?: VNChapterScreenConfig;   // Episode End Screen
   startSceneId: string;
   scenes: VNScene[];
 }
@@ -596,11 +596,11 @@ export interface VNMenuSystemConfig {
 }
 
 export type VNWorkspaceView =
-  | 'hub'               // Project Hub Dashboard / Pantalla principal del proyecto
-  | 'menu_tool'         // Menu Game Tool (arquitectura de inicio, title y flujo)
-  | 'story_tool'        // Visual Novel Tool (guion, timeline, stage WYSIWYG, cinemáticas)
-  | 'gallery_assets'    // Gallery & Assets Studio (personajes, multimedia, dossiers, extras)
-  | 'project_settings'; // Ajustes de proyecto, variables, text box y doctor diagnóstico
+  | 'hub'               // Project Hub Dashboard / Main project command center
+  | 'menu_tool'         // Menu Game Tool (startup architecture, title and navigation flow)
+  | 'story_tool'        // Visual Novel Tool (script, timeline, stage WYSIWYG, cinematics)
+  | 'gallery_assets'    // Gallery & Assets Studio (characters, media, profiles, extras)
+  | 'project_settings'; // Project settings, variables, textbox and diagnostics;
 
 export type VNAssetType = 'sfx' | 'bgm' | 'voice' | 'background' | 'character' | 'icon' | 'font' | 'fx' | 'text_effect' | 'cursor' | 'transition';
 export type VNAssetOrigin = 'system' | 'user';

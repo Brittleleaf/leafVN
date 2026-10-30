@@ -41,9 +41,9 @@ export const VN_THEMES: VNThemeDefinition[] = [
   },
   {
     id: 'rotp',
-    name: 'ROTP Theme',
-    description: 'The iconic Rebirth of the Painter horror theme. Deep crimson borders, typewriter font, and VHS mood.',
-    badge: 'ROTP',
+    name: 'Crimson Noir',
+    description: 'Classic crimson noir horror theme. Deep red borders, vintage typewriter font, and VHS mood.',
+    badge: 'HORROR',
     previewBg: '#07070a',
     previewCard: '#15070a',
     previewBorder: '#991b1b',

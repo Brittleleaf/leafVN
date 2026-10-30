@@ -65,7 +65,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
     <div className="flex-1 w-full h-full overflow-y-auto bg-transparent text-[var(--text)] select-none custom-scrollbar p-4 md:p-8 flex flex-col justify-between relative z-10">
       <div className="max-w-7xl mx-auto w-full space-y-6">
         
-        {/* TOP HERO BANNER: PROJECT DOSSIER */}
+        {/* TOP HERO BANNER: PROJECT OVERVIEW */}
         <div className="relative py-3">
           {/* Subtle Cyber Grid Background */}
           <div
@@ -80,7 +80,7 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-2.5 flex-wrap">
                 <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase bg-[var(--accent-surface)] text-[var(--accent)]">
-                  PROJECT DOSSIER // MASTER HUB
+                  PROJECT OVERVIEW // MASTER HUB
                 </span>
                 <span className="text-xs font-mono text-[var(--muted)]">v{story.version || '1.0.0'}</span>
                 <span className="text-xs text-[var(--muted2)]">•</span>

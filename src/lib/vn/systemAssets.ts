@@ -107,13 +107,13 @@ export const SYSTEM_ASSETS: VNAssetItem[] = [
   },
   {
     id: 'sys-sfx-open-folder',
-    name: 'Open Folder / Dossier',
+    name: 'Open Folder / Document',
     type: 'sfx',
     origin: 'system',
     category: 'Interface / Documents',
     url: '/assets/sfx/open folder.mp3',
-    description: 'Sound of dossier folder opening, modal popup, or game load.',
-    tags: ['folder', 'dossier', 'document', 'save'],
+    description: 'Sound of folder opening, document popup, or game load.',
+    tags: ['folder', 'document', 'save'],
     isProtected: true,
   },
   {

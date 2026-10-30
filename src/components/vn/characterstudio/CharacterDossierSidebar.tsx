@@ -38,7 +38,7 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
             {activeChar.name}
           </h4>
           <span className="text-[10px] text-[var(--muted)] font-mono tracking-wider uppercase block mt-0.5">
-            {activeChar.badgeTitle || 'OPERATOR'}
+            {activeChar.badgeTitle || 'CHARACTER'}
           </span>
         </div>
 
@@ -82,14 +82,14 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
           <div className="flex items-center justify-between text-[var(--accent)] text-[10px] font-bold uppercase tracking-wider">
             <span className="flex items-center gap-1.5">
               <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
-              <span>LORE GUIDE / NOTES</span>
+              <span>CHARACTER NOTES & LORE</span>
             </span>
-            <span className="text-[9px] font-mono text-[var(--muted2)]">CONFIDENTIAL</span>
+            <span className="text-[9px] font-mono text-[var(--muted2)]">CREATOR NOTES</span>
           </div>
           <p className="text-[11px] text-[var(--text)] leading-relaxed max-h-48 overflow-y-auto italic whitespace-pre-wrap font-sans">
             {activeChar.description || (
               <span className="text-[var(--muted2)] not-italic">
-                No lore notes recorded. Add background in 'Identity & Lore' to keep them readily accessible here.
+                No notes recorded. Add background in 'Identity & Lore' to keep them readily accessible here.
               </span>
             )}
           </p>
@@ -98,7 +98,7 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
 
       <div className="pt-2 border-t border-[var(--border)] text-center">
         <span className="text-[9px] text-[var(--muted2)] font-mono tracking-widest block">
-          CHARACTER DOSSIER // ACTIVE
+          CHARACTER PROFILE // ACTIVE
         </span>
       </div>
     </div>

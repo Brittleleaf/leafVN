@@ -142,7 +142,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
                 {activeChar.name}:
               </span>
               <span className="text-[var(--text)]">
-                &ldquo;The secret rests beneath the mirror&apos;s reflection. Do not let the light fade.&rdquo;
+                &ldquo;This is a sample line previewing the typography and dialogue font for this character.&rdquo;
               </span>
             </div>
           )}
@@ -295,7 +295,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
       {/* Lore Dossier / Notes */}
       <div className="space-y-1 pt-2 border-t border-[var(--border)]">
         <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between">
-          <span>Lore Dossier & Motivations (Creator Notes)</span>
+          <span>Character Lore & Creator Notes</span>
           <span className="text-[10px] text-[var(--muted2)] font-normal">Private to writer</span>
         </label>
         <textarea

@@ -21,7 +21,7 @@ export const HOTSPOT_SFX_PRESETS = [
   { name: 'Close Door After Entry (Interaction)', url: '/assets/sfx/Interactions/close door after entry.mp3' },
   { name: 'Open Drawer / Cabinet (Interaction)', url: '/assets/sfx/Interactions/drawer open.mp3' },
   { name: 'Item Select / Pick Up', url: '/assets/sfx/Item select.mp3' },
-  { name: 'Open Folder / Dossier', url: '/assets/sfx/open folder.mp3' },
+  { name: 'Open Folder / Document', url: '/assets/sfx/open folder.mp3' },
   { name: 'Terminal / Console Beep', url: '/assets/sfx/click intro.mp3' },
   { name: 'Soft Interface Click', url: '/assets/sfx/click interface.mp3' },
   { name: 'System Glitch / Static', url: '/assets/sfx/corrupt file.mp3' },

@@ -147,9 +147,9 @@ export function listProjects(): VNProjectSummary[] {
 export function getSampleProjectSummary(): VNProjectSummary {
   return {
     id: SAMPLE_STORY.id || 'el-renacer-del-pintor',
-    title: SAMPLE_STORY.title || 'The Rebirth of the Painter',
-    author: SAMPLE_STORY.author || 'Justin',
-    description: SAMPLE_STORY.description || 'Main story project.',
+    title: SAMPLE_STORY.title || 'Sample Visual Novel',
+    author: SAMPLE_STORY.author || 'Creator',
+    description: SAMPLE_STORY.description || 'Clean starter visual novel project.',
     version: SAMPLE_STORY.version || '1.0.0',
     coverImageUrl: SAMPLE_STORY.coverImageUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
     updatedAt: SAMPLE_STORY.updatedAt || new Date().toISOString(),

@@ -1009,12 +1009,12 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
       )}
       </div>
 
-      {/* 8. STORY COMPLETE SCREEN / DOSSIER COMPLETED */}
+      {/* 8. STORY COMPLETE SCREEN / STORY COMPLETED */}
       {isStoryCompleted && (
         <div className="absolute inset-0 z-50 bg-[#060609]/95 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center select-none animate-fade-in">
           <div className="max-w-xl space-y-6">
             <div className="border border-green-700/60 bg-green-950/20 px-4 py-1.5 inline-block rounded text-xs text-green-400 font-bold uppercase tracking-widest">
-              [ DOSSIER COMPLETED // END OF STORY ]
+              [ STORY COMPLETED // THE END ]
             </div>
 
             <h2 className="text-3xl md:text-5xl text-white font-title tracking-widest drop-shadow-[0_0_25px_rgba(185,28,28,0.5)]">
@@ -1022,7 +1022,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             </h2>
 
             <p className="text-gray-400 text-sm leading-relaxed border-y border-gray-800 py-4">
-              You have reached the end of all chapters recorded in this file.
+              You have reached the end of all chapters in this story.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -1040,7 +1040,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                   className="px-6 py-3 bg-gray-900 hover:bg-gray-800 border border-gray-700 text-gray-300 hover:text-white rounded uppercase tracking-widest text-xs cursor-pointer transition-all flex items-center justify-center gap-2"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.action.exitDoor} className="w-4 h-4" />
-                  <span>RETURN TO DOSSIER</span>
+                  <span>RETURN TO MENU</span>
                 </button>
               )}
             </div>
@@ -1059,8 +1059,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
           )}
 
           <div className="relative z-10 max-w-2xl text-center space-y-6">
-            <div className="border border-red-700/50 bg-red-950/20 px-4 py-1 inline-block rounded text-xs text-red-500 font-bold uppercase tracking-widest animate-pulse">
-              [ DECLASSIFICATION PROTOCOL IN PROGRESS ]
+            <div className="border border-sky-700/50 bg-sky-950/20 px-4 py-1 inline-block rounded text-xs text-sky-400 font-bold uppercase tracking-widest animate-pulse">
+              [ LOADING CHAPTER // PLEASE WAIT ]
             </div>
 
             <h2 className="text-3xl md:text-5xl text-white font-title tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
@@ -1091,7 +1091,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
         <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md p-6 md:p-12 flex flex-col justify-between">
           <div className="flex items-center justify-between border-b border-red-900 pb-4 mb-6">
             <h3 className="text-lg text-red-500 font-bold uppercase tracking-widest">
-              [ COMMUNICATIONS LOG / HISTORY ]
+              [ DIALOGUE BACKLOG / HISTORY ]
             </h3>
             <button
               onClick={() => setShowHistoryModal(false)}

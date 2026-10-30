@@ -54,8 +54,8 @@ interface StaticScreenViewProps {
 
 export const DEFAULT_DEATH_CONFIG: VNStaticScreenConfig = {
   purpose: 'death',
-  title: 'SIGNAL TERMINATED',
-  subtitle: 'Biological and neurological signatures have ceased. No response detected.',
+  title: 'GAME OVER',
+  subtitle: 'Your journey has ended. Would you like to try again?',
   titleColor: '#ef4444',
   subtitleColor: '#d1d5db',
   titleAnimation: 'pulse',
@@ -135,22 +135,22 @@ export const DEFAULT_ENDING_CONFIG: VNStaticScreenConfig = {
 
 export const DEFAULT_INTRO_CONFIG: VNStaticScreenConfig = {
   purpose: 'intro',
-  title: 'ACT I: THE AWAKENING',
-  subtitle: 'Location: Unknown Facility — Timestamp: Redacted',
+  title: 'PROLOGUE',
+  subtitle: 'Prepare to enter the story.',
   titleColor: '#38bdf8',
   subtitleColor: '#94a3b8',
   titleAnimation: 'glitch',
   titleFontSize: '2xl',
   subtitleFontSize: 'base',
   bgOverlayColor: 'rgba(2, 6, 23, 0.85)',
-  screenFx: 'cctv_monitor',
+  screenFx: 'cinema_grain',
   fxIntensity: 'medium',
   sfxUrl: '/assets/sfx/start after click intro.mp3',
   buttonsLayout: 'free',
   buttons: [
     {
       id: 'btn-begin',
-      label: 'ENTER SCENARIO',
+      label: 'ENTER STORY',
       action: 'next_scene',
       style: 'primary',
       size: 'lg',
@@ -163,13 +163,13 @@ export const DEFAULT_INTRO_CONFIG: VNStaticScreenConfig = {
 export const DEFAULT_CHAPTER_INTRO_CONFIG: VNStaticScreenConfig = {
   ...DEFAULT_INTRO_CONFIG,
   purpose: 'intro',
-  title: 'EPISODE 1: THE BEGINNING',
+  title: 'CHAPTER 1: THE BEGINNING',
   subtitle: 'Chapter begins.',
   buttonsLayout: 'free',
   buttons: [
     {
       id: 'btn-start-ep',
-      label: 'START EPISODE',
+      label: 'START CHAPTER',
       action: 'next_scene',
       style: 'primary',
       size: 'lg',
@@ -182,13 +182,13 @@ export const DEFAULT_CHAPTER_INTRO_CONFIG: VNStaticScreenConfig = {
 export const DEFAULT_CHAPTER_END_CONFIG: VNStaticScreenConfig = {
   ...DEFAULT_ENDING_CONFIG,
   purpose: 'ending',
-  title: 'END OF EPISODE',
-  subtitle: 'Episode completed.',
+  title: 'END OF CHAPTER',
+  subtitle: 'Chapter completed.',
   buttonsLayout: 'free',
   buttons: [
     {
       id: 'btn-next-ep',
-      label: 'CONTINUE TO NEXT EPISODE',
+      label: 'CONTINUE TO NEXT CHAPTER',
       action: 'next_scene',
       style: 'primary',
       size: 'lg',
@@ -197,7 +197,7 @@ export const DEFAULT_CHAPTER_END_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-replay-ep',
-      label: 'REPLAY EPISODE',
+      label: 'REPLAY CHAPTER',
       action: 'retry_previous',
       style: 'ghost',
       size: 'md',

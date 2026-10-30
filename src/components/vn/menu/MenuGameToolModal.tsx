@@ -98,7 +98,7 @@ const MENU_ROLES: MenuRoleDefinition[] = [
   {
     role: 'gallery',
     title: 'Gallery & Extras',
-    badge: 'EXTRAS & DOSSIERS',
+    badge: 'EXTRAS & GALLERY',
     description: 'Unlocked cinematics by chapter, scenario backgrounds and character profiles',
     color: '#f59e0b',
     borderColor: 'border-amber-500/50',

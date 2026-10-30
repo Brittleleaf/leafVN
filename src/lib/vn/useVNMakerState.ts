@@ -1588,7 +1588,7 @@ export function useVNMakerState(
   };
 
   const handleReset = () => {
-    if (confirm('Reset to original sample dossier?')) {
+    if (confirm('Reset to original sample project?')) {
       const def = resetToSampleStory();
       setStory(def);
       setSelectedChapterId(def.chapters[0]?.id || '');

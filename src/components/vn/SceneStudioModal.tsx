@@ -23,7 +23,7 @@ export const ENTRY_SFX_PRESETS = [
   { name: 'Cinematic Intro / Scene Start', url: '/assets/sfx/start after click intro.mp3' },
   { name: 'Corrupt File / Electric Glitch', url: '/assets/sfx/corrupt file.mp3' },
   { name: 'Scenario Alarm / Danger', url: '/assets/sfx/ERROR RING.mp3' },
-  { name: 'Flip Page / Dossier Paper', url: '/assets/sfx/flip page.mp3' },
+  { name: 'Flip Page / Paper Sheet', url: '/assets/sfx/flip page.mp3' },
   { name: 'Radio Tuning / Retro Frequency', url: '/assets/sfx/back to intro.mp3' },
   { name: 'Success Chime / Revelation', url: '/assets/sfx/success.mp3' },
   { name: 'Fast Typing / Input Terminal', url: '/assets/sfx/typing.mp3' },

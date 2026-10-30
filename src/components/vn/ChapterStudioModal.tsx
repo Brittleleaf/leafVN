@@ -28,12 +28,12 @@ interface ChapterStudioModalProps {
 }
 
 export const LORE_TIP_PRESETS = [
-  'Every alternate ending reveals a piece of the lost file.',
-  'Decisions made in high-security chambers cannot be reversed.',
-  'Quantum paint reacts to unauthorized frequencies.',
-  'Contingency protocols activate if declassification exceeds the time limit.',
-  'Not all characters reveal their true motives upon the first encounter.',
-  'Checking every corner of the scene can unlock hidden paths.',
+  'Key decisions may branch the narrative and lead to different endings.',
+  'You can review previous dialogue history anytime using the backlog / log.',
+  'Save your progress frequently across multiple save slots.',
+  'Certain dialogue choices will increase character affinity.',
+  'Exploring every branch unveils hidden secrets and bonus scenes.',
+  'You can adjust text speed and auto-advance settings in the preferences menu.',
 ];
 
 export const STATIC_FX_PRESETS: { id: VNScreenFxType; name: string }[] = [
@@ -994,7 +994,7 @@ export default function ChapterStudioModal({
                                   type="text"
                                   value={selectedChapter.introScreen?.staticConfig?.title || `EPISODE #${selectedChapter.number}`}
                                   onChange={(e) => handleUpdateIntroStaticConfig({ title: e.target.value })}
-                                  placeholder="e.g. EPISODE 1: THE AWAKENING"
+                                  placeholder="e.g. EPISODE 1: THE BEGINNING"
                                   className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-sky-500"
                                 />
                               </div>
@@ -1154,7 +1154,7 @@ export default function ChapterStudioModal({
 
                         <div className="space-y-1.5">
                           <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
-                            Subtitle / Protocol
+                            Loading Subtitle
                           </label>
                           <input
                             type="text"
@@ -1169,15 +1169,15 @@ export default function ChapterStudioModal({
                         <div className="space-y-1.5">
                           <div className="flex items-center justify-between">
                             <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
-                              Lore Quote / Classified Tip
+                              Loading Tip / Story Quote
                             </label>
-                            <span className="text-[10px] text-[var(--muted2)] font-mono">Universe clues</span>
+                            <span className="text-[10px] text-[var(--muted2)] font-mono">Hints & story trivia</span>
                           </div>
                           <textarea
                             rows={2}
                             value={selectedChapter.loadingScreen.loreTip || ''}
                             onChange={(e) => handleUpdateLoadingConfig({ loreTip: e.target.value })}
-                            placeholder="Enter lore quote or text here..."
+                            placeholder="Enter loading tip or story quote here..."
                             className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] italic outline-none focus:border-[var(--accent)] resize-none transition-colors"
                           />
 
@@ -1685,8 +1685,8 @@ export default function ChapterStudioModal({
           </button>
 
           <div className="relative z-10 max-w-xl w-full text-center space-y-4 font-mono animate-fade-in">
-            <div className="border border-red-700/50 bg-red-950/20 px-4 py-1 inline-block rounded text-xs text-red-500 font-bold uppercase tracking-widest animate-pulse">
-              [ DECLASSIFICATION PROTOCOL IN PROGRESS ]
+            <div className="border border-sky-700/50 bg-sky-950/20 px-4 py-1 inline-block rounded text-xs text-sky-400 font-bold uppercase tracking-widest animate-pulse">
+              [ LOADING CHAPTER // PLEASE WAIT ]
             </div>
 
             <h2 className="text-3xl md:text-5xl text-white font-title tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">

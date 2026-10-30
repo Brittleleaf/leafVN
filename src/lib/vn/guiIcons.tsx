@@ -495,7 +495,7 @@ export const HOTSPOT_ICON_PRESETS = [
   { label: 'Escape / Run', url: GUI_ICONS.action.run, name: 'Quick Action' },
   { label: 'Radar / Eye', url: GUI_ICONS.action.sheikahEye, name: 'Observatory' },
   { label: 'Target Marker', url: GUI_ICONS.action.target, name: 'Target' },
-  { label: 'Message / Letter', url: GUI_ICONS.general.envelope, name: 'Dossier / Letter' },
+  { label: 'Message / Letter', url: GUI_ICONS.general.envelope, name: 'Message / Letter' },
   { label: 'Padlock / Lock', url: GUI_ICONS.security.lockClosed, name: 'Locked' },
 ];
 

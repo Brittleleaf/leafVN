@@ -5,7 +5,7 @@ export const headstoneFont: VNFontDefinition = {
   name: 'Headstone Title',
   category: 'display',
   fontFamily: 'var(--font-title), serif',
-  description: 'Official custom title font for Rebirth of the Painter. Chiseled monument look.',
-  previewSample: 'REBIRTH OF THE PAINTER // CHAPTER ARCHIVE',
+  description: 'Classical chiseled stone monument title font with sharp serif accents.',
+  previewSample: 'EPIC SAGA // CHAPTER ARCHIVE',
   isBuiltIn: true,
 };

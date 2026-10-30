@@ -62,11 +62,11 @@ export const TypewriterTextEffectComponent: React.FC<TextEffectProps> = ({
 
 export const typewriterTextEffect: TextEffectDefinition = {
   id: 'typewriter',
-  name: 'Classified Typewriter',
+  name: 'Vintage Typewriter',
   category: 'ambient',
   icon: GUI_ICONS.general.texts,
   defaultColor: '#38bdf8',
-  defaultSample: 'ACCESSING ENCRYPTED ARCHIVE...',
+  defaultSample: 'RECORDING ENTRY INTO LOG...',
   description: 'Tactile character-by-character reveal with blinking terminal command cursor.',
   component: TypewriterTextEffectComponent,
 };

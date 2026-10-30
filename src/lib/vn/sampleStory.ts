@@ -3,9 +3,9 @@ import { VNStory } from '@/types/vn';
 export const SAMPLE_STORY: VNStory = {
   id: 'el-renacer-del-pintor',
   version: '1.0.0',
-  title: 'The Rebirth of the Painter',
+  title: 'Sample Visual Novel',
   author: 'Creator',
-  description: 'Clean project prepared for new scenarios.',
+  description: 'Clean starter project template prepared for new scenarios.',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   textBoxConfig: {

@@ -86,11 +86,11 @@ export function FontShowcaseTab({
               <button
                 type="button"
                 onClick={() =>
-                  setCustomFontSample('CLASSIFIED REPORT: Subject does not respond to light stimulus.')
+                  setCustomFontSample('SYSTEM LOG: Narrative timeline and dialogue synchronized.')
                 }
                 className="text-[var(--muted)] hover:text-[var(--text)] text-[10px] underline cursor-pointer"
               >
-                Classified
+                System Log
               </button>
               <button
                 type="button"

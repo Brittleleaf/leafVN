@@ -261,7 +261,7 @@ export default function ProjectStudioModal({
                   className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-2 py-1.5 text-xs text-[var(--text)] font-bold outline-none cursor-pointer"
                 >
                   <option value="blank">Blank Project (Clean)</option>
-                  <option value="sample">Copy Sample Dossier (Demo)</option>
+                  <option value="sample">Copy Sample Project (Demo)</option>
                 </select>
               </div>
 

@@ -142,7 +142,7 @@ export default function GalleryAssetsWorkspaceView() {
                     <span>Live Gallery Viewer (In-Game Menu Simulation)</span>
                   </h3>
                   <p className="text-[10px] text-[var(--muted)]">
-                    Real-time player preview for cinematics, unlockable scenarios, and character dossiers.
+                    Real-time player preview for cinematics, unlockable scenarios, and character profiles.
                   </p>
                 </div>
                 <span className="text-[10px] font-mono text-amber-700 dark:text-amber-300 bg-amber-500/15 border border-amber-500/40 px-2.5 py-0.5 rounded-md font-bold">

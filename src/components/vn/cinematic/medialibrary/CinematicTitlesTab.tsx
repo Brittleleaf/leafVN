@@ -23,7 +23,7 @@ export const CinematicTitlesTab: React.FC<CinematicTitlesTabProps> = ({
       title: 'Dramatic Chapter Title',
       desc: 'Slow cinematic dissolve for chapter headings',
       badge: 'Cinematic',
-      preset: { text: 'ACT I: THE AWAKENING', style: 'dramatics' },
+      preset: { text: 'CHAPTER 1: THE BEGINNING', style: 'dramatics' },
     },
     {
       title: 'Digital Cyber Glitch',
@@ -35,7 +35,7 @@ export const CinematicTitlesTab: React.FC<CinematicTitlesTabProps> = ({
       title: 'Typewriter Note',
       desc: 'Character-by-character reveal for logs and files',
       badge: 'Typewriter',
-      preset: { text: 'CLASSIFIED INTEL REPORT...', effect: 'typewriter' },
+      preset: { text: 'FIELD LOG // ENTRY #01', effect: 'typewriter' },
     },
     {
       title: 'Location & Time',
