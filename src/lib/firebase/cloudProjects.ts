@@ -151,7 +151,15 @@ async function getOrCreateDriveFolder(accessToken: string): Promise<string> {
   });
 
   if (!createRes.ok) {
-    throw new Error('No se pudo crear la carpeta en Google Drive');
+    let errDetail = '';
+    try {
+      const errJson = await createRes.json();
+      errDetail = errJson.error?.message || JSON.stringify(errJson);
+    } catch {
+      errDetail = await createRes.text();
+    }
+    console.error('Google Drive Folder Create Error:', createRes.status, errDetail);
+    throw new Error(`Google Drive (${createRes.status}): ${errDetail}`);
   }
 
   const folder = await createRes.json();
@@ -199,16 +207,21 @@ export async function saveProjectToGoogleDrive(
     );
 
     if (!updateRes.ok) {
-      throw new Error('Error al actualizar el archivo en Google Drive');
+      let errDetail = '';
+      try {
+        const errJson = await updateRes.json();
+        errDetail = errJson.error?.message || JSON.stringify(errJson);
+      } catch {
+        errDetail = await updateRes.text();
+      }
+      console.error('Google Drive File Update Error:', updateRes.status, errDetail);
+      throw new Error(`Google Drive (${updateRes.status}): ${errDetail}`);
     }
     const result = await updateRes.json();
     return { fileId: existingFileId, webViewLink: result.webViewLink };
   } else {
-    // Crear nuevo archivo en Google Drive (Multipart upload)
-    const boundary = '-------LeafVNUploadBoundary' + Date.now();
-    const delimiter = `\r\n--${boundary}\r\n`;
-    const closeDelimiter = `\r\n--${boundary}--`;
-
+    // Crear nuevo archivo en Google Drive (Multipart upload estricto RFC 2046)
+    const boundary = 'LeafVNUploadBoundary' + Date.now();
     const metadata = {
       name: fileName,
       mimeType: 'application/json',
@@ -217,13 +230,13 @@ export async function saveProjectToGoogleDrive(
     };
 
     const multipartRequestBody =
-      delimiter +
+      `--${boundary}\r\n` +
       'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
       JSON.stringify(metadata) +
-      delimiter +
-      'Content-Type: application/json\r\n\r\n' +
+      `\r\n--${boundary}\r\n` +
+      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
       fileContent +
-      closeDelimiter;
+      `\r\n--${boundary}--`;
 
     const createRes = await fetch(
       'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',
@@ -238,7 +251,15 @@ export async function saveProjectToGoogleDrive(
     );
 
     if (!createRes.ok) {
-      throw new Error('Error al subir el archivo a Google Drive');
+      let errDetail = '';
+      try {
+        const errJson = await createRes.json();
+        errDetail = errJson.error?.message || JSON.stringify(errJson);
+      } catch {
+        errDetail = await createRes.text();
+      }
+      console.error('Google Drive File Create Error:', createRes.status, errDetail);
+      throw new Error(`Google Drive (${createRes.status}): ${errDetail}`);
     }
 
     const created = await createRes.json();
