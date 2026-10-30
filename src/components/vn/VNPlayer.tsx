@@ -62,6 +62,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     activeInspection,
     isTextBoxVisible,
     loadingScreen,
+    activeEpisodeScreen,
     shakeClass,
     flashColor,
     isFlashlightShutdownActive,
@@ -77,6 +78,8 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     advanceEvent,
     advanceToNextScene,
     jumpToScene,
+    handleEpisodeScreenContinue,
+    handleEpisodeScreenRetry,
     handleSelectChoice,
     handleHotspotClick,
     handleRetryPrevious,
@@ -163,8 +166,26 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
           containerType: 'size',
         }}
       >
-        {/* EVENT SCENARIOS: STATIC SCREEN OR CINEMATIC SEQUENCER */}
-        {currentScene?.sceneType === 'event' && currentScene?.eventSubtype === 'static' ? (
+        {/* EPISODE SCREEN (START OF EPISODE / END OF EPISODE) */}
+        {activeEpisodeScreen ? (
+          <StaticScreenView
+            scene={activeEpisodeScreen.scene}
+            story={story}
+            isInteractive={true}
+            onNextScene={handleEpisodeScreenContinue}
+            onRetry={handleEpisodeScreenRetry}
+            onMainMenu={() => {
+              if (onExit) {
+                onExit();
+              } else {
+                handleRestartStory();
+              }
+            }}
+            onJumpScene={(targetId) => {
+              jumpToScene(targetId, 0);
+            }}
+          />
+        ) : currentScene?.sceneType === 'event' && currentScene?.eventSubtype === 'static' ? (
           <StaticScreenView
             scene={currentScene}
             story={story}

@@ -160,6 +160,62 @@ export const DEFAULT_INTRO_CONFIG: VNStaticScreenConfig = {
   ],
 };
 
+export const DEFAULT_CHAPTER_INTRO_CONFIG: VNStaticScreenConfig = {
+  ...DEFAULT_INTRO_CONFIG,
+  purpose: 'intro',
+  title: 'EPISODE 1: THE BEGINNING',
+  subtitle: 'Chapter begins.',
+  buttonsLayout: 'free',
+  buttons: [
+    {
+      id: 'btn-start-ep',
+      label: 'START EPISODE',
+      action: 'next_scene',
+      style: 'primary',
+      size: 'lg',
+      xPercent: 50,
+      yPercent: 78,
+    },
+  ],
+};
+
+export const DEFAULT_CHAPTER_END_CONFIG: VNStaticScreenConfig = {
+  ...DEFAULT_ENDING_CONFIG,
+  purpose: 'ending',
+  title: 'END OF EPISODE',
+  subtitle: 'Episode completed.',
+  buttonsLayout: 'free',
+  buttons: [
+    {
+      id: 'btn-next-ep',
+      label: 'CONTINUE TO NEXT EPISODE',
+      action: 'next_scene',
+      style: 'primary',
+      size: 'lg',
+      xPercent: 50,
+      yPercent: 70,
+    },
+    {
+      id: 'btn-replay-ep',
+      label: 'REPLAY EPISODE',
+      action: 'retry_previous',
+      style: 'ghost',
+      size: 'md',
+      xPercent: 50,
+      yPercent: 79,
+    },
+    {
+      id: 'btn-menu',
+      label: 'RETURN TO MENU',
+      action: 'main_menu',
+      style: 'ghost',
+      size: 'md',
+      xPercent: 50,
+      yPercent: 87,
+    },
+  ],
+};
+
 export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
   purpose: 'title',
   title: 'LEAF VISUAL NOVEL',

@@ -1,10 +1,22 @@
 "use client";
-import React, { useState } from 'react';
-import { VNStory, VNChapter, VNScene, VNLoadingScreenConfig } from '@/types/vn';
+import React, { useState, useMemo } from 'react';
+import {
+  VNStory,
+  VNChapter,
+  VNScene,
+  VNLoadingScreenConfig,
+  VNChapterScreenConfig,
+  VNStaticScreenConfig,
+  VNScreenFxType,
+} from '@/types/vn';
 import { playSfx } from '@/lib/audioSettings';
 import { fileToBase64 } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import AssetStudioModal from './AssetStudioModal';
+import StaticScreenView, {
+  DEFAULT_CHAPTER_INTRO_CONFIG,
+  DEFAULT_CHAPTER_END_CONFIG,
+} from './StaticScreenView';
 
 interface ChapterStudioModalProps {
   story: VNStory;
@@ -15,8 +27,6 @@ interface ChapterStudioModalProps {
   notify?: (msg: string) => void;
 }
 
-
-
 export const LORE_TIP_PRESETS = [
   'Every alternate ending reveals a piece of the lost file.',
   'Decisions made in high-security chambers cannot be reversed.',
@@ -24,6 +34,29 @@ export const LORE_TIP_PRESETS = [
   'Contingency protocols activate if declassification exceeds the time limit.',
   'Not all characters reveal their true motives upon the first encounter.',
   'Checking every corner of the scene can unlock hidden paths.',
+];
+
+export const STATIC_FX_PRESETS: { id: VNScreenFxType; name: string }[] = [
+  { id: 'none', name: 'None (Standard)' },
+  { id: 'cinema_grain', name: 'Cinema Grain' },
+  { id: 'vignette', name: 'Vignette' },
+  { id: 'cctv_monitor', name: 'CCTV Monitor' },
+  { id: 'crt_scanline', name: 'CRT Scanline' },
+  { id: 'glitch', name: 'Digital Glitch' },
+  { id: 'matrix', name: 'Binary Matrix' },
+  { id: 'horror_static', name: 'Horror Static' },
+];
+
+export const STATIC_ANIMATION_PRESETS = [
+  { id: 'glitch', name: 'Glitch' },
+  { id: 'pulse', name: 'Pulse' },
+  { id: 'glow', name: 'Glow' },
+  { id: 'fade_in', name: 'Fade In' },
+  { id: 'typewriter', name: 'Typewriter' },
+  { id: 'shimmer', name: 'Shimmer' },
+  { id: 'neon', name: 'Neon' },
+  { id: 'blood', name: 'Blood Drip' },
+  { id: 'none', name: 'Static (None)' },
 ];
 
 export default function ChapterStudioModal({
@@ -38,11 +71,17 @@ export default function ChapterStudioModal({
     currentChapterId || story.chapters[0]?.id || ''
   );
   const [searchFilter, setSearchFilter] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'identity' | 'loading' | 'scenes' | 'atmosphere'>('identity');
+  const [activeTab, setActiveTab] = useState<
+    'identity' | 'intro_screen' | 'loading' | 'end_screen' | 'scenes' | 'atmosphere'
+  >('identity');
   
-  // State for live full-screen loading screen preview
+  // State for live full-screen previews
   const [showLiveLoadingPreview, setShowLiveLoadingPreview] = useState<boolean>(false);
-  const [showBgGallery, setShowBgGallery] = useState<boolean>(false);
+  const [showLiveIntroPreview, setShowLiveIntroPreview] = useState<boolean>(false);
+  const [showLiveEndPreview, setShowLiveEndPreview] = useState<boolean>(false);
+
+  // Asset picker state
+  const [showAssetPickerFor, setShowAssetPickerFor] = useState<'loading_bg' | 'intro_bg' | 'end_bg' | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const selectedChapter = story.chapters.find((c) => c.id === selectedChId) || story.chapters[0];
@@ -69,6 +108,137 @@ export default function ChapterStudioModal({
     });
   };
 
+  // Helper to update episode start (intro) screen configuration
+  const handleUpdateIntroConfig = (patch: Partial<VNChapterScreenConfig>) => {
+    if (!selectedChapter) return;
+    const currentIntro: VNChapterScreenConfig = selectedChapter.introScreen || {
+      enabled: false,
+      staticConfig: {
+        ...DEFAULT_CHAPTER_INTRO_CONFIG,
+        title: selectedChapter.title ? `EPISODE: ${selectedChapter.title.toUpperCase()}` : `EPISODE #${selectedChapter.number}`,
+        subtitle: selectedChapter.summary || 'Prepare to enter the scenario.',
+      },
+    };
+    handleUpdateCurrentChapter({
+      introScreen: { ...currentIntro, ...patch },
+    });
+  };
+
+  const handleUpdateIntroStaticConfig = (patch: Partial<VNStaticScreenConfig>) => {
+    if (!selectedChapter) return;
+    const currentIntro: VNChapterScreenConfig = selectedChapter.introScreen || {
+      enabled: true,
+      staticConfig: {
+        ...DEFAULT_CHAPTER_INTRO_CONFIG,
+        title: selectedChapter.title ? `EPISODE: ${selectedChapter.title.toUpperCase()}` : `EPISODE #${selectedChapter.number}`,
+        subtitle: selectedChapter.summary || 'Prepare to enter the scenario.',
+      },
+    };
+    const currentStatic = currentIntro.staticConfig || DEFAULT_CHAPTER_INTRO_CONFIG;
+    handleUpdateIntroConfig({
+      staticConfig: { ...currentStatic, ...patch },
+    });
+  };
+
+  // Helper to update episode end screen configuration
+  const handleUpdateEndConfig = (patch: Partial<VNChapterScreenConfig>) => {
+    if (!selectedChapter) return;
+    const currentEnd: VNChapterScreenConfig = selectedChapter.endScreen || {
+      enabled: false,
+      staticConfig: {
+        ...DEFAULT_CHAPTER_END_CONFIG,
+        title: `END OF EPISODE #${selectedChapter.number}`,
+        subtitle: 'Episode completed successfully.',
+      },
+    };
+    handleUpdateCurrentChapter({
+      endScreen: { ...currentEnd, ...patch },
+    });
+  };
+
+  const handleUpdateEndStaticConfig = (patch: Partial<VNStaticScreenConfig>) => {
+    if (!selectedChapter) return;
+    const currentEnd: VNChapterScreenConfig = selectedChapter.endScreen || {
+      enabled: true,
+      staticConfig: {
+        ...DEFAULT_CHAPTER_END_CONFIG,
+        title: `END OF EPISODE #${selectedChapter.number}`,
+        subtitle: 'Episode completed successfully.',
+      },
+    };
+    const currentStatic = currentEnd.staticConfig || DEFAULT_CHAPTER_END_CONFIG;
+    handleUpdateEndConfig({
+      staticConfig: { ...currentStatic, ...patch },
+    });
+  };
+
+  // Collect all static scenes in the story to offer as linkable targets
+  const allStaticScenes = useMemo(() => {
+    const list: { id: string; name: string }[] = [];
+    (story.scenarios || []).forEach((sc) => {
+      if (sc.sceneType === 'event' && sc.eventSubtype === 'static') {
+        list.push({ id: sc.id, name: sc.name || sc.id });
+      }
+    });
+    story.chapters.forEach((ch) => {
+      ch.scenes.forEach((sc) => {
+        if (sc.sceneType === 'event' && sc.eventSubtype === 'static' && !list.some((item) => item.id === sc.id)) {
+          list.push({ id: sc.id, name: `${sc.name || sc.id} (Ch. ${ch.number})` });
+        }
+      });
+    });
+    return list;
+  }, [story.scenarios, story.chapters]);
+
+  // Synthetic scenes for live preview
+  const previewIntroScene = useMemo<VNScene>(() => {
+    const intro = selectedChapter?.introScreen;
+    if (intro?.sceneId) {
+      const found =
+        (story.scenarios || []).find((s) => s.id === intro.sceneId) ||
+        selectedChapter?.scenes.find((s) => s.id === intro.sceneId);
+      if (found) return found;
+    }
+    const cfg = intro?.staticConfig || {
+      ...DEFAULT_CHAPTER_INTRO_CONFIG,
+      title: selectedChapter?.title ? `EPISODE: ${selectedChapter.title.toUpperCase()}` : `EPISODE #${selectedChapter?.number || 1}`,
+      subtitle: selectedChapter?.summary || 'Prepare to enter the scenario.',
+    };
+    return {
+      id: 'preview-intro',
+      name: cfg.title || 'Episode Intro',
+      backgroundUrl: intro?.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+      sceneType: 'event',
+      eventSubtype: 'static',
+      staticScreenConfig: cfg,
+      timeline: [],
+    };
+  }, [selectedChapter, story.scenarios]);
+
+  const previewEndScene = useMemo<VNScene>(() => {
+    const end = selectedChapter?.endScreen;
+    if (end?.sceneId) {
+      const found =
+        (story.scenarios || []).find((s) => s.id === end.sceneId) ||
+        selectedChapter?.scenes.find((s) => s.id === end.sceneId);
+      if (found) return found;
+    }
+    const cfg = end?.staticConfig || {
+      ...DEFAULT_CHAPTER_END_CONFIG,
+      title: `END OF EPISODE #${selectedChapter?.number || 1}`,
+      subtitle: 'Episode completed successfully.',
+    };
+    return {
+      id: 'preview-end',
+      name: cfg.title || 'Episode End',
+      backgroundUrl: end?.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+      sceneType: 'event',
+      eventSubtype: 'static',
+      staticScreenConfig: cfg,
+      timeline: [],
+    };
+  }, [selectedChapter, story.scenarios]);
+
   // Create new chapter
   const handleCreateChapter = () => {
     const newNumber = story.chapters.length + 1;
@@ -88,6 +258,22 @@ export default function ChapterStudioModal({
         loreTip: '',
         bgImageUrl: '',
         durationMs: 2000,
+      },
+      introScreen: {
+        enabled: false,
+        staticConfig: {
+          ...DEFAULT_CHAPTER_INTRO_CONFIG,
+          title: `EPISODE ${newNumber}`,
+          subtitle: 'The journey begins.',
+        },
+      },
+      endScreen: {
+        enabled: false,
+        staticConfig: {
+          ...DEFAULT_CHAPTER_END_CONFIG,
+          title: `END OF EPISODE ${newNumber}`,
+          subtitle: 'Episode completed.',
+        },
       },
       scenes: [
         {
@@ -163,6 +349,8 @@ export default function ChapterStudioModal({
       startSceneId: (chToClone.startSceneId && sceneIdMap.get(chToClone.startSceneId)) || clonedScenes[0]?.id || '',
       scenes: clonedScenes,
       loadingScreen: { ...chToClone.loadingScreen },
+      introScreen: chToClone.introScreen ? { ...chToClone.introScreen } : undefined,
+      endScreen: chToClone.endScreen ? { ...chToClone.endScreen } : undefined,
     };
 
     const updatedChapters = [...story.chapters, clonedChapter];
@@ -412,20 +600,45 @@ export default function ChapterStudioModal({
                         <span>{totalScenes} scenes</span>
                       </span>
 
-                      <span className="flex items-center gap-1.5 bg-black/60 px-2 py-0.5 rounded border border-gray-800">
-                        <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3 h-3 text-gray-400" />
+                      <span className="flex items-center gap-1.5 bg-[var(--well-bg)] px-2 py-0.5 rounded border border-[var(--border)]">
+                        <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3 h-3 text-[var(--muted)]" />
                         <span>{totalLines} lines</span>
                       </span>
 
                       <span
-                        className={`flex items-center gap-1.5 px-2 py-0.5 rounded border text-[9px] font-bold ${
+                        className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-bold ${
+                          ch.introScreen?.enabled
+                            ? 'bg-sky-950/40 border-sky-800/80 text-sky-400'
+                            : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted2)]'
+                        }`}
+                        title="Episode Start Screen (Intro)"
+                      >
+                        <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-2.5 h-2.5" />
+                        <span>Intro</span>
+                      </span>
+
+                      <span
+                        className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-bold ${
                           hasLoading
                             ? 'bg-emerald-950/40 border-emerald-800/80 text-emerald-400'
-                            : 'bg-gray-900 border-gray-800 text-gray-500'
+                            : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted2)]'
                         }`}
+                        title="Cinematic Loading Screen"
                       >
-                        <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3 h-3" />
-                        <span>{hasLoading ? 'Loading Active' : 'No Loading'}</span>
+                        <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-2.5 h-2.5" />
+                        <span>Load</span>
+                      </span>
+
+                      <span
+                        className={`flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-bold ${
+                          ch.endScreen?.enabled
+                            ? 'bg-purple-950/40 border-purple-800/80 text-purple-400'
+                            : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted2)]'
+                        }`}
+                        title="Episode End Screen"
+                      >
+                        <GuiIconRenderer icon={GUI_ICONS.general.end} className="w-2.5 h-2.5" />
+                        <span>End</span>
                       </span>
                     </div>
 
@@ -501,6 +714,21 @@ export default function ChapterStudioModal({
                 </button>
 
                 <button
+                  onClick={() => setActiveTab('intro_screen')}
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeTab === 'intro_screen'
+                      ? 'bg-[var(--accent-surface)] border border-[var(--accent)] text-[var(--text)] shadow-sm'
+                      : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
+                  }`}
+                >
+                  <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Start Screen (Intro)</span>
+                  {selectedChapter.introScreen?.enabled && (
+                    <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+                  )}
+                </button>
+
+                <button
                   onClick={() => setActiveTab('loading')}
                   className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     activeTab === 'loading'
@@ -508,10 +736,25 @@ export default function ChapterStudioModal({
                       : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
                   }`}
                 >
-                  <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5" />
-                  <span>Cinematic Loading Screen</span>
+                  <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Loading Screen</span>
                   {selectedChapter.loadingScreen?.enabled && (
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('end_screen')}
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeTab === 'end_screen'
+                      ? 'bg-[var(--accent-surface)] border border-[var(--accent)] text-[var(--text)] shadow-sm'
+                      : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
+                  }`}
+                >
+                  <GuiIconRenderer icon={GUI_ICONS.general.end} className="w-3.5 h-3.5 text-purple-400" />
+                  <span>End Screen (Outro)</span>
+                  {selectedChapter.endScreen?.enabled && (
+                    <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
                   )}
                 </button>
 
@@ -647,7 +890,228 @@ export default function ChapterStudioModal({
                   </div>
                 )}
 
-                {/* TAB 2: CINEMATIC LOADING SCREEN */}
+                {/* TAB 2: EPISODE START SCREEN (INTRO) */}
+                {activeTab === 'intro_screen' && (
+                  <div className="space-y-6 max-w-3xl">
+                    {/* Toggle Switch */}
+                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg flex items-center justify-between shadow-sm">
+                      <div className="space-y-1">
+                        <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider block flex items-center gap-2">
+                          <GuiIconRenderer icon={GUI_ICONS.general.start} className="w-3.5 h-3.5 text-sky-400" />
+                          <span>Enable Episode Start Screen (Intro)</span>
+                        </span>
+                        <p className="text-[11px] text-[var(--muted)]">
+                          Displays a stylized title/intro screen with animations, visual effects, and music when launching this episode before entering narrative dialogues.
+                        </p>
+                      </div>
+
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedChapter.introScreen?.enabled ?? false}
+                          onChange={(e) => handleUpdateIntroConfig({ enabled: e.target.checked })}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-[var(--well-bg)] border border-[var(--border)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+                      </label>
+                    </div>
+
+                    {selectedChapter.introScreen?.enabled && (
+                      <div className="space-y-5 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg shadow-sm animate-fade-in">
+                        
+                        {/* Mode Selector: Custom or Linked */}
+                        <div className="space-y-2">
+                          <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                            Screen Source
+                          </label>
+                          <div className="grid grid-cols-2 gap-3">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateIntroConfig({ sceneId: undefined })}
+                              className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
+                                !selectedChapter.introScreen?.sceneId
+                                  ? 'bg-[var(--accent-surface)] border-sky-500 shadow-sm'
+                                  : 'bg-[var(--well-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)]'
+                              }`}
+                            >
+                              <div className="text-xs font-bold text-[var(--text)]">Design Custom Screen</div>
+                              <div className="text-[10px] text-[var(--muted)] mt-0.5">
+                                Customize title, subtitle, animations, screen FX, and buttons directly.
+                              </div>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateIntroConfig({ sceneId: allStaticScenes[0]?.id || '' })}
+                              className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
+                                selectedChapter.introScreen?.sceneId
+                                  ? 'bg-[var(--accent-surface)] border-sky-500 shadow-sm'
+                                  : 'bg-[var(--well-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)]'
+                              }`}
+                            >
+                              <div className="text-xs font-bold text-[var(--text)]">Link Project Scenario</div>
+                              <div className="text-[10px] text-[var(--muted)] mt-0.5">
+                                Connect an existing static screen scenario built in the Scene Studio.
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Linked Scenario Selector */}
+                        {selectedChapter.introScreen?.sceneId ? (
+                          <div className="space-y-2 p-4 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg">
+                            <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                              Select Linked Static Scenario
+                            </label>
+                            {allStaticScenes.length > 0 ? (
+                              <select
+                                value={selectedChapter.introScreen.sceneId}
+                                onChange={(e) => handleUpdateIntroConfig({ sceneId: e.target.value })}
+                                className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-sky-500 cursor-pointer"
+                              >
+                                {allStaticScenes.map((sc) => (
+                                  <option key={sc.id} value={sc.id}>
+                                    {sc.name}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <p className="text-xs text-amber-400">
+                                No static screen scenarios found in this project. Use "Design Custom Screen" instead.
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          /* Custom Screen Designer */
+                          <div className="space-y-4">
+                            {/* Title & Animation */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              <div className="md:col-span-2 space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Screen Title
+                                </label>
+                                <input
+                                  type="text"
+                                  value={selectedChapter.introScreen?.staticConfig?.title || `EPISODE #${selectedChapter.number}`}
+                                  onChange={(e) => handleUpdateIntroStaticConfig({ title: e.target.value })}
+                                  placeholder="e.g. EPISODE 1: THE AWAKENING"
+                                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-sky-500"
+                                />
+                              </div>
+
+                              <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Title Animation
+                                </label>
+                                <select
+                                  value={selectedChapter.introScreen?.staticConfig?.titleAnimation || 'glitch'}
+                                  onChange={(e) => handleUpdateIntroStaticConfig({ titleAnimation: e.target.value as any })}
+                                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-sky-500 cursor-pointer"
+                                >
+                                  {STATIC_ANIMATION_PRESETS.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                      {p.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Subtitle */}
+                            <div className="space-y-1.5">
+                              <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                Subtitle / Epigraph
+                              </label>
+                              <textarea
+                                rows={2}
+                                value={selectedChapter.introScreen?.staticConfig?.subtitle || selectedChapter.summary || ''}
+                                onChange={(e) => handleUpdateIntroStaticConfig({ subtitle: e.target.value })}
+                                placeholder="Enter narrative intro subtitle or location details..."
+                                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-sky-500 resize-none"
+                              />
+                            </div>
+
+                            {/* Background Image & Screen FX */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
+                              <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Background Image
+                                </label>
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="text"
+                                    value={selectedChapter.introScreen?.backgroundUrl || ''}
+                                    onChange={(e) => handleUpdateIntroConfig({ backgroundUrl: e.target.value })}
+                                    placeholder="Background image URL..."
+                                    className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none focus:border-sky-500"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowAssetPickerFor('intro_bg')}
+                                    className="px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-md cursor-pointer shrink-0 flex items-center gap-1.5"
+                                  >
+                                    <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
+                                    <span>Gallery</span>
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Atmosphere Screen FX
+                                </label>
+                                <select
+                                  value={selectedChapter.introScreen?.staticConfig?.screenFx || 'cctv_monitor'}
+                                  onChange={(e) => handleUpdateIntroStaticConfig({ screenFx: e.target.value as any })}
+                                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none focus:border-sky-500 cursor-pointer"
+                                >
+                                  {STATIC_FX_PRESETS.map((fx) => (
+                                    <option key={fx.id} value={fx.id}>
+                                      {fx.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Start Button Label */}
+                            <div className="space-y-1.5 pt-2 border-t border-[var(--border)]">
+                              <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                Start Button Label
+                              </label>
+                              <input
+                                type="text"
+                                value={selectedChapter.introScreen?.staticConfig?.buttons?.[0]?.label || 'START EPISODE'}
+                                onChange={(e) => {
+                                  const currentButtons = selectedChapter.introScreen?.staticConfig?.buttons || DEFAULT_CHAPTER_INTRO_CONFIG.buttons;
+                                  const updatedButtons = currentButtons.map((btn, idx) =>
+                                    idx === 0 ? { ...btn, label: e.target.value } : btn
+                                  );
+                                  handleUpdateIntroStaticConfig({ buttons: updatedButtons });
+                                }}
+                                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-sky-500"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Test live preview button */}
+                        <div className="pt-3 border-t border-[var(--border)]">
+                          <button
+                            type="button"
+                            onClick={() => setShowLiveIntroPreview(true)}
+                            className="w-full py-2.5 bg-gradient-to-r from-sky-600 to-cyan-600 hover:opacity-90 text-white font-bold rounded-md text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+                          >
+                            <GuiIconRenderer icon={GUI_ICONS.action.lookAt} className="w-3.5 h-3.5" />
+                            <span>Test Live Preview of Episode Start Screen</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 3: CINEMATIC LOADING SCREEN */}
                 {activeTab === 'loading' && (
                   <div className="space-y-6 max-w-2xl">
                     {/* Toggle Switch */}
@@ -751,7 +1215,7 @@ export default function ChapterStudioModal({
                             <div className="flex items-center gap-2 shrink-0">
                               <button
                                 type="button"
-                                onClick={() => setShowBgGallery(true)}
+                                onClick={() => setShowAssetPickerFor('loading_bg')}
                                 className="px-3 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-md cursor-pointer shrink-0 flex items-center gap-1.5 transition-colors shadow-sm"
                                 title="Choose background from Asset Gallery (Backgrounds Only)"
                               >
@@ -808,7 +1272,227 @@ export default function ChapterStudioModal({
                   </div>
                 )}
 
-                {/* TAB 3: SCENARIOS */}
+                {/* TAB 4: EPISODE END SCREEN (OUTRO) */}
+                {activeTab === 'end_screen' && (
+                  <div className="space-y-6 max-w-3xl">
+                    {/* Toggle Switch */}
+                    <div className="p-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg flex items-center justify-between shadow-sm">
+                      <div className="space-y-1">
+                        <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider block flex items-center gap-2">
+                          <GuiIconRenderer icon={GUI_ICONS.general.end} className="w-3.5 h-3.5 text-purple-400" />
+                          <span>Enable Episode End Screen (Conclusion)</span>
+                        </span>
+                        <p className="text-[11px] text-[var(--muted)]">
+                          Displays a static conclusion screen when all narrative scenarios in this chapter are finished, offering clear options to continue to the next chapter, replay, or return to the menu.
+                        </p>
+                      </div>
+
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedChapter.endScreen?.enabled ?? false}
+                          onChange={(e) => handleUpdateEndConfig({ enabled: e.target.checked })}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-[var(--well-bg)] border border-[var(--border)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                      </label>
+                    </div>
+
+                    {selectedChapter.endScreen?.enabled && (
+                      <div className="space-y-5 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg shadow-sm animate-fade-in">
+                        
+                        {/* Mode Selector: Custom or Linked */}
+                        <div className="space-y-2">
+                          <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                            Screen Source
+                          </label>
+                          <div className="grid grid-cols-2 gap-3">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateEndConfig({ sceneId: undefined })}
+                              className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
+                                !selectedChapter.endScreen?.sceneId
+                                  ? 'bg-[var(--accent-surface)] border-purple-500 shadow-sm'
+                                  : 'bg-[var(--well-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)]'
+                              }`}
+                            >
+                              <div className="text-xs font-bold text-[var(--text)]">Design Custom Screen</div>
+                              <div className="text-[10px] text-[var(--muted)] mt-0.5">
+                                Customize title, summary, animations, screen FX, and buttons directly.
+                              </div>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateEndConfig({ sceneId: allStaticScenes[0]?.id || '' })}
+                              className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
+                                selectedChapter.endScreen?.sceneId
+                                  ? 'bg-[var(--accent-surface)] border-purple-500 shadow-sm'
+                                  : 'bg-[var(--well-bg)] border-[var(--border)] hover:bg-[var(--btn-hover-bg)] text-[var(--muted)]'
+                              }`}
+                            >
+                              <div className="text-xs font-bold text-[var(--text)]">Link Project Scenario</div>
+                              <div className="text-[10px] text-[var(--muted)] mt-0.5">
+                                Connect an existing static screen scenario built in the Scene Studio.
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Linked Scenario Selector */}
+                        {selectedChapter.endScreen?.sceneId ? (
+                          <div className="space-y-2 p-4 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg">
+                            <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                              Select Linked Static Scenario
+                            </label>
+                            {allStaticScenes.length > 0 ? (
+                              <select
+                                value={selectedChapter.endScreen.sceneId}
+                                onChange={(e) => handleUpdateEndConfig({ sceneId: e.target.value })}
+                                className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-purple-500 cursor-pointer"
+                              >
+                                {allStaticScenes.map((sc) => (
+                                  <option key={sc.id} value={sc.id}>
+                                    {sc.name}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <p className="text-xs text-amber-400">
+                                No static screen scenarios found in this project. Use "Design Custom Screen" instead.
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          /* Custom Screen Designer */
+                          <div className="space-y-4">
+                            {/* Title & Animation */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              <div className="md:col-span-2 space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Screen Title
+                                </label>
+                                <input
+                                  type="text"
+                                  value={selectedChapter.endScreen?.staticConfig?.title || `END OF EPISODE #${selectedChapter.number}`}
+                                  onChange={(e) => handleUpdateEndStaticConfig({ title: e.target.value })}
+                                  placeholder="e.g. END OF CHAPTER 1"
+                                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] font-bold outline-none focus:border-purple-500"
+                                />
+                              </div>
+
+                              <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Title Animation
+                                </label>
+                                <select
+                                  value={selectedChapter.endScreen?.staticConfig?.titleAnimation || 'fade_in'}
+                                  onChange={(e) => handleUpdateEndStaticConfig({ titleAnimation: e.target.value as any })}
+                                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-purple-500 cursor-pointer"
+                                >
+                                  {STATIC_ANIMATION_PRESETS.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                      {p.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Subtitle / Epilogue */}
+                            <div className="space-y-1.5">
+                              <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                Subtitle / Epilogue Note
+                              </label>
+                              <textarea
+                                rows={2}
+                                value={selectedChapter.endScreen?.staticConfig?.subtitle || 'Episode completed successfully.'}
+                                onChange={(e) => handleUpdateEndStaticConfig({ subtitle: e.target.value })}
+                                placeholder="Enter concluding narrative epilogue or stats..."
+                                className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2.5 text-xs text-[var(--text)] outline-none focus:border-purple-500 resize-none"
+                              />
+                            </div>
+
+                            {/* Background Image & Screen FX */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
+                              <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Background Image
+                                </label>
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="text"
+                                    value={selectedChapter.endScreen?.backgroundUrl || ''}
+                                    onChange={(e) => handleUpdateEndConfig({ backgroundUrl: e.target.value })}
+                                    placeholder="Background image URL..."
+                                    className="flex-1 min-w-0 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none focus:border-purple-500"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowAssetPickerFor('end_bg')}
+                                    className="px-2.5 py-2 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] text-xs font-bold rounded-md cursor-pointer shrink-0 flex items-center gap-1.5"
+                                  >
+                                    <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5" />
+                                    <span>Gallery</span>
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className="space-y-1.5">
+                                <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
+                                  Atmosphere Screen FX
+                                </label>
+                                <select
+                                  value={selectedChapter.endScreen?.staticConfig?.screenFx || 'cinema_grain'}
+                                  onChange={(e) => handleUpdateEndStaticConfig({ screenFx: e.target.value as any })}
+                                  className="w-full bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-2 text-xs text-[var(--text)] outline-none focus:border-purple-500 cursor-pointer"
+                                >
+                                  {STATIC_FX_PRESETS.map((fx) => (
+                                    <option key={fx.id} value={fx.id}>
+                                      {fx.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Buttons Preview Info */}
+                            <div className="p-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg text-[11px] text-[var(--muted)] space-y-1">
+                              <span className="font-bold text-[var(--text)] block uppercase tracking-wider text-[10px]">
+                                Interactive Options on Screen:
+                              </span>
+                              <div className="flex items-center gap-2 flex-wrap pt-1">
+                                <span className="px-2 py-0.5 rounded bg-purple-950/60 border border-purple-800 text-purple-300 font-bold">
+                                  ▶ CONTINUE TO NEXT EPISODE
+                                </span>
+                                <span className="px-2 py-0.5 rounded bg-[var(--card-bg)] border border-[var(--border)] text-[var(--muted)]">
+                                  ↺ REPLAY EPISODE
+                                </span>
+                                <span className="px-2 py-0.5 rounded bg-[var(--card-bg)] border border-[var(--border)] text-[var(--muted)]">
+                                  ⌂ RETURN TO MENU
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Test live preview button */}
+                        <div className="pt-3 border-t border-[var(--border)]">
+                          <button
+                            type="button"
+                            onClick={() => setShowLiveEndPreview(true)}
+                            className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-white font-bold rounded-md text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+                          >
+                            <GuiIconRenderer icon={GUI_ICONS.action.lookAt} className="w-3.5 h-3.5" />
+                            <span>Test Live Preview of Episode End Screen</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* TAB 5: SCENARIOS */}
                 {activeTab === 'scenes' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -1028,16 +1712,64 @@ export default function ChapterStudioModal({
         </div>
       )}
 
-      {showBgGallery && (
+      {/* LIVE EPISODE INTRO PREVIEW MODAL */}
+      {showLiveIntroPreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-md animate-fade-in">
+          <button
+            onClick={() => setShowLiveIntroPreview(false)}
+            className="absolute top-6 right-6 z-50 px-4 py-2 bg-red-900 hover:bg-red-800 text-white rounded-lg text-xs font-bold uppercase tracking-widest cursor-pointer shadow-xl flex items-center gap-2"
+          >
+            <span>Close Preview</span>
+            <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-3.5 h-3.5" />
+          </button>
+
+          <div className="w-full h-full max-w-6xl max-h-[85vh] aspect-video relative rounded-lg overflow-hidden border border-[var(--border)] shadow-2xl bg-black">
+            <StaticScreenView
+              scene={previewIntroScene}
+              story={story}
+              isInteractive={false}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* LIVE EPISODE END PREVIEW MODAL */}
+      {showLiveEndPreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-md animate-fade-in">
+          <button
+            onClick={() => setShowLiveEndPreview(false)}
+            className="absolute top-6 right-6 z-50 px-4 py-2 bg-red-900 hover:bg-red-800 text-white rounded-lg text-xs font-bold uppercase tracking-widest cursor-pointer shadow-xl flex items-center gap-2"
+          >
+            <span>Close Preview</span>
+            <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-3.5 h-3.5" />
+          </button>
+
+          <div className="w-full h-full max-w-6xl max-h-[85vh] aspect-video relative rounded-lg overflow-hidden border border-[var(--border)] shadow-2xl bg-black">
+            <StaticScreenView
+              scene={previewEndScene}
+              story={story}
+              isInteractive={false}
+            />
+          </div>
+        </div>
+      )}
+
+      {showAssetPickerFor && (
         <AssetStudioModal
           story={story}
           initialFilterType="background"
           onSelectAsset={(asset) => {
-            handleUpdateLoadingConfig({ bgImageUrl: asset.url });
-            setShowBgGallery(false);
+            if (showAssetPickerFor === 'loading_bg') {
+              handleUpdateLoadingConfig({ bgImageUrl: asset.url });
+            } else if (showAssetPickerFor === 'intro_bg') {
+              handleUpdateIntroConfig({ backgroundUrl: asset.url });
+            } else if (showAssetPickerFor === 'end_bg') {
+              handleUpdateEndConfig({ backgroundUrl: asset.url });
+            }
+            setShowAssetPickerFor(null);
             notify(`Background selected: ${asset.name}`);
           }}
-          onClose={() => setShowBgGallery(false)}
+          onClose={() => setShowAssetPickerFor(null)}
         />
       )}
 

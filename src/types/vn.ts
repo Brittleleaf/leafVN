@@ -529,12 +529,21 @@ export interface VNLoadingScreenConfig {
   durationMs?: number;
 }
 
+export interface VNChapterScreenConfig {
+  enabled: boolean;
+  sceneId?: string; // Optional: Link to an existing static screen scene in the project
+  staticConfig?: VNStaticScreenConfig; // Full customizable static screen (title, subtitle, buttons, fx, etc.)
+  backgroundUrl?: string;
+}
+
 export interface VNChapter {
   id: string;
   number: number;
   title: string;
   summary?: string;
   loadingScreen: VNLoadingScreenConfig;
+  introScreen?: VNChapterScreenConfig; // Episode Intro Screen (Pantalla de Inicio de Episodio)
+  endScreen?: VNChapterScreenConfig;   // Episode End Screen (Pantalla de Fin de Episodio)
   startSceneId: string;
   scenes: VNScene[];
 }

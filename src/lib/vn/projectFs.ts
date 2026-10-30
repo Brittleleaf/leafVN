@@ -246,6 +246,8 @@ export function loadProject(projectId: string): VNStory | null {
               enabled: false,
               title: chapData.title || '',
             },
+            introScreen: chapData.introScreen,
+            endScreen: chapData.endScreen,
             startSceneId: chapData.startSceneId || scenes[0]?.id || '',
             scenes,
           });
@@ -451,6 +453,8 @@ export function saveProject(projectId: string, story: VNStory): SaveProjectResul
           title: chapter.title || 'Chapter',
           summary: chapter.summary || '',
           loadingScreen: chapter.loadingScreen || { enabled: false, title: chapter.title || '' },
+          introScreen: chapter.introScreen,
+          endScreen: chapter.endScreen,
           startSceneId: chapter.startSceneId || sceneIds[0] || '',
           sceneIds,
         };

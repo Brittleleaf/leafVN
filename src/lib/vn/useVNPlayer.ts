@@ -15,10 +15,13 @@ import {
   VNScreenFxType,
   VNCursorType,
   VNCharacter,
+  VNChapterScreenConfig,
+  VNStaticScreenConfig,
 } from '@/types/vn';
 import { playSfx } from '@/lib/audioSettings';
 import { getSaveSlots, saveGameStateToSlot, deleteSaveSlot } from '@/lib/vn/storage';
 import { evaluateCondition, applyVariableMutation, getCharacterAvatar, interpolateText } from '@/lib/vn/engineUtils';
+import { DEFAULT_CHAPTER_INTRO_CONFIG, DEFAULT_CHAPTER_END_CONFIG } from '@/components/vn/StaticScreenView';
 
 export interface UseVNPlayerProps {
   story: VNStory;
@@ -108,6 +111,15 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     loreTip?: string;
     bgUrl?: string;
   } | null>(null);
+
+  // Pantallas de Episodio: Intro (Inicio) y End (Fin de Episodio)
+  const [activeEpisodeScreen, setActiveEpisodeScreen] = useState<{
+    type: 'intro' | 'end';
+    chapterId: string;
+    scene: VNScene;
+  } | null>(null);
+
+  const seenChapterIntrosRef = useRef<Set<string>>(new Set());
 
   // Efectos de cámara y Pantalla
   const [shakeClass, setShakeClass] = useState<string>('');
@@ -222,25 +234,139 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
   const currentScene: VNScene | undefined = resolved.scene;
   const currentEvent: VNEvent | undefined = currentScene?.timeline[eventIndex];
 
-  // Avance secuencial de escenarios entre capítulos o final de historia
-  const advanceToNextScene = useCallback(() => {
-    const sceneIdx = currentChapter?.scenes?.findIndex((s) => s.id === currentSceneId) ?? -1;
-    if (currentChapter && sceneIdx !== -1 && sceneIdx + 1 < currentChapter.scenes.length) {
-      const nextScene = currentChapter.scenes[sceneIdx + 1];
-      jumpToScene(nextScene.id, 0);
-    } else {
-      const globalScenarios = story.scenarios || [];
-      const globalIdx = globalScenarios.findIndex((s) => s.id === currentSceneId);
-      if (globalIdx !== -1 && globalIdx + 1 < globalScenarios.length) {
-        const nextGlobalSc = globalScenarios[globalIdx + 1];
-        jumpToScene(nextGlobalSc.id, 0);
+  // Helper para identificar escenarios estáticos aislados (Pantallas de Muerte / Menús)
+  // que NUNCA deben ejecutarse automáticamente por avance secuencial de lectura
+  const isIsolatedStaticScene = useCallback((sc?: VNScene): boolean => {
+    if (!sc) return false;
+    if (sc.sceneType === 'event' && sc.eventSubtype === 'static') {
+      const purpose = sc.staticScreenConfig?.purpose;
+      if (purpose && ['death', 'title', 'load_game', 'settings', 'gallery'].includes(purpose)) {
+        return true;
+      }
+    }
+    return false;
+  }, []);
+
+  // Constructor / Resolutor de escenarios de Pantalla de Episodio (Intro / Fin)
+  const resolveEpisodeScene = useCallback(
+    (type: 'intro' | 'end', chapter: VNChapter, screenConfig?: VNChapterScreenConfig): VNScene => {
+      const isIntro = type === 'intro';
+      const defaultStatic = isIntro ? DEFAULT_CHAPTER_INTRO_CONFIG : DEFAULT_CHAPTER_END_CONFIG;
+
+      // 1. Si apunta a un escenario existente del proyecto:
+      if (screenConfig?.sceneId) {
+        const found =
+          (story.scenarios || []).find((s) => s.id === screenConfig.sceneId) ||
+          chapter.scenes.find((s) => s.id === screenConfig.sceneId);
+        if (found) return found;
+      }
+
+      // 2. Usar configuración estática personalizada o plantilla por defecto
+      const baseConfig = screenConfig?.staticConfig || defaultStatic;
+      const config: VNStaticScreenConfig = {
+        ...baseConfig,
+        title:
+          baseConfig.title ||
+          (isIntro
+            ? chapter.title
+              ? `EPISODE: ${chapter.title.toUpperCase()}`
+              : `EPISODE #${chapter.number}`
+            : `END OF EPISODE #${chapter.number}`),
+        subtitle:
+          baseConfig.subtitle ||
+          (isIntro
+            ? chapter.summary || 'Prepare to enter the scenario.'
+            : 'Episode completed successfully.'),
+      };
+
+      return {
+        id: `ep-${type}-${chapter.id}`,
+        name: config.title || (isIntro ? 'Episode Intro' : 'Episode End'),
+        backgroundUrl: screenConfig?.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+        sceneType: 'event',
+        eventSubtype: 'static',
+        staticScreenConfig: config,
+        timeline: [],
+      };
+    },
+    [story.scenarios]
+  );
+
+  // Ejecutor de Pantalla de Carga
+  const triggerLoadingScreen = useCallback(
+    (chapter: VNChapter, onComplete: () => void) => {
+      if (chapter.loadingScreen?.enabled) {
+        setLoadingScreen({
+          active: true,
+          title: chapter.loadingScreen.title || chapter.title,
+          subtitle: chapter.loadingScreen.subtitle,
+          loreTip: chapter.loadingScreen.loreTip,
+          bgUrl: chapter.loadingScreen.bgImageUrl,
+        });
+
+        if (loadingScreenTimerRef.current) clearTimeout(loadingScreenTimerRef.current);
+        loadingScreenTimerRef.current = setTimeout(() => {
+          setLoadingScreen(null);
+          loadingScreenTimerRef.current = null;
+          onComplete();
+        }, chapter.loadingScreen.durationMs || 2500);
+      } else {
+        onComplete();
+      }
+    },
+    []
+  );
+
+  // Inicializador de capítulo con soporte para Pantalla de Inicio (Intro) y Carga
+  const startChapter = useCallback(
+    (chapter: VNChapter) => {
+      if (!chapter) return;
+      setCurrentChapterId(chapter.id);
+
+      // Si el capítulo tiene Pantalla de Inicio habilitada y no ha sido vista en esta sesión:
+      if (chapter.introScreen?.enabled && !seenChapterIntrosRef.current.has(chapter.id)) {
+        seenChapterIntrosRef.current.add(chapter.id);
+        const introScene = resolveEpisodeScene('intro', chapter, chapter.introScreen);
+        setActiveEpisodeScreen({
+          type: 'intro',
+          chapterId: chapter.id,
+          scene: introScene,
+        });
         return;
       }
 
-      const chapIdx = story.chapters.findIndex((c) => c.id === currentChapterId);
+      // Si no tiene intro o ya se vio, ejecutar pantalla de carga si está activa y saltar al primer escenario
+      const targetSceneId = chapter.startSceneId || chapter.scenes[0]?.id;
+      triggerLoadingScreen(chapter, () => {
+        if (targetSceneId) {
+          jumpToScene(targetSceneId, 0);
+        }
+      });
+    },
+    [resolveEpisodeScene, triggerLoadingScreen, jumpToScene]
+  );
+
+  // Continuar desde Pantalla de Episodio (Intro -> Escenario | End -> Siguiente Capítulo)
+  const handleEpisodeScreenContinue = useCallback(() => {
+    if (!activeEpisodeScreen) return;
+    const { type, chapterId } = activeEpisodeScreen;
+    const ch = story.chapters.find((c) => c.id === chapterId) || currentChapter;
+    setActiveEpisodeScreen(null);
+
+    if (type === 'intro') {
+      if (ch) {
+        const targetSceneId = ch.startSceneId || ch.scenes[0]?.id;
+        triggerLoadingScreen(ch, () => {
+          if (targetSceneId) {
+            jumpToScene(targetSceneId, 0);
+          }
+        });
+      }
+    } else if (type === 'end') {
+      const chapIdx = story.chapters.findIndex((c) => c.id === chapterId);
       if (chapIdx !== -1 && chapIdx + 1 < story.chapters.length) {
         const nextChap = story.chapters[chapIdx + 1];
-        jumpToScene(nextChap.startSceneId || nextChap.scenes[0]?.id, 0);
+        startChapter(nextChap);
       } else {
         setIsStoryCompleted(true);
         setSkipMode(false);
@@ -248,7 +374,82 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
         playSfx('/assets/sfx/success.mp3', false, 0.7);
       }
     }
-  }, [currentChapter, currentSceneId, story.chapters, story.scenarios, currentChapterId, jumpToScene]);
+  }, [activeEpisodeScreen, story.chapters, currentChapter, triggerLoadingScreen, jumpToScene, startChapter]);
+
+  // Reintentar / Repetir episodio actual desde pantalla de fin
+  const handleEpisodeScreenRetry = useCallback(() => {
+    if (!activeEpisodeScreen) return;
+    const { chapterId } = activeEpisodeScreen;
+    setActiveEpisodeScreen(null);
+    const ch = story.chapters.find((c) => c.id === chapterId) || currentChapter;
+    if (ch) {
+      seenChapterIntrosRef.current.delete(ch.id);
+      startChapter(ch);
+    }
+  }, [activeEpisodeScreen, story.chapters, currentChapter, startChapter]);
+
+  // Avance secuencial de escenarios entre capítulos o final de historia
+  const advanceToNextScene = useCallback(() => {
+    if (activeEpisodeScreen) {
+      handleEpisodeScreenContinue();
+      return;
+    }
+
+    const sceneIdx = currentChapter?.scenes?.findIndex((s) => s.id === currentSceneId) ?? -1;
+
+    // Buscar el siguiente escenario NARRATIVO jugable dentro del capítulo actual
+    // (omitiendo automáticamente pantallas de muerte, menús o pantallas estáticas aisladas)
+    let nextNarrativeScene: VNScene | null = null;
+    if (currentChapter && sceneIdx !== -1) {
+      for (let i = sceneIdx + 1; i < currentChapter.scenes.length; i++) {
+        const candidate = currentChapter.scenes[i];
+        if (!isIsolatedStaticScene(candidate)) {
+          nextNarrativeScene = candidate;
+          break;
+        }
+      }
+    }
+
+    if (nextNarrativeScene) {
+      jumpToScene(nextNarrativeScene.id, 0);
+      return;
+    }
+
+    // No hay más escenarios narrativos en este capítulo: Fin del Capítulo / Episodio
+    if (currentChapter?.endScreen?.enabled) {
+      const endScene = resolveEpisodeScene('end', currentChapter, currentChapter.endScreen);
+      setActiveEpisodeScreen({
+        type: 'end',
+        chapterId: currentChapter.id,
+        scene: endScene,
+      });
+      playSfx('/assets/sfx/success.mp3', false, 0.6);
+      return;
+    }
+
+    // Si no hay endScreen habilitado, avanzar al siguiente capítulo
+    const chapIdx = story.chapters.findIndex((c) => c.id === currentChapterId);
+    if (chapIdx !== -1 && chapIdx + 1 < story.chapters.length) {
+      const nextChap = story.chapters[chapIdx + 1];
+      startChapter(nextChap);
+    } else {
+      setIsStoryCompleted(true);
+      setSkipMode(false);
+      setIsTextBoxVisible(false);
+      playSfx('/assets/sfx/success.mp3', false, 0.7);
+    }
+  }, [
+    activeEpisodeScreen,
+    currentChapter,
+    currentSceneId,
+    currentChapterId,
+    story.chapters,
+    isIsolatedStaticScene,
+    jumpToScene,
+    resolveEpisodeScene,
+    handleEpisodeScreenContinue,
+    startChapter,
+  ]);
 
   // Registrar último punto de guardado
   useEffect(() => {
@@ -496,22 +697,41 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     return () => window.removeEventListener('vn:storage_quota_warning', handleQuotaWarning);
   }, []);
 
-  // Pantalla de carga al iniciar capítulo
+  // Pantalla de Inicio de Episodio / Pantalla de Carga al arrancar o cambiar capítulo
   useEffect(() => {
-    if (currentChapter?.loadingScreen?.enabled && eventIndex === 0) {
+    if (isRestoringSaveRef.current) return;
+    if (!currentChapter) return;
+
+    if (
+      currentChapter.introScreen?.enabled &&
+      !seenChapterIntrosRef.current.has(currentChapter.id) &&
+      eventIndex === 0 &&
+      !activeEpisodeScreen
+    ) {
+      seenChapterIntrosRef.current.add(currentChapter.id);
+      const introScene = resolveEpisodeScene('intro', currentChapter, currentChapter.introScreen);
+      setActiveEpisodeScreen({
+        type: 'intro',
+        chapterId: currentChapter.id,
+        scene: introScene,
+      });
+      return;
+    }
+
+    if (currentChapter.loadingScreen?.enabled && eventIndex === 0 && !activeEpisodeScreen) {
       setLoadingScreen({
         active: true,
-        title: currentChapter.loadingScreen.title,
+        title: currentChapter.loadingScreen.title || currentChapter.title,
         subtitle: currentChapter.loadingScreen.subtitle,
         loreTip: currentChapter.loadingScreen.loreTip,
         bgUrl: currentChapter.loadingScreen.bgImageUrl,
       });
 
-      const timer = setTimeout(() => {
+      if (loadingScreenTimerRef.current) clearTimeout(loadingScreenTimerRef.current);
+      loadingScreenTimerRef.current = setTimeout(() => {
         setLoadingScreen(null);
+        loadingScreenTimerRef.current = null;
       }, currentChapter.loadingScreen.durationMs || 2500);
-
-      return () => clearTimeout(timer);
     }
   }, [currentChapterId]);
 
@@ -1848,6 +2068,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     persistentCursor,
     temporaryCursor,
     loadingScreen,
+    activeEpisodeScreen,
     shakeClass,
     flashColor,
     isFlashlightShutdownActive,
@@ -1867,6 +2088,8 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     advanceEvent,
     advanceToNextScene,
     jumpToScene,
+    handleEpisodeScreenContinue,
+    handleEpisodeScreenRetry,
     handleSelectChoice,
     handleHotspotClick,
     handleRetryPrevious,

@@ -96,6 +96,8 @@ export function sanitizeStory(raw: unknown): VNStory {
             ? ch.startSceneId
             : scenes[0]?.id || '',
           loadingScreen: ch.loadingScreen || { enabled: false, title: ch.title || '' },
+          introScreen: ch.introScreen,
+          endScreen: ch.endScreen,
           scenes,
         };
       })
