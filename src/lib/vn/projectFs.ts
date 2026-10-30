@@ -63,20 +63,13 @@ export function listProjects(): VNProjectSummary[] {
   try {
     const root = getProjectsRootDir();
     if (!fs.existsSync(root)) {
-      return [getSampleProjectSummary()];
+      return [];
     }
     const entries = fs.readdirSync(root, { withFileTypes: true });
     const projectDirs = entries.filter((e) => e.isDirectory());
 
-    // Si no hay proyectos, intentar inicializar el proyecto base
     if (projectDirs.length === 0) {
-      const defaultId = 'el-renacer-del-pintor';
-      try {
-        saveProject(defaultId, SAMPLE_STORY);
-        return listProjects();
-      } catch {
-        return [getSampleProjectSummary()];
-      }
+      return [];
     }
 
   const summaries: VNProjectSummary[] = [];

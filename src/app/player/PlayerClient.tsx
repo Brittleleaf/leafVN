@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { VNStory } from '@/types/vn';
-import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
+import { createBlankStory } from '@/lib/vn/sampleStory';
 import VNPlayer from '@/components/vn/VNPlayer';
 
 export default function PlayerClient() {
@@ -39,10 +39,10 @@ export default function PlayerClient() {
           } catch (_) {}
         }
 
-        setStory(SAMPLE_STORY);
+        setStory(createBlankStory(projectId));
       } catch (err) {
         console.error('Error loading project for player:', err);
-        setStory(SAMPLE_STORY);
+        setStory(createBlankStory(projectId));
       } finally {
         setLoading(false);
       }

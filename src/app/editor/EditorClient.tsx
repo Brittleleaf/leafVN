@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { VNStory } from '@/types/vn';
-import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
+import { createBlankStory } from '@/lib/vn/sampleStory';
 import { useAuth } from '@/lib/firebase/authContext';
 import { loadProjectFromCloud } from '@/lib/firebase/cloudProjects';
 import VNMaker from '@/components/vn/VNMaker';
@@ -56,11 +56,11 @@ export default function EditorClient() {
           }
         }
 
-        // 4. Fallback a muestra
-        setStory(SAMPLE_STORY);
+        // 4. Fallback a proyecto nuevo en blanco
+        setStory(createBlankStory(projectId, user?.displayName));
       } catch (err) {
         console.error('Error loading project for editor:', err);
-        setStory(SAMPLE_STORY);
+        setStory(createBlankStory(projectId, user?.displayName));
       } finally {
         setLoading(false);
       }

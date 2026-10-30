@@ -1,0 +1,54 @@
+{
+  "id": "el-renacer-del-pintor",
+  "version": "1.0.0",
+  "title": "El Renacer del Pintor",
+  "author": "Creador",
+  "description": "Proyecto en blanco preparado para nuevos escenarios.",
+  "coverImageUrl": "",
+  "createdAt": "2026-10-13T00:00:00.000Z",
+  "updatedAt": "2026-10-13T17:03:16.418Z",
+  "textBoxConfig": {
+    "theme": "classified",
+    "opacity": 0.9,
+    "borderColor": "#b91c1c",
+    "fontSize": "base",
+    "typewriterSpeedMs": 25,
+    "showAvatar": true,
+    "soundBlipEnabled": true,
+    "position": "bottom"
+  },
+  "variables": [],
+  "chapters": [
+    {
+      "id": "chap-1",
+      "number": 1,
+      "title": "Capítulo 1",
+      "summary": "",
+      "loadingScreen": {
+        "enabled": false,
+        "title": "Capítulo 1"
+      },
+      "startSceneId": "scene-1",
+      "sceneIds": [
+        "scene-1791910985341"
+      ]
+    }
+  ],
+  "characters": [],
+  "scenarios": [
+    {
+      "id": "scene-1791910985341",
+      "name": "Escenario #1",
+      "backgroundUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
+      "timeline": [
+        {
+          "id": "ev-1791910985341",
+          "type": "dialogue",
+          "text": "Entrando a una nueva localización..."
+        }
+      ],
+      "hotspots": [],
+      "chapterId": "chap-1"
+    }
+  ]
+}

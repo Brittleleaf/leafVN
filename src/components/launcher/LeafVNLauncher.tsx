@@ -10,7 +10,7 @@ import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
 import ThemeCustomizerPanel from '@/components/vn/theme/ThemeCustomizerPanel';
 import { useAuth } from '@/lib/firebase/authContext';
-import { getCloudProjects, saveProjectToCloud } from '@/lib/firebase/cloudProjects';
+import { getCloudProjects, saveProjectToCloud, saveProjectToGoogleDrive } from '@/lib/firebase/cloudProjects';
 import UserAuthButton from '@/components/auth/UserAuthButton';
 import AboutModal from '@/components/common/AboutModal';
 import { i18n, SUPPORTED_LANGS } from '@/lib/i18n';
@@ -34,7 +34,7 @@ const LANGUAGE_LABELS: Record<string, { name: string; native: string }> = {
 
 export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, googleAccessToken } = useAuth();
 
   const [projects, setProjects] = useState<VNProjectSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -169,23 +169,6 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       serverProjects.forEach((p) => mergedMap.set(p.id, p));
       localProjects.forEach((p) => mergedMap.set(p.id, p));
       cloudProjects.forEach((p) => mergedMap.set(p.id, p));
-
-      if (mergedMap.size === 0) {
-        mergedMap.set(SAMPLE_STORY.id || 'el-renacer-del-pintor', {
-          id: SAMPLE_STORY.id || 'el-renacer-del-pintor',
-          title: SAMPLE_STORY.title || 'The Rebirth of the Painter',
-          author: SAMPLE_STORY.author || 'Justin',
-          description: SAMPLE_STORY.description || 'Story project.',
-          version: SAMPLE_STORY.version || '1.0.0',
-          coverImageUrl: SAMPLE_STORY.coverImageUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
-          updatedAt: SAMPLE_STORY.updatedAt || new Date().toISOString(),
-          createdAt: SAMPLE_STORY.createdAt || new Date().toISOString(),
-          chapterCount: SAMPLE_STORY.chapters.length,
-          characterCount: SAMPLE_STORY.characters.length,
-          scenarioCount: SAMPLE_STORY.scenarios?.length || 1,
-          assetCount: 0,
-        });
-      }
 
       setProjects(Array.from(mergedMap.values()));
     } catch (err) {
@@ -517,6 +500,60 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       }
     } catch (err) {
       console.error('Error exportando proyecto:', err);
+    }
+  };
+
+  // Guardar / Backup de proyecto en Google Drive
+  const handleBackupToGoogleDrive = async (id: string, title: string) => {
+    let token = googleAccessToken || (typeof window !== 'undefined' ? sessionStorage.getItem('vn_gdrive_token') : null);
+    if (!token) {
+      setLauncherToast({
+        type: 'error',
+        message: 'Please sign in with Google (Sign In button) to backup projects directly to Google Drive.',
+      });
+      return;
+    }
+
+    try {
+      setLauncherToast({
+        type: 'success',
+        message: `Backing up "${title}" to Google Drive...`,
+      });
+
+      let storyToBackup: VNStory | null = null;
+      try {
+        const res = await fetch(`/api/projects/${id}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.story) storyToBackup = data.story;
+        }
+      } catch {}
+
+      if (!storyToBackup) {
+        const local = localStorage.getItem(`leafvn_project_${id}`);
+        if (local) storyToBackup = JSON.parse(local);
+      }
+
+      if (!storyToBackup && (id === 'el-renacer-del-pintor' || id === SAMPLE_STORY.id)) {
+        storyToBackup = SAMPLE_STORY;
+      }
+
+      if (!storyToBackup) {
+        throw new Error('Project data could not be loaded.');
+      }
+
+      await saveProjectToGoogleDrive(token, storyToBackup);
+      playSfx('/assets/sfx/success.mp3', false, 0.5);
+      setLauncherToast({
+        type: 'success',
+        message: `Saved to Google Drive: "Leaf VN Projects/${storyToBackup.title}"!`,
+      });
+    } catch (err: any) {
+      console.error('Google Drive backup error:', err);
+      setLauncherToast({
+        type: 'error',
+        message: 'Google Drive error: ' + (err?.message || 'Check permissions'),
+      });
     }
   };
 
@@ -1101,6 +1138,16 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
+                                handleBackupToGoogleDrive(proj.id, proj.title);
+                              }}
+                              title="Backup to Google Drive"
+                              className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
+                            >
+                              <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 handleExportProject(proj.id);
                               }}
                               title="Export JSON"
@@ -1178,6 +1225,13 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                               >
                                 <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3 h-3" />
                                 <span>Play</span>
+                              </button>
+                              <button
+                                onClick={() => handleBackupToGoogleDrive(proj.id, proj.title)}
+                                title="Backup to Google Drive"
+                                className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
+                              >
+                                <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => handleExportProject(proj.id)}
