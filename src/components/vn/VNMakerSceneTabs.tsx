@@ -51,32 +51,62 @@ export default function VNMakerSceneTabs() {
     };
   }, [isNewSceneOpen]);
 
+  const isViewingGlobal =
+    selectedChapterId === '__global__' ||
+    Boolean(
+      (story.scenarios || []).some((s) => s.id === selectedSceneId) &&
+      !currentChapter?.scenes.some((s) => s.id === selectedSceneId)
+    );
+
+  const displayedScenes = isViewingGlobal
+    ? story.scenarios || []
+    : currentChapter?.scenes || [];
+
   return (
     <div className="h-11 border-b vn-glass-header px-4 flex items-center justify-between gap-3 shrink-0 select-none">
       {/* LEFT: Chapter Selector */}
       <div className="flex items-center gap-2 shrink-0">
-        <span className="text-[11px] text-[var(--muted)] uppercase font-bold shrink-0">Chapter:</span>
+        <span className="text-[11px] text-[var(--muted)] uppercase font-bold shrink-0">
+          {isViewingGlobal ? 'Reserve:' : 'Chapter:'}
+        </span>
         <select
-          value={selectedChapterId}
+          value={isViewingGlobal ? '__global__' : selectedChapterId}
           onChange={(e) => {
             const chId = e.target.value;
-            setSelectedChapterId(chId);
-            const ch = story.chapters.find((c) => c.id === chId);
-            const validStartScene = ch?.scenes.find((s) => s.id === ch.startSceneId);
-            const targetScene = validStartScene || ch?.scenes[0];
-            if (targetScene) {
-              setSelectedSceneId(targetScene.id);
-              setSelectedLineIndex(0);
+            if (chId === '__global__') {
+              const firstGlobal = story.scenarios?.[0];
+              if (firstGlobal) {
+                setSelectedSceneId(firstGlobal.id);
+                setSelectedLineIndex(0);
+              }
+            } else {
+              setSelectedChapterId(chId);
+              const ch = story.chapters.find((c) => c.id === chId);
+              const validStartScene = ch?.scenes.find((s) => s.id === ch.startSceneId);
+              const targetScene = validStartScene || ch?.scenes[0];
+              if (targetScene) {
+                setSelectedSceneId(targetScene.id);
+                setSelectedLineIndex(0);
+              }
             }
             playSfx('/assets/sfx/click intro.mp3', false, 0.2);
           }}
           className="bg-[var(--well-bg)] border border-[var(--border)] rounded-md px-2.5 py-1 text-xs text-[var(--text)] font-bold outline-none cursor-pointer focus:border-[var(--accent)]"
         >
-          {story.chapters.map((ch) => (
-            <option key={ch.id} value={ch.id}>
-              {ch.title}
-            </option>
-          ))}
+          <optgroup label="Chapters">
+            {story.chapters.map((ch) => (
+              <option key={ch.id} value={ch.id}>
+                {ch.title}
+              </option>
+            ))}
+          </optgroup>
+          {story.scenarios && story.scenarios.length > 0 && (
+            <optgroup label="Project Library">
+              <option value="__global__">
+                📁 Global Reserve ({story.scenarios.length} scenes)
+              </option>
+            </optgroup>
+          )}
         </select>
 
         {/* Chapter Settings Button */}
@@ -95,7 +125,10 @@ export default function VNMakerSceneTabs() {
 
       {/* CENTER: Scenario Tabs (Scrollable) */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-xs flex-1 custom-scrollbar min-w-0">
-        {currentChapter?.scenes.map((sc, scIdx) => {
+        {displayedScenes.length === 0 && (
+          <span className="text-[11px] text-[var(--muted)] italic px-2">No scenarios found</span>
+        )}
+        {displayedScenes.map((sc, scIdx) => {
           const isActive = sc.id === selectedSceneId;
           const isDragOver = dragOverSceneIndex === scIdx;
           const isBeingDragged = draggedSceneIndex === scIdx;

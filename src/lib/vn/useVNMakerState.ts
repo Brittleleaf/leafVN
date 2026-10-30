@@ -287,7 +287,9 @@ export function useVNMakerState(
   const currentChapter =
     story.chapters.find((c) => c.id === selectedChapterId) || story.chapters[0];
   const currentScene =
-    currentChapter?.scenes.find((s) => s.id === selectedSceneId) || currentChapter?.scenes[0];
+    currentChapter?.scenes.find((s) => s.id === selectedSceneId) ||
+    (story.scenarios || []).find((s) => s.id === selectedSceneId) ||
+    currentChapter?.scenes[0];
   const currentLine = currentScene?.timeline?.[selectedLineIndex] || currentScene?.timeline?.[0];
 
   const currentSpeaker = story.characters.find((c) => c.id === currentLine?.characterId);
@@ -833,14 +835,21 @@ export function useVNMakerState(
       ],
     };
     setStory((prevStory) => {
+      const isGlobal = selectedChapterId === '__global__';
+      if (isGlobal) {
+        const currentScenarios = prevStory.scenarios || [];
+        const updatedScenarios = [...currentScenarios, newScene];
+        const updated = { ...prevStory, scenarios: updatedScenarios };
+        saveActiveStory(updated);
+        return updated;
+      }
+
       const prevChapter = prevStory.chapters.find((c) => c.id === selectedChapterId) || prevStory.chapters[0];
       if (!prevChapter) return prevStory;
       const updatedChapters = prevStory.chapters.map((c) =>
         c.id === prevChapter.id ? { ...c, scenes: [...c.scenes, newScene] } : c
       );
-      const currentScenarios = prevStory.scenarios || [];
-      const updatedScenarios = [...currentScenarios, newScene];
-      const updated = { ...prevStory, chapters: updatedChapters, scenarios: updatedScenarios };
+      const updated = { ...prevStory, chapters: updatedChapters };
       saveActiveStory(updated);
       return updated;
     });
@@ -1191,6 +1200,24 @@ export function useVNMakerState(
   }, [currentScene?.timeline, timelineFxStatus.pairsMap, recordHistorySnapshot, handleUpdateCurrentScene, notify]);
 
   const handleMoveSceneTab = useCallback((fromIndex: number, toIndex: number) => {
+    const isGlobal =
+      (story.scenarios || []).some((s) => s.id === selectedSceneId) &&
+      !currentChapter?.scenes.some((s) => s.id === selectedSceneId);
+
+    if (isGlobal) {
+      if (!story.scenarios || toIndex < 0 || toIndex >= story.scenarios.length || fromIndex === toIndex) return;
+      recordHistorySnapshot();
+      const updatedScenarios = [...story.scenarios];
+      const [moved] = updatedScenarios.splice(fromIndex, 1);
+      updatedScenarios.splice(toIndex, 0, moved);
+      const updatedStory = { ...story, scenarios: updatedScenarios };
+      setStory(updatedStory);
+      saveActiveStory(updatedStory);
+      playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+      notify('Tab order rearranged');
+      return;
+    }
+
     if (!currentChapter?.scenes) return;
     if (toIndex < 0 || toIndex >= currentChapter.scenes.length || fromIndex === toIndex) return;
     recordHistorySnapshot();
@@ -1206,7 +1233,7 @@ export function useVNMakerState(
     saveActiveStory(updatedStory);
     playSfx('/assets/sfx/click intro.mp3', false, 0.2);
     notify('Tab order rearranged');
-  }, [currentChapter, recordHistorySnapshot, story, notify]);
+  }, [currentChapter, recordHistorySnapshot, story, selectedSceneId, notify]);
 
   const handleDragCancel = useCallback(() => {
     if (draggedTimelineItem && draggedTimelineItem.sourceSceneId !== selectedSceneId) {

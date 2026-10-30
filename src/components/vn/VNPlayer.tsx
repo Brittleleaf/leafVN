@@ -176,7 +176,10 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             onNextScene={handleEpisodeScreenContinue}
             onRetry={handleEpisodeScreenRetry}
             onMainMenu={() => {
-              if (onExit) {
+              const mainMenu = findMenuSceneByRole(story, 'main_menu');
+              if (mainMenu) {
+                jumpToScene(mainMenu.id, 0);
+              } else if (onExit) {
                 onExit();
               } else {
                 handleRestartStory();

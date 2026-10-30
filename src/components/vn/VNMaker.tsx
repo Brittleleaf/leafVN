@@ -189,6 +189,7 @@ export default function VNMaker({ initialStory, onPlayStory, onExit, onSaveStory
                   story={story}
                   onUpdateScene={handlePatchCurrentScene}
                   onUpdateStoryCustomAssets={handleUpdateStoryCustomAssets}
+                  onBackToMenuMap={() => setCurrentWorkspace('menu_tool')}
                   editorTheme={editorTheme}
                 />
               ) : (

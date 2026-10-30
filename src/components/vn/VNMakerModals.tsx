@@ -94,7 +94,6 @@ export default function VNMakerModals() {
             saveActiveStory(updatedStory);
           }}
           onClose={() => {
-            setCurrentWorkspace('story_tool');
             setActiveGlobalModal(null);
           }}
           notify={notify}
@@ -147,14 +146,13 @@ export default function VNMakerModals() {
       )}
 
       {/* 5. STUDIO DE ESCENARIOS */}
-      {activeGlobalModal === 'scenes' && currentChapter && (
+      {activeGlobalModal === 'scenes' && (
         <SceneStudioModal
           story={story}
           currentChapterId={selectedChapterId}
           selectedSceneId={selectedSceneId}
           onSelectScene={(scId) => {
-            setSelectedSceneId(scId);
-            setSelectedLineIndex(0);
+            handleSelectScene(scId);
             setCurrentWorkspace('story_tool');
             setActiveGlobalModal(null);
           }}
@@ -185,6 +183,8 @@ export default function VNMakerModals() {
                 setSelectedLineIndex(0);
               }
             }
+            setCurrentWorkspace('hub');
+            setActiveGlobalModal(null);
           }}
           onClose={() => setActiveGlobalModal(null)}
           notify={notify}
