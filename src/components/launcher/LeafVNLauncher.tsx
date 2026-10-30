@@ -760,7 +760,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
             )}
           </div>
 
-          {/* Botón de Autenticación de Usuario */}
+          {/* User Authentication Button */}
           <UserAuthButton />
 
           <button

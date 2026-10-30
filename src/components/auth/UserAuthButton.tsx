@@ -42,7 +42,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
     );
   }
 
-  // Usuario autenticado
+  // Authenticated user state
   const displayName = user.displayName || user.email?.split('@')[0] || 'User';
   const photoUrl = user.photoURL;
 
@@ -75,7 +75,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
             onClick={(e) => e.stopPropagation()}
             className="absolute right-0 top-9 z-[70] w-64 rounded-xl border border-[var(--border2)] bg-[var(--dropdown-bg)] backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-3 text-xs animate-in fade-in zoom-in-95 duration-150"
           >
-            {/* Header del usuario */}
+            {/* User Profile Header */}
             <div className="flex items-center gap-3 pb-3 border-b border-[var(--border)] mb-2">
               {photoUrl ? (
                 <img src={photoUrl} alt={displayName} className="w-9 h-9 rounded-full object-cover border border-[var(--accent)]" />
@@ -90,7 +90,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
               </div>
             </div>
 
-            {/* Estado de sincronización */}
+            {/* Cloud Sync Status */}
             <div className="p-2 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] mb-3 space-y-1">
               <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-400">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -101,7 +101,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
               </p>
             </div>
 
-            {/* Acciones */}
+            {/* Actions */}
             <button
               type="button"
               onClick={async () => {
@@ -112,7 +112,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
               className="w-full py-1.5 px-2.5 rounded-lg hover:bg-rose-500/15 text-rose-400 hover:text-rose-300 transition-colors flex items-center gap-2 cursor-pointer font-medium"
             >
               <GuiIconRenderer icon={GUI_ICONS.action.delete} className="w-3.5 h-3.5" />
-              <span>Cerrar Sesión</span>
+              <span>Sign Out</span>
             </button>
           </div>
         </>

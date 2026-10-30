@@ -50,7 +50,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     } catch (err: unknown) {
       const e = err as { code?: string; message?: string };
       if (e?.code !== 'auth/popup-closed-by-user') {
-        setErrorMsg(e?.message || 'Error al iniciar sesión con Google.');
+        setErrorMsg(e?.message || 'Failed to sign in with Google.');
       }
     } finally {
       setLoading(false);
@@ -69,7 +69,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     } catch (err: unknown) {
       const e = err as { code?: string; message?: string };
       if (e?.code !== 'auth/popup-closed-by-user') {
-        setErrorMsg(e?.message || 'Error al iniciar sesión con GitHub.');
+        setErrorMsg(e?.message || 'Failed to sign in with GitHub.');
       }
     } finally {
       setLoading(false);
@@ -79,7 +79,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
   const handleSubmitEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setErrorMsg('Por favor completa todos los campos.');
+      setErrorMsg('Please fill in all required fields.');
       return;
     }
 
@@ -97,13 +97,13 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
     } catch (err: unknown) {
       const e = err as { code?: string; message?: string };
       if (e?.code === 'auth/user-not-found' || e?.code === 'auth/wrong-password' || e?.code === 'auth/invalid-credential') {
-        setErrorMsg('Correo o contraseña incorrectos.');
+        setErrorMsg('Incorrect email or password.');
       } else if (e?.code === 'auth/email-already-in-use') {
-        setErrorMsg('Este correo ya está registrado.');
+        setErrorMsg('An account with this email already exists.');
       } else if (e?.code === 'auth/weak-password') {
-        setErrorMsg('La contraseña debe tener al menos 6 caracteres.');
+        setErrorMsg('Password must be at least 6 characters long.');
       } else {
-        setErrorMsg(e?.message || 'Error durante la autenticación.');
+        setErrorMsg(e?.message || 'Authentication failed. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -150,7 +150,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
               onClose();
             }}
             className="absolute top-4 right-4 p-1.5 text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)] rounded-lg transition-colors cursor-pointer"
-            title="Cerrar"
+            title="Close"
           >
             <GuiIconRenderer icon={GUI_ICONS.action.cancel} className="w-4 h-4" />
           </button>
@@ -162,14 +162,14 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           />
 
           <h2 className="text-base font-bold text-[var(--text)] tracking-wide">
-            {mode === 'signin' ? 'Iniciar Sesión en Leaf VN' : 'Crear Cuenta en Leaf VN'}
+            {mode === 'signin' ? 'Sign In to Leaf VN' : 'Create Leaf VN Account'}
           </h2>
           <p className="text-xs text-[var(--muted2)] mt-1 max-w-xs">
-            Guarda tus historias en la nube y accede desde cualquier lugar.
+            Save your visual novels to the cloud and access them anywhere.
           </p>
         </div>
 
-        {/* Contenido */}
+        {/* Content */}
         <div className="p-6 space-y-4">
           {errorMsg && (
             <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
@@ -178,7 +178,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
             </div>
           )}
 
-          {/* Botones de Proveedores OAuth */}
+          {/* OAuth Provider Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {/* Google Button */}
             <button
@@ -222,46 +222,46 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
             </button>
           </div>
 
-          {/* Divisor */}
+          {/* Divider */}
           <div className="relative flex items-center justify-center my-3">
             <div className="w-full border-t border-[var(--border)]" />
             <span
               className="absolute px-3 py-0.5 rounded-full text-[10px] uppercase font-mono tracking-wider text-[var(--muted2)] border border-[var(--border)]"
               style={{ background: 'var(--header-bg, rgba(20, 8, 40, 0.95))' }}
             >
-              o con correo
+              or with email
             </span>
           </div>
 
-          {/* Formulario Email / Password */}
+          {/* Email / Password Form */}
           <form onSubmit={handleSubmitEmail} className="space-y-3">
             {mode === 'signup' && (
               <div>
-                <label className="block text-[11px] font-medium text-[var(--muted)] mb-1">Nombre o Alias</label>
+                <label className="block text-[11px] font-medium text-[var(--muted)] mb-1">Author Name or Alias</label>
                 <input
                   type="text"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Tu nombre de autor"
+                  placeholder="Your author name"
                   className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-xs text-[var(--text)] outline-none transition-colors placeholder:text-[var(--muted2)]"
                 />
               </div>
             )}
 
             <div>
-              <label className="block text-[11px] font-medium text-[var(--muted)] mb-1">Correo Electrónico</label>
+              <label className="block text-[11px] font-medium text-[var(--muted)] mb-1">Email Address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="ejemplo@leafvn.com"
+                placeholder="author@leafvn.com"
                 className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-xs text-[var(--text)] outline-none transition-colors placeholder:text-[var(--muted2)]"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium text-[var(--muted)] mb-1">Contraseña</label>
+              <label className="block text-[11px] font-medium text-[var(--muted)] mb-1">Password</label>
               <input
                 type="password"
                 required
@@ -278,20 +278,20 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
               className="w-full py-2.5 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 text-[var(--accent-contrast)] font-bold rounded-xl text-xs shadow-[0_0_15px_var(--accent-glow)] transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? (
-                <span>Procesando...</span>
+                <span>Processing...</span>
               ) : mode === 'signin' ? (
-                <span>Iniciar Sesión</span>
+                <span>Sign In</span>
               ) : (
-                <span>Crear Cuenta Gratuita</span>
+                <span>Create Free Account</span>
               )}
             </button>
           </form>
 
-          {/* Conmutador entre Iniciar Sesión y Registrarse */}
+          {/* Toggle between Sign In and Sign Up */}
           <div className="pt-2 text-center text-xs text-[var(--muted)]">
             {mode === 'signin' ? (
               <p>
-                ¿No tienes cuenta?{' '}
+                Don&apos;t have an account?{' '}
                 <button
                   type="button"
                   onClick={() => {
@@ -300,12 +300,12 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   }}
                   className="text-[var(--accent)] font-semibold hover:underline cursor-pointer"
                 >
-                  Regístrate aquí
+                  Sign up here
                 </button>
               </p>
             ) : (
               <p>
-                ¿Ya tienes una cuenta?{' '}
+                Already have an account?{' '}
                 <button
                   type="button"
                   onClick={() => {
@@ -314,7 +314,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   }}
                   className="text-[var(--accent)] font-semibold hover:underline cursor-pointer"
                 >
-                  Inicia sesión
+                  Sign in here
                 </button>
               </p>
             )}
