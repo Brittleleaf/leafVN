@@ -646,7 +646,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
           {/* Logo Estilo Photoshop Adaptativo */}
           <div className="flex items-center gap-2">
             <img
-              src="/assets/logo/LaefVN.png"
+              src="/assets/logo/LeafVN.png"
               alt="Leaf VN Logo"
               className="w-7 h-7 object-contain rounded-md filter drop-shadow-[0_0_8px_var(--accent-glow)] select-none pointer-events-none"
             />
@@ -1321,7 +1321,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                   <div className="p-3.5 rounded-xl hover:bg-[var(--surface-strong)] transition-colors space-y-1">
                     <div className="text-[10px] font-mono uppercase text-[var(--muted2)]">Engine Version</div>
                     <div className="flex items-center gap-2">
-                      <img src="/assets/logo/LaefVN.png" alt="Leaf VN Logo" className="w-5 h-5 object-contain rounded-sm" />
+                      <img src="/assets/logo/LeafVN.png" alt="Leaf VN Logo" className="w-5 h-5 object-contain rounded-sm" />
                       <div className="font-bold text-[var(--text)]">Leaf VN Studio v2.1 (Standalone)</div>
                     </div>
                     <div className="text-[10px] text-emerald-500 font-medium flex items-center gap-1.5 pt-1">

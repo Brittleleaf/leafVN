@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   title: "Leaf VN Studio - Visual Novel Engine",
   description: "Next-Gen Visual Novel Engine & Creative Authoring Studio",
   icons: {
-    icon: "/assets/logo/LaefVN.png",
-    shortcut: "/assets/logo/LaefVN.png",
-    apple: "/assets/logo/LaefVN.png",
+    icon: "/assets/logo/LeafVN.png",
+    shortcut: "/assets/logo/LeafVN.png",
+    apple: "/assets/logo/LeafVN.png",
   },
 };
 

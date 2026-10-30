@@ -235,7 +235,7 @@ export default function ThemeCustomizerPanel({
       <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)]">
         <div className="flex items-center gap-2">
           <img
-            src="/assets/logo/LaefVN.png"
+            src="/assets/logo/LeafVN.png"
             alt="Leaf VN"
             className="w-4 h-4 object-contain filter drop-shadow-[0_0_4px_var(--accent-glow)]"
           />

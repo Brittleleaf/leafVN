@@ -82,7 +82,7 @@ export default function VNMakerHeader({
 
         <div className="flex items-center gap-2">
           <img
-            src="/assets/logo/LaefVN.png"
+            src="/assets/logo/LeafVN.png"
             alt="Leaf VN Logo"
             className="w-6 h-6 object-contain rounded-md filter drop-shadow-[0_0_6px_var(--accent-glow)] select-none pointer-events-none"
           />
