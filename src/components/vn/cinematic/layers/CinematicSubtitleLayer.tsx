@@ -98,7 +98,7 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
                 </div>
               )}
 
-              {/* 2. Cyberpunk VN Textbox in the middle-bottom ("el diÃ¡logo en medio") */}
+              {/* 2. Cyberpunk VN Textbox in the middle-bottom */}
               <div
                 className="absolute bottom-3.5 inset-x-6 z-30 pointer-events-auto select-none"
                 onClick={(e) => {

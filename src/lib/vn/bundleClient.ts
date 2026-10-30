@@ -110,6 +110,8 @@ export async function unpackBundleInBrowser(fileOrBuffer: File | Blob | ArrayBuf
         title: chapData.title || `Chapter ${chapData.number || chapters.length + 1}`,
         summary: chapData.summary || '',
         loadingScreen: chapData.loadingScreen || { enabled: false, title: chapData.title || '' },
+        introScreen: chapData.introScreen,
+        endScreen: chapData.endScreen,
         startSceneId: chapData.startSceneId || scenes[0]?.id || '',
         scenes,
       });

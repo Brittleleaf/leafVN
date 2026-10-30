@@ -386,7 +386,7 @@ export default function MenuGameToolModal({
     });
     setPan({ x: 80, y: 80 });
     setZoom(0.95);
-    notify('DistribuciÃ³n automÃ¡tica de menÃºs aplicada');
+    notify('Automatic menu layout applied');
   };
 
   // Center view on Main Menu

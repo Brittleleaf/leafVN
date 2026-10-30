@@ -1395,7 +1395,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
                   handlePatchCurrentLine({ prompt: undefined });
                   setSelectedElement(null);
                   playSfx('/assets/sfx/click intro.mp3', false, 0.2);
-                  notify?.("Pregunta eliminada");
+                  notify?.("Question prompt removed");
                   if (recordHistorySnapshot) recordHistorySnapshot();
                 }}
                 capabilities={{

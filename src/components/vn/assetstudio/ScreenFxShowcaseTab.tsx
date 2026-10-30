@@ -298,7 +298,7 @@ export function ScreenFxShowcaseTab({
                               <span>Pixel Grid Size:</span>
                             </span>
                             <span className="font-mono text-amber-300 font-bold">
-                              {currentPixelSize === 0 ? 'Smooth (0)' : `${1 + currentPixelSize * 4}Ã—${1 + currentPixelSize * 4} px`}
+                              {currentPixelSize === 0 ? 'Smooth (0)' : `${1 + currentPixelSize * 4} × ${1 + currentPixelSize * 4} px`}
                             </span>
                           </div>
                           <input

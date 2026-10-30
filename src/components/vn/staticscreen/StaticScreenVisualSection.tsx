@@ -105,7 +105,7 @@ export function StaticScreenVisualSection({
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
               <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-amber-400" />
-              <span>PestaÃ±a Inicial de GalerÃ­a</span>
+              <span>Default Gallery Tab</span>
             </span>
             <span className="text-[9px] font-mono text-amber-300/80">Default Tab</span>
           </div>

@@ -302,9 +302,9 @@ export function StaticScreenSettingsWidget({
         {activeTab === 'language' && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
-              { id: 'es', label: 'EspaÃ±ol', desc: 'Spanish Translation' },
+              { id: 'es', label: 'Español', desc: 'Spanish Translation' },
               { id: 'en', label: 'English', desc: 'English Localization' },
-              { id: 'ja', label: 'æ—¥æœ¬èªž', desc: 'Japanese Localization' },
+              { id: 'ja', label: '日本語', desc: 'Japanese Localization' },
             ].map((lang) => (
               <button
                 key={lang.id}

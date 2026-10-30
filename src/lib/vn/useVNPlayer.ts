@@ -29,6 +29,29 @@ export interface UseVNPlayerProps {
   onExit?: () => void;
 }
 
+// Helper para identificar escenarios estáticos aislados (Pantallas de Muerte / Menús / Portadas)
+// que NUNCA deben ejecutarse automáticamente por avance secuencial de lectura
+export function isIsolatedStaticScene(sc?: VNScene): boolean {
+  if (!sc) return false;
+  if (sc.sceneType === 'event' && sc.eventSubtype === 'static') {
+    const purpose = sc.staticScreenConfig?.purpose;
+    if (purpose && ['death', 'ending', 'intro', 'title', 'load_game', 'settings', 'gallery'].includes(purpose)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Obtener el primer escenario narrativo jugable de un capítulo de forma segura
+export function getChapterInitialSceneId(chap?: VNChapter): string {
+  if (!chap || !chap.scenes || chap.scenes.length === 0) return '';
+  if (chap.startSceneId && chap.scenes.some((s) => s.id === chap.startSceneId)) {
+    return chap.startSceneId;
+  }
+  const narrativeScene = chap.scenes.find((s) => !isIsolatedStaticScene(s));
+  return narrativeScene ? narrativeScene.id : (chap.scenes[0]?.id || '');
+}
+
 export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProps) {
   // Inicialización de variables desde la historia
   const getInitialVariables = useCallback(() => {
@@ -47,8 +70,8 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
   const [currentSceneId, setCurrentSceneId] = useState<string>(
     initialSaveState?.currentSceneId ||
     (story.menuSystemConfig?.enabled
-      ? (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId || story.chapters[0]?.startSceneId || story.chapters[0]?.scenes[0]?.id || '')
-      : (story.chapters[0]?.startSceneId || story.chapters[0]?.scenes[0]?.id || ''))
+      ? (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId || getChapterInitialSceneId(story.chapters[0]))
+      : getChapterInitialSceneId(story.chapters[0]))
   );
   const [eventIndex, setEventIndex] = useState<number>(initialSaveState?.eventIndex || 0);
   const [variablesState, setVariablesState] = useState<Record<string, boolean | string | number>>(
@@ -234,19 +257,6 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
   const currentScene: VNScene | undefined = resolved.scene;
   const currentEvent: VNEvent | undefined = currentScene?.timeline[eventIndex];
 
-  // Helper para identificar escenarios estáticos aislados (Pantallas de Muerte / Menús)
-  // que NUNCA deben ejecutarse automáticamente por avance secuencial de lectura
-  const isIsolatedStaticScene = useCallback((sc?: VNScene): boolean => {
-    if (!sc) return false;
-    if (sc.sceneType === 'event' && sc.eventSubtype === 'static') {
-      const purpose = sc.staticScreenConfig?.purpose;
-      if (purpose && ['death', 'title', 'load_game', 'settings', 'gallery'].includes(purpose)) {
-        return true;
-      }
-    }
-    return false;
-  }, []);
-
   // Constructor / Resolutor de escenarios de Pantalla de Episodio (Intro / Fin)
   const resolveEpisodeScene = useCallback(
     (type: 'intro' | 'end', chapter: VNChapter, screenConfig?: VNChapterScreenConfig): VNScene => {
@@ -336,7 +346,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       }
 
       // Si no tiene intro o ya se vio, ejecutar pantalla de carga si está activa y saltar al primer escenario
-      const targetSceneId = chapter.startSceneId || chapter.scenes[0]?.id;
+      const targetSceneId = getChapterInitialSceneId(chapter);
       triggerLoadingScreen(chapter, () => {
         if (targetSceneId) {
           jumpToScene(targetSceneId, 0);
@@ -355,7 +365,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
 
     if (type === 'intro') {
       if (ch) {
-        const targetSceneId = ch.startSceneId || ch.scenes[0]?.id;
+        const targetSceneId = getChapterInitialSceneId(ch);
         triggerLoadingScreen(ch, () => {
           if (targetSceneId) {
             jumpToScene(targetSceneId, 0);
@@ -444,7 +454,6 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     currentSceneId,
     currentChapterId,
     story.chapters,
-    isIsolatedStaticScene,
     jumpToScene,
     resolveEpisodeScene,
     handleEpisodeScreenContinue,
@@ -496,6 +505,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       loadingScreenTimerRef.current = null;
     }
     setLoadingScreen(null);
+    setActiveEpisodeScreen(null);
 
     if (lastGameplayLocationRef.current) {
       const { chapterId, sceneId, eventIndex: prevIdx, variablesState: savedVars } = lastGameplayLocationRef.current;
@@ -1975,11 +1985,13 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       loadingScreenTimerRef.current = null;
     }
     setLoadingScreen(null);
+    setActiveEpisodeScreen(null);
+    seenChapterIntrosRef.current.clear();
 
     const firstChapter = story.chapters[0];
     const firstSceneId = (story.menuSystemConfig?.enabled && (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId))
       ? (story.menuSystemConfig.introSceneId || story.menuSystemConfig.mainMenuSceneId!)
-      : (firstChapter?.startSceneId || firstChapter?.scenes[0]?.id || '');
+      : getChapterInitialSceneId(firstChapter);
     const isSameScene = firstSceneId === currentSceneId;
 
     if (isSameScene) {

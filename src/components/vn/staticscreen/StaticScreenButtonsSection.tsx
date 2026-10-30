@@ -300,7 +300,7 @@ export function StaticScreenButtonsSection({
                   {(btn.action === 'jump_scene' || btn.action === 'start_game' || btn.action === 'load_game' || btn.action === 'open_settings' || btn.action === 'open_gallery' || btn.action === 'exit_to_intro') && (
                     <div>
                       <label className="text-[9px] text-[var(--muted)] block mb-0.5">
-                        Target Scenario {btn.action !== 'jump_scene' ? '(Opcional / Por Defecto AutomÃ¡tico)' : ''}
+                        Target Scenario {btn.action !== 'jump_scene' ? '(Optional / Automatic Default)' : ''}
                       </label>
                       <select
                         value={btn.targetSceneId || ''}

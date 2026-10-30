@@ -94,7 +94,7 @@ export function sanitizeStory(raw: unknown): VNStory {
           summary: ch.summary || '',
           startSceneId: ch.startSceneId && scenes.some((s: { id: string }) => s.id === ch.startSceneId)
             ? ch.startSceneId
-            : scenes[0]?.id || '',
+            : (scenes.find((s: { sceneType?: string; eventSubtype?: string }) => !(s.sceneType === 'event' && s.eventSubtype === 'static'))?.id || scenes[0]?.id || ''),
           loadingScreen: ch.loadingScreen || { enabled: false, title: ch.title || '' },
           introScreen: ch.introScreen,
           endScreen: ch.endScreen,
