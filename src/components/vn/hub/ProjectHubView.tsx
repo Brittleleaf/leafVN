@@ -200,7 +200,10 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
 
             {/* 2. VISUAL NOVEL STORY STUDIO PILLAR */}
             <div
-              onClick={() => setCurrentWorkspace('story_tool')}
+              onClick={() => {
+                playSfx('/assets/sfx/open folder.mp3', false, 0.4);
+                setActiveGlobalModal('chapter');
+              }}
               className="flex-1 group relative rounded-2xl hover:bg-[var(--surface-strong)] p-5 transition-all duration-150 flex flex-col justify-between cursor-pointer"
             >
               <div className="space-y-3.5">
@@ -218,26 +221,46 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     Story / Visual Novel Tool
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
-                    Core interactive narrative: Dialogue script, event timeline, branching choices, WYSIWYG stage and multitrack cinematics.
+                    Select an episode to edit, organize chapters, configure cinematic loading screens, intros, conclusions and dialogue timelines.
                   </p>
                 </div>
 
                 {/* Status */}
                 <div className="pt-2 flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-[var(--muted)]">Current Scenario:</span>
+                  <span className="text-[var(--muted)]">Active Episode:</span>
                   <span className="text-purple-300 font-bold truncate max-w-[150px]">
-                    {currentScene?.name || 'Scenario 1'}
+                    {currentChapter?.title || 'Chapter 1'}
                   </span>
                 </div>
               </div>
 
-              <div className="pt-5">
+              <div className="pt-5 flex items-center gap-2">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-[var(--surface-strong)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSfx('/assets/sfx/open folder.mp3', false, 0.4);
+                    setActiveGlobalModal('chapter');
+                  }}
+                  className="flex-1 py-2.5 px-3.5 rounded-xl bg-transparent hover:bg-[var(--surface-strong)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <span>Continue Script & Scenarios</span>
+                  <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5" />
+                  <span>Select Episode & Settings</span>
                   <span className="group-hover:translate-x-1 transition-transform text-[11px]">➜</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSfx('/assets/sfx/click intro.mp3', false, 0.25);
+                    setCurrentWorkspace('story_tool');
+                  }}
+                  className="py-2.5 px-3 rounded-xl bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
+                  title="Directly resume editing the current scenario on stage"
+                >
+                  <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-purple-400" />
+                  <span className="hidden xl:inline">Resume</span>
                 </button>
               </div>
             </div>

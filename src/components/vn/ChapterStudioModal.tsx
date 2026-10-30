@@ -23,7 +23,7 @@ import StaticScreenView, {
 interface ChapterStudioModalProps {
   story: VNStory;
   currentChapterId: string;
-  onSelectChapter: (chapterId: string) => void;
+  onSelectChapter: (chapterId: string, sceneId?: string) => void;
   onUpdateStory: (updatedStory: VNStory) => void;
   onClose: () => void;
   notify?: (msg: string) => void;
@@ -930,7 +930,8 @@ export default function ChapterStudioModal({
               <div className="p-3 border-t border-[var(--border)] bg-[var(--header-bg)] shrink-0">
                 <button
                   onClick={() => {
-                    onSelectChapter(selectedChapter.id);
+                    const firstSceneId = selectedChapter.startSceneId || selectedChapter.scenes[0]?.id;
+                    onSelectChapter(selectedChapter.id, firstSceneId);
                     onClose();
                     playSfx('/assets/sfx/start after click intro.mp3', false, 0.3);
                     notify(`Editing on canvas: "${selectedChapter.title}"`);
@@ -938,7 +939,7 @@ export default function ChapterStudioModal({
                   className="w-full py-2 bg-gradient-to-r from-[#D17BF8] to-[#B15BE4] hover:opacity-90 text-[#0F0503] font-extrabold rounded-md text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-[#0F0503]" />
-                  <span>Edit this Chapter on Screen</span>
+                  <span>Edit this Episode on Canvas</span>
                 </button>
               </div>
             )}
@@ -1889,9 +1890,10 @@ export default function ChapterStudioModal({
                               <button
                                 type="button"
                                 onClick={() => {
-                                  onSelectChapter(selectedChapter.id);
+                                  onSelectChapter(selectedChapter.id, sc.id);
                                   onClose();
-                                  notify(`Opening scene "${sc.name}"`);
+                                  playSfx('/assets/sfx/start after click intro.mp3', false, 0.3);
+                                  notify(`Opening scenario "${sc.name}"`);
                                 }}
                                 className="text-[10px] px-2.5 py-1 bg-[var(--accent-surface)] hover:bg-[var(--accent)] text-[var(--accent)] hover:text-white border border-[var(--border2)] rounded-lg font-bold cursor-pointer transition-colors"
                               >

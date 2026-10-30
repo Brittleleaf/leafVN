@@ -124,14 +124,18 @@ export default function VNMakerModals() {
         <ChapterStudioModal
           story={story}
           currentChapterId={selectedChapterId}
-          onSelectChapter={(chapterId) => {
+          onSelectChapter={(chapterId, sceneId) => {
             setSelectedChapterId(chapterId);
             const ch = story.chapters.find((c) => c.id === chapterId);
-            const firstScene = ch?.scenes.find((s) => s.id === ch.startSceneId) || ch?.scenes[0];
-            if (firstScene) {
-              setSelectedSceneId(firstScene.id);
+            const targetScene = sceneId
+              ? ch?.scenes.find((s) => s.id === sceneId)
+              : (ch?.scenes.find((s) => s.id === ch.startSceneId) || ch?.scenes[0]);
+            if (targetScene) {
+              setSelectedSceneId(targetScene.id);
               setSelectedLineIndex(0);
             }
+            setCurrentWorkspace('story_tool');
+            setActiveGlobalModal(null);
           }}
           onUpdateStory={(updatedStory) => {
             setStory(updatedStory);
