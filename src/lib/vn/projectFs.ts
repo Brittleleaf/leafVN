@@ -831,6 +831,10 @@ export async function unpackProjectBundle(bundleBuffer: Buffer, targetProjectId?
   const safeId = sanitizeProjectId(targetProjectId || meta?.id || `project-${Date.now()}`);
   const projDir = getProjectPath(safeId);
 
+  if (!fs.existsSync(projDir)) {
+    fs.mkdirSync(projDir, { recursive: true });
+  }
+
   // Extraer todos los archivos
   const entries = Object.keys(zip.files);
   for (const relativePath of entries) {
@@ -839,7 +843,7 @@ export async function unpackProjectBundle(bundleBuffer: Buffer, targetProjectId?
 
     // Normalizar ruta para evitar path traversal
     const safeRel = relativePath.replace(/\\/g, '/').replace(/^\/+/, '');
-    if (safeRel.includes('..')) continue;
+    if (!safeRel || safeRel.includes('..') || safeRel.endsWith('/') || zipEntry.dir) continue;
 
     const destPath = path.join(/*turbopackIgnore: true*/ projDir, safeRel);
     const destDir = path.dirname(destPath);
@@ -851,7 +855,14 @@ export async function unpackProjectBundle(bundleBuffer: Buffer, targetProjectId?
     fs.writeFileSync(destPath, fileBuffer);
   }
 
-  const loadedStory = loadProject(safeId);
+  let loadedStory = loadProject(safeId);
+  if (!loadedStory) {
+    if (meta && (meta.chapters || meta.scenarios || meta.title)) {
+      saveProject(safeId, meta as VNStory);
+      loadedStory = loadProject(safeId);
+    }
+  }
+
   if (!loadedStory) {
     throw new Error('No se pudo cargar el proyecto desempaquetado.');
   }

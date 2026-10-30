@@ -5,6 +5,7 @@ import { VNStory } from '@/types/vn';
 import type { VNProjectSummary } from '@/lib/vn/projectFs';
 import { playSfx } from '@/lib/audioSettings';
 import { exportStoryToJson, importStoryFromJson } from '@/lib/vn/storage';
+import { unpackBundleInBrowser } from '@/lib/vn/bundleClient';
 import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
@@ -320,41 +321,71 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       playSfx('/assets/sfx/open folder.mp3', false, 0.5);
       let importedStory: VNStory;
 
-      if (file.name.endsWith('.leafvn') || file.type.includes('zip')) {
+      const isLeafvnPackage =
+        file.name.toLowerCase().endsWith('.leafvn') ||
+        file.name.toLowerCase().endsWith('.zip') ||
+        file.type.includes('zip');
+
+      if (isLeafvnPackage) {
         setLauncherToast({
           type: 'success',
           message: `Desempaquetando proyecto completo "${file.name}"...`,
         });
-        const formData = new FormData();
-        formData.append('file', file);
-        const res = await fetch('/api/projects/import-bundle', {
-          method: 'POST',
-          body: formData,
-        });
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.error || 'Fallo al desempaquetar paquete .leafvn');
+
+        // 1. Intento de desempaquetado inmediato en cliente (fallback ultra-rápido y robusto)
+        let clientStory: VNStory | null = null;
+        try {
+          clientStory = await unpackBundleInBrowser(file);
+        } catch (clientErr) {
+          console.warn('Aviso al pre-desempaquetar paquete en navegador:', clientErr);
         }
-        const data = await res.json();
-        importedStory = data.story;
+
+        // 2. Enviar al endpoint para extraer assets binarios a public/projects/[id]/
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          const res = await fetch('/api/projects/import-bundle', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            importedStory = data.story;
+          } else if (clientStory) {
+            importedStory = clientStory;
+          } else {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error || 'Fallo al desempaquetar paquete .leafvn');
+          }
+        } catch (serverErr) {
+          if (clientStory) {
+            importedStory = clientStory;
+          } else {
+            throw serverErr;
+          }
+        }
       } else {
         importedStory = await importStoryFromJson(file);
       }
 
       try {
+        const coverImg = importedStory.coverImageUrl || importedStory.chapters[0]?.scenes[0]?.backgroundUrl;
+        const safeCover = coverImg && coverImg.length > 2000 && coverImg.startsWith('data:') ? undefined : coverImg;
+
         const newSummary: VNProjectSummary = {
           id: importedStory.id,
           title: importedStory.title,
           author: importedStory.author,
           description: importedStory.description,
           version: importedStory.version || '1.0.0',
-          coverImageUrl: importedStory.chapters[0]?.scenes[0]?.backgroundUrl,
+          coverImageUrl: safeCover,
           updatedAt: importedStory.updatedAt || new Date().toISOString(),
           createdAt: importedStory.createdAt || new Date().toISOString(),
           chapterCount: importedStory.chapters.length,
           characterCount: importedStory.characters.length,
           scenarioCount: importedStory.scenarios?.length || 1,
-          assetCount: 0,
+          assetCount: importedStory.customAssets?.length || 0,
         };
         const stored = localStorage.getItem('leafvn_local_projects_registry');
         const list: VNProjectSummary[] = stored ? JSON.parse(stored) : [];
@@ -381,6 +412,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       }
       localStorage.setItem('leafvn_active_project_id', importedStory.id);
       playSfx('/assets/sfx/success.mp3', false, 0.6);
+      await fetchProjects();
       router.push(`/editor?id=${importedStory.id}`);
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : String(err || 'Unknown error');
