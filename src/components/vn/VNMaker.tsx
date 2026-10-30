@@ -97,6 +97,7 @@ export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerPr
             showHelpGuide={showHelpGuide}
             setShowHelpGuide={setShowHelpGuide}
             feedbackMsg={feedbackMsg}
+            onNotify={notify}
             editorTheme={editorTheme}
             onSelectTheme={handleSelectTheme}
           />

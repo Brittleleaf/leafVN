@@ -5,6 +5,9 @@ import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES } from '@/lib/vn/themeManager';
 import ThemeCustomizerPanel from './theme/ThemeCustomizerPanel';
 import UserAuthButton from '@/components/auth/UserAuthButton';
+import { useAuth } from '@/lib/firebase/authContext';
+import { saveProjectToGoogleDrive } from '@/lib/firebase/cloudProjects';
+import { playSfx } from '@/lib/audioSettings';
 
 interface VNMakerHeaderProps {
   story: VNStory;
@@ -25,6 +28,7 @@ interface VNMakerHeaderProps {
   showHelpGuide: boolean;
   setShowHelpGuide: (show: boolean | ((prev: boolean) => boolean)) => void;
   feedbackMsg: string;
+  onNotify?: (msg: string) => void;
   editorTheme?: VNEditorTheme;
   onSelectTheme?: (theme: VNEditorTheme) => void;
 }
@@ -48,11 +52,46 @@ export default function VNMakerHeader({
   showHelpGuide,
   setShowHelpGuide,
   feedbackMsg,
+  onNotify,
   editorTheme = 'default_dark',
   onSelectTheme,
 }: VNMakerHeaderProps) {
   const [showProjectMenu, setShowProjectMenu] = useState<boolean>(false);
   const [showThemeMenu, setShowThemeMenu] = useState<boolean>(false);
+  const [isSavingDrive, setIsSavingDrive] = useState<boolean>(false);
+
+  const { googleAccessToken, signInWithGoogle } = useAuth();
+
+  const handleSaveToDrive = async () => {
+    let token = googleAccessToken || (typeof window !== 'undefined' ? sessionStorage.getItem('vn_gdrive_token') : null);
+    if (!token) {
+      try {
+        await signInWithGoogle();
+        token = typeof window !== 'undefined' ? sessionStorage.getItem('vn_gdrive_token') : null;
+      } catch {
+        return;
+      }
+    }
+
+    if (!token) {
+      onNotify?.('Please sign in with Google to save to Drive.');
+      return;
+    }
+
+    try {
+      setIsSavingDrive(true);
+      playSfx('/assets/sfx/open folder.mp3', false, 0.4);
+      await saveProjectToGoogleDrive(token, story);
+      playSfx('/assets/sfx/success.mp3', false, 0.5);
+      onNotify?.(`Backed up to Google Drive (Leaf VN Projects/${story.title})!`);
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      console.error('Google Drive save error:', err);
+      onNotify?.('Error saving to Google Drive: ' + (e?.message || 'Check permissions'));
+    } finally {
+      setIsSavingDrive(false);
+    }
+  };
 
   return (
     <header className="h-14 border-b vn-glass-header px-3 md:px-5 flex items-center justify-between gap-3 shrink-0 z-50 relative select-none">
@@ -339,6 +378,15 @@ export default function VNMakerHeader({
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.download} className="w-4 h-4 text-sky-500 shrink-0" />
                     <span>Export Story (JSON)</span>
+                  </button>
+
+                  <button
+                    onClick={handleSaveToDrive}
+                    disabled={isSavingDrive}
+                    className="w-full px-3 py-2 rounded-lg text-[var(--text)] hover:bg-[var(--surface-strong)] flex items-center gap-2.5 cursor-pointer transition-colors text-left font-medium disabled:opacity-50"
+                  >
+                    <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>{isSavingDrive ? 'Saving to Drive...' : 'Backup to Google Drive'}</span>
                   </button>
 
                   <div className="h-[1px] bg-[var(--border)] my-1" />
