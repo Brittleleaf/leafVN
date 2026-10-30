@@ -237,7 +237,7 @@ export default function ThemeCustomizerPanel({
           <img
             src="/assets/logo/LeafVN.png"
             alt="Leaf VN"
-            className="w-4 h-4 object-contain filter drop-shadow-[0_0_4px_var(--accent-glow)]"
+            className="w-4 h-4 object-contain rounded"
           />
           <span className="text-xs font-semibold tracking-wide text-[var(--text)]">Appearance & Background</span>
         </div>

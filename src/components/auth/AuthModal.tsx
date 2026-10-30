@@ -158,7 +158,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           <img
             src="/assets/logo/LeafVN.png"
             alt="Leaf VN"
-            className="w-16 h-16 sm:w-20 sm:h-20 object-contain mb-3 filter drop-shadow-[0_0_16px_var(--accent-glow)] transition-transform hover:scale-105 duration-200"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain mb-3 rounded-2xl transition-transform hover:scale-105 duration-200 select-none pointer-events-none"
           />
 
           <h2 className="text-base font-bold text-[var(--text)] tracking-wide">

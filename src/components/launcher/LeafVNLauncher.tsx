@@ -678,7 +678,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
             <img
               src="/assets/logo/LeafVN.png"
               alt="Leaf VN Logo"
-              className="w-7 h-7 object-contain rounded-md filter drop-shadow-[0_0_8px_var(--accent-glow)] select-none pointer-events-none"
+              className="w-7 h-7 object-contain rounded-md select-none pointer-events-none"
             />
             <span className="font-semibold tracking-wide text-[var(--text)]">Leaf VN Studio</span>
           </div>
@@ -841,7 +841,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                 playSfx('/assets/sfx/click interface.mp3', false, 0.4);
                 setShowNewModal(true);
               }}
-              className="w-full py-2 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-110 active:brightness-95 text-[var(--accent-contrast)] font-bold text-xs rounded-full shadow-[0_4px_16px_var(--accent-glow)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2 px-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] hover:brightness-105 active:brightness-95 text-[var(--accent-contrast)] font-bold text-xs rounded-full shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-3.5 h-3.5 text-[var(--accent-contrast)]" />
               <span>New Project</span>

@@ -80,13 +80,11 @@ export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
           {/* Header Section: Logo + App Name + Version */}
           <div className="flex items-start gap-4">
             <div className="relative shrink-0">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[var(--well-bg)] to-[var(--surface-strong)] border border-[var(--border2)] flex items-center justify-center shadow-lg p-2.5">
-                <img
-                  src="/assets/logo/LeafVN.png"
-                  alt="Leaf VN Logo"
-                  className="w-full h-full object-contain filter drop-shadow-[0_0_12px_var(--accent-glow)] select-none pointer-events-none"
-                />
-              </div>
+              <img
+                src="/assets/logo/LeafVN.png"
+                alt="Leaf VN Logo"
+                className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-2xl select-none pointer-events-none"
+              />
             </div>
 
             <div className="pt-1">

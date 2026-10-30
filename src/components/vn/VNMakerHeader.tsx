@@ -126,7 +126,7 @@ export default function VNMakerHeader({
           <img
             src="/assets/logo/LeafVN.png"
             alt="Leaf VN Logo"
-            className="w-6 h-6 object-contain rounded-md filter drop-shadow-[0_0_6px_var(--accent-glow)] select-none pointer-events-none"
+            className="w-6 h-6 object-contain rounded-md select-none pointer-events-none"
           />
           <span className="text-xs md:text-sm font-extrabold tracking-wider text-[var(--accent)] font-mono hidden sm:inline">
             LEAF VN
