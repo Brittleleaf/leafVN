@@ -50,9 +50,10 @@ export async function POST(
       story.id = id;
     }
 
-    const saved = saveProject(id, story);
-    if (!saved) {
-      return NextResponse.json({ error: 'Error writing project to disk.' }, { status: 500 });
+    const saveResult = saveProject(id, story);
+    if (!saveResult.success) {
+      console.error(`Failed to save project "${id}":`, saveResult.error);
+      return NextResponse.json({ error: saveResult.error || 'Error writing project to disk.' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, message: `Project "${id}" saved to disk successfully.` });

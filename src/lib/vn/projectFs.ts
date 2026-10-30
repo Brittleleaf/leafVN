@@ -32,10 +32,16 @@ export function getProjectsRootDir(): string {
   return dir;
 }
 
-export function sanitizeProjectId(rawId: string): string {
-  if (!rawId || typeof rawId !== 'string') return 'project-default';
+export interface SaveProjectResult {
+  success: boolean;
+  error?: string;
+}
+
+export function sanitizeProjectId(rawId: string | number | undefined | null): string {
+  if (rawId === null || rawId === undefined) return 'project-default';
+  const str = String(rawId);
   return (
-    rawId
+    str
       .toLowerCase()
       .trim()
       .replace(/[\/\\]/g, '-')
@@ -50,7 +56,8 @@ export function getProjectPath(projectId: string): string {
   const safeId = sanitizeProjectId(projectId);
   const root = getProjectsRootDir();
   const resolved = path.resolve(root, safeId);
-  if (!resolved.startsWith(path.resolve(root))) {
+  const rootResolved = path.resolve(root);
+  if (!resolved.toLowerCase().startsWith(rootResolved.toLowerCase())) {
     return path.join(root, 'project-default');
   }
   return resolved;
@@ -300,9 +307,32 @@ export function loadProject(projectId: string): VNStory | null {
 }
 
 /**
+ * Escribe un archivo JSON en disco con reintentos para evitar fallos de bloqueo de archivos (EBUSY/EPERM) en Windows
+ */
+export function safeWriteJson(filePath: string, data: any): void {
+  const content = JSON.stringify(data, null, 2);
+  let lastErr: any = null;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      fs.writeFileSync(filePath, content, 'utf-8');
+      return;
+    } catch (err: any) {
+      lastErr = err;
+      if (err.code === 'EBUSY' || err.code === 'EPERM' || err.code === 'EACCES') {
+        const start = Date.now();
+        while (Date.now() - start < 50 * (attempt + 1)) {}
+        continue;
+      }
+      throw err;
+    }
+  }
+  if (lastErr) throw lastErr;
+}
+
+/**
  * Guarda el proyecto completo descomponiendo en project.json, characters/, chapters/, scenarios/
  */
-export function saveProject(projectId: string, story: VNStory): boolean {
+export function saveProject(projectId: string, story: VNStory): SaveProjectResult {
   const safeId = sanitizeProjectId(projectId);
   const projDir = getProjectPath(safeId);
 
@@ -330,7 +360,7 @@ export function saveProject(projectId: string, story: VNStory): boolean {
       id: safeId,
       version: story.version || '1.0.0',
       title: story.title || safeId,
-      author: story.author || 'Creador',
+      author: story.author || 'Creator',
       description: story.description || '',
       coverImageUrl: story.coverImageUrl,
       createdAt: story.createdAt || now,
@@ -338,48 +368,60 @@ export function saveProject(projectId: string, story: VNStory): boolean {
       textBoxConfig: story.textBoxConfig,
       variables: story.variables || [],
     };
-    fs.writeFileSync(path.join(projDir, 'project.json'), JSON.stringify(projectMetadata, null, 2), 'utf-8');
+    safeWriteJson(path.join(projDir, 'project.json'), projectMetadata);
 
     // 2. Guardar characters/
-    const existingCharFiles = fs.readdirSync(charactersDir);
+    const existingCharFiles = fs.existsSync(charactersDir) ? fs.readdirSync(charactersDir) : [];
     const validCharFileNames = new Set<string>();
 
-    for (const char of story.characters || []) {
-      const fileName = `${sanitizeProjectId(char.id)}.json`;
-      validCharFileNames.add(fileName);
-      fs.writeFileSync(path.join(charactersDir, fileName), JSON.stringify(char, null, 2), 'utf-8');
+    if (Array.isArray(story.characters)) {
+      for (const char of story.characters) {
+        if (!char || typeof char !== 'object') continue;
+        const charId = char.id || `char-${Date.now()}`;
+        const fileName = `${sanitizeProjectId(charId)}.json`;
+        validCharFileNames.add(fileName);
+        safeWriteJson(path.join(charactersDir, fileName), char);
+      }
     }
 
-    // Limpiar personajes eliminados
-    for (const file of existingCharFiles) {
-      if (file.endsWith('.json') && !validCharFileNames.has(file)) {
-        try {
-          fs.unlinkSync(path.join(charactersDir, file));
-        } catch (_) {}
+    // Limpiar personajes eliminados SOLO si validCharFileNames contiene items válidos
+    if (validCharFileNames.size > 0) {
+      for (const file of existingCharFiles) {
+        if (file.endsWith('.json') && !validCharFileNames.has(file)) {
+          try {
+            fs.unlinkSync(path.join(charactersDir, file));
+          } catch (_) {}
+        }
       }
     }
 
     // 3. Guardar chapters/ y scenarios/
-    const existingChapFiles = fs.readdirSync(chaptersDir);
+    const existingChapFiles = fs.existsSync(chaptersDir) ? fs.readdirSync(chaptersDir) : [];
     const validChapFileNames = new Set<string>();
 
-    const existingSceneFiles = fs.readdirSync(scenariosDir);
+    const existingSceneFiles = fs.existsSync(scenariosDir) ? fs.readdirSync(scenariosDir) : [];
     const validSceneFileNames = new Set<string>();
 
     // Catálogo unificado de escenarios: biblioteca global + cualquier escena de capítulo
     const allScenariosToSave = new Map<string, VNScene>();
 
-    for (const sc of story.scenarios || []) {
-      if (sc && sc.id) {
-        allScenariosToSave.set(sc.id, sc);
+    if (Array.isArray(story.scenarios)) {
+      for (const sc of story.scenarios) {
+        if (sc && typeof sc === 'object' && sc.id) {
+          allScenariosToSave.set(sc.id, sc);
+        }
       }
     }
 
-    for (const chapter of story.chapters || []) {
-      for (const scene of chapter.scenes || []) {
-        if (scene && scene.id) {
-          // Si ya existe en story.scenarios, preservamos/actualizamos
-          allScenariosToSave.set(scene.id, scene);
+    if (Array.isArray(story.chapters)) {
+      for (const chapter of story.chapters) {
+        if (!chapter || typeof chapter !== 'object') continue;
+        if (Array.isArray(chapter.scenes)) {
+          for (const scene of chapter.scenes) {
+            if (scene && typeof scene === 'object' && scene.id) {
+              allScenariosToSave.set(scene.id, scene);
+            }
+          }
         }
       }
     }
@@ -388,50 +430,63 @@ export function saveProject(projectId: string, story: VNStory): boolean {
     for (const [sId, scene] of allScenariosToSave.entries()) {
       const sceneFileName = `${sanitizeProjectId(sId)}.json`;
       validSceneFileNames.add(sceneFileName);
-      fs.writeFileSync(path.join(scenariosDir, sceneFileName), JSON.stringify(scene, null, 2), 'utf-8');
+      safeWriteJson(path.join(scenariosDir, sceneFileName), scene);
     }
 
     // Guardar capítulos con sus listas de IDs de escenas activas
-    for (const chapter of story.chapters || []) {
-      const chapFileName = `${sanitizeProjectId(chapter.id)}.json`;
-      validChapFileNames.add(chapFileName);
+    if (Array.isArray(story.chapters)) {
+      for (const chapter of story.chapters) {
+        if (!chapter || typeof chapter !== 'object') continue;
+        const chapId = chapter.id || `chap-${Date.now()}`;
+        const chapFileName = `${sanitizeProjectId(chapId)}.json`;
+        validChapFileNames.add(chapFileName);
 
-      const sceneIds: string[] = (chapter.scenes || []).map((s) => s.id);
+        const sceneIds: string[] = (Array.isArray(chapter.scenes) ? chapter.scenes : [])
+          .map((s) => (typeof s === 'string' ? s : s?.id))
+          .filter(Boolean) as string[];
 
-      const chapterPayload = {
-        id: chapter.id,
-        number: chapter.number,
-        title: chapter.title,
-        summary: chapter.summary || '',
-        loadingScreen: chapter.loadingScreen,
-        startSceneId: chapter.startSceneId || sceneIds[0] || '',
-        sceneIds,
-      };
-      fs.writeFileSync(path.join(chaptersDir, chapFileName), JSON.stringify(chapterPayload, null, 2), 'utf-8');
-    }
-
-    // Limpiar capítulos eliminados
-    for (const file of existingChapFiles) {
-      if (file.endsWith('.json') && !validChapFileNames.has(file)) {
-        try {
-          fs.unlinkSync(path.join(chaptersDir, file));
-        } catch (_) {}
+        const chapterPayload = {
+          id: chapId,
+          number: chapter.number ?? 1,
+          title: chapter.title || 'Chapter',
+          summary: chapter.summary || '',
+          loadingScreen: chapter.loadingScreen || { enabled: false, title: chapter.title || '' },
+          startSceneId: chapter.startSceneId || sceneIds[0] || '',
+          sceneIds,
+        };
+        safeWriteJson(path.join(chaptersDir, chapFileName), chapterPayload);
       }
     }
 
-    // Limpiar escenarios eliminados (SOLO si no existen en story.scenarios ni en ningún capítulo)
-    for (const file of existingSceneFiles) {
-      if (file.endsWith('.json') && !validSceneFileNames.has(file)) {
-        try {
-          fs.unlinkSync(path.join(scenariosDir, file));
-        } catch (_) {}
+    // Limpiar capítulos eliminados SOLO si validChapFileNames tiene items válidos
+    if (validChapFileNames.size > 0) {
+      for (const file of existingChapFiles) {
+        if (file.endsWith('.json') && !validChapFileNames.has(file)) {
+          try {
+            fs.unlinkSync(path.join(chaptersDir, file));
+          } catch (_) {}
+        }
       }
     }
 
-    return true;
-  } catch (err) {
+    // Limpiar escenarios eliminados SOLO si validSceneFileNames tiene items válidos
+    if (validSceneFileNames.size > 0) {
+      for (const file of existingSceneFiles) {
+        if (file.endsWith('.json') && !validSceneFileNames.has(file)) {
+          try {
+            fs.unlinkSync(path.join(scenariosDir, file));
+          } catch (_) {}
+        }
+      }
+    }
+
+    return { success: true };
+  } catch (err: any) {
     console.error(`Error saving project ${projectId}:`, err);
-    return false;
+    return {
+      success: false,
+      error: err?.message || 'Error writing project to disk.',
+    };
   }
 }
 

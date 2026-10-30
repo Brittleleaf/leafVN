@@ -63,9 +63,9 @@ export async function POST(req: NextRequest) {
           ],
     };
 
-    const saved = saveProject(safeId, newStory);
-    if (!saved) {
-      return NextResponse.json({ error: 'Failed to create project on disk.' }, { status: 500 });
+    const saveResult = saveProject(safeId, newStory);
+    if (!saveResult.success) {
+      return NextResponse.json({ error: saveResult.error || 'Failed to create project on disk.' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, projectId: safeId, story: newStory });
