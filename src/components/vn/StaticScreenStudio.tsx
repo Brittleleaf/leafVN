@@ -18,6 +18,7 @@ import StaticScreenView, {
   DEFAULT_SETTINGS_CONFIG,
   DEFAULT_GALLERY_CONFIG,
 } from './StaticScreenView';
+import { findMenuSceneByRole } from '@/lib/vn/useVNPlayer';
 import AssetStudioModal from './AssetStudioModal';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { ScreenFxSvgDefs } from './screenfx';
@@ -80,38 +81,73 @@ export default function StaticScreenStudio({
 
   const handleApplyPreset = (purpose: 'death' | 'ending' | 'intro' | 'title' | 'load_game' | 'settings' | 'gallery') => {
     playSfx('/assets/sfx/open folder.mp3', false, 0.4);
+
+    const resolvePresetWithTargets = (baseConfig: VNStaticScreenConfig): VNStaticScreenConfig => {
+      const introScene = findMenuSceneByRole(story, 'intro');
+      const titleScene = findMenuSceneByRole(story, 'main_menu');
+      const playScene = findMenuSceneByRole(story, 'play');
+      const loadScene = findMenuSceneByRole(story, 'load_game');
+      const settingsScene = findMenuSceneByRole(story, 'settings');
+      const galleryScene = findMenuSceneByRole(story, 'gallery');
+
+      const buttons = (baseConfig.buttons || []).map((btn) => {
+        let targetId = btn.targetSceneId;
+        if (!targetId) {
+          if (btn.action === 'start_game') {
+            targetId = playScene?.id;
+          } else if (btn.action === 'load_game') {
+            targetId = loadScene?.id;
+          } else if (btn.action === 'open_settings') {
+            targetId = settingsScene?.id;
+          } else if (btn.action === 'open_gallery') {
+            targetId = galleryScene?.id;
+          } else if (btn.action === 'main_menu') {
+            targetId = titleScene?.id;
+          } else if (btn.action === 'exit_to_intro') {
+            targetId = introScene?.id;
+          } else if (btn.action === 'next_scene') {
+            if (baseConfig.purpose === 'intro') {
+              targetId = titleScene?.id || playScene?.id;
+            }
+          }
+        }
+        return { ...btn, ...(targetId ? { targetSceneId: targetId } : {}) };
+      });
+      return { ...baseConfig, buttons };
+    };
+
     if (purpose === 'death') {
-      updateConfig(DEFAULT_DEATH_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_DEATH_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Death Screen' : scene.name,
       });
     } else if (purpose === 'ending') {
-      updateConfig(DEFAULT_ENDING_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_ENDING_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Story Ending' : scene.name,
       });
     } else if (purpose === 'intro') {
-      updateConfig(DEFAULT_INTRO_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_INTRO_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Chapter Intro' : scene.name,
       });
     } else if (purpose === 'title') {
-      updateConfig(DEFAULT_TITLE_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_TITLE_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Main Menu' : scene.name,
       });
     } else if (purpose === 'load_game') {
-      updateConfig(DEFAULT_LOAD_GAME_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_LOAD_GAME_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Load Game Menu' : scene.name,
       });
     } else if (purpose === 'settings') {
-      updateConfig(DEFAULT_SETTINGS_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_SETTINGS_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Configuration Menu' : scene.name,
       });
     } else if (purpose === 'gallery') {
-      updateConfig(DEFAULT_GALLERY_CONFIG);
+      updateConfig(resolvePresetWithTargets(DEFAULT_GALLERY_CONFIG));
       onUpdateScene({
         name: scene.name.startsWith('Scenario') ? 'Gallery & Cinematics' : scene.name,
       });

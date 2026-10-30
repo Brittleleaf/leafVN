@@ -16,6 +16,7 @@ import {
   DEFAULT_GALLERY_CONFIG,
   DEFAULT_INTRO_CONFIG,
 } from '../StaticScreenView';
+import { getChapterInitialSceneId } from '@/lib/vn/useVNPlayer';
 
 interface MenuGameToolModalProps {
   story: VNStory;
@@ -258,6 +259,117 @@ export default function MenuGameToolModal({
     }
   };
 
+  // Helper to interconnect all menu buttons among configured menu roles
+  const crossLinkMenuButtons = (storyToUpdate: VNStory, cfg: VNMenuSystemConfig): VNStory => {
+    const allScenes: VNScene[] = [];
+    (storyToUpdate.chapters || []).forEach((ch) => {
+      (ch.scenes || []).forEach((sc) => allScenes.push(sc));
+    });
+    (storyToUpdate.scenarios || []).forEach((sc) => {
+      if (!allScenes.some((s) => s.id === sc.id)) allScenes.push(sc);
+    });
+
+    const findScene = (sceneId?: string) => allScenes.find((s) => s.id === sceneId);
+    const findByPurpose = (purposes: string[]) =>
+      allScenes.find(
+        (s) =>
+          s.sceneType === 'event' &&
+          s.eventSubtype === 'static' &&
+          s.staticScreenConfig &&
+          purposes.includes(s.staticScreenConfig.purpose)
+      );
+
+    const introScene = findScene(cfg.introSceneId) || findByPurpose(['intro']);
+    const menuScene = findScene(cfg.mainMenuSceneId) || findByPurpose(['title']);
+    const loadScene = findScene(cfg.loadGameSceneId) || findByPurpose(['load_game']);
+    const settingsScene = findScene(cfg.settingsSceneId) || findByPurpose(['settings']);
+    const galleryScene = findScene(cfg.gallerySceneId) || findByPurpose(['gallery']);
+    const playScene =
+      findScene(cfg.playStartSceneId) ||
+      (storyToUpdate.chapters[0] ? allScenes.find((s) => s.id === getChapterInitialSceneId(storyToUpdate.chapters[0])) : null) ||
+      null;
+
+    const targetMenuId = menuScene?.id;
+    const targetPlayId = playScene?.id;
+    const targetIntroId = introScene?.id;
+    const targetLoadId = loadScene?.id;
+    const targetSettingsId = settingsScene?.id;
+    const targetGalleryId = galleryScene?.id;
+
+    const updateSceneButtons = (sc: VNScene): VNScene => {
+      if (sc.sceneType !== 'event' || sc.eventSubtype !== 'static' || !sc.staticScreenConfig?.buttons) {
+        return sc;
+      }
+
+      const purpose = sc.staticScreenConfig.purpose;
+      const buttons = sc.staticScreenConfig.buttons.map((btn) => {
+        // 1. Intro screen buttons: must connect to Main Menu or directly to Story
+        if (purpose === 'intro') {
+          const destId = targetMenuId || targetPlayId;
+          return {
+            ...btn,
+            targetSceneId: btn.targetSceneId || destId,
+          };
+        }
+        // 2. Title screen buttons
+        if (purpose === 'title') {
+          if (btn.action === 'start_game') {
+            return { ...btn, targetSceneId: btn.targetSceneId || targetPlayId };
+          }
+          if (btn.action === 'load_game') {
+            return { ...btn, targetSceneId: btn.targetSceneId || targetLoadId };
+          }
+          if (btn.action === 'open_settings') {
+            return { ...btn, targetSceneId: btn.targetSceneId || targetSettingsId };
+          }
+          if (btn.action === 'open_gallery') {
+            return { ...btn, targetSceneId: btn.targetSceneId || targetGalleryId };
+          }
+          if (btn.action === 'exit_to_intro') {
+            return { ...btn, targetSceneId: btn.targetSceneId || targetIntroId };
+          }
+        }
+        // 3. Submenu back buttons
+        if (['load_game', 'settings', 'gallery'].includes(purpose || '')) {
+          if (btn.action === 'main_menu' || btn.action === 'next_scene') {
+            return { ...btn, targetSceneId: btn.targetSceneId || targetMenuId };
+          }
+        }
+        return btn;
+      });
+
+      return {
+        ...sc,
+        staticScreenConfig: {
+          ...sc.staticScreenConfig,
+          buttons,
+        },
+      };
+    };
+
+    const updatedChapters = (storyToUpdate.chapters || []).map((ch) => ({
+      ...ch,
+      scenes: (ch.scenes || []).map(updateSceneButtons),
+    }));
+
+    const updatedScenarios = (storyToUpdate.scenarios || []).map(updateSceneButtons);
+
+    return {
+      ...storyToUpdate,
+      chapters: updatedChapters,
+      scenarios: updatedScenarios,
+      menuSystemConfig: {
+        ...cfg,
+        introSceneId: targetIntroId,
+        mainMenuSceneId: targetMenuId,
+        playStartSceneId: targetPlayId,
+        loadGameSceneId: targetLoadId,
+        settingsSceneId: targetSettingsId,
+        gallerySceneId: targetGalleryId,
+      },
+    };
+  };
+
   // Assign or reassign a scene to a role
   const handleAssignSceneToRole = (role: MenuScreenRole, sceneId: string) => {
     const keyMap: Record<MenuScreenRole, keyof VNMenuSystemConfig> = {
@@ -275,12 +387,17 @@ export default function MenuGameToolModal({
       [key]: sceneId || undefined,
     };
 
-    onUpdateStory({
-      ...story,
-      menuSystemConfig: updatedConfig,
-    });
+    const linkedStory = crossLinkMenuButtons(
+      {
+        ...story,
+        menuSystemConfig: updatedConfig,
+      },
+      updatedConfig
+    );
+
+    onUpdateStory(linkedStory);
     playUiSound('select', 0.5);
-    notify(`Screen assigned to role: ${role.toUpperCase()}`);
+    notify(`Screen assigned to ${role.toUpperCase()} and interconnected.`);
   };
 
   // Generate missing menu screens with one click
@@ -354,12 +471,15 @@ export default function MenuGameToolModal({
     updatedStory.scenarios = currentScenarios;
     updatedStory.menuSystemConfig = newConfig;
 
-    onUpdateStory(updatedStory);
+    // Cross-link buttons among all newly generated screens
+    const fullyLinkedStory = crossLinkMenuButtons(updatedStory, newConfig);
+
+    onUpdateStory(fullyLinkedStory);
     playSfx('/assets/sfx/success.mp3', false, 0.4);
     notify(
       createdCount > 0
-        ? `Generated ${createdCount} menu screens successfully.`
-        : 'All menu system screens are already configured.'
+        ? `Generated ${createdCount} menu screens and interconnected all navigation buttons successfully.`
+        : 'All menu system screens are already configured and connected.'
     );
   };
 
@@ -605,6 +725,21 @@ export default function MenuGameToolModal({
               <span>Generate Missing Screens</span>
             </button>
           )}
+
+          {/* Auto-Connect Menu Buttons */}
+          <button
+            onClick={() => {
+              const updated = crossLinkMenuButtons(story, menuConfig);
+              onUpdateStory(updated);
+              playSfx('/assets/sfx/success.mp3', false, 0.4);
+              notify('All menu screen buttons automatically interconnected!');
+            }}
+            className="px-2.5 py-1.5 rounded-lg hover:bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+            title="Automatically cross-link all navigation buttons (Play, Load, Settings, Gallery, Return) to their corresponding screens"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.general.copy} className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Auto-Connect Buttons</span>
+          </button>
 
           <div className="h-4 w-[1px] bg-[var(--border)] mx-0.5" />
 

@@ -25,7 +25,7 @@ import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
 import StaticScreenView from './StaticScreenView';
 import CinematicPlayerView from './CinematicPlayerView';
 import { VNCursorLayer } from './cursors';
-import { useVNPlayer } from '@/lib/vn/useVNPlayer';
+import { useVNPlayer, findMenuSceneByRole, getChapterInitialSceneId } from '@/lib/vn/useVNPlayer';
 import VNUniversalButton from './ui/VNUniversalButton';
 import { isVideoMedia } from './cinematic/layers/CinematicVisualLayer';
 import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
@@ -190,42 +190,68 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             scene={currentScene}
             story={story}
             isInteractive={true}
-            onNextScene={advanceToNextScene}
+            onNextScene={() => {
+              if (currentScene.staticScreenConfig?.purpose === 'intro') {
+                const mainMenu = findMenuSceneByRole(story, 'main_menu');
+                if (mainMenu && mainMenu.id !== currentScene.id) {
+                  jumpToScene(mainMenu.id, 0);
+                  return;
+                }
+                const playScene = findMenuSceneByRole(story, 'play');
+                if (playScene && playScene.id !== currentScene.id) {
+                  jumpToScene(playScene.id, 0);
+                  return;
+                }
+              } else if (currentScene.staticScreenConfig?.purpose === 'title') {
+                const playScene = findMenuSceneByRole(story, 'play');
+                if (playScene && playScene.id !== currentScene.id) {
+                  jumpToScene(playScene.id, 0);
+                  return;
+                }
+              }
+              advanceToNextScene();
+            }}
             onRetry={handleRetryPrevious}
             onStartGame={() => {
-              if (story.menuSystemConfig?.playStartSceneId) {
-                jumpToScene(story.menuSystemConfig.playStartSceneId, 0);
+              const playScene = findMenuSceneByRole(story, 'play');
+              if (playScene) {
+                jumpToScene(playScene.id, 0);
               } else {
                 advanceToNextScene();
               }
             }}
             onLoadGame={() => {
-              if (story.menuSystemConfig?.loadGameSceneId) {
-                jumpToScene(story.menuSystemConfig.loadGameSceneId, 0);
+              const loadScene = findMenuSceneByRole(story, 'load_game');
+              if (loadScene && loadScene.id !== currentScene.id) {
+                jumpToScene(loadScene.id, 0);
               } else {
                 setShowSaveLoadModal('load');
               }
             }}
             onOpenSettings={() => {
-              if (story.menuSystemConfig?.settingsSceneId) {
-                jumpToScene(story.menuSystemConfig.settingsSceneId, 0);
+              const settingsScene = findMenuSceneByRole(story, 'settings');
+              if (settingsScene && settingsScene.id !== currentScene.id) {
+                jumpToScene(settingsScene.id, 0);
               }
             }}
             onOpenGallery={() => {
-              if (story.menuSystemConfig?.gallerySceneId) {
-                jumpToScene(story.menuSystemConfig.gallerySceneId, 0);
+              const galleryScene = findMenuSceneByRole(story, 'gallery');
+              if (galleryScene && galleryScene.id !== currentScene.id) {
+                jumpToScene(galleryScene.id, 0);
               }
             }}
             onExitToIntro={() => {
-              if (story.menuSystemConfig?.introSceneId) {
-                jumpToScene(story.menuSystemConfig.introSceneId, 0);
+              const introScene = findMenuSceneByRole(story, 'intro');
+              if (introScene && introScene.id !== currentScene.id) {
+                jumpToScene(introScene.id, 0);
               } else {
                 handleRestartStory();
               }
             }}
             onMainMenu={() => {
-              if (story.menuSystemConfig?.mainMenuSceneId) {
-                jumpToScene(story.menuSystemConfig.mainMenuSceneId, 0);
+              const mainMenu = findMenuSceneByRole(story, 'main_menu');
+              if (mainMenu && mainMenu.id !== currentScene.id) {
+                jumpToScene(mainMenu.id, 0);
               } else if (onExit) {
                 onExit();
               } else {
@@ -235,8 +261,13 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             onJumpScene={(targetId) => {
               const jumped = jumpToScene(targetId, 0);
               if (!jumped) {
-                console.warn(`[VNPlayer] StaticScreen jump failed for scene "${targetId}". Advancing to next scene.`);
-                advanceToNextScene();
+                console.warn(`[VNPlayer] StaticScreen jump failed for scene "${targetId}".`);
+                const playScene = findMenuSceneByRole(story, 'play');
+                if (playScene && playScene.id !== currentScene.id) {
+                  jumpToScene(playScene.id, 0);
+                } else {
+                  advanceToNextScene();
+                }
               }
             }}
             onLoadSlot={(slotNum) => {

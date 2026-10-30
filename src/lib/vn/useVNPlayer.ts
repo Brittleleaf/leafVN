@@ -52,6 +52,69 @@ export function getChapterInitialSceneId(chap?: VNChapter): string {
   return narrativeScene ? narrativeScene.id : (chap.scenes[0]?.id || '');
 }
 
+// Resolver escenario correspondiente a un rol de menú (por configuración explícita o auto-descubrimiento)
+export function findMenuSceneByRole(
+  story: VNStory,
+  role: 'intro' | 'main_menu' | 'play' | 'load_game' | 'settings' | 'gallery'
+): VNScene | null {
+  if (!story) return null;
+  const cfg = story.menuSystemConfig || {};
+  const allScenes: VNScene[] = [];
+  (story.chapters || []).forEach((ch) => {
+    (ch.scenes || []).forEach((sc) => allScenes.push(sc));
+  });
+  (story.scenarios || []).forEach((sc) => {
+    if (!allScenes.some((s) => s.id === sc.id)) allScenes.push(sc);
+  });
+
+  const explicitIdMap: Record<string, string | undefined> = {
+    intro: cfg.introSceneId,
+    main_menu: cfg.mainMenuSceneId,
+    play: cfg.playStartSceneId,
+    load_game: cfg.loadGameSceneId,
+    settings: cfg.settingsSceneId,
+    gallery: cfg.gallerySceneId,
+  };
+
+  const explicitId = explicitIdMap[role];
+  if (explicitId) {
+    const found = allScenes.find((s) => s.id === explicitId);
+    if (found) return found;
+  }
+
+  // Búsqueda heurística por propósito en pantalla estática
+  const purposeMap: Record<string, string[]> = {
+    intro: ['intro'],
+    main_menu: ['title'],
+    load_game: ['load_game'],
+    settings: ['settings'],
+    gallery: ['gallery'],
+  };
+
+  const purposes = purposeMap[role];
+  if (purposes) {
+    const found = allScenes.find(
+      (s) =>
+        s.sceneType === 'event' &&
+        s.eventSubtype === 'static' &&
+        s.staticScreenConfig?.purpose &&
+        purposes.includes(s.staticScreenConfig.purpose)
+    );
+    if (found) return found;
+  }
+
+  // Fallback para inicio de juego (play): primer escenario narrativo de la historia
+  if (role === 'play') {
+    const ch1 = story.chapters[0];
+    if (ch1) {
+      const sceneId = getChapterInitialSceneId(ch1);
+      return allScenes.find((s) => s.id === sceneId) || ch1.scenes[0] || null;
+    }
+  }
+
+  return null;
+}
+
 export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProps) {
   // Inicialización de variables desde la historia
   const getInitialVariables = useCallback(() => {
@@ -405,6 +468,37 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       return;
     }
 
+    // 1. Si el escenario actual es una pantalla estática de menú o intro,
+    // avanzar debe transicionar inteligentemente a la siguiente pantalla del flujo,
+    // NUNCA disparar "Story Completed" de forma prematura.
+    if (isIsolatedStaticScene(currentScene)) {
+      const purpose = currentScene?.staticScreenConfig?.purpose;
+      if (purpose === 'intro') {
+        const menuScene = findMenuSceneByRole(story, 'main_menu');
+        if (menuScene && menuScene.id !== currentSceneId) {
+          jumpToScene(menuScene.id, 0);
+          return;
+        }
+        const playScene = findMenuSceneByRole(story, 'play');
+        if (playScene && playScene.id !== currentSceneId) {
+          jumpToScene(playScene.id, 0);
+          return;
+        }
+      } else if (purpose === 'title') {
+        const playScene = findMenuSceneByRole(story, 'play');
+        if (playScene && playScene.id !== currentSceneId) {
+          jumpToScene(playScene.id, 0);
+          return;
+        }
+      } else if (['load_game', 'settings', 'gallery', 'death'].includes(purpose || '')) {
+        const menuScene = findMenuSceneByRole(story, 'main_menu');
+        if (menuScene && menuScene.id !== currentSceneId) {
+          jumpToScene(menuScene.id, 0);
+          return;
+        }
+      }
+    }
+
     const sceneIdx = currentChapter?.scenes?.findIndex((s) => s.id === currentSceneId) ?? -1;
 
     // Buscar el siguiente escenario NARRATIVO jugable dentro del capítulo actual
@@ -426,7 +520,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     }
 
     // No hay más escenarios narrativos en este capítulo: Fin del Capítulo / Episodio
-    if (currentChapter?.endScreen?.enabled) {
+    if (currentChapter?.endScreen?.enabled && sceneIdx !== -1) {
       const endScene = resolveEpisodeScene('end', currentChapter, currentChapter.endScreen);
       setActiveEpisodeScreen({
         type: 'end',
@@ -443,17 +537,32 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       const nextChap = story.chapters[chapIdx + 1];
       startChapter(nextChap);
     } else {
-      setIsStoryCompleted(true);
-      setSkipMode(false);
-      setIsTextBoxVisible(false);
-      playSfx('/assets/sfx/success.mp3', false, 0.7);
+      // Si estábamos en un escenario narrativo del último capítulo, la historia ha concluido:
+      if (sceneIdx !== -1) {
+        setIsStoryCompleted(true);
+        setSkipMode(false);
+        setIsTextBoxVisible(false);
+        playSfx('/assets/sfx/success.mp3', false, 0.7);
+      } else {
+        // Estábamos en un escenario fuera de capítulos (ej. menú o escenario global):
+        // Conectar con el inicio narrativo de la historia en lugar de finalizar abruptamente.
+        const firstChapSceneId = getChapterInitialSceneId(story.chapters[0]);
+        if (firstChapSceneId && firstChapSceneId !== currentSceneId) {
+          jumpToScene(firstChapSceneId, 0);
+        } else {
+          setIsStoryCompleted(true);
+          setSkipMode(false);
+          setIsTextBoxVisible(false);
+        }
+      }
     }
   }, [
     activeEpisodeScreen,
     currentChapter,
+    currentScene,
     currentSceneId,
     currentChapterId,
-    story.chapters,
+    story,
     jumpToScene,
     resolveEpisodeScene,
     handleEpisodeScreenContinue,

@@ -466,8 +466,13 @@ export default function StaticScreenView({
         break;
       case 'next_scene':
         unloadBgm();
-        if (onNextScene) onNextScene();
-        else if (onRetry) onRetry();
+        if (button.targetSceneId && onJumpScene) {
+          onJumpScene(button.targetSceneId);
+        } else if (onNextScene) {
+          onNextScene();
+        } else if (onRetry) {
+          onRetry();
+        }
         break;
       case 'retry_previous':
         unloadBgm();
