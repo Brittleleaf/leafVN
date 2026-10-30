@@ -220,6 +220,9 @@ export const GUI_ICONS = {
     fullscreen: '/assets/image/GUI%20ICONS/full-screen.svg',
     exitFullscreen: '/assets/image/GUI%20ICONS/full-screen-exit.svg',
     fullscreenExit: '/assets/image/GUI%20ICONS/full-screen-exit.svg',
+    alignLeft: '/assets/image/GUI%20ICONS/left-alignment.svg',
+    alignCenter: '/assets/image/GUI%20ICONS/center-alignment.svg',
+    alignRight: '/assets/image/GUI%20ICONS/right-alignment.svg',
   },
 };
 
@@ -228,6 +231,15 @@ export const GUI_ICONS = {
  */
 export const GUI_ICON_MAP: Record<string, string> = {
   // Aliases por palabra clave
+  alignLeft: '/assets/image/GUI%20ICONS/left-alignment.svg',
+  alignCenter: '/assets/image/GUI%20ICONS/center-alignment.svg',
+  alignRight: '/assets/image/GUI%20ICONS/right-alignment.svg',
+  'left-alignment': '/assets/image/GUI%20ICONS/left-alignment.svg',
+  'center-alignment': '/assets/image/GUI%20ICONS/center-alignment.svg',
+  'right-alignment': '/assets/image/GUI%20ICONS/right-alignment.svg',
+  leftAlignment: '/assets/image/GUI%20ICONS/left-alignment.svg',
+  centerAlignment: '/assets/image/GUI%20ICONS/center-alignment.svg',
+  rightAlignment: '/assets/image/GUI%20ICONS/right-alignment.svg',
   home: GUI_ICONS.general.home,
   folder: GUI_ICONS.general.folder,
   closedFolder: GUI_ICONS.general.closedFolder,

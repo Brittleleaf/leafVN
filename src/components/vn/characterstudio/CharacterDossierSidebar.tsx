@@ -60,8 +60,18 @@ export const CharacterDossierSidebar: React.FC<CharacterDossierSidebarProps> = (
 
           <div className="flex items-center justify-between text-[var(--muted)]">
             <span className="text-[10px] uppercase font-bold">Position:</span>
-            <span className="text-[var(--text)] uppercase font-mono text-[10px]">
-              {activeChar.side || 'center'}
+            <span className="text-[var(--text)] uppercase font-mono text-[10px] flex items-center gap-1.5">
+              <GuiIconRenderer
+                icon={
+                  activeChar.side === 'left'
+                    ? GUI_ICONS.general.alignLeft
+                    : activeChar.side === 'right'
+                    ? GUI_ICONS.general.alignRight
+                    : GUI_ICONS.general.alignCenter
+                }
+                className="w-3 h-3 text-[var(--accent)]"
+              />
+              <span>{activeChar.side || 'center'}</span>
             </span>
           </div>
         </div>

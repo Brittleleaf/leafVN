@@ -156,9 +156,9 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
         </label>
         <div className="grid grid-cols-3 gap-2">
           {[
-            { id: 'left', label: 'Left', icon: GUI_ICONS.general.positionMarker },
-            { id: 'center', label: 'Center', icon: GUI_ICONS.general.positionMarker },
-            { id: 'right', label: 'Right', icon: GUI_ICONS.general.positionMarker },
+            { id: 'left', label: 'Left', icon: GUI_ICONS.general.alignLeft },
+            { id: 'center', label: 'Center', icon: GUI_ICONS.general.alignCenter },
+            { id: 'right', label: 'Right', icon: GUI_ICONS.general.alignRight },
           ].map((pos) => {
             const isSel = (activeChar.side || 'center') === pos.id;
             return (
