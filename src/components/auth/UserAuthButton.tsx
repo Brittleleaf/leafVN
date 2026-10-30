@@ -30,10 +30,10 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
             playSfx('/assets/sfx/click interface.mp3', true, 0.3);
             setShowAuthModal(true);
           }}
-          className="h-7 px-3 rounded-lg text-xs font-semibold cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--accent)] text-[var(--text)] shadow-sm backdrop-blur-sm"
+          className="h-7 px-3 rounded-lg text-xs font-semibold cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border2)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--accent)] text-[var(--text)] shadow-sm backdrop-blur-sm"
           title="Sign in to save and sync projects to the cloud"
         >
-          <GuiIconRenderer icon={GUI_ICONS.general.userCircle} className="w-3.5 h-3.5 text-[var(--accent)]" />
+          <GuiIconRenderer icon={GUI_ICONS.general.userCircle} className="w-3.5 h-3.5 text-current" />
           <span className="hidden sm:inline">Sign In</span>
         </button>
 
@@ -54,7 +54,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
           playUiSound('select', 0.3);
           setShowDropdown(!showDropdown);
         }}
-        className="h-7 px-2 sm:px-2.5 rounded-lg text-xs font-medium cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] shadow-sm backdrop-blur-sm"
+        className="h-7 px-2 sm:px-2.5 rounded-lg text-xs font-medium cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border2)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] shadow-sm backdrop-blur-sm"
         title={`Logged in as ${displayName}`}
       >
         {photoUrl ? (

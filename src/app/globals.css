@@ -188,6 +188,7 @@
   --header-bg: rgba(10, 5, 7, 0.92);
   --modal-bg: linear-gradient(180deg, rgba(16, 6, 8, 0.97), rgba(10, 4, 6, 0.97));
   --dropdown-bg: rgba(14, 5, 8, 0.97);
+  --icon-color: #fee2e2;
 
   /* Backward compatibility aliases */
   --vn-canvas: var(--bg);

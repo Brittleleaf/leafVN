@@ -244,6 +244,8 @@ export const GUI_ICON_MAP: Record<string, string> = {
   masks: GUI_ICONS.general.masks,
   idCard: GUI_ICONS.general.idCard,
   character: GUI_ICONS.general.idCard,
+  user: GUI_ICONS.general.userCircle,
+  userCircle: GUI_ICONS.general.userCircle,
   gear: GUI_ICONS.general.gear,
   config: GUI_ICONS.general.gear,
   inspector: GUI_ICONS.general.gear,
