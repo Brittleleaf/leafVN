@@ -196,6 +196,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     subtitle?: string;
     loreTip?: string;
     bgUrl?: string;
+    scene?: VNScene;
   } | null>(null);
 
   // Pantallas de Episodio: Intro (Inicio) y End (Fin de Episodio)
@@ -369,12 +370,30 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
   const triggerLoadingScreen = useCallback(
     (chapter: VNChapter, onComplete: () => void) => {
       if (chapter.loadingScreen?.enabled) {
+        let loadingScene: VNScene | undefined = undefined;
+        if (chapter.loadingScreen.sceneId) {
+          loadingScene =
+            chapter.scenes.find((s) => s.id === chapter.loadingScreen.sceneId) ||
+            (story.scenarios || []).find((s) => s.id === chapter.loadingScreen.sceneId);
+        } else if (chapter.loadingScreen.staticConfig) {
+          loadingScene = {
+            id: `ep-loading-${chapter.id}`,
+            name: chapter.loadingScreen.staticConfig.title || 'Loading Screen',
+            backgroundUrl: chapter.loadingScreen.bgImageUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+            sceneType: 'event',
+            eventSubtype: 'static',
+            staticScreenConfig: chapter.loadingScreen.staticConfig,
+            timeline: [],
+          };
+        }
+
         setLoadingScreen({
           active: true,
           title: chapter.loadingScreen.title || chapter.title,
           subtitle: chapter.loadingScreen.subtitle,
           loreTip: chapter.loadingScreen.loreTip,
           bgUrl: chapter.loadingScreen.bgImageUrl,
+          scene: loadingScene,
         });
 
         if (loadingScreenTimerRef.current) clearTimeout(loadingScreenTimerRef.current);
@@ -387,7 +406,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
         onComplete();
       }
     },
-    []
+    [story.scenarios]
   );
 
   // Inicializador de capítulo con soporte para Pantalla de Inicio (Intro) y Carga
@@ -2161,6 +2180,14 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     setDisplayedText('');
   }, []);
 
+  const dismissLoadingScreen = useCallback(() => {
+    if (loadingScreenTimerRef.current) {
+      clearTimeout(loadingScreenTimerRef.current);
+      loadingScreenTimerRef.current = null;
+    }
+    setLoadingScreen(null);
+  }, []);
+
   return {
     // State
     currentChapterId,
@@ -2219,6 +2246,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     handleLoadFromSlot,
     handleDeleteSlot,
     handleCloseTextBox,
+    dismissLoadingScreen,
     setAutoMode,
     setSkipMode,
     setShowHistoryModal,

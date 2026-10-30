@@ -13,9 +13,11 @@ import { playSfx } from '@/lib/audioSettings';
 import { fileToBase64 } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import AssetStudioModal from './AssetStudioModal';
+import StaticScreenStudio from './StaticScreenStudio';
 import StaticScreenView, {
   DEFAULT_CHAPTER_INTRO_CONFIG,
   DEFAULT_CHAPTER_END_CONFIG,
+  DEFAULT_LOADING_CONFIG,
 } from './StaticScreenView';
 
 interface ChapterStudioModalProps {
@@ -84,6 +86,10 @@ export default function ChapterStudioModal({
   const [showAssetPickerFor, setShowAssetPickerFor] = useState<'loading_bg' | 'intro_bg' | 'end_bg' | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
+  // Embedded StaticScreenStudio state for full WYSIWYG screen customization
+  const [editingStaticScene, setEditingStaticScene] = useState<VNScene | null>(null);
+  const [editingScreenRole, setEditingScreenRole] = useState<'intro' | 'loading' | 'end' | null>(null);
+
   const selectedChapter = story.chapters.find((c) => c.id === selectedChId) || story.chapters[0];
 
   // Helper to update current chapter
@@ -93,6 +99,192 @@ export default function ChapterStudioModal({
       c.id === selectedChapter.id ? { ...c, ...patch } : c
     );
     onUpdateStory({ ...story, chapters: updatedChapters });
+  };
+
+  const handleOpenVisualStudio = (role: 'intro' | 'loading' | 'end') => {
+    if (!selectedChapter) return;
+    playSfx('/assets/sfx/open folder.mp3', false, 0.4);
+    setEditingScreenRole(role);
+
+    if (role === 'intro') {
+      const intro = selectedChapter.introScreen;
+      if (intro?.sceneId) {
+        const found =
+          selectedChapter.scenes.find((s) => s.id === intro.sceneId) ||
+          (story.scenarios || []).find((s) => s.id === intro.sceneId);
+        if (found) {
+          setEditingStaticScene(found);
+          return;
+        }
+      }
+      const syntheticId = intro?.sceneId || `scene-intro-${selectedChapter.id}`;
+      const newScene: VNScene = {
+        id: syntheticId,
+        name: `[${selectedChapter.title}] Episode Intro`,
+        backgroundUrl: intro?.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+        sceneType: 'event',
+        eventSubtype: 'static',
+        staticScreenConfig: intro?.staticConfig || {
+          ...DEFAULT_CHAPTER_INTRO_CONFIG,
+          title: selectedChapter.title ? `EPISODE: ${selectedChapter.title.toUpperCase()}` : `EPISODE #${selectedChapter.number}`,
+          subtitle: selectedChapter.summary || 'Prepare to enter the scenario.',
+        },
+        timeline: [],
+      };
+      const existingIdx = selectedChapter.scenes.findIndex((s) => s.id === syntheticId);
+      const nextScenes = [...selectedChapter.scenes];
+      if (existingIdx !== -1) {
+        nextScenes[existingIdx] = newScene;
+      } else {
+        nextScenes.push(newScene);
+      }
+      handleUpdateCurrentChapter({
+        scenes: nextScenes,
+        introScreen: {
+          enabled: true,
+          sceneId: syntheticId,
+          backgroundUrl: newScene.backgroundUrl,
+          staticConfig: newScene.staticScreenConfig,
+        },
+      });
+      setEditingStaticScene(newScene);
+    } else if (role === 'end') {
+      const end = selectedChapter.endScreen;
+      if (end?.sceneId) {
+        const found =
+          selectedChapter.scenes.find((s) => s.id === end.sceneId) ||
+          (story.scenarios || []).find((s) => s.id === end.sceneId);
+        if (found) {
+          setEditingStaticScene(found);
+          return;
+        }
+      }
+      const syntheticId = end?.sceneId || `scene-end-${selectedChapter.id}`;
+      const newScene: VNScene = {
+        id: syntheticId,
+        name: `[${selectedChapter.title}] Episode End`,
+        backgroundUrl: end?.backgroundUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+        sceneType: 'event',
+        eventSubtype: 'static',
+        staticScreenConfig: end?.staticConfig || {
+          ...DEFAULT_CHAPTER_END_CONFIG,
+          title: `END OF EPISODE #${selectedChapter.number}`,
+          subtitle: 'Episode completed successfully.',
+        },
+        timeline: [],
+      };
+      const existingIdx = selectedChapter.scenes.findIndex((s) => s.id === syntheticId);
+      const nextScenes = [...selectedChapter.scenes];
+      if (existingIdx !== -1) {
+        nextScenes[existingIdx] = newScene;
+      } else {
+        nextScenes.push(newScene);
+      }
+      handleUpdateCurrentChapter({
+        scenes: nextScenes,
+        endScreen: {
+          enabled: true,
+          sceneId: syntheticId,
+          backgroundUrl: newScene.backgroundUrl,
+          staticConfig: newScene.staticScreenConfig,
+        },
+      });
+      setEditingStaticScene(newScene);
+    } else if (role === 'loading') {
+      const loading = selectedChapter.loadingScreen;
+      if (loading?.sceneId) {
+        const found =
+          selectedChapter.scenes.find((s) => s.id === loading.sceneId) ||
+          (story.scenarios || []).find((s) => s.id === loading.sceneId);
+        if (found) {
+          setEditingStaticScene(found);
+          return;
+        }
+      }
+      const syntheticId = loading?.sceneId || `scene-loading-${selectedChapter.id}`;
+      const newScene: VNScene = {
+        id: syntheticId,
+        name: `[${selectedChapter.title}] Loading Screen`,
+        backgroundUrl: loading?.bgImageUrl || '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+        sceneType: 'event',
+        eventSubtype: 'static',
+        staticScreenConfig: loading?.staticConfig || {
+          ...DEFAULT_LOADING_CONFIG,
+          title: loading?.title || selectedChapter.title || 'LOADING CHAPTER',
+          subtitle: loading?.subtitle || loading?.loreTip || 'Please wait...',
+        },
+        timeline: [],
+      };
+      const existingIdx = selectedChapter.scenes.findIndex((s) => s.id === syntheticId);
+      const nextScenes = [...selectedChapter.scenes];
+      if (existingIdx !== -1) {
+        nextScenes[existingIdx] = newScene;
+      } else {
+        nextScenes.push(newScene);
+      }
+      handleUpdateCurrentChapter({
+        scenes: nextScenes,
+        loadingScreen: {
+          enabled: true,
+          title: newScene.staticScreenConfig?.title || loading?.title || selectedChapter.title,
+          subtitle: newScene.staticScreenConfig?.subtitle || loading?.subtitle,
+          loreTip: loading?.loreTip,
+          durationMs: loading?.durationMs || 2500,
+          bgImageUrl: newScene.backgroundUrl,
+          sceneId: syntheticId,
+          staticConfig: newScene.staticScreenConfig,
+        },
+      });
+      setEditingStaticScene(newScene);
+    }
+  };
+
+  const handleUpdateEmbeddedScene = (patch: Partial<VNScene>) => {
+    if (!editingStaticScene || !selectedChapter) return;
+    const updatedScene: VNScene = { ...editingStaticScene, ...patch };
+    setEditingStaticScene(updatedScene);
+
+    const nextScenes = selectedChapter.scenes.map((s) =>
+      s.id === updatedScene.id ? updatedScene : s
+    );
+    if (!nextScenes.some((s) => s.id === updatedScene.id)) {
+      nextScenes.push(updatedScene);
+    }
+
+    if (editingScreenRole === 'intro') {
+      handleUpdateCurrentChapter({
+        scenes: nextScenes,
+        introScreen: {
+          enabled: true,
+          sceneId: updatedScene.id,
+          backgroundUrl: updatedScene.backgroundUrl,
+          staticConfig: updatedScene.staticScreenConfig,
+        },
+      });
+    } else if (editingScreenRole === 'end') {
+      handleUpdateCurrentChapter({
+        scenes: nextScenes,
+        endScreen: {
+          enabled: true,
+          sceneId: updatedScene.id,
+          backgroundUrl: updatedScene.backgroundUrl,
+          staticConfig: updatedScene.staticScreenConfig,
+        },
+      });
+    } else if (editingScreenRole === 'loading') {
+      handleUpdateCurrentChapter({
+        scenes: nextScenes,
+        loadingScreen: {
+          ...(selectedChapter.loadingScreen || { enabled: true, durationMs: 2500 }),
+          enabled: true,
+          bgImageUrl: updatedScene.backgroundUrl,
+          title: updatedScene.staticScreenConfig?.title || selectedChapter.loadingScreen?.title || selectedChapter.title,
+          subtitle: updatedScene.staticScreenConfig?.subtitle || selectedChapter.loadingScreen?.subtitle,
+          sceneId: updatedScene.id,
+          staticConfig: updatedScene.staticScreenConfig,
+        },
+      });
+    }
   };
 
   // Helper to update loading screen configuration
@@ -435,6 +627,63 @@ export default function ChapterStudioModal({
       notify('Error processing image');
     }
   };
+
+  // Fullscreen Embedded StaticScreenStudio mode
+  if (editingStaticScene) {
+    return (
+      <div className="fixed inset-0 z-[100] flex flex-col bg-[var(--background)] animate-fade-in">
+        {/* Top Header bar with navigation back to Chapter Studio */}
+        <div className="h-12 border-b border-[var(--border)] bg-[var(--header-bg)] px-4 flex items-center justify-between shrink-0 z-50">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setEditingStaticScene(null);
+                setEditingScreenRole(null);
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className="px-3 py-1.5 rounded-md bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-xs text-[var(--text)] font-bold flex items-center gap-1.5 border border-[var(--border)] transition-colors cursor-pointer shadow-sm"
+            >
+              <span>← Back to Chapter Studio</span>
+            </button>
+            <div className="h-4 w-[1px] bg-[var(--border)]" />
+            <span className="text-xs text-[var(--muted)] font-mono hidden sm:inline">
+              Editing{' '}
+              <strong className="text-[var(--text)] font-semibold">
+                {editingScreenRole === 'loading'
+                  ? 'Loading Screen'
+                  : editingScreenRole === 'intro'
+                  ? 'Episode Intro'
+                  : 'Episode End'}
+              </strong>{' '}
+              for:
+            </span>
+            <span className="text-xs font-bold text-[var(--accent)] font-mono">
+              {selectedChapter?.title}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-400 px-2.5 py-0.5 rounded border border-emerald-500/20">
+              ● Live WYSIWYG Mode
+            </span>
+          </div>
+        </div>
+
+        {/* Full StaticScreenStudio Canvas */}
+        <div className="flex-1 min-h-0 relative">
+          <StaticScreenStudio
+            scene={editingStaticScene}
+            story={story}
+            onUpdateScene={handleUpdateEmbeddedScene}
+            onBackToMenuMap={() => {
+              setEditingStaticScene(null);
+              setEditingScreenRole(null);
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 vn-modal-backdrop p-3 md:p-6 flex items-center justify-center animate-fade-in font-sans">
@@ -919,6 +1168,29 @@ export default function ChapterStudioModal({
                     {selectedChapter.introScreen?.enabled && (
                       <div className="space-y-5 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg shadow-sm animate-fade-in">
                         
+                        {/* Visual WYSIWYG Studio Launcher Banner */}
+                        <div className="p-4 bg-gradient-to-r from-sky-950/40 via-[var(--well-bg)] to-purple-950/40 border border-sky-500/40 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-sky-500/20 text-sky-300">
+                                FULL WYSIWYG STUDIO
+                              </span>
+                              <h4 className="text-xs font-bold text-[var(--text)]">Design on Visual Stage</h4>
+                            </div>
+                            <p className="text-[11px] text-[var(--muted)]">
+                              Edit with interactive drag-and-drop handles, transform toolbar, custom typography, button styles, animations and visual screen FX.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenVisualStudio('intro')}
+                            className="px-4 py-2 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg flex items-center gap-2 shadow-md cursor-pointer shrink-0 transition-all hover:scale-[1.02]"
+                          >
+                            <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5 text-white" />
+                            <span>Open Visual Studio</span>
+                          </button>
+                        </div>
+
                         {/* Mode Selector: Custom or Linked */}
                         <div className="space-y-2">
                           <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
@@ -1138,6 +1410,30 @@ export default function ChapterStudioModal({
 
                     {selectedChapter.loadingScreen?.enabled && (
                       <div className="space-y-4 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg shadow-sm animate-fade-in">
+                        
+                        {/* Visual WYSIWYG Studio Launcher Banner */}
+                        <div className="p-4 bg-gradient-to-r from-emerald-950/40 via-[var(--well-bg)] to-teal-950/40 border border-emerald-500/40 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-300">
+                                FULL WYSIWYG STUDIO
+                              </span>
+                              <h4 className="text-xs font-bold text-[var(--text)]">Design on Visual Stage</h4>
+                            </div>
+                            <p className="text-[11px] text-[var(--muted)]">
+                              Edit with interactive drag-and-drop handles, transform toolbar, custom typography, animations, custom buttons and screen FX.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenVisualStudio('loading')}
+                            className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg flex items-center gap-2 shadow-md cursor-pointer shrink-0 transition-all hover:scale-[1.02]"
+                          >
+                            <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5 text-white" />
+                            <span>Open Visual Studio</span>
+                          </button>
+                        </div>
+
                         {/* Loading title and subtitle */}
                         <div className="space-y-1.5">
                           <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">
@@ -1301,6 +1597,29 @@ export default function ChapterStudioModal({
                     {selectedChapter.endScreen?.enabled && (
                       <div className="space-y-5 p-5 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg shadow-sm animate-fade-in">
                         
+                        {/* Visual WYSIWYG Studio Launcher Banner */}
+                        <div className="p-4 bg-gradient-to-r from-purple-950/40 via-[var(--well-bg)] to-pink-950/40 border border-purple-500/40 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-purple-500/20 text-purple-300">
+                                FULL WYSIWYG STUDIO
+                              </span>
+                              <h4 className="text-xs font-bold text-[var(--text)]">Design on Visual Stage</h4>
+                            </div>
+                            <p className="text-[11px] text-[var(--muted)]">
+                              Edit with interactive drag-and-drop handles, transform toolbar, custom typography, button styles, animations and visual screen FX.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenVisualStudio('end')}
+                            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg flex items-center gap-2 shadow-md cursor-pointer shrink-0 transition-all hover:scale-[1.02]"
+                          >
+                            <GuiIconRenderer icon={GUI_ICONS.general.paintbrush} className="w-3.5 h-3.5 text-white" />
+                            <span>Open Visual Studio</span>
+                          </button>
+                        </div>
+
                         {/* Mode Selector: Custom or Linked */}
                         <div className="space-y-2">
                           <label className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-widest block">

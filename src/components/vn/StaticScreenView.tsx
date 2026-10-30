@@ -216,6 +216,33 @@ export const DEFAULT_CHAPTER_END_CONFIG: VNStaticScreenConfig = {
   ],
 };
 
+export const DEFAULT_LOADING_CONFIG: VNStaticScreenConfig = {
+  purpose: 'custom',
+  title: 'LOADING CHAPTER',
+  subtitle: 'Prepare your choices. The narrative is assembling...',
+  titleColor: '#38bdf8',
+  subtitleColor: '#94a3b8',
+  titleAnimation: 'pulse',
+  titleFontSize: '3xl',
+  subtitleFontSize: 'sm',
+  bgOverlayColor: 'rgba(4, 6, 14, 0.88)',
+  screenFx: 'cinema_grain',
+  fxIntensity: 'light',
+  sfxUrl: '/assets/sfx/start after click intro.mp3',
+  buttonsLayout: 'free',
+  buttons: [
+    {
+      id: 'btn-proceed',
+      label: 'CLICK TO PROCEED',
+      action: 'next_scene',
+      style: 'cyber',
+      size: 'md',
+      xPercent: 50,
+      yPercent: 82,
+    },
+  ],
+};
+
 export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
   purpose: 'title',
   title: 'LEAF VISUAL NOVEL',

@@ -527,6 +527,8 @@ export interface VNLoadingScreenConfig {
   loreTip?: string;
   bgImageUrl?: string;
   durationMs?: number;
+  sceneId?: string; // Optional: Link to an existing static screen in the project
+  staticConfig?: VNStaticScreenConfig; // Full customizable static screen (title, subtitle, buttons, fx, etc.)
 }
 
 export interface VNChapterScreenConfig {

@@ -88,6 +88,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
     handleLoadFromSlot,
     handleDeleteSlot,
     handleCloseTextBox,
+    dismissLoadingScreen,
     setAutoMode,
     setSkipMode,
     setShowHistoryModal,
@@ -1081,39 +1082,48 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
 
       {/* 9. LOADING SCREEN / INTERMISSION */}
       {loadingScreen?.active && (
-        <div className="absolute inset-0 z-50 bg-[#060609] flex flex-col items-center justify-center p-8 select-none">
-          {loadingScreen.bgUrl && (
-            <div
-              className="absolute inset-0 bg-cover bg-center opacity-25 filter blur-sm"
-              style={{ backgroundImage: `url('${loadingScreen.bgUrl}')` }}
+        <div className="absolute inset-0 z-50">
+          {loadingScreen.scene ? (
+            <StaticScreenView
+              scene={loadingScreen.scene}
+              onNextScene={dismissLoadingScreen}
             />
-          )}
+          ) : (
+            <div className="absolute inset-0 bg-[#060609] flex flex-col items-center justify-center p-8 select-none">
+              {loadingScreen.bgUrl && (
+                <div
+                  className="absolute inset-0 bg-cover bg-center opacity-25 filter blur-sm"
+                  style={{ backgroundImage: `url('${loadingScreen.bgUrl}')` }}
+                />
+              )}
 
-          <div className="relative z-10 max-w-2xl text-center space-y-6">
-            <div className="border border-sky-700/50 bg-sky-950/20 px-4 py-1 inline-block rounded text-xs text-sky-400 font-bold uppercase tracking-widest animate-pulse">
-              [ LOADING CHAPTER // PLEASE WAIT ]
-            </div>
+              <div className="relative z-10 max-w-2xl text-center space-y-6">
+                <div className="border border-sky-700/50 bg-sky-950/20 px-4 py-1 inline-block rounded text-xs text-sky-400 font-bold uppercase tracking-widest animate-pulse">
+                  [ LOADING CHAPTER // PLEASE WAIT ]
+                </div>
 
-            <h2 className="text-3xl md:text-5xl text-white font-title tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
-              {loadingScreen.title}
-            </h2>
+                <h2 className="text-3xl md:text-5xl text-white font-title tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+                  {loadingScreen.title}
+                </h2>
 
-            {loadingScreen.subtitle && (
-              <p className="text-xs uppercase tracking-widest text-red-400 font-bold">
-                {loadingScreen.subtitle}
-              </p>
-            )}
+                {loadingScreen.subtitle && (
+                  <p className="text-xs uppercase tracking-widest text-red-400 font-bold">
+                    {loadingScreen.subtitle}
+                  </p>
+                )}
 
-            <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden border border-red-900/40 my-6">
-              <div className="h-full bg-red-600 animate-[pulse_1.5s_infinite] w-full origin-left" />
-            </div>
+                <div className="w-full h-1.5 bg-gray-900 rounded-full overflow-hidden border border-red-900/40 my-6">
+                  <div className="h-full bg-red-600 animate-[pulse_1.5s_infinite] w-full origin-left" />
+                </div>
 
-            {loadingScreen.loreTip && (
-              <div className="border-t border-gray-800 pt-4 text-xs text-gray-400 italic">
-                {loadingScreen.loreTip}
+                {loadingScreen.loreTip && (
+                  <div className="border-t border-gray-800 pt-4 text-xs text-gray-400 italic">
+                    {loadingScreen.loreTip}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
 

@@ -13,6 +13,9 @@ import StaticScreenView, {
   DEFAULT_DEATH_CONFIG,
   DEFAULT_ENDING_CONFIG,
   DEFAULT_INTRO_CONFIG,
+  DEFAULT_CHAPTER_INTRO_CONFIG,
+  DEFAULT_CHAPTER_END_CONFIG,
+  DEFAULT_LOADING_CONFIG,
   DEFAULT_TITLE_CONFIG,
   DEFAULT_LOAD_GAME_CONFIG,
   DEFAULT_SETTINGS_CONFIG,
@@ -79,7 +82,7 @@ export default function StaticScreenStudio({
     });
   };
 
-  const handleApplyPreset = (purpose: 'death' | 'ending' | 'intro' | 'title' | 'load_game' | 'settings' | 'gallery') => {
+  const handleApplyPreset = (purpose: 'death' | 'ending' | 'intro' | 'title' | 'load_game' | 'settings' | 'gallery' | 'loading' | 'chapter_end') => {
     playSfx('/assets/sfx/open folder.mp3', false, 0.4);
 
     const resolvePresetWithTargets = (baseConfig: VNStaticScreenConfig): VNStaticScreenConfig => {
@@ -127,9 +130,19 @@ export default function StaticScreenStudio({
         name: scene.name.startsWith('Scenario') ? 'Story Ending' : scene.name,
       });
     } else if (purpose === 'intro') {
-      updateConfig(resolvePresetWithTargets(DEFAULT_INTRO_CONFIG));
+      updateConfig(resolvePresetWithTargets(DEFAULT_CHAPTER_INTRO_CONFIG));
       onUpdateScene({
-        name: scene.name.startsWith('Scenario') ? 'Chapter Intro' : scene.name,
+        name: scene.name.startsWith('Scenario') ? 'Episode Intro' : scene.name,
+      });
+    } else if (purpose === 'chapter_end') {
+      updateConfig(resolvePresetWithTargets(DEFAULT_CHAPTER_END_CONFIG));
+      onUpdateScene({
+        name: scene.name.startsWith('Scenario') ? 'Episode End' : scene.name,
+      });
+    } else if (purpose === 'loading') {
+      updateConfig(resolvePresetWithTargets(DEFAULT_LOADING_CONFIG));
+      onUpdateScene({
+        name: scene.name.startsWith('Scenario') ? 'Loading Screen' : scene.name,
       });
     } else if (purpose === 'title') {
       updateConfig(resolvePresetWithTargets(DEFAULT_TITLE_CONFIG));
@@ -386,6 +399,22 @@ export default function StaticScreenStudio({
                 title="Chapter Intro card preset"
               >
                 Intro
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('loading')}
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-blue-400 cursor-pointer transition-colors"
+                title="Loading Screen preset"
+              >
+                Loading
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApplyPreset('chapter_end')}
+                className="px-1.5 py-0.5 text-[10px] font-bold rounded hover:bg-[var(--btn-hover-bg)] text-indigo-400 cursor-pointer transition-colors"
+                title="End of Chapter preset"
+              >
+                Ep. End
               </button>
               <button
                 type="button"
