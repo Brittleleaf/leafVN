@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import JSZip from 'jszip';
 import { VNStory, VNChapter, VNScene, VNCharacter, VNAssetItem, VNAssetType } from '@/types/vn';
 import { SAMPLE_STORY } from './sampleStory';
 
@@ -759,4 +760,101 @@ export function renameProjectAsset(
     newUrl,
     newFileName,
   };
+}
+
+/**
+ * Empaqueta un proyecto completo (project.json, chapters, characters, scenarios y todos los assets binarios como audio e imágenes)
+ * en un Buffer comprimido de formato .leafvn (ZIP estándar).
+ */
+export async function createProjectBundle(projectId: string): Promise<Buffer | null> {
+  const safeId = sanitizeProjectId(projectId);
+  const projDir = getProjectPath(safeId);
+  if (!fs.existsSync(projDir)) return null;
+
+  const zip = new JSZip();
+
+  function addDirToZip(currentDir: string, zipFolder: JSZip) {
+    if (!fs.existsSync(currentDir)) return;
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        const subFolder = zipFolder.folder(entry.name);
+        if (subFolder) addDirToZip(fullPath, subFolder);
+      } else if (entry.isFile()) {
+        const fileData = fs.readFileSync(fullPath);
+        zipFolder.file(entry.name, fileData);
+      }
+    }
+  }
+
+  addDirToZip(projDir, zip);
+
+  // Incluir también la historia ensamblada como story.json para respaldo universal
+  const fullStory = loadProject(safeId);
+  if (fullStory) {
+    zip.file('story.json', JSON.stringify(fullStory, null, 2));
+  }
+
+  const buffer = await zip.generateAsync({
+    type: 'nodebuffer',
+    compression: 'DEFLATE',
+    compressionOptions: { level: 6 },
+  });
+
+  return buffer;
+}
+
+/**
+ * Desempaqueta un archivo .leafvn (ZIP) en public/projects/[projectId]/ restaurando
+ * automáticamente todos los archivos de configuración, escenarios y assets (audio, imágenes, etc.).
+ */
+export async function unpackProjectBundle(bundleBuffer: Buffer, targetProjectId?: string): Promise<VNStory> {
+  const zip = await JSZip.loadAsync(bundleBuffer);
+
+  // Intentar leer metadatos de project.json o story.json
+  let meta: any = null;
+  const projectJsonFile = zip.file('project.json');
+  if (projectJsonFile) {
+    const text = await projectJsonFile.async('text');
+    try { meta = JSON.parse(text); } catch (_) {}
+  }
+
+  if (!meta) {
+    const storyJsonFile = zip.file('story.json');
+    if (storyJsonFile) {
+      const text = await storyJsonFile.async('text');
+      try { meta = JSON.parse(text); } catch (_) {}
+    }
+  }
+
+  const safeId = sanitizeProjectId(targetProjectId || meta?.id || `project-${Date.now()}`);
+  const projDir = getProjectPath(safeId);
+
+  // Extraer todos los archivos
+  const entries = Object.keys(zip.files);
+  for (const relativePath of entries) {
+    const zipEntry = zip.files[relativePath];
+    if (zipEntry.dir) continue;
+
+    // Normalizar ruta para evitar path traversal
+    const safeRel = relativePath.replace(/\\/g, '/').replace(/^\/+/, '');
+    if (safeRel.includes('..')) continue;
+
+    const destPath = path.join(/*turbopackIgnore: true*/ projDir, safeRel);
+    const destDir = path.dirname(destPath);
+    if (!fs.existsSync(destDir)) {
+      fs.mkdirSync(destDir, { recursive: true });
+    }
+
+    const fileBuffer = await zipEntry.async('nodebuffer');
+    fs.writeFileSync(destPath, fileBuffer);
+  }
+
+  const loadedStory = loadProject(safeId);
+  if (!loadedStory) {
+    throw new Error('No se pudo cargar el proyecto desempaquetado.');
+  }
+
+  return loadedStory;
 }

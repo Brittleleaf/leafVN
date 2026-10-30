@@ -311,14 +311,35 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
     router.push(`/editor?id=${safeId}`);
   };
 
-  // Importar archivo .json / .leafvn
+  // Importar archivo .leafvn (paquete completo con assets) o .json
   const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       playSfx('/assets/sfx/open folder.mp3', false, 0.5);
-      const importedStory = await importStoryFromJson(file);
+      let importedStory: VNStory;
+
+      if (file.name.endsWith('.leafvn') || file.type.includes('zip')) {
+        setLauncherToast({
+          type: 'success',
+          message: `Desempaquetando proyecto completo "${file.name}"...`,
+        });
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('/api/projects/import-bundle', {
+          method: 'POST',
+          body: formData,
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || 'Fallo al desempaquetar paquete .leafvn');
+        }
+        const data = await res.json();
+        importedStory = data.story;
+      } else {
+        importedStory = await importStoryFromJson(file);
+      }
 
       try {
         const newSummary: VNProjectSummary = {
@@ -363,7 +384,10 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       router.push(`/editor?id=${importedStory.id}`);
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : String(err || 'Unknown error');
-      showToast(`Error importing project: ${errMsg}`, 'error');
+      setLauncherToast({
+        type: 'error',
+        message: `Error importando proyecto: ${errMsg}`,
+      });
       playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
     } finally {
       if (e.target) e.target.value = '';
@@ -472,34 +496,23 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
     }
   };
 
-  // Exportar proyecto a JSON
-  const handleExportProject = async (id: string) => {
+  // Exportar paquete completo .leafvn (con audios, imágenes y escenas)
+  const handleExportProject = async (id: string, title?: string) => {
     try {
-      let storyToExport: VNStory | null = null;
-
-      try {
-        const res = await fetch(`/api/projects/${id}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.story) storyToExport = data.story;
-        }
-      } catch {}
-
-      if (!storyToExport) {
-        const local = localStorage.getItem(`leafvn_project_${id}`);
-        if (local) storyToExport = JSON.parse(local);
-      }
-
-      if (!storyToExport && (id === 'el-renacer-del-pintor' || id === SAMPLE_STORY.id)) {
-        storyToExport = SAMPLE_STORY;
-      }
-
-      if (storyToExport) {
-        exportStoryToJson(storyToExport);
-        playSfx('/assets/sfx/success.mp3', false, 0.5);
-      }
+      playSfx('/assets/sfx/success.mp3', false, 0.5);
+      const cleanTitle = (title || id).toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.href = `/api/projects/${id}/bundle`;
+      downloadAnchor.download = `${cleanTitle}.leafvn`;
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      setTimeout(() => downloadAnchor.remove(), 200);
+      setLauncherToast({
+        type: 'success',
+        message: `Exportado paquete completo "${cleanTitle}.leafvn" con todos sus assets.`,
+      });
     } catch (err) {
-      console.error('Error exportando proyecto:', err);
+      console.error('Error exportando paquete .leafvn:', err);
     }
   };
 
@@ -1148,9 +1161,9 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleExportProject(proj.id);
+                                handleExportProject(proj.id, proj.title);
                               }}
-                              title="Export JSON"
+                              title="Export .leafvn Package"
                               className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                             >
                               <GuiIconRenderer icon={GUI_ICONS.general.download} className="w-3 h-3" />
@@ -1234,8 +1247,8 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                                 <GuiIconRenderer icon={GUI_ICONS.general.upload} className="w-3.5 h-3.5" />
                               </button>
                               <button
-                                onClick={() => handleExportProject(proj.id)}
-                                title="Export JSON"
+                                onClick={() => handleExportProject(proj.id, proj.title)}
+                                title="Export .leafvn Package"
                                 className="p-1 hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] rounded cursor-pointer"
                               >
                                 <GuiIconRenderer icon={GUI_ICONS.general.download} className="w-3.5 h-3.5" />

@@ -167,16 +167,48 @@ async function getOrCreateDriveFolder(accessToken: string): Promise<string> {
 }
 
 /**
- * Guarda o actualiza un archivo de proyecto (.json / .leafvn) en Google Drive.
+ * Guarda o actualiza un paquete completo de proyecto (.leafvn con todos sus assets, audios y escenas) en Google Drive.
  */
 export async function saveProjectToGoogleDrive(
   accessToken: string,
   story: VNStory
 ): Promise<{ fileId: string; webViewLink?: string }> {
   const folderId = await getOrCreateDriveFolder(accessToken);
-  const fileName = `${story.title.replace(/[/\\?%*:|"<>]/g, '-') || 'story'}.leafvn.json`;
+  const cleanTitle = (story.title || story.id || 'project')
+    .replace(/[/\\?%*:|"<>]/g, '-')
+    .trim();
+  const fileName = `${cleanTitle}.leafvn`;
 
-  // Buscar si ya existe el archivo en la carpeta
+  // 1. Obtener el bundle completo comprimido (.leafvn) desde la API del proyecto
+  let fileBlob: Blob | null = null;
+  try {
+    const bundleRes = await fetch(`/api/projects/${story.id}/bundle`);
+    if (bundleRes.ok) {
+      fileBlob = await bundleRes.blob();
+    }
+  } catch (_) {}
+
+  // Si no está disponible en la API local (p.ej. cliente puro), generar el bundle en el navegador con JSZip
+  if (!fileBlob) {
+    const JSZip = (await import('jszip')).default;
+    const zip = new JSZip();
+    zip.file('project.json', JSON.stringify({
+      id: story.id,
+      title: story.title,
+      author: story.author,
+      description: story.description,
+      version: story.version || '1.0.0',
+      coverImageUrl: story.coverImageUrl,
+      createdAt: story.createdAt,
+      updatedAt: new Date().toISOString(),
+      textBoxConfig: story.textBoxConfig,
+      variables: story.variables || [],
+    }, null, 2));
+    zip.file('story.json', JSON.stringify(sanitizeStory(story), null, 2));
+    fileBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+  }
+
+  // 2. Buscar si ya existe el archivo en la carpeta de Drive
   const q = encodeURIComponent(`name = '${fileName}' and '${folderId}' in parents and trashed = false`);
   const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,webViewLink)`, {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -190,19 +222,17 @@ export async function saveProjectToGoogleDrive(
     }
   }
 
-  const fileContent = JSON.stringify(sanitizeStory(story), null, 2);
-
   if (existingFileId) {
-    // Actualizar contenido del archivo existente (PATCH multipart/simple upload)
+    // Actualizar archivo existente en Google Drive
     const updateRes = await fetch(
       `https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=media`,
       {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-leafvn',
         },
-        body: fileContent,
+        body: fileBlob,
       }
     );
 
@@ -220,23 +250,19 @@ export async function saveProjectToGoogleDrive(
     const result = await updateRes.json();
     return { fileId: existingFileId, webViewLink: result.webViewLink };
   } else {
-    // Crear nuevo archivo en Google Drive (Multipart upload estricto RFC 2046)
+    // Crear nuevo archivo .leafvn en Google Drive usando Multipart upload con Blob
     const boundary = 'LeafVNUploadBoundary' + Date.now();
     const metadata = {
       name: fileName,
-      mimeType: 'application/json',
+      mimeType: 'application/x-leafvn',
       parents: [folderId],
-      description: `Leaf VN Visual Novel Project: ${story.title}`,
+      description: `Leaf VN Visual Novel Project Package: ${story.title}`,
     };
 
-    const multipartRequestBody =
-      `--${boundary}\r\n` +
-      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-      JSON.stringify(metadata) +
-      `\r\n--${boundary}\r\n` +
-      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-      fileContent +
-      `\r\n--${boundary}--`;
+    const metadataPart = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n--${boundary}\r\nContent-Type: application/x-leafvn\r\n\r\n`;
+    const closePart = `\r\n--${boundary}--`;
+
+    const multipartBlob = new Blob([metadataPart, fileBlob, closePart]);
 
     const createRes = await fetch(
       'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink',
@@ -246,7 +272,7 @@ export async function saveProjectToGoogleDrive(
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': `multipart/related; boundary=${boundary}`,
         },
-        body: multipartRequestBody,
+        body: multipartBlob,
       }
     );
 
