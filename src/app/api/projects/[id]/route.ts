@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadProject, saveProject, deleteProject } from '@/lib/vn/projectFs';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,11 +27,27 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const body = await req.json();
-    const story = body.story || body;
+    let story: any = null;
 
-    if (!story || !story.id) {
+    try {
+      const body = await req.json();
+      story = body?.story || body;
+    } catch (_) {
+      try {
+        const text = await req.text();
+        const body = JSON.parse(text);
+        story = body?.story || body;
+      } catch (parseErr) {
+        console.error('Failed to parse request JSON:', parseErr);
+      }
+    }
+
+    if (!story || typeof story !== 'object') {
       return NextResponse.json({ error: 'Invalid story payload' }, { status: 400 });
+    }
+
+    if (!story.id) {
+      story.id = id;
     }
 
     const saved = saveProject(id, story);

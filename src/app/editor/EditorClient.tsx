@@ -20,30 +20,58 @@ export default function EditorClient() {
     const loadStory = async () => {
       try {
         if (projectId) {
-          // 1. Intentar desde API de servidor local
+          let serverStory: VNStory | null = null;
+          let localStory: VNStory | null = null;
+
+          // 1. Leer versión local en navegador
+          try {
+            const rawLocal = localStorage.getItem(`leafvn_project_${projectId}`);
+            if (rawLocal) {
+              localStory = JSON.parse(rawLocal);
+            }
+          } catch (_) {}
+
+          // 2. Leer versión en disco del servidor local
           try {
             const res = await fetch(`/api/projects/${projectId}`);
             if (res.ok) {
               const data = await res.json();
               if (data.story) {
-                setStory(data.story);
-                setLoading(false);
-                return;
+                serverStory = data.story;
               }
             }
           } catch (_) {}
 
-          // 2. Intentar desde localStorage
-          try {
-            const local = localStorage.getItem(`leafvn_project_${projectId}`);
-            if (local) {
-              setStory(JSON.parse(local));
+          // 3. Resolver la versión más reciente según timestamp
+          if (localStory && serverStory) {
+            const localTime = new Date(localStory.updatedAt || 0).getTime();
+            const serverTime = new Date(serverStory.updatedAt || 0).getTime();
+            if (localTime > serverTime) {
+              setStory(localStory);
+              setLoading(false);
+              // Sincronizar en segundo plano al disco
+              fetch(`/api/projects/${projectId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ story: localStory }),
+              }).catch(() => {});
+              return;
+            } else {
+              setStory(serverStory);
               setLoading(false);
               return;
             }
-          } catch (_) {}
+          } else if (serverStory) {
+            setStory(serverStory);
+            setLoading(false);
+            return;
+          } else if (localStory) {
+            setStory(localStory);
+            setLoading(false);
+            return;
+          }
 
-          // 3. Intentar desde Cloud Firestore si el usuario está autenticado
+          // 4. Intentar desde Cloud Firestore si el usuario está autenticado
           if (user?.uid) {
             try {
               const cloudStory = await loadProjectFromCloud(user.uid, projectId);
@@ -56,7 +84,7 @@ export default function EditorClient() {
           }
         }
 
-        // 4. Fallback a proyecto nuevo en blanco
+        // 5. Fallback a proyecto nuevo en blanco
         setStory(createBlankStory(projectId, user?.displayName));
       } catch (err) {
         console.error('Error loading project for editor:', err);
@@ -82,9 +110,18 @@ export default function EditorClient() {
     <div className="w-screen h-screen overflow-hidden">
       <VNMaker
         initialStory={story}
-        onPlayStory={(updatedStory) => {
+        onPlayStory={async (updatedStory) => {
           try {
             localStorage.setItem(`leafvn_project_${updatedStory.id}`, JSON.stringify(updatedStory));
+            localStorage.setItem('leafvn_active_project_id', updatedStory.id);
+          } catch (_) {}
+          // Guardar en disco antes de probar
+          try {
+            await fetch(`/api/projects/${updatedStory.id}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ story: updatedStory }),
+            });
           } catch (_) {}
           router.push(`/player?id=${updatedStory.id}`);
         }}

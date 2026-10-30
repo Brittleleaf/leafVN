@@ -43,7 +43,8 @@ import { saveProjectToCloud } from '@/lib/firebase/cloudProjects';
 export function useVNMakerState(
   initialStory: VNStory,
   onPlayStory: (story: VNStory) => void,
-  onExit: () => void
+  onExit: () => void,
+  onSaveStory?: (story: VNStory) => void
 ): VNMakerContextType {
   const [story, setStory] = useState<VNStory>(initialStory);
 
@@ -685,9 +686,19 @@ export function useVNMakerState(
     });
   }, [currentScene?.timeline]);
 
-  // Guardado manual
+  // Manual save
   const handleManualSave = useCallback(async () => {
     saveActiveStory(story, true);
+    try {
+      localStorage.setItem(`leafvn_project_${story.id}`, JSON.stringify(story));
+      localStorage.setItem('leafvn_active_project_id', story.id);
+    } catch (_) {}
+
+    if (onSaveStory) {
+      try {
+        onSaveStory(story);
+      } catch (_) {}
+    }
 
     let savedToCloud = false;
     if (auth.currentUser) {
@@ -695,7 +706,7 @@ export function useVNMakerState(
         await saveProjectToCloud(auth.currentUser.uid, story);
         savedToCloud = true;
       } catch (cloudErr) {
-        console.warn('Error guardando en Firestore:', cloudErr);
+        console.warn('Error saving to Firestore:', cloudErr);
       }
     }
 
@@ -709,12 +720,15 @@ export function useVNMakerState(
         playSfx('/assets/sfx/success.mp3', false, 0.5);
         notify(savedToCloud ? `Project saved to Cloud & Disk (${story.id})!` : `Project saved to disk: public/projects/${story.id}!`);
       } else {
-        notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser (server unavailable)');
+        const errJson = await res.json().catch(() => ({}));
+        console.warn('Server save error response:', errJson);
+        notify(savedToCloud ? 'Project saved to Cloud & Browser' : `Saved to browser (${errJson.error || 'Server error ' + res.status})`);
       }
-    } catch {
-      notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser');
+    } catch (netErr) {
+      console.warn('Server save network error:', netErr);
+      notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser (server unreachable)');
     }
-  }, [story, notify]);
+  }, [story, notify, onSaveStory]);
 
   // Mutaciones de Escena
   const handlePatchCurrentScene = useCallback((patch: Partial<VNScene>) => {

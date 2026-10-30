@@ -22,10 +22,11 @@ interface VNMakerProps {
   initialStory: VNStory;
   onPlayStory: (story: VNStory) => void;
   onExit: () => void;
+  onSaveStory?: (story: VNStory) => void;
 }
 
-export default function VNMaker({ initialStory, onPlayStory, onExit }: VNMakerProps) {
-  const contextValue = useVNMakerState(initialStory, onPlayStory, onExit);
+export default function VNMaker({ initialStory, onPlayStory, onExit, onSaveStory }: VNMakerProps) {
+  const contextValue = useVNMakerState(initialStory, onPlayStory, onExit, onSaveStory);
   const {
     story,
     setStory,

@@ -703,6 +703,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       <div className="w-screen h-screen overflow-hidden">
         <VNMaker
           initialStory={activeStory}
+          onSaveStory={handleStoryUpdateFromEditor}
           onPlayStory={(updated) => {
             handleStoryUpdateFromEditor(updated);
             setEngineMode('player');

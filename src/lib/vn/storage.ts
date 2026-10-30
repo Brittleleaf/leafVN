@@ -170,9 +170,13 @@ let pendingStoryToSave: VNStory | null = null;
 function executeDirectSave(story: VNStory): void {
   try {
     story.updatedAt = new Date().toISOString();
-    localStorage.setItem(STORAGE_KEYS.CURRENT_STORY, JSON.stringify(story));
+    const serialized = JSON.stringify(story);
+
+    localStorage.setItem(STORAGE_KEYS.CURRENT_STORY, serialized);
     if (story?.id) {
       localStorage.setItem('vn_active_project_id', story.id);
+      localStorage.setItem(`leafvn_project_${story.id}`, serialized);
+      localStorage.setItem('leafvn_active_project_id', story.id);
     }
   } catch (err: unknown) {
     const errorObj = err as { name?: string; code?: number };
