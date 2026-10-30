@@ -122,10 +122,12 @@ export async function deleteProjectFromCloud(userId: string, projectId: string):
 // =========================================================================
 
 /**
- * Busca o crea una carpeta en Google Drive llamada "Leaf VN Projects"
+ * Busca o crea una carpeta en Google Drive dado su nombre y parent opcional
  */
-async function getOrCreateDriveFolder(accessToken: string): Promise<string> {
-  const query = encodeURIComponent("name = 'Leaf VN Projects' and mimeType = 'application/vnd.google-apps.folder' and trashed = false");
+async function findOrCreateFolder(accessToken: string, folderName: string, parentId?: string): Promise<string> {
+  const parentFilter = parentId ? `'${parentId}' in parents` : "'root' in parents";
+  const query = encodeURIComponent(`name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and ${parentFilter} and trashed = false`);
+
   const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name)`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -137,17 +139,22 @@ async function getOrCreateDriveFolder(accessToken: string): Promise<string> {
     }
   }
 
-  // Crear la carpeta si no existe
+  // Crear la carpeta
+  const body: any = {
+    name: folderName,
+    mimeType: 'application/vnd.google-apps.folder',
+  };
+  if (parentId) {
+    body.parents = [parentId];
+  }
+
   const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      name: 'Leaf VN Projects',
-      mimeType: 'application/vnd.google-apps.folder',
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!createRes.ok) {
@@ -158,7 +165,7 @@ async function getOrCreateDriveFolder(accessToken: string): Promise<string> {
     } catch {
       errDetail = await createRes.text();
     }
-    console.error('Google Drive Folder Create Error:', createRes.status, errDetail);
+    console.error(`Google Drive Folder "${folderName}" Create Error:`, createRes.status, errDetail);
     throw new Error(`Google Drive (${createRes.status}): ${errDetail}`);
   }
 
@@ -167,13 +174,24 @@ async function getOrCreateDriveFolder(accessToken: string): Promise<string> {
 }
 
 /**
+ * Busca o crea la jerarquía en Google Drive:
+ * LeafVN / projects
+ */
+async function getOrCreateProjectsFolder(accessToken: string): Promise<string> {
+  const leafVnFolderId = await findOrCreateFolder(accessToken, 'LeafVN');
+  const projectsFolderId = await findOrCreateFolder(accessToken, 'projects', leafVnFolderId);
+  return projectsFolderId;
+}
+
+/**
  * Guarda o actualiza un paquete completo de proyecto (.leafvn con todos sus assets, audios y escenas) en Google Drive.
+ * Ubicación: Drive -> LeafVN -> projects -> <proyecto>.leafvn
  */
 export async function saveProjectToGoogleDrive(
   accessToken: string,
   story: VNStory
 ): Promise<{ fileId: string; webViewLink?: string }> {
-  const folderId = await getOrCreateDriveFolder(accessToken);
+  const folderId = await getOrCreateProjectsFolder(accessToken);
   const cleanTitle = (story.title || story.id || 'project')
     .replace(/[/\\?%*:|"<>]/g, '-')
     .trim();

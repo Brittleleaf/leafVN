@@ -559,7 +559,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       playSfx('/assets/sfx/success.mp3', false, 0.5);
       setLauncherToast({
         type: 'success',
-        message: `Saved to Google Drive: "Leaf VN Projects/${storyToBackup.title}"!`,
+        message: `Guardado en Google Drive: "LeafVN/projects/${storyToBackup.title}.leafvn"!`,
       });
     } catch (err: any) {
       console.error('Google Drive backup error:', err);
