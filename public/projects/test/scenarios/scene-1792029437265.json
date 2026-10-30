@@ -1,0 +1,87 @@
+{
+  "id": "scene-1792029437265",
+  "name": "Death Screen",
+  "backgroundUrl": "https://i.pinimg.com/1200x/48/b1/d8/48b1d83d18bfa1f23c89033140f1a138.jpg",
+  "sceneType": "event",
+  "eventSubtype": "static",
+  "staticScreenConfig": {
+    "purpose": "death",
+    "title": "YOURE DEAD",
+    "subtitle": "Would you like to try again?",
+    "titleColor": "#ffffff",
+    "subtitleColor": "#d1d5db",
+    "titleAnimation": "pulse",
+    "titleFontSize": "xl",
+    "subtitleFontSize": "base",
+    "bgOverlayColor": "rgba(10, 2, 4, 0.85)",
+    "fxIntensity": "heavy",
+    "buttonsLayout": "free",
+    "buttons": [
+      {
+        "id": "btn-1792355060520",
+        "label": "Retry",
+        "action": "retry_previous",
+        "style": "ghost",
+        "size": "md",
+        "xPercent": 50,
+        "yPercent": 57.7,
+        "hideContainer": true,
+        "hoverEffect": "box"
+      },
+      {
+        "id": "btn-1792355094746",
+        "label": "Load Game",
+        "action": "load_game",
+        "style": "ghost",
+        "size": "md",
+        "xPercent": 50,
+        "yPercent": 65.4,
+        "hideContainer": true,
+        "hoverEffect": "box"
+      },
+      {
+        "id": "btn-1792355134882",
+        "label": "EXIT",
+        "action": "main_menu",
+        "style": "ghost",
+        "size": "md",
+        "xPercent": 50,
+        "yPercent": 73.1,
+        "hideContainer": true,
+        "hoverEffect": "box"
+      }
+    ],
+    "titleXPercent": 50,
+    "titleYPercent": 39,
+    "subtitleXPercent": 50,
+    "subtitleYPercent": 50,
+    "cursorType": "palimpsest_dot",
+    "subtitleScale": 1.09,
+    "subtitleFontFamily": "special-elite",
+    "titleFontFamily": "cinzel",
+    "bgmUrl": "/assets/sfx/BGM/Dead zone.mp3",
+    "screenFx": "digital_glitch",
+    "titleLocked": false,
+    "subtitleRotation": 0
+  },
+  "timeline": [
+    {
+      "id": "ev-1792029437265",
+      "type": "dialogue",
+      "characterId": "char-1791911965690",
+      "text": "Static screen ready...",
+      "characterScale": 0.76
+    },
+    {
+      "id": "ev-1791931734035",
+      "type": "dialogue",
+      "characterId": "char-1791911965690",
+      "text": "If you're looking for work, you'll have to come back another day. \nI'd be happy to welcome you then, but not right now.",
+      "characterScale": 0.76
+    }
+  ],
+  "mapPosition": {
+    "x": 941,
+    "y": -47
+  }
+}

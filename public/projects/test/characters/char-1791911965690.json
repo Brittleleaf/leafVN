@@ -1,0 +1,13 @@
+{
+  "id": "char-1791911965690",
+  "name": "Justin",
+  "color": "#8100c7",
+  "badgeTitle": "Boss",
+  "shortcut": "1",
+  "description": "Escribe aquí la historia de fondo, personalidad y motivaciones de este personaje...",
+  "avatarUrl": "https://scontent.ftuc1-2.fna.fbcdn.net/v/t39.30808-6/484943420_628534023421254_4625918433291286406_n.jpg?stp=dst-jpg_tt6&cstp=mx1000x1000&ctp=s1000x1000&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeG8GAJapZiVZZuWRpDgJ7oDHl5-0KFbF1YeXn7QoVsXVgO6qW_d6RPyd2eAbHn1CgA6ObeogTcxrwCM9IOiMOic&_nc_ohc=jeMbzq446gMQ7kNvwFlqaQw&_nc_oc=AdrEyzN6bxh0bEGZFxYuIJ5EA-fuMdhhB07tPioDvybvSTfAnaFUU5ZlrcsAZioAOvs&_nc_zt=23&_nc_ht=scontent.ftuc1-2.fna&_nc_gid=hpRaAqTpJobHBi3kcLGSiw&_nc_ss=7b2a8&oh=00_AQN5FlzV85hWJgmQ6KPxGFzsf97kUr-YP5scyBp4yyVyug&oe=6AD4258A",
+  "expressions": {
+    "neutral": "https://scontent.ftuc1-2.fna.fbcdn.net/v/t39.30808-6/484943420_628534023421254_4625918433291286406_n.jpg?stp=dst-jpg_tt6&cstp=mx1000x1000&ctp=s1000x1000&_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeG8GAJapZiVZZuWRpDgJ7oDHl5-0KFbF1YeXn7QoVsXVgO6qW_d6RPyd2eAbHn1CgA6ObeogTcxrwCM9IOiMOic&_nc_ohc=jeMbzq446gMQ7kNvwFlqaQw&_nc_oc=AdrEyzN6bxh0bEGZFxYuIJ5EA-fuMdhhB07tPioDvybvSTfAnaFUU5ZlrcsAZioAOvs&_nc_zt=23&_nc_ht=scontent.ftuc1-2.fna&_nc_gid=hpRaAqTpJobHBi3kcLGSiw&_nc_ss=7b2a8&oh=00_AQN5FlzV85hWJgmQ6KPxGFzsf97kUr-YP5scyBp4yyVyug&oe=6AD4258A"
+  },
+  "defaultScale": 0.76
+}

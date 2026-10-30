@@ -18,6 +18,7 @@
     "position": "bottom"
   },
   "variables": [],
+  "characters": [],
   "chapters": [
     {
       "id": "chap-1",
@@ -31,10 +32,24 @@
       "startSceneId": "scene-1",
       "sceneIds": [
         "scene-1791910985341"
+      ],
+      "scenes": [
+        {
+          "id": "scene-1791910985341",
+          "name": "Escenario #1",
+          "backgroundUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
+          "timeline": [
+            {
+              "id": "ev-1791910985341",
+              "type": "dialogue",
+              "text": "Entrando a una nueva localización..."
+            }
+          ],
+          "hotspots": []
+        }
       ]
     }
   ],
-  "characters": [],
   "scenarios": [
     {
       "id": "scene-1791910985341",
@@ -50,5 +65,6 @@
       "hotspots": [],
       "chapterId": "chap-1"
     }
-  ]
+  ],
+  "customAssets": []
 }

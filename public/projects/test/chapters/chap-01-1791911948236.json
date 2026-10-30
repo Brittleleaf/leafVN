@@ -1,0 +1,18 @@
+{
+  "id": "chap-01-1791911948236",
+  "number": 1,
+  "title": "Capítulo 1: Comienzo",
+  "summary": "Inicio de la historia.",
+  "loadingScreen": {
+    "enabled": false,
+    "title": "Capítulo 1"
+  },
+  "startSceneId": "scene-01-1791911948236",
+  "sceneIds": [
+    "scene-01-1791911948236",
+    "scene-1791912199729",
+    "scene-1792029437265",
+    "scene-1792097243727",
+    "scene-1792106204413"
+  ]
+}

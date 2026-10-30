@@ -36,24 +36,38 @@ export function sanitizeStory(raw: unknown): VNStory {
 
   const chapters = Array.isArray(storyObj.chapters) && storyObj.chapters.length > 0
     ? (storyObj.chapters as Array<Record<string, any>>).map((ch, idx: number) => {
-        const rawScenes = Array.isArray(ch.scenes) && ch.scenes.length > 0
-          ? ch.scenes
-          : [
-              {
-                id: `scene-${idx + 1}-1`,
-                name: 'Scene 1',
-                backgroundUrl: '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
-                sceneType: 'standard',
-                timeline: [
-                  {
-                    id: `ev-${Date.now()}-0`,
-                    type: 'dialogue',
-                    text: '...',
-                  },
-                ],
-                hotspots: [],
-              },
-            ];
+        let rawScenes = Array.isArray(ch.scenes) && ch.scenes.length > 0 ? ch.scenes : [];
+        if (rawScenes.length === 0 && Array.isArray((storyObj as any).scenarios) && (storyObj as any).scenarios.length > 0) {
+          const allScenarios: any[] = (storyObj as any).scenarios;
+          const sceneIds: string[] = Array.isArray(ch.sceneIds) ? ch.sceneIds : [];
+          if (sceneIds.length > 0) {
+            rawScenes = sceneIds
+              .map((sId) => allScenarios.find((s) => s.id === sId))
+              .filter(Boolean);
+          }
+          if (rawScenes.length === 0) {
+            rawScenes = allScenarios.filter((s) => s.chapterId === ch.id || !s.chapterId);
+          }
+        }
+
+        if (rawScenes.length === 0) {
+          rawScenes = [
+            {
+              id: `scene-${idx + 1}-1`,
+              name: 'Scene 1',
+              backgroundUrl: '/assets/image/scenarios/SCENARIO-TEMPLATE.jpg',
+              sceneType: 'standard',
+              timeline: [
+                {
+                  id: `ev-${Date.now()}-0`,
+                  type: 'dialogue',
+                  text: '...',
+                },
+              ],
+              hotspots: [],
+            },
+          ];
+        }
 
         const scenes = rawScenes.map((s: Record<string, any>, sIdx: number) => ({
           ...s,
