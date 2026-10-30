@@ -104,7 +104,7 @@ export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
           <div className="rounded-xl bg-[var(--well-bg)] border border-[var(--border)] p-4 text-[11px] leading-relaxed text-[var(--muted)] max-h-48 overflow-y-auto space-y-3 font-sans select-text scrollbar-thin">
             <p>
               <span className="font-semibold text-[var(--text)]">Core Architecture & Design: </span>
-              Brittleleaf, Deep Creative AI Team, Leaf VN Open Contributors, Justin.
+              Brittleleaf, Nicolas Luciel, Google Antigravity, Leaf VN Open Contributors.
             </p>
             <p>
               <span className="font-semibold text-[var(--text)]">Engine Systems: </span>

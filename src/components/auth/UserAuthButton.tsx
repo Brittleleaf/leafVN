@@ -33,7 +33,7 @@ export default function UserAuthButton({ compact = false }: UserAuthButtonProps)
           className="h-7 px-3 rounded-lg text-xs font-semibold cursor-pointer border flex items-center gap-1.5 transition-all border-[var(--border)] bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--accent)] text-[var(--text)] shadow-sm backdrop-blur-sm"
           title="Sign in to save and sync projects to the cloud"
         >
-          <GuiIconRenderer icon={GUI_ICONS.general.profile} className="w-3.5 h-3.5 text-[var(--accent)]" />
+          <GuiIconRenderer icon={GUI_ICONS.general.userCircle} className="w-3.5 h-3.5 text-[var(--accent)]" />
           <span className="hidden sm:inline">Sign In</span>
         </button>
 

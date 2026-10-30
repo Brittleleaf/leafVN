@@ -182,6 +182,7 @@ export const GUI_ICONS = {
     paperclip: '/assets/image/GUI%20ICONS/gui-paperclip.svg',
     dead: '/assets/image/GUI%20ICONS/Character%20mood%20state/dead-head.svg',
     profile: '/assets/image/GUI%20ICONS/id-card.svg',
+    userCircle: '/assets/image/GUI%20ICONS/user-circle.svg',
     copy: '/assets/image/GUI%20ICONS/files.svg',
     image: '/assets/image/GUI%20ICONS/gallery.svg',
     eye: '/assets/image/GUI%20ICONS/gui-view-show.svg',
