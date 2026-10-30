@@ -21,6 +21,15 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleGoogleLogin = async () => {
@@ -96,9 +105,17 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+          onClose();
+        }
+      }}
+      className="fixed inset-0 z-50 vn-modal-backdrop p-3 sm:p-6 flex items-center justify-center bg-black/80 backdrop-blur-2xl animate-fade-in font-sans"
+    >
       <div
-        className="fixed inset-0"
+        className="fixed inset-0 -z-10 bg-black/50 backdrop-blur-3xl"
         onClick={() => {
           playSfx('/assets/sfx/click intro.mp3', false, 0.2);
           onClose();
@@ -107,10 +124,13 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md bg-[var(--window-bg)] border border-[var(--border2)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden z-10"
+        className="relative w-full max-w-md vn-modal-card rounded-2xl border border-[var(--border2)] shadow-[0_30px_90px_rgba(0,0,0,0.85)] backdrop-blur-3xl overflow-hidden z-10 text-[var(--text)]"
+        style={{
+          background: 'var(--modal-bg, linear-gradient(180deg, rgba(35, 14, 60, 0.96), rgba(1, 1, 3, 0.98)))',
+        }}
       >
         {/* Encabezado con Logo */}
-        <div className="p-6 pb-4 border-b border-[var(--border)] flex items-center justify-between">
+        <div className="p-6 pb-4 border-b border-[var(--border)] vn-glass-header flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
               src="/assets/logo/LeafVN.png"
@@ -193,7 +213,10 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           {/* Divisor */}
           <div className="relative flex items-center justify-center my-3">
             <div className="w-full border-t border-[var(--border)]" />
-            <span className="absolute bg-[var(--window-bg)] px-3 text-[10px] uppercase font-mono tracking-wider text-[var(--muted2)]">
+            <span
+              className="absolute px-3 py-0.5 rounded-full text-[10px] uppercase font-mono tracking-wider text-[var(--muted2)] border border-[var(--border)]"
+              style={{ background: 'var(--header-bg, rgba(20, 8, 40, 0.95))' }}
+            >
               o con correo
             </span>
           </div>
