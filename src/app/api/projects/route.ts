@@ -7,8 +7,8 @@ export async function GET() {
     const projects = listProjects();
     return NextResponse.json({ success: true, projects });
   } catch (error: any) {
-    console.error('Error al listar proyectos:', error);
-    return NextResponse.json({ error: error?.message || 'Error al listar proyectos' }, { status: 500 });
+    console.error('Error listing projects:', error);
+    return NextResponse.json({ error: error?.message || 'Error listing projects' }, { status: 500 });
   }
 }
 

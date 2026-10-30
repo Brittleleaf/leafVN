@@ -26,8 +26,8 @@ export function getProjectsRootDir(): string {
       fs.mkdirSync(dir, { recursive: true });
     }
   } catch (err) {
-    // En entornos de solo lectura como Vercel lambdas, no lanzar excepción fatal
-    console.warn('Advertencia: No se pudo crear el directorio de proyectos (posible entorno de solo lectura):', err);
+    // Read-only environment like Vercel lambdas
+    console.warn('Warning: Could not create projects directory (possible read-only environment):', err);
   }
   return dir;
 }
@@ -181,7 +181,7 @@ export function loadProject(projectId: string): VNStory | null {
           const charData = JSON.parse(fs.readFileSync(path.join(charactersDir, f), 'utf-8'));
           characters.push(charData);
         } catch (e) {
-          console.error(`Error al leer personaje ${f}:`, e);
+          console.error(`Error reading character ${f}:`, e);
         }
       }
     }
@@ -196,7 +196,7 @@ export function loadProject(projectId: string): VNStory | null {
           const sceneData = JSON.parse(fs.readFileSync(path.join(scenariosDir, f), 'utf-8'));
           scenariosMap[sceneData.id] = sceneData;
         } catch (e) {
-          console.error(`Error al leer escenario ${f}:`, e);
+          console.error(`Error reading scenario ${f}:`, e);
         }
       }
     }
@@ -233,7 +233,7 @@ export function loadProject(projectId: string): VNStory | null {
           chapters.push({
             id: chapData.id,
             number: chapData.number ?? chapters.length + 1,
-            title: chapData.title || `Capítulo ${chapData.number || chapters.length + 1}`,
+            title: chapData.title || `Chapter ${chapData.number || chapters.length + 1}`,
             summary: chapData.summary || '',
             loadingScreen: chapData.loadingScreen || {
               enabled: false,
@@ -243,7 +243,7 @@ export function loadProject(projectId: string): VNStory | null {
             scenes,
           });
         } catch (e) {
-          console.error(`Error al leer capítulo ${f}:`, e);
+          console.error(`Error reading chapter ${f}:`, e);
         }
       }
     }
@@ -270,7 +270,7 @@ export function loadProject(projectId: string): VNStory | null {
       id: sanitizeProjectId(projectId),
       version: meta.version || '1.0.0',
       title: meta.title || projectId,
-      author: meta.author || 'Autor Anónimo',
+      author: meta.author || 'Anonymous Author',
       description: meta.description || '',
       coverImageUrl: meta.coverImageUrl,
       createdAt: meta.createdAt || new Date().toISOString(),
@@ -294,7 +294,7 @@ export function loadProject(projectId: string): VNStory | null {
 
     return story;
   } catch (err) {
-    console.error(`Error al cargar el proyecto ${projectId}:`, err);
+    console.error(`Error loading project ${projectId}:`, err);
     return null;
   }
 }
@@ -430,7 +430,7 @@ export function saveProject(projectId: string, story: VNStory): boolean {
 
     return true;
   } catch (err) {
-    console.error(`Error al guardar proyecto ${projectId}:`, err);
+    console.error(`Error saving project ${projectId}:`, err);
     return false;
   }
 }
@@ -445,7 +445,7 @@ export function deleteProject(projectId: string): boolean {
     fs.rmSync(projDir, { recursive: true, force: true });
     return true;
   } catch (err) {
-    console.error(`Error al eliminar proyecto ${projectId}:`, err);
+    console.error(`Error deleting project ${projectId}:`, err);
     return false;
   }
 }
@@ -684,7 +684,7 @@ export function deleteProjectAsset(projectId: string, relativePathOrUrl: string)
 
   // Protección estricta contra Path Traversal
   if (!targetFile.startsWith(assetsDir)) {
-    throw new Error('Acceso no permitido: la ruta está fuera de la carpeta de assets.');
+    throw new Error('Access denied: path is outside the assets folder.');
   }
 
   if (fs.existsSync(targetFile)) {
@@ -730,11 +730,11 @@ export function renameProjectAsset(
   const targetFile = path.resolve(assetsDir, oldRelativePathOrUrl);
 
   if (!targetFile.startsWith(assetsDir)) {
-    throw new Error('Acceso no permitido: la ruta está fuera de la carpeta de assets.');
+    throw new Error('Access denied: path is outside the assets folder.');
   }
 
   if (!fs.existsSync(targetFile)) {
-    throw new Error('El archivo original no existe en disco.');
+    throw new Error('The original file does not exist on disk.');
   }
 
   const ext = path.extname(targetFile);
@@ -864,7 +864,7 @@ export async function unpackProjectBundle(bundleBuffer: Buffer, targetProjectId?
   }
 
   if (!loadedStory) {
-    throw new Error('No se pudo cargar el proyecto desempaquetado.');
+    throw new Error('Could not load unpacked project.');
   }
 
   return loadedStory;

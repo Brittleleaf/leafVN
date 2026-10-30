@@ -257,7 +257,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
 
   const presets = [
     {
-      label: 'Código & Sintaxis',
+      label: 'Code & Syntax',
       words: [
         'function()',
         'Debug.Print()',
@@ -280,7 +280,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
       ],
     },
     {
-      label: '01 Matriz Binaria',
+      label: '01 Binary Matrix',
       words: [
         '01010011',
         '11001010',
@@ -299,7 +299,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
       ],
     },
     {
-      label: 'Alerta Cyberpunk',
+      label: 'Cyberpunk Alert',
       words: [
         'WARNING',
         'BREACH DETECTED',
@@ -316,7 +316,7 @@ export const CodeFlythroughInspector: React.FC<ScreenFxInspectorProps> = ({
       ],
     },
     {
-      label: 'Susurros / Terror',
+      label: 'Whispers / Horror',
       words: [
         'HELP ME',
         'LOOK BEHIND',

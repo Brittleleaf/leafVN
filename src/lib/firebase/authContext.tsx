@@ -54,34 +54,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       return result.user;
     } catch (err) {
-      console.error('Error al iniciar sesión con Google:', err);
+      console.error('Error signing in with Google:', err);
       throw err;
     }
   };
 
-  // Inicio con GitHub
+  // Sign in with GitHub
   const signInWithGithub = async (): Promise<User | null> => {
     try {
       const result = await signInWithPopup(auth, githubProvider);
       return result.user;
     } catch (err) {
-      console.error('Error al iniciar sesión con GitHub:', err);
+      console.error('Error signing in with GitHub:', err);
       throw err;
     }
   };
 
-  // Inicio con Correo y Contraseña
+  // Sign in with Email and Password
   const signInWithEmail = async (email: string, pass: string): Promise<User | null> => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, pass);
       return result.user;
     } catch (err) {
-      console.error('Error al iniciar sesión con correo:', err);
+      console.error('Error signing in with email:', err);
       throw err;
     }
   };
 
-  // Registro con Correo y Contraseña
+  // Sign up with Email and Password
   const signUpWithEmail = async (email: string, pass: string, displayName?: string): Promise<User | null> => {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, pass);
@@ -90,12 +90,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       return result.user;
     } catch (err) {
-      console.error('Error al registrar usuario:', err);
+      console.error('Error registering user:', err);
       throw err;
     }
   };
 
-  // Cerrar sesión
+  // Sign out
   const signOutUser = async (): Promise<void> => {
     try {
       await signOut(auth);
@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         sessionStorage.removeItem('vn_gdrive_token');
       }
     } catch (err) {
-      console.error('Error al cerrar sesión:', err);
+      console.error('Error signing out:', err);
       throw err;
     }
   };

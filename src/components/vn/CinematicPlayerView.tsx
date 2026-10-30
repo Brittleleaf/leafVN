@@ -383,7 +383,7 @@ export default function CinematicPlayerView({
                 }}
                 className="px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-black/60 hover:bg-black/90 border border-white/20 hover:border-white/50 text-gray-300 hover:text-white backdrop-blur-md cursor-pointer transition-all shadow-md active:scale-95 pointer-events-auto"
               >
-                SALTAR CINEMÁTICA »
+                SKIP CINEMATIC »
               </button>
             )}
           </div>

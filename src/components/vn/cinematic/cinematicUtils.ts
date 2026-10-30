@@ -86,7 +86,7 @@ export function normalizeCinematicTracks(
   const dialogClips: VNCinematicClip[] = (config?.textTracks || []).map((txt, idx) => ({
     id: txt.id || `clip-txt-${idx}-${Date.now()}`,
     trackId: 'track-media-2',
-    name: txt.speaker ? `[${txt.speaker}]` : `Diálogo ${idx + 1}`,
+    name: txt.speaker ? `[${txt.speaker}]` : `Dialogue ${idx + 1}`,
     startSec: txt.startSec ?? 0,
     endSec: txt.endSec ?? Math.min(duration, 4),
     text: txt.text || '',

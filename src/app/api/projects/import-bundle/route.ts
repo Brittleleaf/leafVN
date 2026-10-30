@@ -25,20 +25,20 @@ export async function POST(req: NextRequest) {
     }
 
     if (!buffer || buffer.length === 0) {
-      return NextResponse.json({ error: 'No se recibió ningún archivo .leafvn válido.' }, { status: 400 });
+      return NextResponse.json({ error: 'No valid .leafvn bundle file received.' }, { status: 400 });
     }
 
     const story = await unpackProjectBundle(buffer);
 
     return NextResponse.json({
       success: true,
-      message: `Proyecto "${story.title}" importado con éxito con todos sus assets.`,
+      message: `Project "${story.title}" imported successfully with all assets.`,
       story,
     });
   } catch (error: any) {
-    console.error('Error al importar paquete .leafvn:', error);
+    console.error('Error importing .leafvn bundle:', error);
     return NextResponse.json(
-      { error: error?.message || 'Error interno al desempaquetar el proyecto .leafvn' },
+      { error: error?.message || 'Internal server error unpacking .leafvn bundle' },
       { status: 500 }
     );
   }

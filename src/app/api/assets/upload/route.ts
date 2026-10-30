@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     const rawAssetType = (formData.get('assetType') as string) || 'other';
 
     if (!file) {
-      return NextResponse.json({ error: 'No se envió ningún archivo.' }, { status: 400 });
+      return NextResponse.json({ error: 'No file was provided.' }, { status: 400 });
     }
 
     // 1. Sanitizar el tipo de recurso y validar contra lista blanca
@@ -62,9 +62,9 @@ export async function POST(req: NextRequest) {
       size: buffer.length,
     });
   } catch (error: any) {
-    console.error('Error al subir asset:', error);
+    console.error('Error uploading asset:', error);
     return NextResponse.json(
-      { error: error?.message || 'Error interno del servidor al procesar el archivo.' },
+      { error: error?.message || 'Internal server error processing file.' },
       { status: 500 }
     );
   }

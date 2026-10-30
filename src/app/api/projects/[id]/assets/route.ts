@@ -35,7 +35,7 @@ export async function POST(
       const { name, url, assetType, category, description } = body;
 
       if (!url || !url.trim()) {
-        return NextResponse.json({ error: 'Se requiere una URL válida para indexar el recurso.' }, { status: 400 });
+        return NextResponse.json({ error: 'A valid URL is required to index the asset.' }, { status: 400 });
       }
 
       const asset = saveProjectExternalAsset(id, {
@@ -59,7 +59,7 @@ export async function POST(
     const assetType = (formData.get('assetType') as string) || 'sfx';
 
     if (!file) {
-      return NextResponse.json({ error: 'No se envió ningún archivo.' }, { status: 400 });
+      return NextResponse.json({ error: 'No file was provided.' }, { status: 400 });
     }
 
     const arrayBuffer = await file.arrayBuffer();
@@ -76,8 +76,8 @@ export async function POST(
       projectId: id,
     });
   } catch (error: any) {
-    console.error('Error al subir asset al proyecto:', error);
-    return NextResponse.json({ error: error?.message || 'Error interno' }, { status: 500 });
+    console.error('Error uploading asset to project:', error);
+    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -92,7 +92,7 @@ export async function PATCH(
 
     if (!oldFilePath || !newName) {
       return NextResponse.json(
-        { error: 'Se requiere "oldFilePath" y "newName" para renombrar.' },
+        { error: 'Both "oldFilePath" and "newName" are required to rename.' },
         { status: 400 }
       );
     }
@@ -101,14 +101,14 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: 'Asset renombrado correctamente.',
+      message: 'Asset renamed successfully.',
       newRelativePath: renamed.newRelativePath,
       newUrl: renamed.newUrl,
       newFileName: renamed.newFileName,
     });
   } catch (error: any) {
-    console.error('Error al renombrar asset:', error);
-    return NextResponse.json({ error: error?.message || 'Error interno' }, { status: 500 });
+    console.error('Error renaming asset:', error);
+    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -129,17 +129,17 @@ export async function DELETE(
     }
 
     if (!filePath) {
-      return NextResponse.json({ error: 'Se requiere "filePath" para eliminar.' }, { status: 400 });
+      return NextResponse.json({ error: 'A "filePath" is required to delete.' }, { status: 400 });
     }
 
     const deleted = deleteProjectAsset(id, filePath);
     if (!deleted) {
-      return NextResponse.json({ error: 'Archivo no encontrado en disco.' }, { status: 404 });
+      return NextResponse.json({ error: 'File not found on disk.' }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, message: 'Asset eliminado del disco.' });
+    return NextResponse.json({ success: true, message: 'Asset deleted from disk successfully.' });
   } catch (error: any) {
-    console.error('Error al eliminar asset:', error);
-    return NextResponse.json({ error: error?.message || 'Error interno' }, { status: 500 });
+    console.error('Error deleting asset:', error);
+    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
   }
 }

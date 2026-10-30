@@ -14,7 +14,7 @@ export async function GET(
     const bundleBuffer = await createProjectBundle(safeId);
 
     if (!bundleBuffer) {
-      return NextResponse.json({ error: `Proyecto "${id}" no encontrado.` }, { status: 404 });
+      return NextResponse.json({ error: `Project "${id}" not found.` }, { status: 404 });
     }
 
     const story = loadProject(safeId);
@@ -33,7 +33,7 @@ export async function GET(
       },
     });
   } catch (error: any) {
-    console.error('Error al generar paquete .leafvn:', error);
-    return NextResponse.json({ error: error?.message || 'Error interno' }, { status: 500 });
+    console.error('Error generating .leafvn bundle:', error);
+    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
   }
 }

@@ -204,7 +204,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
           {/* Scale Stepper & Chips */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[10px] text-[var(--muted)] font-bold uppercase tracking-wider">
-              Escala:
+              Scale:
             </span>
             <div className="flex items-center gap-1 bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-1.5 py-0.5 shadow-sm">
               <button
@@ -214,7 +214,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                   onPatchCurrentLine({ characterScale: newScale });
                 }}
                 className="w-5 h-5 flex items-center justify-center rounded hover:bg-[var(--well-bg)] text-[var(--text)] font-bold cursor-pointer"
-                title="Reducir tamaño"
+                title="Decrease size"
               >
                 -
               </button>
@@ -228,7 +228,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                   onPatchCurrentLine({ characterScale: newScale });
                 }}
                 className="w-5 h-5 flex items-center justify-center rounded hover:bg-[var(--well-bg)] text-[var(--text)] font-bold cursor-pointer"
-                title="Aumentar tamaño"
+                title="Increase size"
               >
                 +
               </button>

@@ -90,7 +90,7 @@ export function sanitizeStory(raw: unknown): VNStory {
         return {
           id: ch.id || `chap-${idx + 1}`,
           number: typeof ch.number === 'number' ? ch.number : idx + 1,
-          title: ch.title || `Capítulo ${idx + 1}`,
+          title: ch.title || `Chapter ${idx + 1}`,
           summary: ch.summary || '',
           startSceneId: ch.startSceneId && scenes.some((s: { id: string }) => s.id === ch.startSceneId)
             ? ch.startSceneId

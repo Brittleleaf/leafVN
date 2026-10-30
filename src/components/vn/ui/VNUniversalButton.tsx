@@ -359,12 +359,12 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
                 handleCommit();
               }}
               className="px-2.5 py-1.5 rounded-xl bg-emerald-950/95 hover:bg-emerald-900 border border-emerald-400/80 hover:border-emerald-300 text-emerald-200 hover:text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(16,185,129,0.4)] cursor-pointer whitespace-nowrap transition-all"
-              title="Confirmar cambios (Enter)"
+              title="Confirm changes (Enter)"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-emerald-400">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              <span>Listo</span>
+              <span>Done</span>
             </button>
           )}
         </div>

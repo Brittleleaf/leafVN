@@ -329,7 +329,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       if (isLeafvnPackage) {
         setLauncherToast({
           type: 'success',
-          message: `Desempaquetando proyecto completo "${file.name}"...`,
+          message: `Unpacking complete project "${file.name}"...`,
         });
 
         // 1. Intento de desempaquetado inmediato en cliente (fallback ultra-rápido y robusto)
@@ -356,7 +356,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
             importedStory = clientStory;
           } else {
             const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.error || 'Fallo al desempaquetar paquete .leafvn');
+            throw new Error(errData.error || 'Failed to unpack .leafvn bundle');
           }
         } catch (serverErr) {
           if (clientStory) {
@@ -394,7 +394,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
         localStorage.setItem('leafvn_local_projects_registry', JSON.stringify(filtered));
         localStorage.setItem(`leafvn_project_${importedStory.id}`, JSON.stringify(importedStory));
       } catch (err) {
-        console.warn('Error guardando importación en localStorage:', err);
+        console.warn('Error saving import to localStorage:', err);
       }
 
       try {
@@ -418,7 +418,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       const errMsg = err instanceof Error ? err.message : String(err || 'Unknown error');
       setLauncherToast({
         type: 'error',
-        message: `Error importando proyecto: ${errMsg}`,
+        message: `Error importing project: ${errMsg}`,
       });
       playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
     } finally {
@@ -591,7 +591,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
       playSfx('/assets/sfx/success.mp3', false, 0.5);
       setLauncherToast({
         type: 'success',
-        message: `Guardado en Google Drive: "LeafVN/projects/${storyToBackup.title}.leafvn"!`,
+        message: `Saved to Google Drive: "LeafVN/projects/${storyToBackup.title}.leafvn"!`,
       });
     } catch (err: any) {
       console.error('Google Drive backup error:', err);

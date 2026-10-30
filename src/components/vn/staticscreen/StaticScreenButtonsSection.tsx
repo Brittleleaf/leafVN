@@ -151,15 +151,15 @@ export function StaticScreenButtonsSection({
                         onChange={(e) => handleUpdateButton(btn.id, { action: e.target.value as any })}
                         className="w-full px-1.5 py-1 rounded border border-[var(--border)] bg-[var(--btn-bg)] text-[var(--text)] text-[11px] cursor-pointer"
                       >
-                        <option value="start_game">Play / Iniciar Historia</option>
-                        <option value="load_game">Load Game / Cargar Partida</option>
-                        <option value="open_settings">ConfiguraciÃ³n / Opciones</option>
-                        <option value="open_gallery">CinemÃ¡ticas / GalerÃ­a</option>
-                        <option value="exit_to_intro">Exit to Intro (Salir a Intro)</option>
-                        <option value="main_menu">MenÃº Principal / Title</option>
-                        <option value="next_scene">Siguiente Escenario / Continuar</option>
-                        <option value="retry_previous">Reintentar Anterior (Retry)</option>
-                        <option value="jump_scene">Saltar a Escenario EspecÃ­fico...</option>
+                        <option value="start_game">Play / Start Story</option>
+                        <option value="load_game">Load Game / Saved Slots</option>
+                        <option value="open_settings">Settings / Options</option>
+                        <option value="open_gallery">Cinematics / Gallery</option>
+                        <option value="exit_to_intro">Exit to Intro</option>
+                        <option value="main_menu">Main Menu / Title Screen</option>
+                        <option value="next_scene">Next Scene / Continue</option>
+                        <option value="retry_previous">Retry Previous Scene</option>
+                        <option value="jump_scene">Jump to Specific Scene...</option>
                       </select>
                     </div>
 
@@ -307,7 +307,7 @@ export function StaticScreenButtonsSection({
                         onChange={(e) => handleUpdateButton(btn.id, { targetSceneId: e.target.value })}
                         className="w-full px-1.5 py-1 rounded border border-[var(--border)] bg-[var(--btn-bg)] text-[var(--text)] text-[11px] cursor-pointer"
                       >
-                        <option value="">-- {btn.action === 'jump_scene' ? 'Seleccionar Escenario' : 'AutomÃ¡tico del Sistema'} --</option>
+                        <option value="">-- {btn.action === 'jump_scene' ? 'Select Scenario' : 'System Default'} --</option>
                         {allStoryScenarios.map((sc) => (
                           <option key={sc.id} value={sc.id}>
                             {sc.name}

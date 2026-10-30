@@ -177,7 +177,7 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-play',
-      label: 'PLAY / INICIAR',
+      label: 'PLAY STORY',
       action: 'start_game',
       style: 'cyber',
       size: 'lg',
@@ -186,7 +186,7 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-load-game',
-      label: 'LOAD GAME / CARGAR',
+      label: 'LOAD GAME',
       action: 'load_game',
       style: 'glass',
       size: 'md',
@@ -195,7 +195,7 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
     },
     {
       id: 'btn-settings',
-      label: 'CONFIGURATION / AJUSTES',
+      label: 'SETTINGS',
       action: 'open_settings',
       style: 'glass',
       size: 'md',
@@ -225,8 +225,8 @@ export const DEFAULT_TITLE_CONFIG: VNStaticScreenConfig = {
 
 export const DEFAULT_LOAD_GAME_CONFIG: VNStaticScreenConfig = {
   purpose: 'load_game',
-  title: 'PARTIDAS GUARDADAS',
-  subtitle: 'Selecciona una ranura de guardado para reanudar tu aventura',
+  title: 'SAVED GAMES',
+  subtitle: 'Select a save slot to resume your adventure',
   titleColor: '#38bdf8',
   subtitleColor: '#94a3b8',
   titleAnimation: 'fade_in',
@@ -241,7 +241,7 @@ export const DEFAULT_LOAD_GAME_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-back-menu',
-      label: '⬅ VOLVER AL MENÚ',
+      label: '⬅ RETURN TO MENU',
       action: 'main_menu',
       style: 'ghost',
       size: 'sm',
@@ -253,8 +253,8 @@ export const DEFAULT_LOAD_GAME_CONFIG: VNStaticScreenConfig = {
 
 export const DEFAULT_SETTINGS_CONFIG: VNStaticScreenConfig = {
   purpose: 'settings',
-  title: 'CONFIGURACIÓN DEL JUEGO',
-  subtitle: 'Ajustes de audio, resolución, pantalla, velocidad y lenguaje',
+  title: 'GAME SETTINGS',
+  subtitle: 'Audio, resolution, display, typewriter speed, and language settings',
   titleColor: '#a855f7',
   subtitleColor: '#d4d4d8',
   titleAnimation: 'fade_in',
@@ -269,7 +269,7 @@ export const DEFAULT_SETTINGS_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-back-menu',
-      label: '⬅ VOLVER AL MENÚ',
+      label: '⬅ RETURN TO MENU',
       action: 'main_menu',
       style: 'ghost',
       size: 'sm',
@@ -282,8 +282,8 @@ export const DEFAULT_SETTINGS_CONFIG: VNStaticScreenConfig = {
 export const DEFAULT_GALLERY_CONFIG: VNStaticScreenConfig = {
   purpose: 'gallery',
   galleryTab: 'cinematics',
-  title: 'GALERÍA & CINEMÁTICAS',
-  subtitle: 'Revive escenas cinemáticas, escenarios desbloqueados y perfiles de personajes',
+  title: 'GALLERY & CINEMATICS',
+  subtitle: 'Replay cinematics, unlocked scenarios, and character profiles',
   titleColor: '#f59e0b',
   subtitleColor: '#fed7aa',
   titleAnimation: 'fade_in',
@@ -298,7 +298,7 @@ export const DEFAULT_GALLERY_CONFIG: VNStaticScreenConfig = {
   buttons: [
     {
       id: 'btn-back-menu',
-      label: '⬅ VOLVER AL MENÚ',
+      label: '⬅ RETURN TO MENU',
       action: 'main_menu',
       style: 'ghost',
       size: 'sm',

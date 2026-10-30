@@ -19,7 +19,7 @@ import { sanitizeStory } from '@/lib/vn/storage';
  */
 export async function saveProjectToCloud(userId: string, story: VNStory): Promise<void> {
   if (!userId || !story?.id) {
-    throw new Error('UserId y Story ID son requeridos para guardar en la nube.');
+    throw new Error('UserId and Story ID are required to save to cloud.');
   }
 
   const projectRef = doc(db, 'users', userId, 'projects', story.id);

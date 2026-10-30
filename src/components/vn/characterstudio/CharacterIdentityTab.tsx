@@ -142,7 +142,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
                 {activeChar.name}:
               </span>
               <span className="text-[var(--text)]">
-                Â«El secreto descansa bajo el reflejo del espejo. No dejes que la luz se apague.Â»
+                &ldquo;The secret rests beneath the mirror&apos;s reflection. Do not let the light fade.&rdquo;
               </span>
             </div>
           )}
@@ -200,7 +200,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
                 handleUpdateChar(activeChar.id, { defaultScale: next });
               }}
               className="w-6 h-6 flex items-center justify-center rounded hover:bg-[var(--btn-hover-bg)] text-[var(--text)] font-bold cursor-pointer transition-colors"
-              title="Reducir escala"
+              title="Decrease scale"
             >
               -
             </button>
@@ -215,7 +215,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
                 handleUpdateChar(activeChar.id, { defaultScale: next });
               }}
               className="w-6 h-6 flex items-center justify-center rounded hover:bg-[var(--btn-hover-bg)] text-[var(--text)] font-bold cursor-pointer transition-colors"
-              title="Aumentar escala"
+              title="Increase scale"
             >
               +
             </button>

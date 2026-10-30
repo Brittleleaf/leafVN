@@ -107,7 +107,7 @@ export async function unpackBundleInBrowser(fileOrBuffer: File | Blob | ArrayBuf
       chapters.push({
         id: chapData.id,
         number: chapData.number ?? chapters.length + 1,
-        title: chapData.title || `Capítulo ${chapData.number || chapters.length + 1}`,
+        title: chapData.title || `Chapter ${chapData.number || chapters.length + 1}`,
         summary: chapData.summary || '',
         loadingScreen: chapData.loadingScreen || { enabled: false, title: chapData.title || '' },
         startSceneId: chapData.startSceneId || scenes[0]?.id || '',
@@ -154,7 +154,7 @@ export async function unpackBundleInBrowser(fileOrBuffer: File | Blob | ArrayBuf
     id: projectId,
     version: meta.version || '1.0.0',
     title: meta.title || projectId,
-    author: meta.author || 'Autor Anónimo',
+    author: meta.author || 'Anonymous Author',
     description: meta.description || '',
     coverImageUrl: meta.coverImageUrl,
     createdAt: meta.createdAt || new Date().toISOString(),

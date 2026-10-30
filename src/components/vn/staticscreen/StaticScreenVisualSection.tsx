@@ -124,7 +124,7 @@ export function StaticScreenVisualSection({
                     : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white'
                 }`}
               >
-                {tab === 'cinematics' ? 'CinemÃ¡ticas' : tab === 'scenarios' ? 'Escenarios' : 'Personajes'}
+                {tab === 'cinematics' ? 'Cinematics' : tab === 'scenarios' ? 'Scenarios' : 'Characters'}
               </button>
             ))}
           </div>

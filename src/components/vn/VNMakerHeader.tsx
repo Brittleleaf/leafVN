@@ -85,7 +85,7 @@ export default function VNMakerHeader({
       playSfx('/assets/sfx/open folder.mp3', false, 0.4);
       await saveProjectToGoogleDrive(token, story);
       playSfx('/assets/sfx/success.mp3', false, 0.5);
-      onNotify?.(`Guardado en Google Drive (LeafVN/projects/${story.title}.leafvn)!`);
+      onNotify?.(`Saved to Google Drive (LeafVN/projects/${story.title}.leafvn)!`);
     } catch (err: unknown) {
       const e = err as { message?: string };
       console.error('Google Drive save error:', err);

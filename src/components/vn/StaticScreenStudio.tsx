@@ -289,7 +289,7 @@ export default function StaticScreenStudio({
                   type="button"
                   onClick={onBackToMenuMap}
                   className="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer shadow-sm transition-all flex items-center gap-1.5"
-                  title="Volver al Mapa de Menús"
+                  title="Return to Menu Map"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
                   <span>Menu Tool</span>

@@ -190,9 +190,9 @@ export const VignetteInspector: React.FC<ScreenFxInspectorProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
           {[
             { id: 'none', label: 'Static', icon: GUI_ICONS.action.pause },
-            { id: 'flicker', label: 'Parpadeo', icon: GUI_ICONS.general.screenFx },
-            { id: 'heartbeat', label: 'Latido', icon: GUI_ICONS.general.heart },
-            { id: 'breathe', label: 'Respiración', icon: GUI_ICONS.action.lookAt },
+            { id: 'flicker', label: 'Flicker', icon: GUI_ICONS.general.screenFx },
+            { id: 'heartbeat', label: 'Heartbeat', icon: GUI_ICONS.general.heart },
+            { id: 'breathe', label: 'Breathe', icon: GUI_ICONS.action.lookAt },
           ].map((anim) => {
             const isSelected = currentAnimation === anim.id;
             return (

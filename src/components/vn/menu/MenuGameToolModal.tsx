@@ -246,8 +246,8 @@ export default function MenuGameToolModal({
     playUiSound('select', 0.5);
     notify(
       nextState
-        ? 'Sistema de MenÃº Activado: El juego iniciarÃ¡ desde Intro / MenÃº Principal'
-        : 'Sistema de MenÃº Desactivado: El juego iniciarÃ¡ directo en el CapÃ­tulo 1'
+        ? 'Menu System Enabled: Game will start from Intro / Main Menu'
+        : 'Menu System Disabled: Game will start directly at Chapter 1'
     );
   };
 
