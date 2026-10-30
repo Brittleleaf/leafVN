@@ -983,7 +983,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                           : 'text-[var(--muted2)] hover:text-[var(--text)]'
                       }`}
                     >
-                      <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />
+                      <GuiIconRenderer icon={GUI_ICONS.general.layoutList} className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => setViewMode('grid')}
@@ -994,7 +994,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                           : 'text-[var(--muted2)] hover:text-[var(--text)]'
                       }`}
                     >
-                      <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3.5 h-3.5" />
+                      <GuiIconRenderer icon={GUI_ICONS.general.layoutBlocks} className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
