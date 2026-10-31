@@ -158,7 +158,7 @@ export const MonitorComponent: React.FC<ScreenFxProps> = ({ intensityMultiplier 
         {/* 6. Corner Bracket Accents */}
         <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-[#00b446] z-25 pointer-events-none" />
         <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-[#00b446] z-25 pointer-events-none opacity-80" />
-        <div className="absolute bottom-3 left-3 w-4 h-4 border-bottom-2 border-b-2 border-l-2 border-[#00b446] z-25 pointer-events-none opacity-80" />
+        <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-[#00b446] z-25 pointer-events-none opacity-80" />
         <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-[#00b446] z-25 pointer-events-none" />
 
         {/* 7. HUD Overlays */}

@@ -193,35 +193,42 @@ export const FlashlightComponent: React.FC<ScreenFxProps> = ({
       {!isDark && (
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ opacity: lightOpacity * 0.55 }}
+          style={{ opacity: lightOpacity * 0.6 }}
         >
           <defs>
+            <filter id="flashlightBeamFeather" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
             <linearGradient id="flashlightBeamGrad" x1={bottomX} y1={bottomY} x2={cx} y2={cy} gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor={color} stopOpacity="0.4" />
-              <stop offset="60%" stopColor={color} stopOpacity="0.18" />
-              <stop offset="100%" stopColor={color} stopOpacity="0.08" />
+              <stop offset="0%" stopColor={color} stopOpacity="0.45" />
+              <stop offset="50%" stopColor={color} stopOpacity="0.22" />
+              <stop offset="85%" stopColor={color} stopOpacity="0.10" />
+              <stop offset="100%" stopColor={color} stopOpacity="0.02" />
             </linearGradient>
           </defs>
           <path
             d={`M ${cx - radius * 0.85} ${cy} Q ${bottomX} ${(cy + bottomY) / 2} ${bottomX - 40} ${bottomY} L ${bottomX + 40} ${bottomY} Q ${bottomX} ${(cy + bottomY) / 2} ${cx + radius * 0.85} ${cy} Z`}
             fill="url(#flashlightBeamGrad)"
+            filter="url(#flashlightBeamFeather)"
           />
         </svg>
       )}
 
-      {/* 2. Darkness shroud with radial transparent spotlight */}
+      {/* 2. Darkness shroud with feathered radial transparent spotlight */}
       <div
         className="absolute inset-0 pointer-events-none transition-opacity duration-150"
         style={{
           background: isDark
             ? 'rgba(0, 0, 0, 0.98)'
             : `radial-gradient(circle at ${cx}px ${cy}px, transparent 0px, transparent ${Math.round(
-                radius * 0.5
-              )}px, rgba(0, 0, 0, ${0.75 * (1 / lightOpacity)}) ${Math.round(
-                radius * 0.85
-              )}px, rgba(0, 0, 0, 0.96) ${Math.round(radius * 1.35)}px, rgba(0, 0, 0, 0.99) ${Math.round(
-                radius * 2.1
-              )}px)`,
+                radius * 0.42
+              )}px, rgba(0, 0, 0, ${0.12 * (1 / lightOpacity)}) ${Math.round(
+                radius * 0.62
+              )}px, rgba(0, 0, 0, ${0.45 * (1 / lightOpacity)}) ${Math.round(
+                radius * 0.88
+              )}px, rgba(0, 0, 0, ${0.82 * (1 / lightOpacity)}) ${Math.round(
+                radius * 1.18
+              )}px, rgba(0, 0, 0, 0.98) ${Math.round(radius * 1.6)}px)`,
         }}
       />
 
