@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { VNStory } from '@/types/vn';
 import type { VNProjectSummary } from '@/lib/vn/projectFs';
 import { playSfx } from '@/lib/audioSettings';
@@ -831,6 +832,16 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
                     </a>
+                    <Link
+                      href="/privacy"
+                      onClick={() => setShowHelpMenu(false)}
+                      className="w-full text-left px-3 py-1.5 rounded-lg hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] transition-colors cursor-pointer flex items-center justify-between"
+                    >
+                      <span>Privacy Policy</span>
+                      <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </Link>
                   </div>
                 </>
               )}

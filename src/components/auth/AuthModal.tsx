@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import { useAuth } from '@/lib/firebase/authContext';
 import { playSfx, playUiSound } from '@/lib/audioSettings';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
@@ -323,7 +324,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           </form>
 
           {/* Toggle between Sign In and Sign Up */}
-          <div className="pt-2 text-center text-xs text-[var(--muted)]">
+          <div className="pt-2 text-center text-xs text-[var(--muted)] space-y-2">
             {mode === 'signin' ? (
               <p>
                 Don&apos;t have an account?{' '}
@@ -353,6 +354,18 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 </button>
               </p>
             )}
+
+            <p className="text-[10px] text-[var(--muted2)] pt-1">
+              By using Leaf VN, you agree to our{' '}
+              <Link
+                href="/privacy"
+                target="_blank"
+                onClick={onClose}
+                className="text-[var(--accent)] hover:underline font-medium"
+              >
+                Privacy Policy
+              </Link>
+            </p>
           </div>
         </div>
       </div>
