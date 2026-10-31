@@ -17,6 +17,7 @@ import { retroPixelateFx } from './RetroPixelateFx';
 import { rainyScreenFx } from './RainyScreenFx';
 import { rain1Fx } from './Rain1Fx';
 import { rainyScreen2Fx } from './RainyScreen2Fx';
+import { rain2Fx } from './Rain2Fx';
 
 export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   red_alert: redAlertFx,
@@ -37,6 +38,7 @@ export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   rainy_screen: rainyScreenFx,
   rain_1: rain1Fx,
   rainy_screen_2: rainyScreen2Fx,
+  rain_2: rain2Fx,
 };
 
 // Config metadata compatibility map (same shape as previously exported SCREEN_FX_CONFIGS)
