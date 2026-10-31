@@ -10,7 +10,7 @@ import {
   VNScreenFxType,
 } from '@/types/vn';
 import { playSfx } from '@/lib/audioSettings';
-import { fileToBase64 } from '@/lib/vn/engineUtils';
+import { fileToBase64, uploadProjectAssetFile } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import AssetStudioModal from './AssetStudioModal';
 import StaticScreenStudio from './StaticScreenStudio';
@@ -620,8 +620,8 @@ export default function ChapterStudioModal({
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const b64 = await fileToBase64(file);
-      handleUpdateLoadingConfig({ bgImageUrl: b64 });
+      const assetUrl = await uploadProjectAssetFile(file, 'background', story.id);
+      handleUpdateLoadingConfig({ bgImageUrl: assetUrl });
       notify('Loading screen background updated');
     } catch (err) {
       notify('Error processing image');

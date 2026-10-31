@@ -1,4 +1,4 @@
-import { VNCondition, VNVariableMutation, VNCharacter, VNEvent, VNStory, VNScene } from '@/types/vn';
+import { VNCondition, VNVariableMutation, VNCharacter, VNEvent, VNStory, VNScene, VNAssetType } from '@/types/vn';
 
 /**
  * Normaliza valores de cualquier tipo (strings de formulario, booleans, números, undefined)
@@ -162,6 +162,44 @@ export function applyVariableMutation(
   }
 
   return newState;
+}
+
+/**
+ * Sube un archivo de asset de manera óptima al servidor/disco del proyecto
+ * evitando almacenar pesadas cadenas Base64 en el JSON de la historia.
+ * Retorna la URL relativa del archivo en el servidor (/projects/[id]/assets/...).
+ */
+export async function uploadProjectAssetFile(
+  file: File,
+  assetType: VNAssetType | string = 'background',
+  projectId: string = 'current-project'
+): Promise<string> {
+  if (!file) throw new Error('No file provided');
+
+  // 1. Subida directa vía FormData al disco físico en el backend
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('assetType', assetType);
+
+    const safeId = projectId || 'current-project';
+    const res = await fetch(`/api/projects/${safeId}/assets`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.url) {
+        return data.url;
+      }
+    }
+  } catch (uploadErr) {
+    console.warn('[uploadProjectAssetFile] Could not save asset directly to disk, falling back:', uploadErr);
+  }
+
+  // 2. Fallback de compatibilidad si el backend no responde
+  return await fileToBase64(file);
 }
 
 /**

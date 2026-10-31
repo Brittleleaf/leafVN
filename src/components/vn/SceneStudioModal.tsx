@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { VNStory, VNScene, VNHotspot, VNAssetItem, VNAssetType } from '@/types/vn';
 import { playSfx } from '@/lib/audioSettings';
-import { fileToBase64, cleanOrphanSceneReferences } from '@/lib/vn/engineUtils';
+import { fileToBase64, uploadProjectAssetFile, cleanOrphanSceneReferences } from '@/lib/vn/engineUtils';
 import { GUI_ICONS, HOTSPOT_ICON_PRESETS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import AssetStudioModal from './AssetStudioModal';
 import { DEFAULT_DEATH_CONFIG } from './StaticScreenView';
@@ -746,23 +746,7 @@ export default function SceneStudioModal({
                                 onChange={async (e) => {
                                   const file = e.target.files?.[0];
                                   if (!file) return;
-                                  let bgUrl = '';
-                                  try {
-                                    const formData = new FormData();
-                                    formData.append('file', file);
-                                    formData.append('assetType', 'background');
-                                    const res = await fetch(`/api/projects/${story.id || 'current-project'}/assets`, {
-                                      method: 'POST',
-                                      body: formData,
-                                    });
-                                    if (res.ok) {
-                                      const data = await res.json();
-                                      if (data.url) bgUrl = data.url;
-                                    }
-                                  } catch (_) {}
-                                  if (!bgUrl) {
-                                    bgUrl = await fileToBase64(file);
-                                  }
+                                  const bgUrl = await uploadProjectAssetFile(file, 'background', story.id || 'current-project');
                                   handleUpdateCurrentScene({ backgroundUrl: bgUrl });
                                   notify('Background updated from your PC');
                                 }}

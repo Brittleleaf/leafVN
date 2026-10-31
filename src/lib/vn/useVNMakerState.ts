@@ -22,7 +22,7 @@ import {
   exportStoryToJson,
   resetToSampleStory,
 } from '@/lib/vn/storage';
-import { fileToBase64, getCharacterAvatar, syncChoiceJumpsInTimeline } from '@/lib/vn/engineUtils';
+import { fileToBase64, uploadProjectAssetFile, getCharacterAvatar, syncChoiceJumpsInTimeline } from '@/lib/vn/engineUtils';
 import { GUI_ICONS } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
 import { DEFAULT_DEATH_CONFIG } from '@/components/vn/StaticScreenView';
@@ -949,35 +949,13 @@ export function useVNMakerState(
     const projectId = story.id || 'current-project';
 
     try {
-      let finalUrl = '';
-      // 1. Intentar subir físicamente al disco del proyecto para evitar saturar localStorage con Base64
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('assetType', 'background');
-        const res = await fetch(`/api/projects/${projectId}/assets`, {
-          method: 'POST',
-          body: formData,
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.url) finalUrl = data.url;
-        }
-      } catch (uploadErr) {
-        console.warn('Could not save background directly to disk, falling back to local base64:', uploadErr);
-      }
-
-      // 2. Fallback seguro a Data URL Base64 si el backend no respondió o está offline
-      if (!finalUrl) {
-        finalUrl = await fileToBase64(file);
-      }
-
+      const finalUrl = await uploadProjectAssetFile(file, 'background', projectId);
       handleUpdateCurrentScene('backgroundUrl', finalUrl);
       playSfx('/assets/sfx/success.mp3', false, 0.4);
-      notify('Scenario background updated!');
+      notify('Scenario background saved to project assets!');
     } catch (err) {
       playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
-      notify('Error reading or uploading image');
+      notify('Error saving or uploading image');
     }
   }, [story.id, handleUpdateCurrentScene, notify]);
 

@@ -3,10 +3,11 @@ import React from 'react';
 import { VNCharacter } from '@/types/vn';
 import { CHARACTER_MOOD_PRESETS, GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { playSfx } from '@/lib/audioSettings';
-import { fileToBase64 } from '@/lib/vn/engineUtils';
+import { fileToBase64, uploadProjectAssetFile } from '@/lib/vn/engineUtils';
 
 interface CharacterExpressionsTabProps {
   activeChar: VNCharacter;
+  projectId?: string;
   newMoodName: string;
   setNewMoodName: (name: string) => void;
   newMoodUrl: string;
@@ -18,6 +19,7 @@ interface CharacterExpressionsTabProps {
 
 export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = ({
   activeChar,
+  projectId,
   newMoodName,
   setNewMoodName,
   newMoodUrl,
@@ -132,10 +134,11 @@ export const CharacterExpressionsTab: React.FC<CharacterExpressionsTabProps> = (
                     onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const b64 = await fileToBase64(file);
-                      setNewMoodUrl(b64);
+                      const safeProjectId = projectId || 'current-project';
+                      const assetUrl = await uploadProjectAssetFile(file, 'character', safeProjectId);
+                      setNewMoodUrl(assetUrl);
                       playSfx('/assets/sfx/success.mp3', false, 0.4);
-                      notify('Photo loaded for this mood');
+                      notify('Photo saved to project assets');
                     }}
                     className="hidden"
                   />

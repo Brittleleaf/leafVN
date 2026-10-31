@@ -390,6 +390,7 @@ export default function CharacterStudioModal({
                 {activeTab === 'avatar' && (
                   <CharacterAvatarTab
                     activeChar={activeChar}
+                    projectId={story.id}
                     handleUpdateChar={handleUpdateChar}
                     onOpenAvatarAssetPicker={() => setShowAvatarAssetPicker(true)}
                     notify={notify}
@@ -401,6 +402,7 @@ export default function CharacterStudioModal({
                 {activeTab === 'expressions' && (
                   <CharacterExpressionsTab
                     activeChar={activeChar}
+                    projectId={story.id}
                     newMoodName={newMoodName}
                     setNewMoodName={setNewMoodName}
                     newMoodUrl={newMoodUrl}

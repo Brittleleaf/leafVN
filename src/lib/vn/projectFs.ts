@@ -831,6 +831,9 @@ export async function createProjectBundle(projectId: string): Promise<Buffer | n
   if (!fs.existsSync(projDir)) return null;
 
   const zip = new JSZip();
+  const PRECOMPRESSED_EXTS = new Set([
+    '.mp3', '.ogg', '.m4a', '.flac', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.zip', '.leafvn'
+  ]);
 
   function addDirToZip(currentDir: string, zipFolder: JSZip) {
     if (!fs.existsSync(currentDir)) return;
@@ -841,8 +844,12 @@ export async function createProjectBundle(projectId: string): Promise<Buffer | n
         const subFolder = zipFolder.folder(entry.name);
         if (subFolder) addDirToZip(fullPath, subFolder);
       } else if (entry.isFile()) {
+        const ext = path.extname(entry.name).toLowerCase();
         const fileData = fs.readFileSync(fullPath);
-        zipFolder.file(entry.name, fileData);
+        // Optimización: archivar medios ya comprimidos con STORE (0 overhead) y JSON/textos con compresión DEFLATE
+        zipFolder.file(entry.name, fileData, {
+          compression: PRECOMPRESSED_EXTS.has(ext) ? 'STORE' : 'DEFLATE',
+        });
       }
     }
   }
@@ -852,7 +859,7 @@ export async function createProjectBundle(projectId: string): Promise<Buffer | n
   // Incluir también la historia ensamblada como story.json para respaldo universal
   const fullStory = loadProject(safeId);
   if (fullStory) {
-    zip.file('story.json', JSON.stringify(fullStory, null, 2));
+    zip.file('story.json', JSON.stringify(fullStory, null, 2), { compression: 'DEFLATE' });
   }
 
   const buffer = await zip.generateAsync({
