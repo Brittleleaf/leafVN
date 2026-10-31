@@ -63,9 +63,9 @@ export function StaticScreenVisualSection({
           screenFxParams: newParams,
         };
 
-        // When retro_pixelate, liquid_distortion, or rainy_screen is selected and the current background tint is very dark (>= 0.65),
+        // When retro_pixelate, liquid_distortion, rainy_screen or rain_1 is selected and the current background tint is very dark (>= 0.65),
         // soften it to a balanced ~0.35 so the effect and background are immediately vivid and visible
-        if (asset.url === 'retro_pixelate' || asset.url === 'liquid_distortion' || asset.url === 'rainy_screen') {
+        if (asset.url === 'retro_pixelate' || asset.url === 'liquid_distortion' || asset.url === 'rainy_screen' || asset.url === 'rain_1') {
           const match = config.bgOverlayColor?.match(/rgba?\([^,]+,[^,]+,[^,]+,([^)]+)\)/);
           const currentAlpha = match ? parseFloat(match[1]) : 0.85;
           if (currentAlpha >= 0.65) {
@@ -81,7 +81,7 @@ export function StaticScreenVisualSection({
 
   const handleSelectFx = (fxKey: VNScreenFxType) => {
     const updates: Partial<VNStaticScreenConfig> = { screenFx: fxKey };
-    if (fxKey === 'retro_pixelate' || fxKey === 'liquid_distortion' || fxKey === 'rainy_screen') {
+    if (fxKey === 'retro_pixelate' || fxKey === 'liquid_distortion' || fxKey === 'rainy_screen' || fxKey === 'rain_1') {
       const match = config.bgOverlayColor?.match(/rgba?\([^,]+,[^,]+,[^,]+,([^)]+)\)/);
       const currentAlpha = match ? parseFloat(match[1]) : 0.85;
       if (currentAlpha >= 0.65) {

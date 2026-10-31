@@ -19,4 +19,5 @@ export * from './CodeFlythroughFx';
 export * from './LiquidDistortionFx';
 export * from './RetroPixelateFx';
 export * from './RainyScreenFx';
+export * from './Rain1Fx';
 export * from './ScreenFxSvgDefs';
