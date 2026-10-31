@@ -257,10 +257,11 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     setCurrentWorkspace('story_tool');
                   }}
                   className="py-2.5 px-3 rounded-xl bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] border border-[var(--border)] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
-                  title="Directly resume editing the current scenario on stage"
+                  title="Directly open and edit the current active scenario on stage"
                 >
-                  <GuiIconRenderer icon={GUI_ICONS.action.play} className="w-3.5 h-3.5 text-purple-400" />
-                  <span className="hidden xl:inline">Resume</span>
+                  <GuiIconRenderer icon={GUI_ICONS.general.pencil} className="w-3.5 h-3.5 text-[var(--accent)]" />
+                  <span className="hidden xl:inline">Edit Scenario</span>
+                  <span className="text-[11px]">➜</span>
                 </button>
               </div>
             </div>

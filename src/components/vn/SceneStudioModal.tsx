@@ -14,6 +14,7 @@ interface SceneStudioModalProps {
   selectedSceneId: string;
   onSelectScene: (sceneId: string) => void;
   onUpdateStory: (updatedStory: VNStory) => void;
+  onMoveSceneToChapter?: (sceneId: string, targetChapterId: string | '__global__') => void;
   onClose: () => void;
   notify?: (msg: string) => void;
 }
@@ -40,6 +41,7 @@ export default function SceneStudioModal({
   selectedSceneId,
   onSelectScene,
   onUpdateStory,
+  onMoveSceneToChapter,
   onClose,
   notify = () => {},
 }: SceneStudioModalProps) {
@@ -78,6 +80,9 @@ export default function SceneStudioModal({
 
   const currentScene = allScenarios.find((s) => s.id === activeSceneId) || allScenarios[0];
   const isActiveInCurrentChapter = Boolean(chapter?.scenes.some((s) => s.id === currentScene?.id));
+  const currentAssignedChapter = story.chapters.find((c) =>
+    c.scenes.some((s) => s.id === currentScene?.id)
+  );
 
   // Helper to update current scenario in global library and any chapter containing it
   const handleUpdateCurrentScene = (patch: Partial<VNScene>) => {
@@ -252,6 +257,48 @@ export default function SceneStudioModal({
     setActiveSceneId(cleanedScenarios[0]?.id || '');
     playSfx('/assets/sfx/glitch.mp3', false, 0.4);
     notify('Scenario permanently removed and unlinked from project');
+  };
+
+  // Move scenario location between chapters or global reserve
+  const handleMoveLocation = (target: string) => {
+    if (!currentScene) return;
+    if (onMoveSceneToChapter) {
+      onMoveSceneToChapter(currentScene.id, target as string | '__global__');
+      return;
+    }
+
+    let updatedChapters = [...story.chapters];
+    let updatedScenarios = [...(story.scenarios || [])];
+
+    updatedChapters = updatedChapters.map((ch) => ({
+      ...ch,
+      scenes: ch.scenes.filter((s) => s.id !== currentScene.id),
+      startSceneId:
+        ch.startSceneId === currentScene.id
+          ? ch.scenes.filter((s) => s.id !== currentScene.id)[0]?.id || ''
+          : ch.startSceneId,
+    }));
+    updatedScenarios = updatedScenarios.filter((s) => s.id !== currentScene.id);
+
+    if (target === '__global__') {
+      updatedScenarios.push(currentScene);
+      notify(`Scenario moved to Global Reserve`);
+    } else {
+      const destIdx = updatedChapters.findIndex((c) => c.id === target);
+      if (destIdx !== -1) {
+        updatedChapters[destIdx] = {
+          ...updatedChapters[destIdx],
+          scenes: [...updatedChapters[destIdx].scenes, currentScene],
+        };
+        notify(`Scenario moved to ${updatedChapters[destIdx].title}`);
+      }
+    }
+
+    onUpdateStory({
+      ...story,
+      chapters: updatedChapters,
+      scenarios: updatedScenarios,
+    });
   };
 
   // Add interaction hotspot
@@ -582,6 +629,26 @@ export default function SceneStudioModal({
 
                   {/* Scenario Actions */}
                   <div className="flex items-center gap-2">
+                    {/* Location Selector */}
+                    <div className="flex items-center gap-1.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-lg px-2.5 py-1 text-xs shadow-sm">
+                      <span className="font-semibold text-[var(--muted)] text-[11px] whitespace-nowrap">Location:</span>
+                      <select
+                        value={currentAssignedChapter ? currentAssignedChapter.id : '__global__'}
+                        onChange={(e) => handleMoveLocation(e.target.value)}
+                        className="bg-transparent text-xs font-bold text-[var(--text)] outline-none cursor-pointer"
+                        title="Move this scenario to another chapter or to Global Reserve"
+                      >
+                        {story.chapters.map((ch) => (
+                          <option key={ch.id} value={ch.id} className="bg-[var(--card-bg)] text-[var(--text)]">
+                            📖 {ch.title}
+                          </option>
+                        ))}
+                        <option value="__global__" className="bg-[var(--card-bg)] text-amber-400">
+                          📁 Global Reserve
+                        </option>
+                      </select>
+                    </div>
+
                     {/* Add / Remove from Chapter */}
                     <button
                       type="button"
@@ -645,6 +712,41 @@ export default function SceneStudioModal({
                           onChange={(e) => handleUpdateCurrentScene({ name: e.target.value })}
                           className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-sm text-[var(--text)] font-bold outline-none transition-colors"
                         />
+                      </div>
+
+                      {/* Scenario Location & Assignment */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[var(--text)] block">
+                          Assigned Location (Chapter / Global Reserve):
+                        </label>
+                        <div className="flex items-center gap-3 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-3">
+                          <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-5 h-5 text-[var(--accent)] shrink-0" />
+                          <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <span className="text-xs text-[var(--muted)]">
+                              Current placement:{' '}
+                              <strong className="text-[var(--text)] font-mono">
+                                {currentAssignedChapter ? `Chapter: ${currentAssignedChapter.title}` : '📁 Global Reserve'}
+                              </strong>
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[11px] font-bold text-[var(--muted)]">Move to:</span>
+                              <select
+                                value={currentAssignedChapter ? currentAssignedChapter.id : '__global__'}
+                                onChange={(e) => handleMoveLocation(e.target.value)}
+                                className="bg-[var(--card-bg)] border border-[var(--border)] rounded px-2.5 py-1 text-xs font-bold text-[var(--text)] outline-none cursor-pointer focus:border-[var(--accent)]"
+                              >
+                                {story.chapters.map((ch) => (
+                                  <option key={ch.id} value={ch.id}>
+                                    📖 {ch.title}
+                                  </option>
+                                ))}
+                                <option value="__global__">
+                                  📁 Global Reserve (Storage)
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Scenario Architecture Type Selector */}

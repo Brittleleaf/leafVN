@@ -218,7 +218,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
             onRetry={handleRetryPrevious}
             onStartGame={() => {
               const playScene = findMenuSceneByRole(story, 'play');
-              if (playScene) {
+              if (playScene && playScene.id !== currentScene.id) {
                 jumpToScene(playScene.id, 0);
               } else {
                 advanceToNextScene();

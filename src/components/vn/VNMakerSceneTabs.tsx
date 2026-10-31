@@ -196,7 +196,11 @@ export default function VNMakerSceneTabs() {
                 playSfx('/assets/sfx/click intro.mp3', false, 0.2);
               }}
               className={`px-3 py-1.5 rounded-md border font-bold cursor-pointer shrink-0 flex items-center gap-1.5 transition-all text-xs ${
-                isActive
+                isViewingGlobal
+                  ? isActive
+                    ? 'border-amber-500 bg-amber-600 text-white shadow-md'
+                    : 'border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300'
+                  : isActive
                   ? 'border-[var(--accent)] bg-[var(--accent)] text-white shadow-md'
                   : 'border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)]'
               } ${isDragOver ? 'ring-2 ring-amber-400 scale-105' : ''} ${
@@ -255,7 +259,10 @@ export default function VNMakerSceneTabs() {
                     );
                   })() : (
                     <span className="truncate flex items-center gap-1.5">
-                      <GuiIconRenderer icon={GUI_ICONS.general.scenario} className="w-3 h-3 text-gray-400 shrink-0" />
+                      <GuiIconRenderer
+                        icon={isViewingGlobal ? GUI_ICONS.general.folder : GUI_ICONS.general.scenario}
+                        className={`w-3 h-3 ${isViewingGlobal ? (isActive ? 'text-white' : 'text-amber-400') : 'text-gray-400'} shrink-0`}
+                      />
                       <span>{sc.name}</span>
                     </span>
                   )}

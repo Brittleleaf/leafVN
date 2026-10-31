@@ -216,6 +216,7 @@ export interface VNMakerActionsType {
   ) => void;
   handleDuplicateScene: (sceneId: string) => void;
   handleDeleteScene: (sceneId: string) => void;
+  handleMoveSceneToChapter?: (sceneId: string, targetChapterId: string | '__global__') => void;
   handleUpdateCurrentScene: (field: keyof VNScene, value: unknown) => void;
   handlePatchCurrentScene: (patch: Partial<VNScene>) => void;
   handleUploadBackground: (e: React.ChangeEvent<HTMLInputElement>) => void;

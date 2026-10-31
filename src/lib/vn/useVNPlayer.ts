@@ -79,7 +79,12 @@ export function findMenuSceneByRole(
   const explicitId = explicitIdMap[role];
   if (explicitId) {
     const found = allScenes.find((s) => s.id === explicitId);
-    if (found) return found;
+    if (found) {
+      // Para 'play', no aceptar un destino que sea una pantalla de menú o portada aislada
+      if (role !== 'play' || !isIsolatedStaticScene(found)) {
+        return found;
+      }
+    }
   }
 
   // Búsqueda heurística por propósito en pantalla estática
@@ -103,12 +108,26 @@ export function findMenuSceneByRole(
     if (found) return found;
   }
 
-  // Fallback para inicio de juego (play): primer escenario narrativo de la historia
+  // Fallback para inicio de juego (play): primer escenario narrativo real de la historia
   if (role === 'play') {
+    // 1. Buscar primer escenario no-estático en los capítulos
+    for (const ch of story.chapters || []) {
+      for (const sc of ch.scenes || []) {
+        if (!isIsolatedStaticScene(sc)) {
+          return sc;
+        }
+      }
+    }
+    // 2. Buscar en la biblioteca global de escenarios
+    for (const sc of story.scenarios || []) {
+      if (!isIsolatedStaticScene(sc)) {
+        return sc;
+      }
+    }
+    // 3. Fallback a la primera escena disponible
     const ch1 = story.chapters[0];
     if (ch1) {
-      const sceneId = getChapterInitialSceneId(ch1);
-      return allScenes.find((s) => s.id === sceneId) || ch1.scenes[0] || null;
+      return ch1.scenes[0] || null;
     }
   }
 

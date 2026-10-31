@@ -935,12 +935,17 @@ export function useVNMakerState(
   ) => {
     recordHistorySnapshot();
     const newSceneId = `scene-${Date.now()}`;
+    const isGlobal = selectedChapterId === '__global__';
+    const sceneCount = isGlobal
+      ? (story.scenarios?.length || 0) + 1
+      : (currentChapter?.scenes.length || 0) + 1;
+
     const defaultName =
       sceneType === 'event'
         ? eventSubtype === 'cinematic'
-          ? `Cinematic #${(currentChapter?.scenes.length || 0) + 1}`
-          : `Static Screen #${(currentChapter?.scenes.length || 0) + 1}`
-        : `Scenario #${(currentChapter?.scenes.length || 0) + 1}`;
+          ? `Cinematic #${sceneCount}`
+          : `Static Screen #${sceneCount}`
+        : `Scenario #${sceneCount}`;
 
     const newScene: VNScene = {
       id: newSceneId,
@@ -1017,6 +1022,34 @@ export function useVNMakerState(
   }, [currentChapter?.scenes, selectedChapterId, recordHistorySnapshot, notify]);
 
   const handleDeleteScene = useCallback((sceneId: string) => {
+    const isGlobal = selectedChapterId === '__global__';
+
+    // 1. Eliminación desde la Reserva Global
+    if (isGlobal) {
+      const scenarios = story.scenarios || [];
+      const sceneToRemove = scenarios.find((s) => s.id === sceneId);
+      if (!sceneToRemove) return;
+
+      if (confirm(`Delete "${sceneToRemove.name || 'this scenario'}" permanently from Global Reserve?`)) {
+        recordHistorySnapshot();
+        const filtered = scenarios.filter((s) => s.id !== sceneId);
+        setStory((prev) => {
+          const updated = { ...prev, scenarios: filtered };
+          saveActiveStory(updated);
+          return updated;
+        });
+        if (selectedSceneId === sceneId) {
+          const nextScene = filtered[0] || story.chapters[0]?.scenes[0];
+          setSelectedSceneId(nextScene?.id || '');
+          setSelectedLineIndex(0);
+        }
+        playSfx('/assets/sfx/glitch.mp3', false, 0.4);
+        notify('Scenario deleted from Global Reserve');
+      }
+      return;
+    }
+
+    // 2. Eliminación de un capítulo (se preserva en la biblioteca global)
     if (!currentChapter || currentChapter.scenes.length <= 1) {
       playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
       notify('The chapter must have at least one active scenario in its storyline.');
@@ -1056,7 +1089,63 @@ export function useVNMakerState(
       playSfx('/assets/sfx/glitch.mp3', false, 0.4);
       notify('Scenario removed from chapter (kept in library)');
     }
-  }, [currentChapter, selectedChapterId, selectedSceneId, recordHistorySnapshot, notify]);
+  }, [currentChapter, selectedChapterId, selectedSceneId, story.scenarios, story.chapters, recordHistorySnapshot, notify]);
+
+  // Mover una escena a otro capítulo o a la Reserva Global
+  const handleMoveSceneToChapter = useCallback((sceneId: string, targetChapterId: string | '__global__') => {
+    recordHistorySnapshot();
+
+    setStory((prevStory) => {
+      // 1. Encontrar la escena
+      let targetScene: VNScene | null = null;
+      for (const ch of prevStory.chapters) {
+        const found = ch.scenes.find((s) => s.id === sceneId);
+        if (found) {
+          targetScene = found;
+          break;
+        }
+      }
+      if (!targetScene) {
+        targetScene = (prevStory.scenarios || []).find((s) => s.id === sceneId) || null;
+      }
+      if (!targetScene) return prevStory;
+
+      // 2. Remover de capítulos y scenarios
+      const updatedChapters = prevStory.chapters.map((ch) => ({
+        ...ch,
+        scenes: ch.scenes.filter((s) => s.id !== sceneId),
+        startSceneId: ch.startSceneId === sceneId ? ch.scenes.filter((s) => s.id !== sceneId)[0]?.id || '' : ch.startSceneId,
+      }));
+      let updatedScenarios = (prevStory.scenarios || []).filter((s) => s.id !== sceneId);
+
+      // 3. Añadir a su nuevo destino
+      if (targetChapterId === '__global__') {
+        updatedScenarios = [...updatedScenarios, targetScene];
+      } else {
+        const destChapIdx = updatedChapters.findIndex((c) => c.id === targetChapterId);
+        if (destChapIdx !== -1) {
+          updatedChapters[destChapIdx] = {
+            ...updatedChapters[destChapIdx],
+            scenes: [...updatedChapters[destChapIdx].scenes, targetScene],
+          };
+        }
+      }
+
+      const updated = { ...prevStory, chapters: updatedChapters, scenarios: updatedScenarios };
+      saveActiveStory(updated);
+      return updated;
+    });
+
+    if (targetChapterId === '__global__') {
+      setSelectedChapterId('__global__');
+      notify(`Scene moved to Global Reserve`);
+    } else {
+      setSelectedChapterId(targetChapterId);
+      const chName = story.chapters.find((c) => c.id === targetChapterId)?.title || 'Chapter';
+      notify(`Scene moved to ${chName}`);
+    }
+    playSfx('/assets/sfx/success.mp3', false, 0.4);
+  }, [story.chapters, recordHistorySnapshot, notify]);
 
   const handleApplyBackgroundToCurrentScene = useCallback((bgUrl: string) => {
     handleUpdateCurrentScene('backgroundUrl', bgUrl);
@@ -1802,6 +1891,7 @@ export function useVNMakerState(
     handleAddScene,
     handleDuplicateScene,
     handleDeleteScene,
+    handleMoveSceneToChapter,
     handleUpdateCurrentScene,
     handlePatchCurrentScene,
     handleUploadBackground,
@@ -1869,6 +1959,7 @@ export function useVNMakerState(
     handleAddScene,
     handleDuplicateScene,
     handleDeleteScene,
+    handleMoveSceneToChapter,
     handleUpdateCurrentScene,
     handlePatchCurrentScene,
     handleUploadBackground,

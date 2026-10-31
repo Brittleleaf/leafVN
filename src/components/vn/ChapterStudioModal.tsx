@@ -675,6 +675,8 @@ export default function ChapterStudioModal({
             scene={editingStaticScene}
             story={story}
             onUpdateScene={handleUpdateEmbeddedScene}
+            backButtonLabel="Chapter Studio"
+            notify={notify}
             onBackToMenuMap={() => {
               setEditingStaticScene(null);
               setEditingScreenRole(null);

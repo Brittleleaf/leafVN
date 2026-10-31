@@ -182,6 +182,25 @@ export default function VNMakerHeader({
           <span className="font-semibold text-[var(--text)] truncate">{story.title}</span>
         </button>
 
+        {/* Live Storage / PC Connection Badge */}
+        {linkedFileName ? (
+          <span
+            className="hidden lg:flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 max-w-[160px] truncate shadow-sm cursor-help"
+            title={`Direct PC File Sync: "${linkedFileName}" is linked via File System Access API`}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="truncate">PC: {linkedFileName}</span>
+          </span>
+        ) : (
+          <span
+            className="hidden xl:flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-mono bg-neutral-800/60 text-neutral-400 border border-neutral-700/40 shadow-sm cursor-help"
+            title="Saved locally in Browser Storage (IndexedDB)"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0" />
+            <span>IndexedDB</span>
+          </span>
+        )}
+
         {/* UNDO / REDO BUTTONS */}
         <div className="flex items-center gap-0.5 bg-[var(--well-bg)] border border-[var(--border)] rounded-md p-0.5 backdrop-blur-sm">
           <button

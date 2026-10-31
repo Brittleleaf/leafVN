@@ -38,6 +38,8 @@ interface StaticScreenStudioProps {
   onUpdateScene: (patch: Partial<VNScene>) => void;
   onUpdateStoryCustomAssets?: (updatedAssets: VNAssetItem[]) => void;
   onBackToMenuMap?: () => void;
+  backButtonLabel?: string;
+  notify?: (msg: string) => void;
   editorTheme?: 'default_dark' | 'default_light' | 'rotp';
 }
 
@@ -47,6 +49,8 @@ export default function StaticScreenStudio({
   onUpdateScene,
   onUpdateStoryCustomAssets,
   onBackToMenuMap,
+  backButtonLabel,
+  notify,
   editorTheme = 'default_dark',
 }: StaticScreenStudioProps) {
   const config: VNStaticScreenConfig = scene.staticScreenConfig || DEFAULT_DEATH_CONFIG;
@@ -338,10 +342,10 @@ export default function StaticScreenStudio({
                   type="button"
                   onClick={onBackToMenuMap}
                   className="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-xs font-bold text-[var(--accent)] cursor-pointer shadow-sm transition-all flex items-center gap-1.5"
-                  title="Return to Menu Map"
+                  title={`Return to ${backButtonLabel || 'Menu Map'}`}
                 >
                   <GuiIconRenderer icon={GUI_ICONS.navigation.arrowLeft} className="w-3.5 h-3.5" />
-                  <span>Menu Tool</span>
+                  <span>{backButtonLabel || 'Menu Tool'}</span>
                 </button>
               )}
               <div className="w-8 h-8 rounded-md bg-[var(--accent-surface)] border border-[var(--border2)] flex items-center justify-center text-[var(--accent)]">
@@ -693,7 +697,7 @@ export default function StaticScreenStudio({
             playSfx('/assets/sfx/click intro.mp3', false, 0.3);
           }}
           onClose={() => setAssetPickerConfig(null)}
-          notify={() => {}}
+          notify={notify || (() => {})}
         />
       )}
     </div>

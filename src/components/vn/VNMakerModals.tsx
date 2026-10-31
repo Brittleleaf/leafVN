@@ -45,6 +45,7 @@ export default function VNMakerModals() {
     handleInsertEvent,
     handleUpdateCurrentScene,
     handlePatchCurrentScene,
+    handleMoveSceneToChapter,
     notify,
     handleSelectScene,
     setCurrentWorkspace,
@@ -160,6 +161,7 @@ export default function VNMakerModals() {
             setStory(updatedStory);
             saveActiveStory(updatedStory);
           }}
+          onMoveSceneToChapter={handleMoveSceneToChapter}
           onClose={() => setActiveGlobalModal(null)}
           notify={notify}
         />
