@@ -178,6 +178,7 @@ export type VNScreenFxType =
   | 'blink_eyes'
   | 'drunk_pov'
   | 'snowy'
+  | 'snowy_2'
   | (string & {});
 
 export type VNCursorType =

@@ -23,6 +23,7 @@ import { speedFx } from './SpeedFx';
 import { blinkEyesFx } from './BlinkEyesFx';
 import { drunkPovFx } from './DrunkPovFx';
 import { snowyFx } from './SnowyFx';
+import { snowy2Fx } from './Snowy2Fx';
 
 export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   red_alert: redAlertFx,
@@ -49,6 +50,7 @@ export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   blink_eyes: blinkEyesFx,
   drunk_pov: drunkPovFx,
   snowy: snowyFx,
+  snowy_2: snowy2Fx,
 };
 
 // Config metadata compatibility map (same shape as previously exported SCREEN_FX_CONFIGS)
