@@ -176,6 +176,7 @@ export type VNScreenFxType =
   | 'rain_3'
   | 'speed'
   | 'blink_eyes'
+  | 'drunk_pov'
   | (string & {});
 
 export type VNCursorType =

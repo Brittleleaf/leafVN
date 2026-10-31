@@ -48,6 +48,9 @@ export function getSceneElementFxFilter(
       ? `url(#retro_pixelate_color_${colorSteps})`
       : `url(#retro_pixelate_tile_${boxSize}_${colorSteps})`;
   }
+  if (fxType === 'drunk_pov') {
+    return 'url(#drunk_distort)';
+  }
   return undefined;
 }
 
@@ -86,6 +89,11 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
   const baseScale = params.scale ?? (intensity === 'light' ? 16 : intensity === 'heavy' ? 52 : 30);
   const liquidScale = Math.max(1, Math.round(baseScale * effectiveMultiplier));
   const liquidDur = params.speed ?? (intensity === 'light' ? 8 : intensity === 'heavy' ? 4.5 : 6);
+
+  // Drunk POV params
+  const isDrunk = fxType === 'drunk_pov';
+  const drunkScale = Math.max(2, Math.round((params.distortionScale ?? (intensity === 'light' ? 8 : intensity === 'heavy' ? 24 : 14)) * effectiveMultiplier));
+  const drunkSwayDur = Math.max(1.5, (params.swaySpeed ?? 1.0) > 0 ? (5.0 / (params.swaySpeed ?? 1.0)) : 5.0);
 
   // Retro Pixelate params
   const rawPixelSize =
@@ -168,6 +176,30 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
             in="SourceGraphic"
             in2="noise"
             scale={liquidScale}
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+
+        {/* Drunk POV Refraction & Optical Aberration Filter */}
+        <filter id="drunk_distort" x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.006 0.004"
+            numOctaves="2"
+            result="drunkNoise"
+          >
+            <animate
+              attributeName="baseFrequency"
+              values="0.006 0.004;0.010 0.007;0.006 0.004"
+              dur={`${drunkSwayDur}s`}
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="drunkNoise"
+            scale={drunkScale}
             xChannelSelector="R"
             yChannelSelector="G"
           />
