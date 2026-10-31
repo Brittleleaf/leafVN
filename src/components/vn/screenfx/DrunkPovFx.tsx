@@ -156,8 +156,10 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
       const xNorm = (e.clientX / innerWidth) * 2 - 1; // -1 to +1
       const yNorm = (e.clientY / innerHeight) * 2 - 1; // -1 to +1
 
-      mousePosRef.current.targetX = xNorm * 18 * mouseTiltStrength;
-      mousePosRef.current.targetY = yNorm * 14 * mouseTiltStrength;
+      const rawTargetX = xNorm * 18 * mouseTiltStrength;
+      const rawTargetY = yNorm * 14 * mouseTiltStrength;
+      mousePosRef.current.targetX = Math.max(-24, Math.min(24, rawTargetX));
+      mousePosRef.current.targetY = Math.max(-18, Math.min(18, rawTargetY));
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -261,7 +263,7 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
           rotateZ(${(swayRoll + 0.6).toFixed(2)}deg)
           skewX(${skewXVal.toFixed(2)}deg)
           skewY(${skewYVal.toFixed(2)}deg)
-          scale(1.10)
+          scale(1.30)
         `;
         ghost1Ref.current.style.backdropFilter = `blur(${currentBlur.toFixed(1)}px)`;
       }
@@ -276,7 +278,7 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
           rotateZ(${(swayRoll - 0.6).toFixed(2)}deg)
           skewX(${(-skewXVal * 0.8).toFixed(2)}deg)
           skewY(${(-skewYVal * 0.8).toFixed(2)}deg)
-          scale(1.10)
+          scale(1.30)
         `;
         ghost2Ref.current.style.backdropFilter = `blur(${(currentBlur * 0.85).toFixed(1)}px)`;
       }
@@ -297,34 +299,51 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
         transformStyle: 'preserve-3d',
       }}
     >
-      {/* Ghost Diplopia Layer 1: Red/Magenta Optical Chromatic Split */}
+      {/* Ghost Diplopia Layer 1: Red/Magenta Optical Chromatic Split (Oversized with feathered mask to eliminate sharp edges) */}
       <div
         ref={ghost1Ref}
-        className="absolute inset-0 pointer-events-none will-change-transform"
+        className="pointer-events-none will-change-transform"
         style={{
+          position: 'absolute',
+          top: '-30%',
+          left: '-30%',
+          width: '160%',
+          height: '160%',
           opacity: Math.min(0.48, (0.35 * (chromaticAberration / 100) + 0.1)),
           mixBlendMode: 'screen',
           backgroundColor: `rgba(255, 60, 110, ${(0.08 * (chromaticAberration / 100)).toFixed(2)})`,
-          boxShadow: `inset 0 0 100px rgba(255, 50, 100, ${(0.15 * (chromaticAberration / 100)).toFixed(2)})`,
+          maskImage: 'radial-gradient(ellipse at center, black 65%, transparent 95%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 65%, transparent 95%)',
         }}
       />
 
-      {/* Ghost Diplopia Layer 2: Cyan/Blue Optical Chromatic Split */}
+      {/* Ghost Diplopia Layer 2: Cyan/Blue Optical Chromatic Split (Oversized with feathered mask to eliminate sharp edges) */}
       <div
         ref={ghost2Ref}
-        className="absolute inset-0 pointer-events-none will-change-transform"
+        className="pointer-events-none will-change-transform"
         style={{
+          position: 'absolute',
+          top: '-30%',
+          left: '-30%',
+          width: '160%',
+          height: '160%',
           opacity: Math.min(0.48, (0.35 * (chromaticAberration / 100) + 0.1)),
           mixBlendMode: 'screen',
           backgroundColor: `rgba(50, 200, 255, ${(0.08 * (chromaticAberration / 100)).toFixed(2)})`,
-          boxShadow: `inset 0 0 100px rgba(0, 180, 255, ${(0.15 * (chromaticAberration / 100)).toFixed(2)})`,
+          maskImage: 'radial-gradient(ellipse at center, black 65%, transparent 95%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 65%, transparent 95%)',
         }}
       />
 
       {/* Optical Blur & Refraction Glaze across entire scene */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none"
         style={{
+          position: 'absolute',
+          top: '-15%',
+          left: '-15%',
+          width: '130%',
+          height: '130%',
           backdropFilter: blurAmount > 0.5 ? `blur(${(blurAmount * 0.4).toFixed(1)}px)` : undefined,
         }}
       />
