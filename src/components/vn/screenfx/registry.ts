@@ -25,6 +25,7 @@ import { drunkPovFx } from './DrunkPovFx';
 import { snowyFx } from './SnowyFx';
 import { snowy2Fx } from './Snowy2Fx';
 import { gtavSirenFx } from './GtavSirenFx';
+import { highAfFx } from './HighAfFx';
 
 export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   red_alert: redAlertFx,
@@ -53,6 +54,7 @@ export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   snowy: snowyFx,
   snowy_2: snowy2Fx,
   gtav_siren: gtavSirenFx,
+  high_af: highAfFx,
 };
 
 // Config metadata compatibility map (same shape as previously exported SCREEN_FX_CONFIGS)

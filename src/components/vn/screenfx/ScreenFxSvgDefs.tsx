@@ -48,7 +48,7 @@ export function getSceneElementFxFilter(
       ? `url(#retro_pixelate_color_${colorSteps})`
       : `url(#retro_pixelate_tile_${boxSize}_${colorSteps})`;
   }
-  if (fxType === 'drunk_pov') {
+  if (fxType === 'drunk_pov' || fxType === 'high_af') {
     return 'url(#drunk_distort)';
   }
   return undefined;
@@ -90,8 +90,8 @@ export const ScreenFxSvgDefs: React.FC<ScreenFxSvgDefsProps> = ({ activeFx }) =>
   const liquidScale = Math.max(1, Math.round(baseScale * effectiveMultiplier));
   const liquidDur = params.speed ?? (intensity === 'light' ? 8 : intensity === 'heavy' ? 4.5 : 6);
 
-  // Drunk POV params
-  const isDrunk = fxType === 'drunk_pov';
+  // Drunk POV & High AF params
+  const isDrunk = fxType === 'drunk_pov' || fxType === 'high_af';
   const drunkScale = Math.max(2, Math.round((params.distortionScale ?? (intensity === 'light' ? 8 : intensity === 'heavy' ? 24 : 14)) * effectiveMultiplier));
   const drunkSwayDur = Math.max(1.5, (params.swaySpeed ?? 1.0) > 0 ? (5.0 / (params.swaySpeed ?? 1.0)) : 5.0);
 

@@ -29,4 +29,5 @@ export * from './DrunkPovFx';
 export * from './SnowyFx';
 export * from './Snowy2Fx';
 export * from './GtavSirenFx';
+export * from './HighAfFx';
 export * from './ScreenFxSvgDefs';
