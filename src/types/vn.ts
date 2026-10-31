@@ -171,6 +171,7 @@ export type VNScreenFxType =
   | 'retro_pixelate'
   | 'rainy_screen'
   | 'rain_1'
+  | 'rainy_screen_2'
   | (string & {});
 
 export type VNCursorType =

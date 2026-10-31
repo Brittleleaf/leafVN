@@ -667,7 +667,7 @@ export default function StaticScreenView({
         className="absolute inset-0 transition-all duration-500 pointer-events-none"
         style={{
           backgroundColor: (() => {
-            if (config.screenFx === 'retro_pixelate' || config.screenFx === 'liquid_distortion' || config.screenFx === 'rainy_screen' || config.screenFx === 'rain_1') {
+            if (config.screenFx === 'retro_pixelate' || config.screenFx === 'liquid_distortion' || config.screenFx === 'rainy_screen' || config.screenFx === 'rain_1' || config.screenFx === 'rainy_screen_2') {
               if (
                 !config.bgOverlayColor ||
                 config.bgOverlayColor === 'rgba(10, 2, 4, 0.85)' ||

@@ -20,4 +20,5 @@ export * from './LiquidDistortionFx';
 export * from './RetroPixelateFx';
 export * from './RainyScreenFx';
 export * from './Rain1Fx';
+export * from './RainyScreen2Fx';
 export * from './ScreenFxSvgDefs';
