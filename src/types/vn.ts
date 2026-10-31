@@ -179,6 +179,7 @@ export type VNScreenFxType =
   | 'drunk_pov'
   | 'snowy'
   | 'snowy_2'
+  | 'gtav_siren'
   | (string & {});
 
 export type VNCursorType =
