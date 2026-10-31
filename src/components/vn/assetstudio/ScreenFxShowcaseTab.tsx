@@ -69,7 +69,7 @@ export function ScreenFxShowcaseTab({
             const currentMultiplier =
               fxMultipliers[fx.id] ?? (currentIntensity === 'light' ? 0.6 : currentIntensity === 'heavy' ? 1.4 : 1.0);
             const currentHue = fxHueRotates[fx.id] ?? 0;
-            const currentTintColor = fxTintColors[fx.id] || (fx.id === 'liquid_distortion' ? '#06b6d4' : undefined);
+            const currentTintColor = fxTintColors[fx.id] || (fx.id === 'liquid_distortion' ? '#06b6d4' : fx.id === 'rainy_screen' ? '#3498db' : undefined);
             const currentPixelSize = fxPixelSizes[fx.id] ?? (currentIntensity === 'light' ? 1 : currentIntensity === 'heavy' ? 4 : 2);
             const currentColorSteps = fxColorSteps[fx.id] ?? (currentIntensity === 'heavy' ? 3 : currentIntensity === 'light' ? 8 : 5);
 
@@ -241,8 +241,8 @@ export function ScreenFxShowcaseTab({
                       </div>
                     </div>
 
-                    {/* Color Tint & Hue Spectrum Row (for Liquid Distortion & Tintable FX) */}
-                    {(fx.id === 'liquid_distortion' || fx.id === 'vignette') && (
+                    {/* Color Tint & Hue Spectrum Row (for Liquid Distortion, Rainy Screen & Tintable FX) */}
+                    {(fx.id === 'liquid_distortion' || fx.id === 'vignette' || fx.id === 'rainy_screen') && (
                       <div className="space-y-1.5 pt-1.5 border-t border-[var(--border)] text-[10px]">
                         <div className="flex items-center justify-between">
                           <span className="font-bold uppercase text-[var(--muted)] flex items-center gap-1">

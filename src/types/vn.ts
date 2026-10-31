@@ -169,6 +169,7 @@ export type VNScreenFxType =
   | 'code_flythrough'
   | 'liquid_distortion'
   | 'retro_pixelate'
+  | 'rainy_screen'
   | (string & {});
 
 export type VNCursorType =

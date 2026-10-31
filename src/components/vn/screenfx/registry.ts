@@ -14,6 +14,7 @@ import { flashlightFx } from './FlashlightFx';
 import { codeFlythroughFx } from './CodeFlythroughFx';
 import { liquidDistortionFx } from './LiquidDistortionFx';
 import { retroPixelateFx } from './RetroPixelateFx';
+import { rainyScreenFx } from './RainyScreenFx';
 
 export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   red_alert: redAlertFx,
@@ -31,6 +32,7 @@ export const SCREEN_FX_REGISTRY: Record<string, ScreenFxDefinition> = {
   code_flythrough: codeFlythroughFx,
   liquid_distortion: liquidDistortionFx,
   retro_pixelate: retroPixelateFx,
+  rainy_screen: rainyScreenFx,
 };
 
 // Config metadata compatibility map (same shape as previously exported SCREEN_FX_CONFIGS)
