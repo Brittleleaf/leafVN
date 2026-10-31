@@ -11,7 +11,7 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
-import { auth, googleProvider, githubProvider } from './config';
+import { auth, googleProvider, githubProvider, facebookProvider } from './config';
 
 export interface AuthContextType {
   user: User | null;
@@ -19,6 +19,7 @@ export interface AuthContextType {
   googleAccessToken: string | null;
   signInWithGoogle: () => Promise<User | null>;
   signInWithGithub: () => Promise<User | null>;
+  signInWithFacebook: () => Promise<User | null>;
   signInWithEmail: (email: string, pass: string) => Promise<User | null>;
   signUpWithEmail: (email: string, pass: string, displayName?: string) => Promise<User | null>;
   signOutUser: () => Promise<void>;
@@ -70,6 +71,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Sign in with Facebook
+  const signInWithFacebook = async (): Promise<User | null> => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      return result.user;
+    } catch (err) {
+      console.error('Error signing in with Facebook:', err);
+      throw err;
+    }
+  };
+
   // Sign in with Email and Password
   const signInWithEmail = async (email: string, pass: string): Promise<User | null> => {
     try {
@@ -117,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         googleAccessToken,
         signInWithGoogle,
         signInWithGithub,
+        signInWithFacebook,
         signInWithEmail,
         signUpWithEmail,
         signOutUser,
