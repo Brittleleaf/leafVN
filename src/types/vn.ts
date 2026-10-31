@@ -173,6 +173,7 @@ export type VNScreenFxType =
   | 'rain_1'
   | 'rainy_screen_2'
   | 'rain_2'
+  | 'rain_3'
   | (string & {});
 
 export type VNCursorType =
