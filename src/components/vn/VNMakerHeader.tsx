@@ -95,6 +95,36 @@ export default function VNMakerHeader({
     }
   };
 
+  const handleExportBundle = async () => {
+    try {
+      playSfx('/assets/sfx/success.mp3', false, 0.4);
+      const safeTitle = (story.title || story.id || 'project')
+        .toLowerCase()
+        .replace(/[/\\?%*:|"<>]/g, '_')
+        .replace(/\s+/g, '_');
+
+      const res = await fetch(`/api/projects/${story.id}/bundle`);
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeTitle}.leafvn`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          a.remove();
+          URL.revokeObjectURL(url);
+        }, 200);
+        onNotify?.(`Exported package "${safeTitle}.leafvn"`);
+      } else {
+        onExport?.();
+      }
+    } catch {
+      onExport?.();
+    }
+  };
+
   return (
     <header className="h-14 border-b vn-glass-header px-3 md:px-5 flex items-center justify-between gap-3 shrink-0 z-50 relative select-none">
       
@@ -372,6 +402,15 @@ export default function VNMakerHeader({
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-4 h-4 text-emerald-500 shrink-0" />
                     <span>Project Manager</span>
+                  </button>
+
+                  <button
+                    onClick={handleExportBundle}
+                    className="w-full px-3 py-2 rounded-lg text-[var(--accent)] hover:bg-[var(--surface-strong)] flex items-center gap-2.5 cursor-pointer transition-colors text-left font-semibold"
+                    title="Download standalone .leafvn package with all scenes, audios and images"
+                  >
+                    <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-4 h-4 text-[var(--accent)] shrink-0" />
+                    <span>Download Package (.leafvn)</span>
                   </button>
 
                   <button
