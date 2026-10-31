@@ -132,8 +132,8 @@ export default function PrivacyPolicyPage() {
               <p className="font-semibold text-purple-200 pt-2">To request full database deletion of your Leaf VN account and cloud saves:</p>
               <p className="text-gray-300">
                 You can delete your cloud-stored projects directly from the in-app Project Manager by clicking the &quot;Delete&quot; icon, or send an email request to our privacy team at{' '}
-                <a href="mailto:privacy@leafvn.com" className="text-[#D17BF8] underline font-mono">
-                  privacy@leafvn.com
+                <a href="mailto:leffi.app.help@gmail.com" className="text-[#D17BF8] underline font-mono">
+                  leffi.app.help@gmail.com
                 </a>{' '}
                 with the subject &quot;Data Deletion Request&quot;. Your account and associated cloud records will be permanently purged within 30 days.
               </p>
@@ -160,7 +160,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="p-3.5 bg-purple-950/20 border border-purple-500/25 rounded-lg font-mono text-xs text-purple-200/90 space-y-1">
               <div><strong>Project:</strong> Leaf VN Studio</div>
-              <div><strong>Email:</strong> privacy@leafvn.com</div>
+              <div><strong>Email:</strong> leffi.app.help@gmail.com</div>
               <div><strong>Website:</strong> https://leafvn.vercel.app</div>
             </div>
           </section>

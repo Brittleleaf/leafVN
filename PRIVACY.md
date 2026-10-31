@@ -48,7 +48,7 @@ In compliance with Meta Platform Terms and General Data Protection Regulations (
 
 ### How to request full database deletion of your account and cloud saves:
 You can delete your cloud-stored projects directly from the in-app Project Manager by clicking the "Delete" icon, or send an email request to our privacy team at:  
-📧 **privacy@leafvn.com** or **leafvn.team@gmail.com** with the subject *"Data Deletion Request"*. Your account and associated cloud records will be permanently purged within 30 days.
+📧 **leffi.app.help@gmail.com** with the subject *"Data Deletion Request"*. Your account and associated cloud records will be permanently purged within 30 days.
 
 ---
 
@@ -61,4 +61,4 @@ We implement industry-standard encryption protocols (HTTPS/TLS) for data in tran
 If you have any questions, feedback, or concerns regarding this Privacy Policy or your personal data, please contact us at:
 * **Project:** Leaf VN Studio
 * **Repository:** https://github.com/Brittleleaf/leafVN
-* **Email:** privacy@leafvn.com
+* **Email:** leffi.app.help@gmail.com

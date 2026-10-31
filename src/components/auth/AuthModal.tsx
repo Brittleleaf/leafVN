@@ -291,7 +291,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="author@leafvn.com"
+                placeholder="you@example.com"
                 className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-lg px-3 py-2 text-xs text-[var(--text)] outline-none transition-colors placeholder:text-[var(--muted2)]"
               />
             </div>
