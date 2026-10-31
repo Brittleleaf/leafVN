@@ -98,8 +98,8 @@ export const DEFAULT_MENU_DICTIONARY = {
 const NUMERIC_REGEX = /^[\d\s.,+\-$%]*$|^\$[\d.,]+$|\d+[.,]\d{2}$/;
 const EMOJI_ONLY_REGEX = /^[\p{Emoji}\s]+$/u;
 
-/** Atributos HTML traducibles además de text nodes */
-const TRANSLATABLE_ATTRS = ['placeholder', 'aria-label', 'title', 'alt'];
+/** Atributos HTML traducibles además de text nodes (placeholders se mantienen siempre en inglés) */
+const TRANSLATABLE_ATTRS = ['aria-label', 'title', 'alt'];
 
 // [OPT O2] Selector CSS pre-calculado (evita recalcular en cada llamada)
 const ATTRS_SELECTOR = TRANSLATABLE_ATTRS.map(a => `[${a}]`).join(',');

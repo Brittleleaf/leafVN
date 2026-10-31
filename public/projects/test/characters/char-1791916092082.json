@@ -4,11 +4,11 @@
   "color": "#ff00a2",
   "badgeTitle": "Security",
   "shortcut": "2",
-  "description": "Escribe aquí la historia de fondo, personalidad y motivaciones de este personaje...",
+  "description": "Enter background story, personality and motivations for this character...",
   "avatarUrl": "https://scontent.ftuc1-1.fna.fbcdn.net/v/t39.30808-6/481284256_617359537872036_2888263225220570037_n.jpg?stp=dst-jpg_tt6&cstp=mx300x300&ctp=s300x300&_nc_cat=104&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeG5FHrr8uRv-uSpbTpyn0Z-p0HSCR949Q2nQdIJH3j1DbUcyUqferj_2LJk02VTnrtIlwqyXwhZrnyRt0xkzau2&_nc_ohc=1l03l0WfI1kQ7kNvwFb3gin&_nc_oc=AdqD_-W7h8HdDNIYbEDCp69s3bOJ4W_D1NziqlIXx26bRArDpHiIxv8zt9FPVt3eiOc&_nc_zt=23&_nc_ht=scontent.ftuc1-1.fna&_nc_gid=QeP3CEV0I8SdxUxs8ogVhA&_nc_ss=7b2a8&oh=00_AQOnLuTJgCO_5dOA9LhdKDvFOUhWQBUVGWkhVfR6qBNY-w&oe=6AD431A3",
   "expressions": {
     "neutral": "https://scontent.ftuc1-1.fna.fbcdn.net/v/t39.30808-6/481284256_617359537872036_2888263225220570037_n.jpg?stp=dst-jpg_tt6&cstp=mx300x300&ctp=s300x300&_nc_cat=104&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeG5FHrr8uRv-uSpbTpyn0Z-p0HSCR949Q2nQdIJH3j1DbUcyUqferj_2LJk02VTnrtIlwqyXwhZrnyRt0xkzau2&_nc_ohc=1l03l0WfI1kQ7kNvwFb3gin&_nc_oc=AdqD_-W7h8HdDNIYbEDCp69s3bOJ4W_D1NziqlIXx26bRArDpHiIxv8zt9FPVt3eiOc&_nc_zt=23&_nc_ht=scontent.ftuc1-1.fna&_nc_gid=QeP3CEV0I8SdxUxs8ogVhA&_nc_ss=7b2a8&oh=00_AQOnLuTJgCO_5dOA9LhdKDvFOUhWQBUVGWkhVfR6qBNY-w&oe=6AD431A3",
-    "enojado": "https://scontent.ftuc1-2.fna.fbcdn.net/v/t39.30808-6/481660854_618620734412583_164930679550513572_n.jpg?stp=dst-jpg_tt6&cstp=mx1000x989&ctp=s1000x989&_nc_cat=108&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHydnTmXDsaKtFF0bMjmoSjQ-INh-SYZcZD4g2H5Jhlxhuw4ruCto6d1Nmu81zaQDy6BWyAzuI2mwfNwPaH-QQm&_nc_ohc=Bz0VglO3Ud0Q7kNvwF4BHDB&_nc_oc=AdrffC_q3AyiQ2Qf1icvw0gbw-r7JA6fwU4MBx1e2dIa4MCr2YJOpN0yKbvvWrX5HmU&_nc_zt=23&_nc_ht=scontent.ftuc1-2.fna&_nc_gid=l_IGgZCNKZ8WFBofKXeqlA&_nc_ss=7b2a8&oh=00_AQPUNhiEHsCLYi7MqYpdkbWGaeoduvAcUqZmMa_gxZKzNg&oe=6AD43EA3"
+    "angry": "https://scontent.ftuc1-2.fna.fbcdn.net/v/t39.30808-6/481660854_618620734412583_164930679550513572_n.jpg?stp=dst-jpg_tt6&cstp=mx1000x989&ctp=s1000x989&_nc_cat=108&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHydnTmXDsaKtFF0bMjmoSjQ-INh-SYZcZD4g2H5Jhlxhuw4ruCto6d1Nmu81zaQDy6BWyAzuI2mwfNwPaH-QQm&_nc_ohc=Bz0VglO3Ud0Q7kNvwF4BHDB&_nc_oc=AdrffC_q3AyiQ2Qf1icvw0gbw-r7JA6fwU4MBx1e2dIa4MCr2YJOpN0yKbvvWrX5HmU&_nc_zt=23&_nc_ht=scontent.ftuc1-2.fna&_nc_gid=l_IGgZCNKZ8WFBofKXeqlA&_nc_ss=7b2a8&oh=00_AQPUNhiEHsCLYi7MqYpdkbWGaeoduvAcUqZmMa_gxZKzNg&oe=6AD43EA3"
   },
   "side": "right",
   "defaultScale": 0.76

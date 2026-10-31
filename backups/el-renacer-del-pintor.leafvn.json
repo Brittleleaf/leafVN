@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "title": "El Renacer del Pintor",
   "author": "Creador",
-  "description": "Proyecto en blanco preparado para nuevos escenarios.",
+  "description": "Clean starter project template prepared for new scenarios.",
   "coverImageUrl": "",
   "createdAt": "2026-10-13T00:00:00.000Z",
   "updatedAt": "2026-10-13T17:03:16.418Z",
@@ -23,11 +23,11 @@
     {
       "id": "chap-1",
       "number": 1,
-      "title": "Capítulo 1",
+      "title": "Chapter 1",
       "summary": "",
       "loadingScreen": {
         "enabled": false,
-        "title": "Capítulo 1"
+        "title": "Chapter 1"
       },
       "startSceneId": "scene-1",
       "sceneIds": [
@@ -36,13 +36,13 @@
       "scenes": [
         {
           "id": "scene-1791910985341",
-          "name": "Escenario #1",
+          "name": "Scenario #1",
           "backgroundUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
           "timeline": [
             {
               "id": "ev-1791910985341",
               "type": "dialogue",
-              "text": "Entrando a una nueva localización..."
+              "text": "Entering a new location..."
             }
           ],
           "hotspots": []
@@ -53,13 +53,13 @@
   "scenarios": [
     {
       "id": "scene-1791910985341",
-      "name": "Escenario #1",
+      "name": "Scenario #1",
       "backgroundUrl": "/assets/image/scenarios/SCENARIO-TEMPLATE.jpg",
       "timeline": [
         {
           "id": "ev-1791910985341",
           "type": "dialogue",
-          "text": "Entrando a una nueva localización..."
+          "text": "Entering a new location..."
         }
       ],
       "hotspots": [],

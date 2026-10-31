@@ -121,7 +121,7 @@ export function listProjects(): VNProjectSummary[] {
       summaries.push({
         id: dir.name,
         title: meta.title || dir.name,
-        author: meta.author || 'Desconocido',
+        author: meta.author || 'Unknown',
         description: meta.description || '',
         version: meta.version || '1.0.0',
         coverImageUrl: meta.coverImageUrl,
