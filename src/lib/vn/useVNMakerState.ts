@@ -39,6 +39,14 @@ import {
 import { DraggedTimelineItem } from '@/components/vn/VNMakerTimeline';
 import { auth } from '@/lib/firebase/config';
 import { saveProjectToCloud } from '@/lib/firebase/cloudProjects';
+import { idbSaveWorkingCopy, idbGetWorkingCopy, idbSaveSnapshot } from '@/lib/vn/idbStorage';
+import {
+  openNativeLeafvnFile,
+  saveToExistingFileHandle,
+  saveAsNativeLeafvnFile,
+  verifyFileHandleHealth,
+} from '@/lib/vn/fileSystemAccess';
+import { createStoryBundleBlob } from '@/lib/vn/bundleClient';
 
 export function useVNMakerState(
   initialStory: VNStory,
@@ -177,6 +185,48 @@ export function useVNMakerState(
 
   // Notificación visual de guardado
   const [feedbackMsg, setFeedbackMsg] = useState<string>('');
+
+  // Photopea-style native File System & IndexedDB state
+  const [linkedFileHandle, setLinkedFileHandle] = useState<FileSystemFileHandle | null>(null);
+  const [linkedFileName, setLinkedFileName] = useState<string | null>(null);
+  const [fileSafetyAlert, setFileSafetyAlert] = useState<{
+    isOpen: boolean;
+    fileName: string;
+    errorMessage?: string;
+  }>({
+    isOpen: false,
+    fileName: '',
+  });
+
+  const dismissSafetyAlert = useCallback(() => {
+    setFileSafetyAlert({ isOpen: false, fileName: '' });
+  }, []);
+
+  // Carga inicial: restaurar handle de IndexedDB si existe para este proyecto
+  useEffect(() => {
+    idbGetWorkingCopy(story.id).then((cached) => {
+      if (cached?.fileHandle) {
+        setLinkedFileHandle(cached.fileHandle);
+        setLinkedFileName(cached.fileName || cached.fileHandle.name);
+      }
+    });
+  }, [story.id]);
+
+  // Auto-guardado en caliente en IndexedDB (provisional) con debouncing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      idbSaveWorkingCopy(story, linkedFileHandle || undefined, linkedFileName || undefined);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [story, linkedFileHandle, linkedFileName]);
+
+  // Snapshot periódico automático cada 5 minutos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      idbSaveSnapshot(story, 'auto');
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [story]);
 
   // Historial de cambios (Undo / Redo)
   const pastStoriesRef = useRef<VNStory[]>([]);
@@ -683,8 +733,45 @@ export function useVNMakerState(
     });
   }, [currentScene?.timeline]);
 
-  // Manual save
+  // Abrir archivo .leafvn nativamente desde PC (Estilo Photopea)
+  const handleOpenFileFromPC = useCallback(async () => {
+    try {
+      const result = await openNativeLeafvnFile();
+      if (!result) return;
+      setStory(result.story);
+      setLinkedFileHandle(result.handle);
+      setLinkedFileName(result.fileName);
+      saveActiveStory(result.story, true);
+      playSfx('/assets/sfx/open folder.mp3', false, 0.5);
+      notify(`Opened "${result.fileName}" from PC (Direct write enabled)`);
+    } catch (err: any) {
+      playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
+      notify(`Could not open file: ${err?.message || err}`);
+    }
+  }, [notify]);
+
+  // Guardar como en una nueva ubicación en PC
+  const handleSaveAsFromPC = useCallback(async () => {
+    try {
+      const result = await saveAsNativeLeafvnFile(story, linkedFileName || story.title);
+      if (!result) return;
+      setLinkedFileHandle(result.handle);
+      setLinkedFileName(result.fileName);
+      setFileSafetyAlert({ isOpen: false, fileName: '' });
+      playSfx('/assets/sfx/success.mp3', false, 0.5);
+      notify(`Project saved as "${result.fileName}" on PC!`);
+    } catch (err: any) {
+      playSfx('/assets/sfx/corrupt file.mp3', false, 0.4);
+      notify(`Save As error: ${err?.message || err}`);
+    }
+  }, [story, linkedFileName, notify]);
+
+  // Manual save (Doble Copia: IndexedDB + Archivo Físico PC / Nube)
   const handleManualSave = useCallback(async () => {
+    // 1. Dual-Copy: Guardar siempre en IndexedDB y crear Snapshot preventivo
+    await idbSaveWorkingCopy(story, linkedFileHandle || undefined, linkedFileName || undefined);
+    await idbSaveSnapshot(story, 'manual');
+
     saveActiveStory(story, true);
     try {
       localStorage.setItem(`leafvn_project_${story.id}`, JSON.stringify(story));
@@ -707,6 +794,44 @@ export function useVNMakerState(
       }
     }
 
+    // 2. Si el proyecto tiene un archivo físico en PC vinculado (Estilo Photopea):
+    if (linkedFileHandle) {
+      const health = await verifyFileHandleHealth(linkedFileHandle);
+      if (health.isMovedOrDeleted) {
+        // PARCHE DE SEGURIDAD: Archivo movido o borrado en el disco
+        playSfx('/assets/sfx/corrupt file.mp3', false, 0.5);
+        setFileSafetyAlert({
+          isOpen: true,
+          fileName: linkedFileName || linkedFileHandle.name || 'project.leafvn',
+          errorMessage: health.error,
+        });
+        notify('⚠️ File moved or deleted from PC! Working copy is safe in IndexedDB.');
+        return;
+      }
+
+      try {
+        const bundleBlob = await createStoryBundleBlob(story);
+        const writeResult = await saveToExistingFileHandle(linkedFileHandle, bundleBlob);
+        if (writeResult.success) {
+          playSfx('/assets/sfx/success.mp3', false, 0.5);
+          notify(`Saved directly to PC file (${linkedFileName || linkedFileHandle.name})!`);
+          return;
+        } else if (writeResult.isMovedOrDeleted) {
+          playSfx('/assets/sfx/corrupt file.mp3', false, 0.5);
+          setFileSafetyAlert({
+            isOpen: true,
+            fileName: linkedFileName || linkedFileHandle.name || 'project.leafvn',
+            errorMessage: writeResult.error,
+          });
+          notify('⚠️ File write failed: missing or moved.');
+          return;
+        }
+      } catch (err: any) {
+        console.warn('Direct file handle write failed:', err);
+      }
+    }
+
+    // 3. Fallback habitual al servidor local o navegador
     try {
       const res = await fetch(`/api/projects/${story.id}`, {
         method: 'POST',
@@ -723,9 +848,9 @@ export function useVNMakerState(
       }
     } catch (netErr) {
       console.warn('Server save network error:', netErr);
-      notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser (server unreachable)');
+      notify(savedToCloud ? 'Project saved to Cloud & Browser' : 'Saved to browser (IndexedDB backup intact)');
     }
-  }, [story, notify, onSaveStory]);
+  }, [story, notify, onSaveStory, linkedFileHandle, linkedFileName]);
 
   // Mutaciones de Escena
   const handlePatchCurrentScene = useCallback((patch: Partial<VNScene>) => {
@@ -1659,6 +1784,9 @@ export function useVNMakerState(
     handleManualSave,
     handleExport,
     handleReset,
+    handleOpenFileFromPC,
+    handleSaveAsFromPC,
+    dismissSafetyAlert,
     handleUpdateCurrentLine,
     handlePatchCurrentLine,
     handleDeleteCurrentLine,
@@ -1723,6 +1851,9 @@ export function useVNMakerState(
     handleManualSave,
     handleExport,
     handleReset,
+    handleOpenFileFromPC,
+    handleSaveAsFromPC,
+    dismissSafetyAlert,
     handleUpdateCurrentLine,
     handlePatchCurrentLine,
     handleDeleteCurrentLine,
@@ -1798,6 +1929,9 @@ export function useVNMakerState(
     isFullscreenWorkspace,
     assetPickerConfig,
     feedbackMsg,
+    linkedFileHandle,
+    linkedFileName,
+    fileSafetyAlert,
   }), [
     story,
     editorTheme,
@@ -1849,6 +1983,9 @@ export function useVNMakerState(
     isFullscreenWorkspace,
     assetPickerConfig,
     feedbackMsg,
+    linkedFileHandle,
+    linkedFileName,
+    fileSafetyAlert,
   ]);
 
   return useMemo<VNMakerContextType>(() => ({

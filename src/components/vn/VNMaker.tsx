@@ -17,6 +17,9 @@ import GalleryAssetsWorkspaceView from './gallery/GalleryAssetsWorkspaceView';
 import ProjectSettingsWorkspaceView from './settings/ProjectSettingsWorkspaceView';
 import MenuGameToolModal from './menu/MenuGameToolModal';
 import { saveActiveStory } from '@/lib/vn/storage';
+import { FileSafetyAlertModal } from './FileSafetyAlertModal';
+import { useAuth } from '@/lib/firebase/authContext';
+import { saveProjectToGoogleDrive } from '@/lib/firebase/cloudProjects';
 
 interface VNMakerProps {
   initialStory: VNStory;
@@ -54,7 +57,35 @@ export default function VNMaker({ initialStory, onPlayStory, onExit, onSaveStory
     handleSelectScene,
     handlePatchCurrentScene,
     handleUpdateStoryCustomAssets,
+    linkedFileName,
+    fileSafetyAlert,
+    handleOpenFileFromPC,
+    handleSaveAsFromPC,
+    dismissSafetyAlert,
   } = contextValue;
+
+  const { googleAccessToken, signInWithGoogle } = useAuth();
+
+  const handleSafetyBackupToDrive = async () => {
+    let token = googleAccessToken || (typeof window !== 'undefined' ? sessionStorage.getItem('vn_gdrive_token') : null);
+    if (!token) {
+      try {
+        await signInWithGoogle();
+        token = typeof window !== 'undefined' ? sessionStorage.getItem('vn_gdrive_token') : null;
+      } catch {
+        return;
+      }
+    }
+    if (token) {
+      try {
+        await saveProjectToGoogleDrive(token, story);
+        dismissSafetyAlert();
+        notify('Backup saved to Google Drive!');
+      } catch (err: any) {
+        notify(`Google Drive error: ${err?.message || err}`);
+      }
+    }
+  };
 
   return (
     <VNMakerActionsContext.Provider value={contextValue}>
@@ -101,6 +132,9 @@ export default function VNMaker({ initialStory, onPlayStory, onExit, onSaveStory
             onNotify={notify}
             editorTheme={editorTheme}
             onSelectTheme={handleSelectTheme}
+            linkedFileName={linkedFileName}
+            onOpenFileFromPC={handleOpenFileFromPC}
+            onSaveAsFromPC={handleSaveAsFromPC}
           />
         )}
 
@@ -213,6 +247,16 @@ export default function VNMaker({ initialStory, onPlayStory, onExit, onSaveStory
 
         {/* GLOBAL MODALS OVERLAY */}
         <VNMakerModals />
+
+        {/* PARCHE DE SEGURIDAD (DUAL-COPY SAFETY ALERT) */}
+        <FileSafetyAlertModal
+          isOpen={fileSafetyAlert.isOpen}
+          fileName={fileSafetyAlert.fileName}
+          errorMessage={fileSafetyAlert.errorMessage}
+          onSaveAs={handleSaveAsFromPC}
+          onBackupDrive={handleSafetyBackupToDrive}
+          onDismiss={dismissSafetyAlert}
+        />
       </div>
         </VNMakerContext.Provider>
       </VNMakerStateContext.Provider>

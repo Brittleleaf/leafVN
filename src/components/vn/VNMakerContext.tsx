@@ -126,6 +126,15 @@ export interface VNMakerStateType {
 
   // Feedback y utilidades
   feedbackMsg: string;
+
+  // Photopea-style native File System & IndexedDB state
+  linkedFileHandle: FileSystemFileHandle | null;
+  linkedFileName: string | null;
+  fileSafetyAlert: {
+    isOpen: boolean;
+    fileName: string;
+    errorMessage?: string;
+  };
 }
 
 export interface VNMakerActionsType {
@@ -182,6 +191,9 @@ export interface VNMakerActionsType {
   handleManualSave: () => Promise<void>;
   handleExport: () => void;
   handleReset: () => void;
+  handleOpenFileFromPC: () => Promise<void>;
+  handleSaveAsFromPC: () => Promise<void>;
+  dismissSafetyAlert: () => void;
 
   handleUpdateCurrentLine: (field: keyof VNEvent, value: unknown) => void;
   handlePatchCurrentLine: (patch: Partial<VNEvent>) => void;

@@ -32,6 +32,9 @@ interface VNMakerHeaderProps {
   onNotify?: (msg: string) => void;
   editorTheme?: VNEditorTheme;
   onSelectTheme?: (theme: VNEditorTheme) => void;
+  linkedFileName?: string | null;
+  onOpenFileFromPC?: () => void;
+  onSaveAsFromPC?: () => void;
 }
 
 export default function VNMakerHeader({
@@ -56,6 +59,9 @@ export default function VNMakerHeader({
   onNotify,
   editorTheme = 'default_dark',
   onSelectTheme,
+  linkedFileName,
+  onOpenFileFromPC,
+  onSaveAsFromPC,
 }: VNMakerHeaderProps) {
   const [showProjectMenu, setShowProjectMenu] = useState<boolean>(false);
   const [showThemeMenu, setShowThemeMenu] = useState<boolean>(false);
@@ -389,10 +395,43 @@ export default function VNMakerHeader({
               >
                 <div className="px-2.5 py-1 text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider flex items-center justify-between border-b border-[var(--border)] mb-1">
                   <span>FILE & PROJECT</span>
-                  <span className="text-[var(--muted2)] font-mono text-[9px]">{story.title}</span>
+                  <span className="text-[var(--muted2)] font-mono text-[9px] truncate max-w-[120px]">
+                    {linkedFileName || story.title}
+                  </span>
                 </div>
 
+                {linkedFileName && (
+                  <div className="mx-2 mb-1 px-2 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded text-[10px] text-emerald-400 font-mono flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="truncate">PC Link: {linkedFileName}</span>
+                  </div>
+                )}
+
                 <div className="flex flex-col gap-0.5" onClick={() => setShowProjectMenu(false)}>
+                  {/* Photopea-style Open from PC */}
+                  {onOpenFileFromPC && (
+                    <button
+                      onClick={onOpenFileFromPC}
+                      className="w-full px-3 py-2 rounded-lg text-[var(--text)] hover:bg-[var(--surface-strong)] flex items-center gap-2.5 cursor-pointer transition-colors text-left font-medium"
+                      title="Open a .leafvn project file directly from your computer"
+                    >
+                      <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span>Open .leafvn from PC...</span>
+                    </button>
+                  )}
+
+                  {/* Save As (PC) */}
+                  {onSaveAsFromPC && (
+                    <button
+                      onClick={onSaveAsFromPC}
+                      className="w-full px-3 py-2 rounded-lg text-[var(--text)] hover:bg-[var(--surface-strong)] flex items-center gap-2.5 cursor-pointer transition-colors text-left font-medium"
+                      title="Save as a new .leafvn file on your computer"
+                    >
+                      <GuiIconRenderer icon={GUI_ICONS.general.save} className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <span>Save As on PC (.leafvn)...</span>
+                    </button>
+                  )}
+
                   <button
                     onClick={() => {
                       setShowProjectMenu(false);

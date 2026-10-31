@@ -180,3 +180,66 @@ export async function unpackBundleInBrowser(fileOrBuffer: File | Blob | ArrayBuf
 
   return sanitizeStory(rawStory);
 }
+
+/**
+ * Empaqueta una historia en un Blob binario comprimido .leafvn directamente en el navegador.
+ * Intenta primero la API del servidor si está disponible; de lo contrario genera el paquete con JSZip en cliente.
+ */
+export async function createStoryBundleBlob(story: VNStory): Promise<Blob> {
+  // 1. Intentar obtener el bundle consolidado desde la API local si el servidor responde
+  try {
+    const res = await fetch(`/api/projects/${story.id}/bundle`);
+    if (res.ok) {
+      return await res.blob();
+    }
+  } catch (_) {}
+
+  // 2. Empaquetado puro en el navegador usando JSZip
+  const zip = new JSZip();
+
+  const projectMetadata = {
+    id: story.id,
+    title: story.title,
+    author: story.author,
+    description: story.description,
+    version: story.version || '1.0.0',
+    coverImageUrl: story.coverImageUrl,
+    createdAt: story.createdAt,
+    updatedAt: new Date().toISOString(),
+    textBoxConfig: story.textBoxConfig,
+    variables: story.variables || [],
+  };
+
+  zip.file('project.json', JSON.stringify(projectMetadata, null, 2), { compression: 'DEFLATE' });
+  zip.file('story.json', JSON.stringify(sanitizeStory(story), null, 2), { compression: 'DEFLATE' });
+
+  // Capítulos individuales
+  if (Array.isArray(story.chapters)) {
+    const chapFolder = zip.folder('chapters');
+    for (const ch of story.chapters) {
+      chapFolder?.file(`${ch.id}.json`, JSON.stringify(ch, null, 2), { compression: 'DEFLATE' });
+    }
+  }
+
+  // Escenarios individuales
+  if (Array.isArray(story.scenarios)) {
+    const scFolder = zip.folder('scenarios');
+    for (const sc of story.scenarios) {
+      scFolder?.file(`${sc.id}.json`, JSON.stringify(sc, null, 2), { compression: 'DEFLATE' });
+    }
+  }
+
+  // Personajes individuales
+  if (Array.isArray(story.characters)) {
+    const charFolder = zip.folder('characters');
+    for (const c of story.characters) {
+      charFolder?.file(`${c.id}.json`, JSON.stringify(c, null, 2), { compression: 'DEFLATE' });
+    }
+  }
+
+  return await zip.generateAsync({
+    type: 'blob',
+    mimeType: 'application/x-leafvn',
+    compression: 'DEFLATE',
+  });
+}

@@ -6,6 +6,7 @@ import type { VNProjectSummary } from '@/lib/vn/projectFs';
 import { playSfx } from '@/lib/audioSettings';
 import { exportStoryToJson, importStoryFromJson } from '@/lib/vn/storage';
 import { unpackBundleInBrowser } from '@/lib/vn/bundleClient';
+import { isFileSystemAccessSupported, openNativeLeafvnFile } from '@/lib/vn/fileSystemAccess';
 import { SAMPLE_STORY } from '@/lib/vn/sampleStory';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { VNEditorTheme, VN_THEMES, getStoredTheme, setStoredTheme, initStoredThemeAndAccent } from '@/lib/vn/themeManager';
@@ -930,16 +931,34 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
               <span>New Project</span>
             </button>
 
-            {/* Botón: Abrir Archivo */}
+            {/* Botón: Abrir Archivo (Nativo File System API estilo Photopea con fallback) */}
             <button
-              onClick={() => {
+              onClick={async () => {
                 playSfx('/assets/sfx/click interface.mp3', false, 0.4);
+                if (isFileSystemAccessSupported()) {
+                  try {
+                    const res = await openNativeLeafvnFile();
+                    if (res) {
+                      localStorage.setItem('leafvn_active_project_id', res.story.id);
+                      localStorage.setItem(`leafvn_project_${res.story.id}`, JSON.stringify(res.story));
+                      playSfx('/assets/sfx/success.mp3', false, 0.6);
+                      router.push(`/editor?id=${res.story.id}`);
+                      return;
+                    }
+                  } catch (e: any) {
+                    if (e?.name !== 'AbortError') {
+                      fileInputRef.current?.click();
+                    }
+                    return;
+                  }
+                }
                 fileInputRef.current?.click();
               }}
               className="w-full py-2 px-4 bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)] font-medium text-xs rounded-full border border-[var(--border)] hover:border-[var(--border-hover)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              title="Open a .leafvn project file directly from your PC"
             >
               <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--muted)]" />
-              <span>Open File</span>
+              <span>Open File (.leafvn)</span>
             </button>
             <input
               ref={fileInputRef}
