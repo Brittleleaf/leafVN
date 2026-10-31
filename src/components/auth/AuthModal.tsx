@@ -199,7 +199,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
           )}
 
           {/* OAuth Provider Buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="flex flex-col gap-2">
             {/* Google Button */}
             <button
               type="button"
@@ -226,10 +226,10 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-              <span>Google</span>
+              <span>Continue with Google</span>
             </button>
 
-            {/* GitHub Button */}
+            {/* Temporarily hidden: GitHub & Facebook OAuth buttons
             <button
               type="button"
               onClick={handleGithubLogin}
@@ -243,7 +243,6 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
               <span>GitHub</span>
             </button>
 
-            {/* Facebook Button */}
             <button
               type="button"
               onClick={handleFacebookLogin}
@@ -256,6 +255,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
               </svg>
               <span>Facebook</span>
             </button>
+            */}
           </div>
 
           {/* Divider */}
