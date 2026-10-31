@@ -156,7 +156,7 @@ export default function PrivacyPolicyPage() {
             <div className="p-3 bg-[#1D0E07] border border-[#3D1E0F] rounded-lg font-mono text-xs text-[#A29A95] space-y-1">
               <div><strong>Project:</strong> Leaf VN Studio</div>
               <div><strong>Email:</strong> privacy@leafvn.com</div>
-              <div><strong>Website:</strong> https://leaf-vn.firebaseapp.com</div>
+              <div><strong>Website:</strong> https://leafvn.vercel.app</div>
             </div>
           </section>
 
