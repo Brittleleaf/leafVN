@@ -24,4 +24,5 @@ export * from './RainyScreen2Fx';
 export * from './Rain2Fx';
 export * from './Rain3Fx';
 export * from './SpeedFx';
+export * from './BlinkEyesFx';
 export * from './ScreenFxSvgDefs';
