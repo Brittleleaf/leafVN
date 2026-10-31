@@ -30,7 +30,6 @@ export const HIGH_AF_PRESETS: Record<
       chromaticAberration: number;
       vignetteStrength: number;
       mouseReactivity: boolean;
-      showHighText: boolean;
     };
   }
 > = {
@@ -51,7 +50,6 @@ export const HIGH_AF_PRESETS: Record<
       chromaticAberration: 40,
       vignetteStrength: 0.35,
       mouseReactivity: true,
-      showHighText: false,
     },
   },
   psychedelic_trip: {
@@ -71,12 +69,11 @@ export const HIGH_AF_PRESETS: Record<
       chromaticAberration: 75,
       vignetteStrength: 0.55,
       mouseReactivity: true,
-      showHighText: true,
     },
   },
   high_af: {
     label: 'High AF (Full Immersion)',
-    description: 'Deep 3D vertigo tilt, intense kaleidoscope Julia set, floating psychedelic thoughts, and heavy diplopia.',
+    description: 'Deep 3D vertigo tilt, intense kaleidoscope Julia set, and heavy diplopia.',
     icon: GUI_ICONS.action.sparkles,
     params: {
       fractalOpacity: 0.85,
@@ -91,7 +88,6 @@ export const HIGH_AF_PRESETS: Record<
       chromaticAberration: 90,
       vignetteStrength: 0.7,
       mouseReactivity: true,
-      showHighText: true,
     },
   },
   astral_realm: {
@@ -111,23 +107,9 @@ export const HIGH_AF_PRESETS: Record<
       chromaticAberration: 100,
       vignetteStrength: 0.85,
       mouseReactivity: true,
-      showHighText: true,
     },
   },
 };
-
-const DEFAULT_HIGH_THOUGHTS = [
-  'Dude...',
-  'The colors are breathing...',
-  'Wait... what was I saying?',
-  'Is time moving backwards?',
-  'Whoa...',
-  'Everything is connected...',
-  'I can hear the walls talking...',
-  'Did you see that?',
-  'My hands feel so far away...',
-  'Reality is vibrating...',
-];
 
 // ============================================================================
 // WEBGL SHADER SOURCES (Lissajous Julia Set Fractal with HSV Color Cycling)
@@ -260,12 +242,6 @@ export const HighAfComponent: React.FC<ScreenFxProps> = ({
   const chromaticAberration = Math.max(0, Math.min(100, params?.chromaticAberration ?? 75));
   const vignetteStrength = Math.max(0, Math.min(1, params?.vignetteStrength ?? 0.55));
   const mouseReactivity = params?.mouseReactivity ?? true;
-  const showHighText = params?.showHighText ?? true;
-
-  // Thought cycle states
-  const [currentThought, setCurrentThought] = useState<string>('');
-  const [thoughtVisible, setThoughtVisible] = useState<boolean>(false);
-  const [thoughtPos, setThoughtPos] = useState<{ x: number; y: number }>({ x: 50, y: 55 });
 
   const mousePosRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
@@ -288,42 +264,7 @@ export const HighAfComponent: React.FC<ScreenFxProps> = ({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseReactivity]);
 
-  // 2. High Thoughts Generator
-  useEffect(() => {
-    if (!showHighText) {
-      setThoughtVisible(false);
-      return;
-    }
-
-    let isMounted = true;
-    let timer: NodeJS.Timeout;
-
-    const triggerThought = () => {
-      if (!isMounted) return;
-      const phrases = DEFAULT_HIGH_THOUGHTS;
-      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      const randX = 30 + Math.random() * 40;
-      const randY = 40 + Math.random() * 30;
-
-      setCurrentThought(randomPhrase);
-      setThoughtPos({ x: randX, y: randY });
-      setThoughtVisible(true);
-
-      timer = setTimeout(() => {
-        if (!isMounted) return;
-        setThoughtVisible(false);
-        timer = setTimeout(triggerThought, 2800 + Math.random() * 3500);
-      }, 2400);
-    };
-
-    timer = setTimeout(triggerThought, 1000);
-    return () => {
-      isMounted = false;
-      clearTimeout(timer);
-    };
-  }, [showHighText]);
-
-  // 3. WebGL Fractal Shader Pipeline
+  // 2. WebGL Fractal Shader Pipeline
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -566,27 +507,6 @@ export const HighAfComponent: React.FC<ScreenFxProps> = ({
         />
       )}
 
-      {/* 6. High Thoughts Floating Subtitle */}
-      {showHighText && (
-        <div
-          className="absolute pointer-events-none transition-all duration-700 ease-out font-serif italic text-white"
-          style={{
-            left: `${thoughtPos.x}%`,
-            top: `${thoughtPos.y}%`,
-            opacity: thoughtVisible ? 0.95 : 0,
-            transform: `translate(-50%, -50%) scale(${thoughtVisible ? 1 : 0.85}) rotate(${
-              thoughtVisible ? (Math.sin(Date.now() / 350) * 4).toFixed(1) : '0'
-            }deg)`,
-            textShadow: '0 0 16px rgba(180, 100, 255, 0.9), 0 2px 10px rgba(0, 0, 0, 0.95)',
-            letterSpacing: '0.12em',
-            fontSize: 'clamp(1.15rem, 2.5vw, 1.95rem)',
-          }}
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-purple-400/30">
-            {currentThought}
-          </span>
-        </div>
-      )}
     </div>
   );
 };
@@ -614,7 +534,6 @@ export const HighAfInspector: React.FC<ScreenFxInspectorProps> = ({
   const chromaticAberration = params?.chromaticAberration ?? 75;
   const vignetteStrength = params?.vignetteStrength ?? 0.55;
   const mouseReactivity = params?.mouseReactivity ?? true;
-  const showHighText = params?.showHighText ?? true;
 
   const applyPreset = (presetKey: Exclude<HighAfPreset, 'custom'>) => {
     const p = HIGH_AF_PRESETS[presetKey];
@@ -846,24 +765,6 @@ export const HighAfInspector: React.FC<ScreenFxInspectorProps> = ({
             {mouseReactivity ? 'ENABLED' : 'DISABLED'}
           </button>
         </div>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-bold block text-[var(--text)]">Floating High Thoughts</span>
-            <span className="text-[9px] text-[var(--muted)]">Psychedelic thoughts drifting across the screen</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => onChange({ showHighText: !showHighText })}
-            className={`px-3 py-1 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-              showHighText
-                ? 'bg-purple-500/20 border-purple-400 text-purple-300'
-                : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)]'
-            }`}
-          >
-            {showHighText ? 'SHOWN' : 'HIDDEN'}
-          </button>
-        </div>
       </div>
     </div>
   );
@@ -893,7 +794,6 @@ export const highAfFx: ScreenFxDefinition = {
     chromaticAberration: 75,
     vignetteStrength: 0.55,
     mouseReactivity: true,
-    showHighText: true,
     intensityMultiplier: 1.0,
   },
   component: HighAfComponent,

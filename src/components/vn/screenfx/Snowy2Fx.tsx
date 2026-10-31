@@ -34,8 +34,6 @@ export const SNOWY2_PRESETS: Record<
       minSpeed: number;
       nightTint: number;
       color: string;
-      headingText?: string;
-      showHeading?: boolean;
     };
   }
 > = {
@@ -51,7 +49,6 @@ export const SNOWY2_PRESETS: Record<
       minSpeed: 0.8,
       nightTint: 0.25,
       color: '#ffffff',
-      showHeading: false,
     },
   },
   twilight_midnight: {
@@ -66,7 +63,6 @@ export const SNOWY2_PRESETS: Record<
       minSpeed: 1.0,
       nightTint: 0.55,
       color: '#e8f4fc',
-      showHeading: false,
     },
   },
   gentle_crystals: {
@@ -81,7 +77,6 @@ export const SNOWY2_PRESETS: Record<
       minSpeed: 0.5,
       nightTint: 0.1,
       color: '#d6f0ff',
-      showHeading: false,
     },
   },
   dense_blizzard: {
@@ -96,7 +91,6 @@ export const SNOWY2_PRESETS: Record<
       minSpeed: 1.2,
       nightTint: 0.35,
       color: '#ffffff',
-      showHeading: false,
     },
   },
 };
@@ -125,8 +119,6 @@ export const Snowy2Component: React.FC<ScreenFxProps> = ({
   const minSpeed = Math.max(0.2, (params?.minSpeed ?? 1.0));
   const nightTint = Math.max(0, Math.min(0.9, params?.nightTint ?? 0.25));
   const snowColor = params?.color || color || '#ffffff';
-  const showHeading = params?.showHeading ?? false;
-  const headingText = params?.headingText || 'First Snow';
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -254,20 +246,6 @@ export const Snowy2Component: React.FC<ScreenFxProps> = ({
   return (
     <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-20">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
-
-      {/* Optional Ethereal Centered Text */}
-      {showHeading && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h2
-            className="text-white/20 font-serif italic text-4xl md:text-6xl tracking-widest select-none transition-all duration-1000"
-            style={{
-              textShadow: '0 0 20px rgba(255, 255, 255, 0.25)',
-            }}
-          >
-            {headingText}
-          </h2>
-        </div>
-      )}
     </div>
   );
 };
@@ -291,8 +269,6 @@ export const Snowy2Inspector: React.FC<ScreenFxInspectorProps> = ({
   const sway = params?.sway ?? 1.0;
   const nightTint = params?.nightTint ?? 0.25;
   const currentColor = params?.color || color || '#ffffff';
-  const showHeading = params?.showHeading ?? false;
-  const headingText = params?.headingText || 'First Snow';
 
   const applyPreset = (presetKey: Exclude<Snowy2Preset, 'custom'>) => {
     const p = SNOWY2_PRESETS[presetKey];
@@ -510,37 +486,6 @@ export const Snowy2Inspector: React.FC<ScreenFxInspectorProps> = ({
           ))}
         </div>
       </div>
-
-      {/* 7. Optional Atmospheric Heading */}
-      <div className="space-y-2 pt-2 border-t border-[var(--border)]">
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-bold block text-[var(--text)]">Cursive Screen Title</span>
-            <span className="text-[9px] text-[var(--muted)]">Ethereal translucent cursive text centered on screen</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => onChange({ showHeading: !showHeading })}
-            className={`px-3 py-1 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-              showHeading
-                ? 'bg-indigo-500/20 border-indigo-400 text-indigo-300'
-                : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)]'
-            }`}
-          >
-            {showHeading ? 'SHOWN' : 'HIDDEN'}
-          </button>
-        </div>
-
-        {showHeading && (
-          <input
-            type="text"
-            value={headingText}
-            onChange={(e) => onChange({ headingText: e.target.value })}
-            placeholder="e.g. First Snow, Winter Silence..."
-            className="w-full px-2.5 py-1.5 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] text-xs text-[var(--text)] placeholder-[var(--muted)] focus:outline-none focus:border-indigo-400"
-          />
-        )}
-      </div>
     </div>
   );
 };
@@ -564,8 +509,6 @@ export const snowy2Fx: ScreenFxDefinition = {
     minSpeed: 1.0,
     nightTint: 0.25,
     color: '#ffffff',
-    showHeading: false,
-    headingText: 'First Snow',
     intensityMultiplier: 1.0,
   },
   component: Snowy2Component,

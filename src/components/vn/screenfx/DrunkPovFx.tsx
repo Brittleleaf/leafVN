@@ -25,7 +25,6 @@ export const DRUNK_PRESETS: Record<
       vignetteStrength: number;
       mouseReactivity: boolean;
       mouseTiltStrength: number;
-      showDrunkText: boolean;
       hiccup: 'none' | 'occasional' | 'frequent';
     };
   }
@@ -43,13 +42,12 @@ export const DRUNK_PRESETS: Record<
       vignetteStrength: 0.35,
       mouseReactivity: true,
       mouseTiltStrength: 0.6,
-      showDrunkText: false,
       hiccup: 'none',
     },
   },
   wasted: {
     label: 'Heavy Drunk / Wasted',
-    description: 'Pronounced 3D tilt, sluggish double vision, slurred thoughts, and chromatic splitting.',
+    description: 'Pronounced 3D tilt, sluggish double vision, and chromatic splitting.',
     icon: GUI_ICONS.action.sparkles,
     params: {
       doubleVision: 24,
@@ -60,7 +58,6 @@ export const DRUNK_PRESETS: Record<
       vignetteStrength: 0.6,
       mouseReactivity: true,
       mouseTiltStrength: 1.0,
-      showDrunkText: true,
       hiccup: 'occasional',
     },
   },
@@ -77,7 +74,6 @@ export const DRUNK_PRESETS: Record<
       vignetteStrength: 0.7,
       mouseReactivity: true,
       mouseTiltStrength: 1.4,
-      showDrunkText: true,
       hiccup: 'occasional',
     },
   },
@@ -94,22 +90,10 @@ export const DRUNK_PRESETS: Record<
       vignetteStrength: 0.9,
       mouseReactivity: false,
       mouseTiltStrength: 0.4,
-      showDrunkText: true,
       hiccup: 'frequent',
     },
   },
 };
-
-const DEFAULT_DRUNK_PHRASES = [
-  "I swear to God...",
-  "I'm not drunk...",
-  "Everything is spinning...",
-  "Whoa...",
-  "Where did the floor go?",
-  "Hic!",
-  "Just one more...",
-  "Can't walk straight...",
-];
 
 // ============================================================================
 // DRUNK POV COMPONENT (Full 3D Perspective Vertigo & Diplopia Ghosting)
@@ -134,14 +118,7 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
   const vignetteStrength = Math.max(0, Math.min(1, (params?.vignetteStrength ?? 0.55)));
   const mouseReactivity = params?.mouseReactivity ?? true;
   const mouseTiltStrength = params?.mouseTiltStrength ?? 1.0;
-  const showDrunkText = params?.showDrunkText ?? false;
   const hiccupMode = params?.hiccup ?? 'none';
-  const customPhrases: string[] = params?.customPhrases || DEFAULT_DRUNK_PHRASES;
-
-  // Real-time animation physics states
-  const [currentThought, setCurrentThought] = useState<string>('');
-  const [thoughtVisible, setThoughtVisible] = useState<boolean>(false);
-  const [thoughtPos, setThoughtPos] = useState<{ x: number; y: number }>({ x: 40, y: 55 });
 
   // Mouse tilt tracking with physics lerp
   const mousePosRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
@@ -166,48 +143,7 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseReactivity, mouseTiltStrength]);
 
-  // 2. Drunk slurred thought generator cycle
-  useEffect(() => {
-    if (!showDrunkText) {
-      setThoughtVisible(false);
-      return;
-    }
-
-    let isMounted = true;
-    let timer: NodeJS.Timeout;
-
-    const triggerThought = () => {
-      if (!isMounted) return;
-      const randomPhrase = customPhrases[Math.floor(Math.random() * customPhrases.length)];
-      // Random coordinates around central visual cone
-      const randX = 25 + Math.random() * 45;
-      const randY = 40 + Math.random() * 35;
-
-      setCurrentThought(randomPhrase);
-      setThoughtPos({ x: randX, y: randY });
-      setThoughtVisible(true);
-
-      // Disappear after 2.2s
-      timer = setTimeout(() => {
-        if (!isMounted) return;
-        setThoughtVisible(false);
-
-        // Schedule next random thought in 2.5s - 6s
-        const nextDelay = 2500 + Math.random() * 3500;
-        timer = setTimeout(triggerThought, nextDelay);
-      }, 2200);
-    };
-
-    // Initial trigger
-    timer = setTimeout(triggerThought, 1200);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timer);
-    };
-  }, [showDrunkText, customPhrases]);
-
-  // 3. 60fps RequestAnimationFrame Loop driving 3D camera sway, double vision diplopia, and hiccups
+  // 2. 60fps RequestAnimationFrame Loop driving 3D camera sway, double vision diplopia, and hiccups
   const ghost1Ref = useRef<HTMLDivElement | null>(null);
   const ghost2Ref = useRef<HTMLDivElement | null>(null);
   const vignetteRef = useRef<HTMLDivElement | null>(null);
@@ -360,27 +296,6 @@ export const DrunkPovComponent: React.FC<ScreenFxProps> = ({
         />
       )}
 
-      {/* Drunk Floating Thought ("Drunk Speak" slurred text) */}
-      {showDrunkText && (
-        <div
-          className="absolute pointer-events-none transition-all duration-700 ease-out font-serif italic text-white"
-          style={{
-            left: `${thoughtPos.x}%`,
-            top: `${thoughtPos.y}%`,
-            opacity: thoughtVisible ? 0.9 : 0,
-            transform: `translate(-50%, -50%) scale(${thoughtVisible ? 1 : 0.85}) rotate(${
-              thoughtVisible ? (Math.sin(Date.now() / 300) * 4).toFixed(1) : '0'
-            }deg)`,
-            textShadow: '0 0 12px rgba(255, 100, 150, 0.8), 0 2px 8px rgba(0, 0, 0, 0.9)',
-            letterSpacing: '0.12em',
-            fontSize: 'clamp(1.1rem, 2.5vw, 1.85rem)',
-          }}
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20">
-            {currentThought}
-          </span>
-        </div>
-      )}
     </div>
   );
 };
@@ -403,7 +318,6 @@ export const DrunkPovInspector: React.FC<ScreenFxInspectorProps> = ({
   const vignetteStrength = params?.vignetteStrength ?? 0.55;
   const mouseReactivity = params?.mouseReactivity ?? true;
   const mouseTiltStrength = params?.mouseTiltStrength ?? 1.0;
-  const showDrunkText = params?.showDrunkText ?? false;
   const hiccupMode = params?.hiccup ?? 'none';
   const currentPreset = (params?.preset as DrunkPreset) || 'wasted';
 
@@ -626,25 +540,6 @@ export const DrunkPovInspector: React.FC<ScreenFxInspectorProps> = ({
           </button>
         </div>
 
-        {/* Drunk Speak Overlay */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-bold block text-[var(--text)]">Drunk Speak Thoughts</span>
-            <span className="text-[9px] text-[var(--muted)]">Floating slurred thoughts drift across screen</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => onChange({ showDrunkText: !showDrunkText })}
-            className={`px-3 py-1 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-              showDrunkText
-                ? 'bg-pink-500/20 border-pink-400 text-pink-300'
-                : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)]'
-            }`}
-          >
-            {showDrunkText ? 'SHOWN' : 'HIDDEN'}
-          </button>
-        </div>
-
         {/* Hiccups */}
         <div className="flex items-center justify-between">
           <div>
@@ -701,7 +596,6 @@ export const drunkPovFx: ScreenFxDefinition = {
     vignetteStrength: 0.55,
     mouseReactivity: true,
     mouseTiltStrength: 1.0,
-    showDrunkText: false,
     hiccup: 'none',
     intensityMultiplier: 1.0,
   },

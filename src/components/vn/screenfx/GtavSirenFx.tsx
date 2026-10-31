@@ -8,7 +8,7 @@ import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 // GTAV SIREN PRESETS & TYPES
 // ============================================================================
 
-export type GtavSirenPreset = 'one_star' | 'three_stars' | 'five_stars' | 'stealth' | 'custom';
+export type GtavSirenPreset = 'patrol' | 'pursuit' | 'heavy_chase' | 'ambient' | 'custom';
 export type SirenStrobeMode = 'smooth_pulse' | 'wigwag';
 
 export const GTAV_SIREN_PRESETS: Record<
@@ -18,75 +18,60 @@ export const GTAV_SIREN_PRESETS: Record<
     description: string;
     icon: string;
     params: {
-      wantedLevel: number;
       speed: number;
       lightIntensity: number;
       strobeMode: SirenStrobeMode;
       blurAmount: number;
       whitePop: boolean;
-      showStars: boolean;
-      showRockstarCard: boolean;
     };
   }
 > = {
-  one_star: {
-    label: '1 Star: Suspicion',
-    description: 'Slow patrol beacon sweep with a single blinking wanted star.',
+  patrol: {
+    label: 'Routine Patrol',
+    description: 'Slow, steady alternating red and blue beacon sweep.',
     icon: GUI_ICONS.action.sparkles,
     params: {
-      wantedLevel: 1,
       speed: 0.8,
       lightIntensity: 0.65,
       strobeMode: 'smooth_pulse',
       blurAmount: 90,
       whitePop: false,
-      showStars: true,
-      showRockstarCard: false,
     },
   },
-  three_stars: {
-    label: '3 Stars: Pursuit',
-    description: 'Fast alternating police siren flash with 3 blinking wanted stars.',
+  pursuit: {
+    label: 'Active Pursuit',
+    description: 'Fast alternating police siren flash with white LED strobe pop.',
     icon: GUI_ICONS.action.sparkles,
     params: {
-      wantedLevel: 3,
       speed: 1.6,
       lightIntensity: 0.85,
       strobeMode: 'smooth_pulse',
       blurAmount: 85,
       whitePop: true,
-      showStars: true,
-      showRockstarCard: false,
     },
   },
-  five_stars: {
-    label: '5 Stars: Maximum Wanted',
-    description: 'Intense high-speed emergency strobe, white LED pops, and all 5 stars flashing frantically.',
+  heavy_chase: {
+    label: 'High-Speed Chase',
+    description: 'Intense high-speed emergency wig-wag strobe with rapid flashes.',
     icon: GUI_ICONS.action.sparkles,
     params: {
-      wantedLevel: 5,
       speed: 2.5,
       lightIntensity: 1.0,
       strobeMode: 'wigwag',
       blurAmount: 80,
       whitePop: true,
-      showStars: true,
-      showRockstarCard: false,
     },
   },
-  stealth: {
-    label: 'Undercover / Ambient',
-    description: 'Subtle red and blue siren reflection across the scene with no UI HUD.',
+  ambient: {
+    label: 'Subtle Ambience',
+    description: 'Soft red and blue emergency vehicle light reflections across the scene.',
     icon: GUI_ICONS.action.sparkles,
     params: {
-      wantedLevel: 0,
       speed: 1.0,
       lightIntensity: 0.45,
       strobeMode: 'smooth_pulse',
       blurAmount: 110,
       whitePop: false,
-      showStars: false,
-      showRockstarCard: false,
     },
   },
 };
@@ -107,14 +92,11 @@ export const GtavSirenComponent: React.FC<ScreenFxProps> = ({
   const levelMult = intensity === 'light' ? 0.65 : intensity === 'heavy' ? 1.4 : 1.0;
   const effectiveMultiplier = (params?.intensityMultiplier ?? 1.0) * levelMult * intensityMultiplier;
 
-  const wantedLevel = Math.max(0, Math.min(5, params?.wantedLevel ?? 3));
   const speed = Math.max(0.3, (params?.speed ?? 1.4));
   const lightIntensity = Math.max(0.1, Math.min(1.5, (params?.lightIntensity ?? 0.85) * effectiveMultiplier));
   const strobeMode: SirenStrobeMode = params?.strobeMode || 'smooth_pulse';
   const blurAmount = Math.max(30, Math.min(160, params?.blurAmount ?? 85));
   const whitePop = params?.whitePop ?? true;
-  const showStars = params?.showStars ?? (wantedLevel > 0);
-  const showRockstarCard = params?.showRockstarCard ?? false;
 
   // Animation cycle duration in seconds (base: 3.2s / speed)
   const cycleDuration = Math.max(0.5, 3.2 / speed);
@@ -193,17 +175,6 @@ export const GtavSirenComponent: React.FC<ScreenFxProps> = ({
             opacity: ${lightIntensity * 0.4};
           }
         }
-
-        @keyframes ${animKey}_flashStar {
-          0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-          45%, 75% {
-            opacity: 0.35;
-            transform: scale(0.96);
-          }
-        }
       `}</style>
 
       {/* Red Siren Strobe Sweep (Oversized with blur to cover screen completely) */}
@@ -250,75 +221,6 @@ export const GtavSirenComponent: React.FC<ScreenFxProps> = ({
           }}
         />
       )}
-
-      {/* GTA V WANTED STARS HUD (Top-Right Corner) */}
-      {showStars && wantedLevel > 0 && (
-        <div
-          className="absolute top-4 right-6 flex items-center gap-1.5 z-40 pointer-events-none select-none"
-          style={{
-            filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9))',
-          }}
-        >
-          {[1, 2, 3, 4, 5].map((starIndex) => {
-            const isEarned = starIndex <= wantedLevel;
-            return (
-              <span
-                key={starIndex}
-                className="text-2xl md:text-3xl font-black transition-all"
-                style={{
-                  color: isEarned ? '#ffffff' : 'rgba(0, 0, 0, 0.45)',
-                  WebkitTextStroke: isEarned ? '1px rgba(0, 0, 0, 0.8)' : '1px rgba(255, 255, 255, 0.15)',
-                  animation: isEarned
-                    ? `${animKey}_flashStar ${Math.max(0.4, 0.9 / speed).toFixed(2)}s linear infinite`
-                    : 'none',
-                  animationDelay: `${starIndex * 0.08}s`,
-                }}
-              >
-                ★
-              </span>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Optional Rockstar Card Tribute */}
-      {showRockstarCard && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-          <div
-            className="relative flex items-center justify-center rounded-3xl border-4 border-black shadow-2xl transition-all"
-            style={{
-              width: '180px',
-              height: '160px',
-              backgroundColor: '#f1ab15',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(241, 171, 21, 0.4)',
-            }}
-          >
-            <span
-              className="absolute font-black italic text-black select-none"
-              style={{
-                fontFamily: 'system-ui, sans-serif',
-                fontSize: '85px',
-                top: '40%',
-                left: '42%',
-                transform: 'translate(-50%, -50%)',
-              }}
-            >
-              R
-            </span>
-            <span
-              className="absolute font-black select-none text-white"
-              style={{
-                fontSize: '52px',
-                top: '25%',
-                right: '20%',
-                WebkitTextStroke: '3px #000',
-              }}
-            >
-              ★
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -332,16 +234,13 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
   onChange,
   playSfx,
 }) => {
-  const currentPreset = (params?.preset as GtavSirenPreset) || 'three_stars';
+  const currentPreset = (params?.preset as GtavSirenPreset) || 'pursuit';
   const currentMultiplier = params?.intensityMultiplier ?? 1.0;
-  const wantedLevel = params?.wantedLevel ?? 3;
   const speed = params?.speed ?? 1.4;
   const lightIntensity = params?.lightIntensity ?? 0.85;
   const strobeMode: SirenStrobeMode = params?.strobeMode || 'smooth_pulse';
   const blurAmount = params?.blurAmount ?? 85;
   const whitePop = params?.whitePop ?? true;
-  const showStars = params?.showStars ?? (wantedLevel > 0);
-  const showRockstarCard = params?.showRockstarCard ?? false;
 
   const applyPreset = (presetKey: Exclude<GtavSirenPreset, 'custom'>) => {
     const p = GTAV_SIREN_PRESETS[presetKey];
@@ -365,10 +264,10 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
           </span>
           <div>
             <h4 className="text-xs font-bold text-red-400 uppercase tracking-wider">
-              GTA V Police Siren & Wanted HUD
+              GTA V Police Siren
             </h4>
             <p className="text-[10px] text-[var(--muted)]">
-              Alternating red/blue pursuit beacons, wanted stars, and strobe flashes
+              Alternating red/blue pursuit beacons with diffused glow and LED strobe pops
             </p>
           </div>
         </div>
@@ -410,33 +309,7 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
         </div>
       </div>
 
-      {/* 3. Wanted Level (0 to 5 Stars) */}
-      <div className="space-y-1.5 pt-1 border-t border-[var(--border)]">
-        <div className="flex items-center justify-between text-[10px]">
-          <span className="text-[var(--muted)] font-semibold uppercase">Wanted Level:</span>
-          <span className="font-mono text-amber-300 font-bold">
-            {wantedLevel === 0 ? 'None (Stars Off)' : `${wantedLevel} Star${wantedLevel > 1 ? 's' : ''}`}
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          {[0, 1, 2, 3, 4, 5].map((lvl) => (
-            <button
-              key={lvl}
-              type="button"
-              onClick={() => onChange({ preset: 'custom', wantedLevel: lvl, showStars: lvl > 0 })}
-              className={`flex-1 py-1 rounded text-[10px] font-bold border transition-all cursor-pointer ${
-                wantedLevel === lvl
-                  ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-sm'
-                  : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white'
-              }`}
-            >
-              {lvl === 0 ? '0' : '★'.repeat(lvl)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 4. Siren Speed & Light Intensity */}
+      {/* 3. Siren Speed & Light Intensity */}
       <div className="grid grid-cols-2 gap-3 pt-1 border-t border-[var(--border)]">
         <div className="space-y-1">
           <div className="flex items-center justify-between text-[10px]">
@@ -471,7 +344,7 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
         </div>
       </div>
 
-      {/* 5. Strobe Rhythm & Diffusion Blur */}
+      {/* 4. Strobe Rhythm & Diffusion Blur */}
       <div className="grid grid-cols-2 gap-3 pt-1 border-t border-[var(--border)]">
         <div className="space-y-1">
           <span className="text-[10px] font-semibold text-[var(--muted)] uppercase block">Strobe Rhythm:</span>
@@ -518,9 +391,8 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
         </div>
       </div>
 
-      {/* 6. Toggles: White LED Pop, Stars & Rockstar Card */}
-      <div className="space-y-2 pt-2 border-t border-[var(--border)]">
-        {/* White LED Pop */}
+      {/* 5. Toggles: White LED Pop */}
+      <div className="pt-2 border-t border-[var(--border)]">
         <div className="flex items-center justify-between">
           <div>
             <span className="text-[11px] font-bold block text-[var(--text)]">White LED Strobe Pop</span>
@@ -538,44 +410,6 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
             {whitePop ? 'ENABLED' : 'DISABLED'}
           </button>
         </div>
-
-        {/* Wanted Stars Visibility */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-bold block text-[var(--text)]">Wanted Stars HUD</span>
-            <span className="text-[9px] text-[var(--muted)]">Top-right GTA V flashing stars overlay</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => onChange({ showStars: !showStars })}
-            className={`px-3 py-1 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-              showStars
-                ? 'bg-amber-500/20 border-amber-400 text-amber-300'
-                : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)]'
-            }`}
-          >
-            {showStars ? 'VISIBLE' : 'HIDDEN'}
-          </button>
-        </div>
-
-        {/* Rockstar Card */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-bold block text-[var(--text)]">Rockstar Badge Card</span>
-            <span className="text-[9px] text-[var(--muted)]">Classic golden R★ badge in screen center</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => onChange({ showRockstarCard: !showRockstarCard })}
-            className={`px-3 py-1 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-              showRockstarCard
-                ? 'bg-yellow-500/20 border-yellow-400 text-yellow-300'
-                : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)]'
-            }`}
-          >
-            {showRockstarCard ? 'SHOWN' : 'HIDDEN'}
-          </button>
-        </div>
       </div>
     </div>
   );
@@ -588,19 +422,16 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
 export const gtavSirenFx: ScreenFxDefinition = {
   id: 'gtav_siren',
   label: 'GTAV Siren',
-  description: 'Police chase sirens with alternating red/blue beacon sweeps, flashing wanted stars, and strobe pops.',
+  description: 'Police chase sirens with alternating red/blue beacon sweeps, diffused glow, and strobe pops.',
   icon: GUI_ICONS.action.sparkles,
   badgeColor: 'border-red-500 bg-red-950/80 text-red-200',
   defaultParams: {
-    preset: 'three_stars',
-    wantedLevel: 3,
+    preset: 'pursuit',
     speed: 1.4,
     lightIntensity: 0.85,
     strobeMode: 'smooth_pulse',
     blurAmount: 85,
     whitePop: true,
-    showStars: true,
-    showRockstarCard: false,
     intensityMultiplier: 1.0,
   },
   component: GtavSirenComponent,
