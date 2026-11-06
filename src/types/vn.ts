@@ -340,6 +340,12 @@ export interface VNStaticScreenConfig {
   galleryTab?: 'cinematics' | 'scenarios' | 'characters';
   title?: string;
   subtitle?: string;
+  logoUrl?: string; // Optional official game logo or brand banner (transparent PNG)
+  logoScale?: number;
+  logoXPercent?: number;
+  logoYPercent?: number;
+  logoRotation?: number;
+  logoLocked?: boolean;
   titleColor?: string;
   subtitleColor?: string;
   titleFontFamily?: string;

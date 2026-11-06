@@ -248,14 +248,24 @@ export default function StaticScreenStudio({
   // Active target for docked vertical VNTransformToolbar
   const isTitleSelected = selectedTarget === 'title';
   const isSubtitleSelected = selectedTarget === 'subtitle';
+  const isLogoSelected = selectedTarget === 'logo';
   const isButtonSelected =
-    !isTitleSelected && !isSubtitleSelected && Boolean(selectedButton);
+    !isTitleSelected && !isSubtitleSelected && !isLogoSelected && Boolean(selectedButton);
 
   const selectedBtnIndex = (config.buttons || []).findIndex((b) => b.id === selectedButton?.id);
   const totalBtns = config.buttons?.length || 1;
   const defaultBtnY = Math.round((70 + (selectedBtnIndex - (totalBtns - 1) / 2) * 11) * 10) / 10;
 
-  const activeTransformTarget: VNTransformableTarget | null = isTitleSelected
+  const activeTransformTarget: VNTransformableTarget | null = isLogoSelected
+    ? {
+        id: 'static-screen-logo',
+        xPercent: config.logoXPercent ?? 50,
+        yPercent: config.logoYPercent ?? 28,
+        scale: config.logoScale ?? 1,
+        rotation: config.logoRotation ?? 0,
+        locked: config.logoLocked ?? false,
+      }
+    : isTitleSelected
     ? {
         id: 'static-screen-title',
         xPercent: config.titleXPercent ?? 50,
@@ -298,7 +308,15 @@ export default function StaticScreenStudio({
     : null;
 
   const handleToolbarUpdate = (patch: Partial<VNTransformableTarget>) => {
-    if (isTitleSelected) {
+    if (isLogoSelected) {
+      updateConfig({
+        ...(patch.xPercent !== undefined ? { logoXPercent: patch.xPercent } : {}),
+        ...(patch.yPercent !== undefined ? { logoYPercent: patch.yPercent } : {}),
+        ...(patch.scale !== undefined ? { logoScale: patch.scale } : {}),
+        ...(patch.rotation !== undefined ? { logoRotation: patch.rotation } : {}),
+        ...(patch.locked !== undefined ? { logoLocked: patch.locked } : {}),
+      });
+    } else if (isTitleSelected) {
       updateConfig({
         ...(patch.xPercent !== undefined ? { titleXPercent: patch.xPercent } : {}),
         ...(patch.yPercent !== undefined ? { titleYPercent: patch.yPercent } : {}),
@@ -627,7 +645,15 @@ export default function StaticScreenStudio({
                 handleTransformButton(btnId, patch);
               }}
               onTransformText={(target, patch) => {
-                if (target === 'title') {
+                if (target === 'logo') {
+                  updateConfig({
+                    ...(patch.xPercent !== undefined ? { logoXPercent: patch.xPercent } : {}),
+                    ...(patch.yPercent !== undefined ? { logoYPercent: patch.yPercent } : {}),
+                    ...(patch.scale !== undefined ? { logoScale: patch.scale } : {}),
+                    ...(patch.rotation !== undefined ? { logoRotation: patch.rotation } : {}),
+                    ...(patch.locked !== undefined ? { logoLocked: patch.locked } : {}),
+                  });
+                } else if (target === 'title') {
                   updateConfig({
                     ...(patch.xPercent !== undefined ? { titleXPercent: patch.xPercent } : {}),
                     ...(patch.yPercent !== undefined ? { titleYPercent: patch.yPercent } : {}),

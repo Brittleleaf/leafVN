@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { VNScene, VNStory, VNStaticScreenConfig, VNStaticScreenButton } from '@/types/vn';
 import { VNScreenFxOverlay } from './VNScreenFxOverlay';
 import { ScreenFxSvgDefs, getSceneElementFxFilter, getSceneElementFxStyle } from './screenfx';
-import { playSfx } from '@/lib/audioSettings';
+import { playSfx, getAudioSettings } from '@/lib/audioSettings';
 import { ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
 import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
 import { VNTextEffectRenderer } from '@/lib/vn/textEffects';
@@ -22,15 +22,15 @@ interface StaticScreenViewProps {
   story?: VNStory;
   isInteractive?: boolean; // true in VNPlayer, false in VNMaker editor preview
   selectedButtonId?: string | null;
-  selectedTarget?: 'title' | 'subtitle' | string | null;
+  selectedTarget?: 'title' | 'subtitle' | 'logo' | string | null;
   showGuides?: boolean;
   snapToGuides?: boolean;
-  onSelectTarget?: (target: 'title' | 'subtitle' | string | null) => void;
+  onSelectTarget?: (target: 'title' | 'subtitle' | 'logo' | string | null) => void;
   onSelectButton?: (btnId: string | null) => void;
   onDragButton?: (btnId: string, xPercent: number, yPercent: number) => void;
   onTransformButton?: (btnId: string, patch: Partial<VNStaticScreenButton>) => void;
   onTransformText?: (
-    target: 'title' | 'subtitle',
+    target: 'title' | 'subtitle' | 'logo',
     patch: {
       xPercent?: number;
       yPercent?: number;
@@ -451,13 +451,21 @@ export default function StaticScreenView({
     }
   };
 
-  // Loop BGM
+  const getBgmVolume = () => {
+    const s = getAudioSettings();
+    if (s.muteAll) return 0;
+    const musicFactor = s.volume / 100;
+    return Math.max(0, Math.min(1, 0.7 * musicFactor));
+  };
+
+  // Loop BGM with real-time settings scaling
   useEffect(() => {
-    if (config.bgmUrl && isInteractive) {
+    const targetBgm = config.bgmUrl || scene.bgmUrl;
+    if (targetBgm && isInteractive) {
       try {
-        const audio = new Audio(config.bgmUrl);
+        const audio = new Audio(targetBgm);
         audio.loop = true;
-        audio.volume = 0.5;
+        audio.volume = getBgmVolume();
         audio.play().catch(() => {});
         bgmAudioRef.current = audio;
       } catch (e) {}
@@ -466,7 +474,22 @@ export default function StaticScreenView({
     return () => {
       unloadBgm();
     };
-  }, [config.bgmUrl, isInteractive]);
+  }, [config.bgmUrl, scene.bgmUrl, isInteractive]);
+
+  // Synchronize BGM volume in real-time when user alters audio settings
+  useEffect(() => {
+    const handleAudioSync = () => {
+      if (bgmAudioRef.current) {
+        bgmAudioRef.current.volume = getBgmVolume();
+      }
+    };
+    window.addEventListener('vn_audio_settings_changed', handleAudioSync);
+    window.addEventListener('storage', handleAudioSync);
+    return () => {
+      window.removeEventListener('vn_audio_settings_changed', handleAudioSync);
+      window.removeEventListener('storage', handleAudioSync);
+    };
+  }, []);
 
   const handleButtonClick = (button: VNStaticScreenButton) => {
     if (button.sfxUrl) {
@@ -507,7 +530,6 @@ export default function StaticScreenView({
         break;
       case 'load_game':
         if (button.targetSceneId && onJumpScene) {
-          unloadBgm();
           onJumpScene(button.targetSceneId);
         } else if (onLoadGame) {
           onLoadGame();
@@ -515,7 +537,6 @@ export default function StaticScreenView({
         break;
       case 'open_settings':
         if (button.targetSceneId && onJumpScene) {
-          unloadBgm();
           onJumpScene(button.targetSceneId);
         } else if (onOpenSettings) {
           onOpenSettings();
@@ -523,7 +544,6 @@ export default function StaticScreenView({
         break;
       case 'open_gallery':
         if (button.targetSceneId && onJumpScene) {
-          unloadBgm();
           onJumpScene(button.targetSceneId);
         } else if (onOpenGallery) {
           onOpenGallery();
@@ -538,7 +558,6 @@ export default function StaticScreenView({
         }
         break;
       case 'main_menu':
-        unloadBgm();
         if (button.targetSceneId && onJumpScene) {
           onJumpScene(button.targetSceneId);
         } else if (onMainMenu) {
@@ -595,6 +614,7 @@ export default function StaticScreenView({
   const isFreeLayout = config.buttonsLayout !== 'stacked';
   const isTitleSelected = !isInteractive && selectedTarget === 'title';
   const isSubtitleSelected = !isInteractive && selectedTarget === 'subtitle';
+  const isLogoSelected = !isInteractive && selectedTarget === 'logo';
 
   const staticScreenFxStyle = getSceneElementFxStyle({
     fxType: config.screenFx,
@@ -695,6 +715,82 @@ export default function StaticScreenView({
         />
       )}
 
+
+      {/* Official Game Logo / Brand Graphic with canvas transform gizmo */}
+      {config.logoUrl && (() => {
+        const logoX = typeof config.logoXPercent === 'number' && Number.isFinite(config.logoXPercent) ? config.logoXPercent : 50;
+        const logoY = typeof config.logoYPercent === 'number' && Number.isFinite(config.logoYPercent) ? config.logoYPercent : 28;
+        const logoRot = typeof config.logoRotation === 'number' && Number.isFinite(config.logoRotation) ? config.logoRotation : 0;
+        const logoScale = typeof config.logoScale === 'number' && Number.isFinite(config.logoScale) ? config.logoScale : 1;
+
+        return (
+          <div
+            onPointerDown={(e) => {
+              if (!isInteractive && onSelectTarget) {
+                e.stopPropagation();
+                onSelectTarget('logo');
+              }
+            }}
+            onClick={(e) => {
+              if (!isInteractive) {
+                e.stopPropagation();
+                onSelectTarget?.('logo');
+              }
+            }}
+            style={{
+              position: 'absolute',
+              left: `${logoX}%`,
+              top: `${logoY}%`,
+              transform: `translate(-50%, -50%) rotate(${logoRot}deg) scale(${logoScale})`,
+              transformOrigin: 'center center',
+              zIndex: 36,
+            }}
+            className={`pointer-events-auto ${!isInteractive ? 'cursor-pointer select-none' : ''}`}
+          >
+            <div className="relative p-2 max-w-[85vw] max-h-[45vh] flex items-center justify-center">
+              <img
+                src={getProxiedImageUrl(config.logoUrl)}
+                alt="Game Logo"
+                className="max-h-[38vh] w-auto object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.85)] pointer-events-none select-none"
+                draggable={false}
+              />
+            </div>
+
+            {/* Universal Gizmo attached to Logo */}
+            {isLogoSelected && !isInteractive && (
+              <VNUniversalTransformGizmo
+                target={{
+                  id: 'static-screen-logo',
+                  xPercent: config.logoXPercent ?? 50,
+                  yPercent: config.logoYPercent ?? 28,
+                  scale: config.logoScale ?? 1,
+                  rotation: config.logoRotation ?? 0,
+                  locked: config.logoLocked ?? false,
+                }}
+                stageRef={stageRef}
+                onUpdate={(patch) => {
+                  if (onTransformText) {
+                    onTransformText('logo', {
+                      xPercent: patch.xPercent,
+                      yPercent: patch.yPercent,
+                      scale: patch.scale,
+                      rotation: patch.rotation,
+                      locked: patch.locked,
+                    });
+                  }
+                }}
+                capabilities={{
+                  allowCrop: false,
+                  allow3D: false,
+                  allowPivot: false,
+                  allowNonUniformScale: false,
+                }}
+                isEditor={!isInteractive}
+              />
+            )}
+          </div>
+        );
+      })()}
 
       {/* Title with customizable typography, size, animation & canvas transform */}
       {config.title && (() => {

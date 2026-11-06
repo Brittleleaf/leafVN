@@ -5,6 +5,7 @@ import { playSfx } from '@/lib/audioSettings';
 import { VN_FONT_CATALOG, ensureGoogleFontLoaded } from '@/lib/vn/fontCatalog';
 import { VN_TEXT_EFFECTS_CATALOG } from '@/lib/vn/textEffects';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
+import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
 
 interface StaticScreenTypographySectionProps {
   config: VNStaticScreenConfig;
@@ -34,6 +35,155 @@ export function StaticScreenTypographySection({
         <GuiIconRenderer icon={GUI_ICONS.general.fontFx} className="w-3.5 h-3.5 text-[var(--accent)]" />
         <span>Text & Typography</span>
       </span>
+
+      {/* Game Logo / Official Brand Graphic (Transparent PNG) */}
+      <div className="p-2.5 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)]/40 space-y-2">
+        <div className="flex items-center justify-between">
+          <label className="text-[10px] text-[var(--text)] font-bold uppercase flex items-center gap-1.5">
+            <GuiIconRenderer icon={GUI_ICONS.general.image} className="w-3 h-3 text-[var(--accent)]" />
+            <span>Official Game Logo (PNG)</span>
+          </label>
+          {config.logoUrl && (
+            <button
+              type="button"
+              onClick={() => {
+                updateConfig({ logoUrl: undefined });
+                if (selectedTarget === 'logo') setSelectedTarget(null);
+                playSfx('/assets/sfx/corrupt file.mp3', false, 0.2);
+              }}
+              className="text-[10px] text-red-400 hover:text-red-300 font-bold transition-colors cursor-pointer"
+            >
+              Remove Logo
+            </button>
+          )}
+        </div>
+
+        {config.logoUrl ? (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 bg-black/40 p-2 rounded-lg border border-[var(--border)]">
+              <div className="w-12 h-12 rounded bg-black/60 border border-[var(--border2)] flex items-center justify-center p-1 shrink-0 overflow-hidden">
+                <img
+                  src={getProxiedImageUrl(config.logoUrl)}
+                  alt="Game Logo Preview"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] text-[var(--muted)] font-mono truncate">
+                  {config.logoUrl.split('/').pop()}
+                </div>
+                <div className="flex items-center gap-1 mt-1 text-[9px] font-mono text-[var(--text)]">
+                  <span>X: {config.logoXPercent ?? 50}%</span>
+                  <span>Y: {config.logoYPercent ?? 28}%</span>
+                  <span>({config.logoScale ?? 1.0}x)</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setAssetPickerConfig({
+                    filterType: 'background',
+                    title: 'Select Game Logo Image (PNG)',
+                    onSelect: (asset) => {
+                      updateConfig({ logoUrl: asset.url });
+                    },
+                  });
+                }}
+                className="px-2 py-1 rounded bg-[var(--surface)] hover:bg-[var(--accent-surface)] border border-[var(--border)] text-[10px] font-bold text-[var(--text)] cursor-pointer"
+              >
+                Change
+              </button>
+            </div>
+
+            {/* Logo Canvas Controls */}
+            <div className="flex items-center justify-between text-[10px] pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedTarget('logo');
+                  setSelectedButtonId(null);
+                  playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+                }}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                  selectedTarget === 'logo'
+                    ? 'bg-cyan-500 text-black shadow-sm'
+                    : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
+                }`}
+                title="Select Logo directly on canvas to drag, scale and rotate"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-2.5 h-2.5" />
+                <span>Select Canvas</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  updateConfig({ logoXPercent: 50 });
+                  playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+                }}
+                className="px-2 py-0.5 rounded text-[10px] font-bold text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--surface-strong)] cursor-pointer flex items-center gap-1 transition-colors"
+                title="Center Logo horizontally"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.general.circle} className="w-2.5 h-2.5" />
+                <span>Center X</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  updateConfig({ logoXPercent: 50, logoYPercent: 28, logoScale: 1.0, logoRotation: 0 });
+                  playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+                }}
+                className="px-2 py-0.5 rounded text-[10px] font-bold text-[var(--muted)] hover:text-red-400 hover:bg-[var(--surface-strong)] cursor-pointer flex items-center gap-1 transition-colors"
+                title="Reset Logo position, scale and rotation"
+              >
+                <GuiIconRenderer icon={GUI_ICONS.general.reset} className="w-2.5 h-2.5" />
+                <span>Reset</span>
+              </button>
+            </div>
+
+            {/* Logo Scale Slider */}
+            <div className="space-y-1 pt-1 border-t border-[var(--border)]">
+              <div className="flex items-center justify-between text-[9px] text-[var(--muted)] font-bold">
+                <span>Logo Scale:</span>
+                <span className="font-mono text-cyan-400">{config.logoScale ?? 1.0}x</span>
+              </div>
+              <input
+                type="range"
+                min="0.2"
+                max="2.5"
+                step="0.05"
+                value={config.logoScale ?? 1.0}
+                onChange={(e) => updateConfig({ logoScale: parseFloat(e.target.value) })}
+                className="w-full h-1 bg-[var(--border)] rounded-lg appearance-none cursor-pointer accent-cyan-400"
+              />
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setAssetPickerConfig({
+                filterType: 'background',
+                title: 'Select Game Logo Image (PNG)',
+                onSelect: (asset) => {
+                  updateConfig({
+                    logoUrl: asset.url,
+                    logoXPercent: 50,
+                    logoYPercent: 28,
+                    logoScale: 1.0,
+                    logoRotation: 0,
+                  });
+                  setSelectedTarget('logo');
+                  setSelectedButtonId(null);
+                },
+              });
+            }}
+            className="w-full py-2 px-3 rounded-lg border border-dashed border-[var(--border)] hover:border-[var(--accent)] hover:bg-[var(--accent-surface)] text-[10px] font-bold text-[var(--muted)] hover:text-[var(--accent)] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.general.image} className="w-3.5 h-3.5" />
+            <span>+ Add Official Game Logo (PNG)</span>
+          </button>
+        )}
+      </div>
 
       {/* Title Direct Canvas Transform Status & Controls */}
       <div

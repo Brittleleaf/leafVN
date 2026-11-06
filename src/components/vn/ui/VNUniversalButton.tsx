@@ -2,6 +2,7 @@
 import React from 'react';
 import { getButtonHoverEffectClass, getButtonHoverContainerClass } from '@/lib/vn/buttonHoverEffects';
 import { VNButtonHoverEffect } from '@/types/vn';
+import { playUiSound } from '@/lib/audioSettings';
 
 export type VNButtonStylePreset =
   | 'primary'
@@ -28,6 +29,7 @@ export interface VNUniversalButtonProps {
   disabled?: boolean;
   isSelected?: boolean;
   isInteractive?: boolean;
+  enableHoverSound?: boolean;
 
   // Spatial Coordinate & Transform System
   xPercent?: number;
@@ -124,6 +126,7 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
   disabled = false,
   isSelected = false,
   isInteractive = true,
+  enableHoverSound = true,
   xPercent,
   yPercent,
   widthPercent,
@@ -226,6 +229,11 @@ export const VNUniversalButton: React.FC<VNUniversalButtonProps> = ({
     >
       <RootInteractive
         {...(!isEditingText ? { type: 'button', disabled } : { role: 'group' })}
+        onMouseEnter={() => {
+          if (!disabled && isInteractive && enableHoverSound !== false) {
+            playUiSound('hover', 0.15);
+          }
+        }}
         onClick={(e: React.MouseEvent) => {
           if (isEditingText) {
             e.stopPropagation();

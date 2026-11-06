@@ -53,10 +53,13 @@ export function StaticScreenButtonsSection({
         </button>
       </div>
 
-      {/* Layout Mode (Stacked vs Free Positioning) */}
-      <div className="flex items-center justify-between p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
-        <span className="text-[11px] font-bold text-[var(--text)]">Layout Mode:</span>
-        <div className="flex items-center gap-1">
+      {/* Quick Menu Layout Presets */}
+      <div className="space-y-1.5 p-2 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-bold text-[var(--text)]">Layout Presets:</span>
+          <span className="text-[9px] font-mono text-[var(--muted)]">1-Click Layout</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-0.5">
           <button
             type="button"
             onClick={() => {
@@ -69,32 +72,71 @@ export function StaticScreenButtonsSection({
               }));
               updateConfig({ buttonsLayout: 'stacked', buttons: resetButtons });
             }}
-            className={`px-2.5 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+            className={`px-2 py-1.5 rounded-md text-[10px] font-bold text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border ${
               config.buttonsLayout !== 'free'
-                ? 'bg-[var(--accent)] text-white shadow'
-                : 'bg-[var(--btn-bg)] text-[var(--muted)]'
+                ? 'bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm'
+                : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
+            title="Standard vertical centered layout"
           >
-            Centered Stack
+            <span>Center Stack</span>
           </button>
+
           <button
             type="button"
             onClick={() => {
               const total = config.buttons?.length || 1;
-              const freeButtons = (config.buttons || []).map((b, idx) => ({
+              const rightButtons = (config.buttons || []).map((b, idx) => ({
                 ...b,
-                xPercent: b.xPercent ?? 50,
-                yPercent: b.yPercent ?? Math.round((70 + (idx - (total - 1) / 2) * 11) * 10) / 10,
+                xPercent: 82,
+                yPercent: Math.round((54 + idx * 8.5) * 10) / 10,
+                rotation: 0,
+                scale: 1,
               }));
-              updateConfig({ buttonsLayout: 'free', buttons: freeButtons });
+              updateConfig({ buttonsLayout: 'free', buttons: rightButtons });
             }}
-            className={`px-2.5 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
-              config.buttonsLayout === 'free'
-                ? 'bg-[var(--accent)] text-white shadow'
-                : 'bg-[var(--btn-bg)] text-[var(--muted)]'
-            }`}
+            className="px-2 py-1.5 rounded-md text-[10px] font-bold text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--surface-strong)]"
+            title="Classic Japanese Visual Novel right column rail"
           >
-            Free Canvas (Drag)
+            <span>Right Rail (VN)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              const total = config.buttons?.length || 1;
+              const leftButtons = (config.buttons || []).map((b, idx) => ({
+                ...b,
+                xPercent: 18,
+                yPercent: Math.round((54 + idx * 8.5) * 10) / 10,
+                rotation: 0,
+                scale: 1,
+              }));
+              updateConfig({ buttonsLayout: 'free', buttons: leftButtons });
+            }}
+            className="px-2 py-1.5 rounded-md text-[10px] font-bold text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--surface-strong)]"
+            title="Western Dossier / Sci-Fi left column rail"
+          >
+            <span>Left Rail</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              const total = config.buttons?.length || 1;
+              const bottomButtons = (config.buttons || []).map((b, idx) => ({
+                ...b,
+                xPercent: Math.round((50 + (idx - (total - 1) / 2) * Math.min(24, 76 / total)) * 10) / 10,
+                yPercent: 88,
+                rotation: 0,
+                scale: 0.95,
+              }));
+              updateConfig({ buttonsLayout: 'free', buttons: bottomButtons });
+            }}
+            className="px-2 py-1.5 rounded-md text-[10px] font-bold text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-cyan-300 hover:bg-[var(--surface-strong)]"
+            title="Horizontal bottom action bar"
+          >
+            <span>Bottom Bar</span>
           </button>
         </div>
       </div>
