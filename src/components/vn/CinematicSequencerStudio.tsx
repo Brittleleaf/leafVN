@@ -614,6 +614,20 @@ export default function CinematicSequencerStudio({
           onAddTextClip={handleAddTextClip}
           onAddAudioClip={handleAddAudioClip}
           onAddFxClip={handleAddFxClip}
+          selectedClipId={selectedClipId}
+          onApplyTransition={(transType, durationSec) => {
+            if (selectedClipId) {
+              handleUpdateClip(selectedClipId, {
+                transition: transType,
+                transitionDuration: durationSec,
+              });
+              setSaveSuccessMsg(`Transition "${transType}" applied (${durationSec}s)`);
+              setTimeout(() => setSaveSuccessMsg(null), 3000);
+            } else {
+              setSaveSuccessMsg('Select a clip first to apply the transition');
+              setTimeout(() => setSaveSuccessMsg(null), 3000);
+            }
+          }}
           isCollapsed={isLibraryCollapsed}
           onToggleCollapse={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
           onOpenAssetStudio={(filterType) => {

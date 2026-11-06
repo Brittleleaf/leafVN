@@ -19,6 +19,7 @@ import { AudioWaveformVisualizer } from './AudioWaveformVisualizer';
 import { useTimelineDrag } from './hooks/useTimelineDrag';
 import { getAudioDuration } from './hooks/useCinematicAudio';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
+import { TransitionBowtieIcon } from './cinematicTransitions';
 
 interface CinematicMultitrackTimelineProps {
   tracks: VNCinematicTrack[];
@@ -843,6 +844,44 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                     peaks={clip.waveform}
                                     color={isSelected ? 'rgba(255, 255, 255, 0.5)' : 'rgba(161, 254, 16, 0.7)'}
                                   />
+                                )}
+
+                                {/* FADE IN VISUAL SLOPE */}
+                                {clip.fadeInSec && clip.fadeInSec > 0 && (
+                                  <div
+                                    style={{
+                                      width: `${Math.min(100, (clip.fadeInSec / Math.max(0.01, clip.endSec - clip.startSec)) * 100)}%`,
+                                    }}
+                                    className="absolute left-0 top-0 bottom-0 pointer-events-none bg-gradient-to-r from-emerald-500/30 to-transparent z-10 border-l border-emerald-400"
+                                    title={`Fade In: ${clip.fadeInSec}s`}
+                                  />
+                                )}
+
+                                {/* FADE OUT VISUAL SLOPE */}
+                                {clip.fadeOutSec && clip.fadeOutSec > 0 && (
+                                  <div
+                                    style={{
+                                      width: `${Math.min(100, (clip.fadeOutSec / Math.max(0.01, clip.endSec - clip.startSec)) * 100)}%`,
+                                    }}
+                                    className="absolute right-0 top-0 bottom-0 pointer-events-none bg-gradient-to-l from-rose-500/30 to-transparent z-10 border-r border-rose-400"
+                                    title={`Fade Out: ${clip.fadeOutSec}s`}
+                                  />
+                                )}
+
+                                {/* CAPCUT TRANSITION BADGE */}
+                                {clip.transition && clip.transition !== 'cut' && (
+                                  <div
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSelectClip(clip.id);
+                                      onSelectTrack(track.id);
+                                      playUiSound('select', 0.2);
+                                    }}
+                                    className="absolute left-1 top-1/2 -translate-y-1/2 z-30 px-1 py-0.5 rounded bg-black/90 border border-white hover:border-cyan-400 text-white hover:text-cyan-300 shadow-[0_0_8px_rgba(0,0,0,0.8)] cursor-pointer hover:scale-110 transition-transform flex items-center justify-center gap-0.5"
+                                    title={`Transition: ${clip.transition} (${clip.transitionDuration ?? 0.5}s) - Click to edit`}
+                                  >
+                                    <TransitionBowtieIcon className="w-2.5 h-2.5" />
+                                  </div>
                                 )}
 
                                 {/* Left Trim Handle */}

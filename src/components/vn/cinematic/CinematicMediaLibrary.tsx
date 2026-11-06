@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { VNStory, VNAssetType, VNAssetItem } from '@/types/vn';
+import { VNStory, VNAssetType, VNAssetItem, VNCinematicTransitionType } from '@/types/vn';
 import {
   playUiSound,
   subscribeAudioPreview,
@@ -9,6 +9,7 @@ import {
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { useProjectAssets } from '@/lib/vn/useProjectAssets';
 import { SCREEN_FX_REGISTRY } from '../screenfx';
+import { TransitionBowtieIcon } from './cinematicTransitions';
 import {
   MediaTabType,
   MediaCatalogItem,
@@ -17,6 +18,7 @@ import {
   CinematicMediaTab,
   CinematicTitlesTab,
   CinematicAudioTab,
+  CinematicTransitionsTab,
 } from './medialibrary';
 
 interface CinematicMediaLibraryProps {
@@ -38,6 +40,8 @@ interface CinematicMediaLibraryProps {
   }) => void;
   onAddAudioClip: (asset: { url: string; name?: string; isBgm?: boolean }) => void;
   onAddFxClip: (fxType: string) => void;
+  onApplyTransition?: (transitionType: VNCinematicTransitionType, durationSec: number) => void;
+  selectedClipId?: string | null;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
   onOpenAssetStudio?: (filterType?: VNAssetType) => void;
@@ -50,6 +54,8 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
   onAddTextClip,
   onAddAudioClip,
   onAddFxClip,
+  onApplyTransition,
+  selectedClipId,
   isCollapsed = false,
   onToggleCollapse,
   onOpenAssetStudio,
@@ -310,14 +316,15 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
           )}
         </div>
 
-        {/* TABS (5 SECTIONS) */}
-        <div className="grid grid-cols-5 gap-1 p-1 bg-[var(--well-bg)] rounded-md border border-[var(--border)] text-[10px] font-bold">
+        {/* TABS (6 SECTIONS INCL. CAPCUT TRANSITIONS) */}
+        <div className="grid grid-cols-6 gap-1 p-1 bg-[var(--well-bg)] rounded-md border border-[var(--border)] text-[10px] font-bold">
           {[
-            { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.group, count: characters.length },
-            { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.general.screenFx, count: Object.keys(SCREEN_FX_REGISTRY).length },
-            { id: 'media', label: 'Media', icon: GUI_ICONS.general.gallery, count: mediaItems.length },
-            { id: 'text', label: 'Titles', icon: GUI_ICONS.general.texts, count: 6 },
-            { id: 'audio', label: 'Audio', icon: GUI_ICONS.general.sound, count: audioAssets.length },
+            { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.group, isBowtie: false },
+            { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.general.screenFx, isBowtie: false },
+            { id: 'media', label: 'Media', icon: GUI_ICONS.general.gallery, isBowtie: false },
+            { id: 'text', label: 'Titles', icon: GUI_ICONS.general.texts, isBowtie: false },
+            { id: 'audio', label: 'Audio', icon: GUI_ICONS.general.sound, isBowtie: false },
+            { id: 'transitions', label: 'Transitions', icon: '', isBowtie: true },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -331,7 +338,11 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
                   : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
               }`}
             >
-              <GuiIconRenderer icon={tab.icon} className="w-3.5 h-3.5" />
+              {tab.isBowtie ? (
+                <TransitionBowtieIcon className="w-3.5 h-3.5" />
+              ) : (
+                <GuiIconRenderer icon={tab.icon} className="w-3.5 h-3.5" />
+              )}
               <span className="truncate max-w-full text-[9px]">{tab.label}</span>
             </button>
           ))}
@@ -378,6 +389,13 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
           currentPreviewUrl={currentPreviewUrl}
           onAddAudioClip={onAddAudioClip}
           onOpenAssetStudio={onOpenAssetStudio}
+        />
+      )}
+
+      {activeTab === 'transitions' && (
+        <CinematicTransitionsTab
+          onApplyTransition={onApplyTransition}
+          selectedClipId={selectedClipId}
         />
       )}
     </div>

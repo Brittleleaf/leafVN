@@ -378,6 +378,37 @@ export interface VNStaticScreenConfig {
 export type VNCinematicSection = 'media' | 'audio' | 'background' | 'dialog';
 export type VNCinematicTrackKind = 'visual' | 'text' | 'audio' | 'fx';
 
+export type VNCinematicTransitionType =
+  | 'cut'
+  | 'fade'
+  | 'dissolve'
+  | 'fade_black'
+  | 'fade_white'
+  | 'blink'
+  | 'slide_left'
+  | 'slide_right'
+  | 'slide_up'
+  | 'slide_down'
+  | 'flip'
+  | 'zoom_in'
+  | 'zoom_out'
+  | 'glitch'
+  | 'circle_wipe'
+  | 'door_open'
+  | 'pixelate';
+
+export type VNCinematicAnimationType =
+  | 'none'
+  | 'fade'
+  | 'zoom_in'
+  | 'zoom_out'
+  | 'slide_left'
+  | 'slide_right'
+  | 'slide_up'
+  | 'slide_down'
+  | 'flip_in'
+  | 'flip_out';
+
 export interface VNCinematicClip {
   id: string;
   trackId: string;
@@ -405,7 +436,9 @@ export interface VNCinematicClip {
   isPerspective3D?: boolean; // Toggle 3D perspective mode
   opacity?: number; // 0 - 1.0
   blendMode?: 'normal' | 'multiply' | 'screen' | 'overlay' | 'lighten';
-  transition?: 'cut' | 'fade' | 'zoom' | 'slide' | 'glitch';
+  transition?: VNCinematicTransitionType | string;
+  inAnimation?: VNCinematicAnimationType | string;
+  outAnimation?: VNCinematicAnimationType | string;
   fit?: 'cover' | 'contain' | 'custom';
   isCover?: boolean;
   locked?: boolean; // Prevents accidental dragging or transform changes

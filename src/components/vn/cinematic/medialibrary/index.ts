@@ -4,3 +4,4 @@ export * from './CinematicScreenFxTab';
 export * from './CinematicMediaTab';
 export * from './CinematicTitlesTab';
 export * from './CinematicAudioTab';
+export * from './CinematicTransitionsTab';

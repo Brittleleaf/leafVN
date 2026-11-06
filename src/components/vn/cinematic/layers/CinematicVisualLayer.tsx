@@ -4,6 +4,7 @@ import { VNCinematicClip } from '@/types/vn';
 import { VNUniversalTransformGizmo } from '../../transform';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 import { getProxiedImageUrl } from '@/lib/vn/mediaUtils';
+import { calculateCinematicClipFx } from '../cinematicTransitions';
 
 export interface VisualClipWithIndex {
   clip: VNCinematicClip;
@@ -165,15 +166,7 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
           clip.fit === 'cover';
 
         const isVideo = isVideoMedia(clip.mediaUrl, clip.mediaType);
-        const effectiveOpacity = calculateClipOpacity(clip, currentTimeSec);
-
-        // CSS Transition helper for slide / zoom
-        const transitionClass =
-          clip.transition === 'slide'
-            ? 'animate-in slide-in-from-bottom-6 duration-500'
-            : clip.transition === 'zoom'
-            ? 'animate-in zoom-in-95 duration-500'
-            : '';
+        const fx = calculateCinematicClipFx(clip, currentTimeSec);
 
         if (isCover) {
           const bgScale = Number.isFinite(clip.scale) ? (clip.scale as number) : 1;
@@ -187,10 +180,13 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
               key={clip.id}
               style={{
                 zIndex,
-                opacity: effectiveOpacity,
+                opacity: fx.opacity,
                 mixBlendMode: clip.blendMode || 'normal',
+                filter: fx.filter || undefined,
+                clipPath: fx.clipPath,
+                transform: `translate(${fx.translateX}, ${fx.translateY})`,
               }}
-              className={`absolute inset-0 overflow-hidden pointer-events-auto cursor-pointer ${transitionClass}`}
+              className="absolute inset-0 overflow-hidden pointer-events-auto cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 if (isEditor && onSelectClip) onSelectClip(clip.id);
@@ -211,7 +207,7 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
                   top: `${bgY}%`,
                   width: '100%',
                   height: '100%',
-                  transform: `translate(-50%, -50%) rotate(${bgRot}deg) scale(${bgScale})`,
+                  transform: `translate(-50%, -50%) rotate(${bgRot}deg) rotateY(${fx.rotateYDeg}deg) rotateX(${fx.rotateXDeg}deg) scale(${bgScale * fx.scaleMultiplier})`,
                   transformOrigin: '50% 50%',
                 }}
                 className={isSelected ? 'pointer-events-auto' : 'pointer-events-none'}
@@ -326,14 +322,18 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
               left: `${xPct}%`,
               top: `${yPct}%`,
               transformOrigin: `${pivotX}% ${pivotY}%`,
-              transform: `translate(-${pivotX}%, -${pivotY}%) rotate(${rotation}deg) ${
-                clip.isPerspective3D ? `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)` : ''
-              } scale(${scale * scaleX * (clip.flipX ? -1 : 1)}, ${scale * scaleY * (clip.flipY ? -1 : 1)})`,
+              transform: `translate(-${pivotX}%, -${pivotY}%) translate(${fx.translateX}, ${fx.translateY}) rotate(${rotation}deg) rotateY(${rotateY + fx.rotateYDeg}deg) rotateX(${rotateX + fx.rotateXDeg}deg) ${
+                clip.isPerspective3D || fx.rotateYDeg !== 0 || fx.rotateXDeg !== 0
+                  ? `perspective(1000px) rotateX(${rotateX + fx.rotateXDeg}deg) rotateY(${rotateY + fx.rotateYDeg}deg)`
+                  : ''
+              } scale(${scale * scaleX * fx.scaleMultiplier * (clip.flipX ? -1 : 1)}, ${scale * scaleY * fx.scaleMultiplier * (clip.flipY ? -1 : 1)})`,
               zIndex: isSelected ? 60 : zIndex,
-              opacity: effectiveOpacity,
+              opacity: fx.opacity,
               mixBlendMode: clip.blendMode || 'normal',
+              filter: fx.filter || undefined,
+              clipPath: fx.clipPath || (clip.crop ? `inset(${clip.crop.top}% ${clip.crop.right}% ${clip.crop.bottom}% ${clip.crop.left}%)` : undefined),
             }}
-            className={`pointer-events-auto select-none ${transitionClass} ${
+            className={`pointer-events-auto select-none ${
               !isSelected && isEditor ? 'cursor-pointer hover:opacity-90' : ''
             }`}
           >

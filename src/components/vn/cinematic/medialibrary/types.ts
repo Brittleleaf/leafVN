@@ -9,4 +9,4 @@ export interface MediaCatalogItem {
   category?: string;
 }
 
-export type MediaTabType = 'characters' | 'fx' | 'media' | 'text' | 'audio';
+export type MediaTabType = 'characters' | 'fx' | 'media' | 'text' | 'audio' | 'transitions';
