@@ -10,16 +10,27 @@ export const AUDIO_KEYS = {
   MUTE_ALL: 'site_mute_all',
   MUTE_NAV: 'site_mute_nav',
   VOLUME: 'site_volume',
+  BGM_VOLUME: 'site_bgm_volume',
+  SFX_VOLUME: 'site_sfx_volume',
 } as const;
 
 export function getAudioSettings() {
-  if (typeof window === 'undefined') return { muteAll: false, muteNav: false, volume: 60 };
+  if (typeof window === 'undefined') {
+    return { muteAll: false, muteNav: false, volume: 60, bgmVolume: 75, sfxVolume: 85 };
+  }
   const rawVol = localStorage.getItem(AUDIO_KEYS.VOLUME);
   const parsedVol = rawVol ? parseInt(rawVol, 10) : 60;
+  const rawBgm = localStorage.getItem(AUDIO_KEYS.BGM_VOLUME);
+  const parsedBgm = rawBgm ? parseInt(rawBgm, 10) : 75;
+  const rawSfx = localStorage.getItem(AUDIO_KEYS.SFX_VOLUME);
+  const parsedSfx = rawSfx ? parseInt(rawSfx, 10) : 85;
+
   return {
     muteAll: localStorage.getItem(AUDIO_KEYS.MUTE_ALL) === 'true',
     muteNav: localStorage.getItem(AUDIO_KEYS.MUTE_NAV) === 'true',
     volume: Number.isFinite(parsedVol) ? Math.max(0, Math.min(100, parsedVol)) : 60,
+    bgmVolume: Number.isFinite(parsedBgm) ? Math.max(0, Math.min(100, parsedBgm)) : 75,
+    sfxVolume: Number.isFinite(parsedSfx) ? Math.max(0, Math.min(100, parsedSfx)) : 85,
   };
 }
 
@@ -63,7 +74,7 @@ const MAX_POOL_PER_SRC = 4;
 
 export function playSfx(src: string, isNav = false, baseVol = 1): HTMLAudioElement | undefined {
   if (!src) return;
-  const { muteAll, muteNav, volume } = getAudioSettings();
+  const { muteAll, muteNav, volume, sfxVolume } = getAudioSettings();
   if (muteAll) return;
   if (isNav && muteNav) return;
 
@@ -87,7 +98,8 @@ export function playSfx(src: string, isNav = false, baseVol = 1): HTMLAudioEleme
       audio.currentTime = 0;
     }
 
-    audio.volume = Math.max(0, Math.min(1, baseVol * (volume / 100)));
+    const sfxScale = (sfxVolume ?? 85) / 100;
+    audio.volume = Math.max(0, Math.min(1, baseVol * (volume / 100) * sfxScale));
 
     const handleRelease = () => {
       if (audio && !pool.includes(audio)) {

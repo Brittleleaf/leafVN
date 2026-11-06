@@ -23,6 +23,7 @@ import { VNTextBoxRenderer } from './textboxes';
 import { resolveEffectiveFontFamily } from '@/lib/vn/fontCatalog';
 import { getButtonHoverEffectClass } from '@/lib/vn/buttonHoverEffects';
 import StaticScreenView from './StaticScreenView';
+import { StaticScreenSettingsWidget } from './staticscreen/widgets/StaticScreenSettingsWidget';
 import CinematicPlayerView from './CinematicPlayerView';
 import { VNCursorLayer } from './cursors';
 import { useVNPlayer, findMenuSceneByRole, getChapterInitialSceneId } from '@/lib/vn/useVNPlayer';
@@ -101,6 +102,19 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
   } = useVNPlayer({ story, initialSaveState, onExit });
 
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (showSettingsModal && e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowSettingsModal(false);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [showSettingsModal]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -313,10 +327,20 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
               return (
                 <div
                   onClick={() => {
+                    if (!isTextBoxVisible && !isHotspotMode && currentEvent?.type === 'dialogue') {
+                      setIsTextBoxVisible(true);
+                      return;
+                    }
                     const activeHotspots = (currentScene?.hotspots || []).filter((hs) => !(hs.interactionLimit === 'once' && consumedHotspots.includes(hs.id)));
                     const canAdvanceExploration = isHotspotMode && activeHotspots.length === 0;
                     if ((!isHotspotMode || canAdvanceExploration) && currentEvent?.type !== 'choice' && (isTextBoxVisible || canAdvanceExploration)) {
                       advanceEvent();
+                    }
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    if (!isHotspotMode && currentEvent?.type === 'dialogue') {
+                      setIsTextBoxVisible((prev) => !prev);
                     }
                   }}
                   className={`absolute inset-0 bg-cover bg-center overflow-hidden transition-all duration-700 ${shakeClass} ${
@@ -1037,6 +1061,15 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                   <span>LOG / HISTORY</span>
                   <span className="opacity-60 text-[8px] font-mono">[H]</span>
                 </button>
+                <button
+                  onClick={() => setIsTextBoxVisible(false)}
+                  title="Hide dialogue box to view clean background artwork (Shortcut: C / Right-click)"
+                  className="px-2 py-0.5 rounded border border-gray-800 hover:text-white hover:border-gray-600 uppercase tracking-widest text-[10px] transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <GuiIconRenderer icon={GUI_ICONS.general.eye} className="w-3 h-3 text-gray-400" />
+                  <span>HIDE UI</span>
+                  <span className="opacity-60 text-[8px] font-mono">[C]</span>
+                </button>
               </div>
 
               <div className="flex items-center gap-2">
@@ -1053,6 +1086,14 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 >
                   <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3 h-3 text-gray-400" />
                   <span>LOAD</span>
+                </button>
+                <button
+                  onClick={() => setShowSettingsModal(true)}
+                  title="Open Game Preferences & Audio Settings"
+                  className="px-2 py-0.5 bg-gray-900 border border-gray-800 hover:border-cyan-500 text-gray-400 hover:text-white rounded uppercase tracking-widest text-[10px] transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-3 h-3 text-cyan-400" />
+                  <span>SETTINGS</span>
                 </button>
               </div>
             </div>
@@ -1277,6 +1318,31 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* 12. IN-GAME SETTINGS MODAL */}
+      {showSettingsModal && (
+        <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-md p-6 md:p-10 flex flex-col justify-between animate-fade-in">
+          <div className="flex items-center justify-between border-b border-white/15 pb-4 mb-4">
+            <div className="flex items-center gap-2">
+              <GuiIconRenderer icon={GUI_ICONS.general.gear} className="w-5 h-5 text-cyan-400" />
+              <h3 className="text-sm md:text-base text-cyan-400 font-bold uppercase tracking-widest">
+                [ GAME SETTINGS & PREFERENCES ]
+              </h3>
+            </div>
+            <button
+              onClick={() => setShowSettingsModal(false)}
+              className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded text-xs uppercase tracking-widest cursor-pointer flex items-center gap-1.5 transition-colors"
+            >
+              <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
+              <span>CLOSE</span>
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto flex items-center justify-center">
+            <StaticScreenSettingsWidget isInteractive={true} />
           </div>
         </div>
       )}

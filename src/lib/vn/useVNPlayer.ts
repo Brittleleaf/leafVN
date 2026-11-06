@@ -19,6 +19,7 @@ import {
   VNStaticScreenConfig,
 } from '@/types/vn';
 import { playSfx, getAudioSettings } from '@/lib/audioSettings';
+import { getGameSettings } from '@/lib/vn/gameSettings';
 import { getSaveSlots, saveGameStateToSlot, deleteSaveSlot } from '@/lib/vn/storage';
 import { evaluateCondition, applyVariableMutation, getCharacterAvatar, interpolateText } from '@/lib/vn/engineUtils';
 import { DEFAULT_CHAPTER_INTRO_CONFIG, DEFAULT_CHAPTER_END_CONFIG } from '@/components/vn/StaticScreenView';
@@ -716,9 +717,9 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
     let volToPlay = explicitVol ?? 0.5;
     currentBgmRawVolumeRef.current = volToPlay;
 
-    const { muteAll, volume } = getAudioSettings();
+    const { muteAll, volume, bgmVolume = 75 } = getAudioSettings();
     const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
-    const effectiveVol = volToPlay * masterVol;
+    const effectiveVol = volToPlay * masterVol * (bgmVolume / 100);
 
     if (!urlToPlay && targetScene.timeline) {
       for (let i = targetIndex; i >= 0; i--) {
@@ -768,10 +769,11 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
   // Sincronización reactiva en tiempo real del volumen y mute de BGM y FX Loop
   useEffect(() => {
     const syncActiveVolumes = () => {
-      const { muteAll, volume } = getAudioSettings();
+      const { muteAll, volume, bgmVolume = 75 } = getAudioSettings();
       const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
+      const bgmFactor = bgmVolume / 100;
       if (bgmAudioRef.current) {
-        bgmAudioRef.current.volume = currentBgmRawVolumeRef.current * masterVol;
+        bgmAudioRef.current.volume = currentBgmRawVolumeRef.current * masterVol * bgmFactor;
       }
       if (fxLoopAudioRef.current) {
         fxLoopAudioRef.current.volume = currentFxRawVolumeRef.current * masterVol;
@@ -1140,6 +1142,13 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
         return;
       }
 
+      // Atajo C para alternar visibilidad de la UI (Clean View / Ocultar caja de diálogo)
+      if (e.key === 'c' || e.key === 'C') {
+        e.preventDefault();
+        setIsTextBoxVisible((prev) => !prev);
+        return;
+      }
+
       // Atajo V para abrir/cerrar visor de variables
       if (e.key === 'v' || e.key === 'V') {
         e.preventDefault();
@@ -1210,9 +1219,10 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       return [...prev.slice(-249), { speaker: speakerName, speakerColor: speakerCol, text: fullText }];
     });
 
+    const gameSettings = getGameSettings();
     const speed = skipModeRef.current
       ? 5
-      : reactionChar?.textBoxConfig?.typewriterSpeedMs || story.textBoxConfig.typewriterSpeedMs || 25;
+      : reactionChar?.textBoxConfig?.typewriterSpeedMs || gameSettings.typewriterSpeedMs || story.textBoxConfig.typewriterSpeedMs || 25;
     const blipSound = reactionChar?.blipSound || '/assets/sfx/click intro.mp3';
     const blipEnabled = reactionChar?.textBoxConfig?.soundBlipEnabled ?? story.textBoxConfig.soundBlipEnabled;
 
@@ -1236,7 +1246,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
             advanceEventRef.current();
           }, 140);
         } else if (autoModeRef.current) {
-          const autoDelay = story.textBoxConfig.autoSpeedMs || 2000;
+          const autoDelay = gameSettings.autoAdvanceSpeedMs || story.textBoxConfig.autoSpeedMs || 2500;
           autoTimerRef.current = setTimeout(() => {
             advanceEventRef.current();
           }, autoDelay);
@@ -1276,7 +1286,8 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
         }
 
         const fullText = interpolateText(currentEvent.text || '', variablesState);
-        const charSpeed = currentSpeaker?.textBoxConfig?.typewriterSpeedMs || story.textBoxConfig.typewriterSpeedMs || 25;
+        const gameSettings = getGameSettings();
+        const charSpeed = currentSpeaker?.textBoxConfig?.typewriterSpeedMs || gameSettings.typewriterSpeedMs || story.textBoxConfig.typewriterSpeedMs || 25;
         const speed = skipModeRef.current ? 5 : charSpeed;
         const charBlip = currentSpeaker?.blipSound || '/assets/sfx/click intro.mp3';
         const blipEnabled = currentSpeaker?.textBoxConfig?.soundBlipEnabled ?? story.textBoxConfig.soundBlipEnabled;
@@ -1321,7 +1332,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
                 advanceEventRef.current();
               }, 140);
             } else if (autoModeRef.current) {
-              const autoDelay = story.textBoxConfig.autoSpeedMs || 2000;
+              const autoDelay = gameSettings.autoAdvanceSpeedMs || story.textBoxConfig.autoSpeedMs || 2500;
               autoTimerRef.current = setTimeout(() => {
                 advanceEventRef.current();
               }, autoDelay);
@@ -1393,9 +1404,9 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
 
           const rawVol = currentEvent.audioVolume ?? 0.5;
           currentBgmRawVolumeRef.current = rawVol;
-          const { muteAll, volume } = getAudioSettings();
+          const { muteAll, volume, bgmVolume = 75 } = getAudioSettings();
           const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
-          const effectiveVol = rawVol * masterVol;
+          const effectiveVol = rawVol * masterVol * (bgmVolume / 100);
 
           if (isSameTrack && bgmAudioRef.current) {
             bgmAudioRef.current.volume = effectiveVol;

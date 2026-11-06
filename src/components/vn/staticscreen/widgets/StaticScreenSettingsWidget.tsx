@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
 import { getAudioSettings, AUDIO_KEYS, playSfx, playUiSound, notifyAudioSettingsChanged } from '@/lib/audioSettings';
+import { getGameSettings, saveGameSettings } from '@/lib/vn/gameSettings';
 
 interface StaticScreenSettingsWidgetProps {
   isInteractive?: boolean;
@@ -21,6 +22,7 @@ export function StaticScreenSettingsWidget({
   // Display state
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [aspectRatio169, setAspectRatio169] = useState<boolean>(true);
+  const [graphicsQuality, setGraphicsQuality] = useState<'high' | 'performance'>('high');
 
   // Text state
   const [typewriterSpeedMs, setTypewriterSpeedMs] = useState<number>(25);
@@ -29,12 +31,20 @@ export function StaticScreenSettingsWidget({
   // Language state
   const [selectedLanguage, setSelectedLanguage] = useState<'es' | 'en' | 'ja'>('es');
 
-  // Load existing audio settings
+  // Load existing audio and game settings
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const settings = getAudioSettings();
-    setMasterVolume(settings.volume);
-    setIsMuted(settings.muteAll);
+    const aSettings = getAudioSettings();
+    setMasterVolume(aSettings.volume);
+    setBgmVolume(aSettings.bgmVolume ?? 75);
+    setSfxVolume(aSettings.sfxVolume ?? 85);
+    setIsMuted(aSettings.muteAll);
+
+    const gSettings = getGameSettings();
+    setTypewriterSpeedMs(gSettings.typewriterSpeedMs);
+    setAutoAdvanceSpeedMs(gSettings.autoAdvanceSpeedMs);
+    setGraphicsQuality(gSettings.graphicsQuality);
+    setSelectedLanguage(gSettings.language);
 
     const handleFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
     document.addEventListener('fullscreenchange', handleFsChange);
@@ -45,6 +55,22 @@ export function StaticScreenSettingsWidget({
     setMasterVolume(val);
     if (typeof window !== 'undefined') {
       localStorage.setItem(AUDIO_KEYS.VOLUME, String(val));
+      notifyAudioSettingsChanged();
+    }
+  };
+
+  const handleUpdateBgmVolume = (val: number) => {
+    setBgmVolume(val);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(AUDIO_KEYS.BGM_VOLUME, String(val));
+      notifyAudioSettingsChanged();
+    }
+  };
+
+  const handleUpdateSfxVolume = (val: number) => {
+    setSfxVolume(val);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(AUDIO_KEYS.SFX_VOLUME, String(val));
       notifyAudioSettingsChanged();
     }
   };
@@ -67,6 +93,28 @@ export function StaticScreenSettingsWidget({
       document.exitFullscreen?.().catch(() => {});
     }
     playUiSound('click', 0.3);
+  };
+
+  const handleUpdateTypewriterSpeed = (val: number) => {
+    setTypewriterSpeedMs(val);
+    saveGameSettings({ typewriterSpeedMs: val });
+  };
+
+  const handleUpdateAutoAdvanceSpeed = (val: number) => {
+    setAutoAdvanceSpeedMs(val);
+    saveGameSettings({ autoAdvanceSpeedMs: val });
+  };
+
+  const handleToggleGraphicsQuality = (quality: 'high' | 'performance') => {
+    setGraphicsQuality(quality);
+    saveGameSettings({ graphicsQuality: quality });
+    playUiSound('select', 0.3);
+  };
+
+  const handleSelectLanguage = (lang: 'es' | 'en' | 'ja') => {
+    setSelectedLanguage(lang);
+    saveGameSettings({ language: lang });
+    playUiSound('select', 0.4);
   };
 
   return (
@@ -164,7 +212,7 @@ export function StaticScreenSettingsWidget({
                 min={0}
                 max={100}
                 value={bgmVolume}
-                onChange={(e) => setBgmVolume(parseInt(e.target.value, 10))}
+                onChange={(e) => handleUpdateBgmVolume(parseInt(e.target.value, 10))}
                 className="w-full accent-purple-400 cursor-pointer h-1.5 bg-white/20 rounded-lg"
               />
             </div>
@@ -183,7 +231,7 @@ export function StaticScreenSettingsWidget({
                 min={0}
                 max={100}
                 value={sfxVolume}
-                onChange={(e) => setSfxVolume(parseInt(e.target.value, 10))}
+                onChange={(e) => handleUpdateSfxVolume(parseInt(e.target.value, 10))}
                 className="w-full accent-amber-400 cursor-pointer h-1.5 bg-white/20 rounded-lg"
               />
             </div>
@@ -230,6 +278,37 @@ export function StaticScreenSettingsWidget({
 
             <div className="flex items-center justify-between p-2.5 rounded-md border border-white/10 bg-white/5">
               <div>
+                <span className="text-xs font-bold text-white block uppercase tracking-wider">Graphics Quality & Shaders</span>
+                <span className="text-[11px] text-gray-400">Optimize visual effects rendering for high fidelity or battery/low-end GPUs</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleToggleGraphicsQuality('high')}
+                  className={`px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider border transition-all cursor-pointer ${
+                    graphicsQuality === 'high'
+                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-sm'
+                      : 'bg-white/5 border-white/15 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  High (Full Shaders)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleToggleGraphicsQuality('performance')}
+                  className={`px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider border transition-all cursor-pointer ${
+                    graphicsQuality === 'performance'
+                      ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-sm'
+                      : 'bg-white/5 border-white/15 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Performance (Save GPU)
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between p-2.5 rounded-md border border-white/10 bg-white/5">
+              <div>
                 <span className="text-xs font-bold text-white block uppercase tracking-wider">Aspect Ratio Locking</span>
                 <span className="text-[11px] text-gray-400">Fixed 16:9 cinematic proportional scaling</span>
               </div>
@@ -264,7 +343,7 @@ export function StaticScreenSettingsWidget({
                 min={5}
                 max={75}
                 value={typewriterSpeedMs}
-                onChange={(e) => setTypewriterSpeedMs(parseInt(e.target.value, 10))}
+                onChange={(e) => handleUpdateTypewriterSpeed(parseInt(e.target.value, 10))}
                 className="w-full accent-cyan-400 cursor-pointer h-1.5 bg-white/20 rounded-lg"
               />
               <div className="flex justify-between text-[10px] text-gray-400 font-mono">
@@ -288,7 +367,7 @@ export function StaticScreenSettingsWidget({
                 max={6000}
                 step={500}
                 value={autoAdvanceSpeedMs}
-                onChange={(e) => setAutoAdvanceSpeedMs(parseInt(e.target.value, 10))}
+                onChange={(e) => handleUpdateAutoAdvanceSpeed(parseInt(e.target.value, 10))}
                 className="w-full accent-emerald-400 cursor-pointer h-1.5 bg-white/20 rounded-lg"
               />
               <div className="flex justify-between text-[10px] text-gray-400 font-mono">
@@ -311,7 +390,7 @@ export function StaticScreenSettingsWidget({
               <button
                 key={lang.id}
                 type="button"
-                onClick={() => { setSelectedLanguage(lang.id as any); playUiSound('select', 0.4); }}
+                onClick={() => handleSelectLanguage(lang.id as any)}
                 className={`p-3 rounded-md border text-left transition-all cursor-pointer backdrop-blur-sm ${
                   selectedLanguage === lang.id
                     ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)]'
