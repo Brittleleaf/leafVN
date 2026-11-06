@@ -103,8 +103,8 @@ export const CharacterAvatarTab: React.FC<CharacterAvatarTabProps> = ({
             <img
               src={activeChar.avatarUrl || '/assets/image/characters/SUBJECT-TEMPLATE.png'}
               alt={activeChar.name}
-              className="w-16 h-20 object-cover rounded-md border-2 shadow"
-              style={{ borderColor: activeChar.color || '#ef4444' }}
+              className={`w-16 h-20 ${activeChar.avatarFramed === false ? 'object-contain border-0' : 'object-cover rounded-md border-2 shadow'}`}
+              style={{ borderColor: activeChar.avatarFramed === false ? 'transparent' : (activeChar.color || '#ef4444') }}
             />
             <div className="space-y-0.5">
               <span className="text-xs font-bold text-[var(--text)] uppercase block">{activeChar.name}</span>
@@ -114,6 +114,35 @@ export const CharacterAvatarTab: React.FC<CharacterAvatarTabProps> = ({
                 <span>Active photo in viewer and dialogue</span>
               </span>
             </div>
+          </div>
+
+          {/* Sprite Style Toggle */}
+          <div className="pt-2 border-t border-[var(--border)] flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold text-[var(--text)] block uppercase tracking-wider">
+                Sprite Presentation Style
+              </span>
+              <span className="text-[10px] text-[var(--muted)]">
+                {activeChar.avatarFramed === false
+                  ? 'Transparent full-body sprite (no clipping card)'
+                  : 'Framed dossier card (3:4 ratio with theme border)'}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const next = activeChar.avatarFramed === false ? true : false;
+                handleUpdateChar(activeChar.id, { avatarFramed: next });
+                playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+              }}
+              className={`px-3 py-1.5 rounded-md border text-xs font-bold cursor-pointer transition-all ${
+                activeChar.avatarFramed === false
+                  ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                  : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)]'
+              }`}
+            >
+              {activeChar.avatarFramed === false ? 'Transparent Full-Body' : 'Framed Card (3:4)'}
+            </button>
           </div>
         </div>
       </div>

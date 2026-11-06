@@ -18,7 +18,7 @@ import {
   VNChapterScreenConfig,
   VNStaticScreenConfig,
 } from '@/types/vn';
-import { playSfx } from '@/lib/audioSettings';
+import { playSfx, getAudioSettings } from '@/lib/audioSettings';
 import { getSaveSlots, saveGameStateToSlot, deleteSaveSlot } from '@/lib/vn/storage';
 import { evaluateCondition, applyVariableMutation, getCharacterAvatar, interpolateText } from '@/lib/vn/engineUtils';
 import { DEFAULT_CHAPTER_INTRO_CONFIG, DEFAULT_CHAPTER_END_CONFIG } from '@/components/vn/StaticScreenView';
@@ -1457,7 +1457,9 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
 
         const fxType = currentEvent.fxType || 'red_alert';
         const fadeIn = Math.max(0, currentEvent.fxFadeInSeconds ?? 1.0);
-        const targetVol = currentEvent.fxLoopAudioVolume ?? 0.6;
+        const { muteAll, volume } = getAudioSettings();
+        const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
+        const targetVol = (currentEvent.fxLoopAudioVolume ?? 0.6) * masterVol;
 
         if (currentEvent.fxLoopAudioUrl) {
           if (fxLoopAudioRef.current) {
@@ -2071,9 +2073,11 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       setActiveScreenFx(slot.gameState.activeScreenFx);
       if (slot.gameState.activeScreenFx.sfxUrl) {
         try {
+          const { muteAll, volume } = getAudioSettings();
+          const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
           const a = new Audio(slot.gameState.activeScreenFx.sfxUrl);
           a.loop = true;
-          a.volume = 0.5;
+          a.volume = 0.5 * masterVol;
           a.play().catch(() => {});
           fxLoopAudioRef.current = a;
         } catch {}

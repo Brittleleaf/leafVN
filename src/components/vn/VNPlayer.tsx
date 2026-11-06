@@ -475,11 +475,12 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
       {/* 4.1 Custom Free-Placed Character Sprite (ONLY when dialogue is active, textbox is rendered, and showAvatar is enabled) */}
       {isPlayerCustomPlaced && isPlayerTextBoxRendered && activeAvatarUrl && (story.textBoxConfig.showAvatar !== false) && (() => {
         const charX = Number.isFinite(currentEvent?.characterXPercent) ? currentEvent.characterXPercent! : 50;
-        const charY = Number.isFinite(currentEvent?.characterYPercent) ? currentEvent.characterYPercent! : 80;
+        const charY = Number.isFinite(currentEvent?.characterYPercent) ? currentEvent.characterYPercent! : 88;
         const charRot = Number.isFinite(currentEvent?.characterRotation) ? currentEvent.characterRotation! : 0;
         const charScale = Number.isFinite(currentEvent?.characterScale)
           ? currentEvent.characterScale!
           : (Number.isFinite(currentSpeaker?.defaultScale) ? currentSpeaker!.defaultScale! : 1);
+        const isFramed = currentEvent?.characterFramed ?? currentSpeaker?.textBoxConfig?.avatarFramed ?? currentSpeaker?.avatarFramed ?? story.textBoxConfig?.avatarFramed ?? true;
 
         return (
           <div className="absolute inset-0 pointer-events-none z-32 overflow-hidden">
@@ -497,12 +498,16 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 crossOrigin="anonymous"
                 alt={currentSpeaker?.name || 'Character'}
                 style={{
-                  borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444',
+                  borderColor: isFramed ? (activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || '#ef4444') : 'transparent',
                   transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
                   filter: playerFxFilter,
                   imageRendering: isPixelate ? 'pixelated' : undefined,
                 }}
-                className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
+                className={
+                  isFramed
+                    ? "h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
+                    : "h-[65cqh] max-h-[72cqh] w-auto object-contain border-0 shadow-none rounded-none aspect-auto"
+                }
               />
             </div>
           </div>
@@ -522,6 +527,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 const isSpeaking = currentSpeaker?.id === charId;
                 const avatar = getCharacterAvatar(char, isSpeaking ? activeEmotion : data.emotion);
                 if (!avatar) return null;
+                const isFramed = char.textBoxConfig?.avatarFramed ?? char.avatarFramed ?? story.textBoxConfig?.avatarFramed ?? true;
                 return (
                   <div
                     key={charId}
@@ -536,13 +542,17 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                       crossOrigin="anonymous"
                       alt={char.name}
                       style={{
-                        borderColor: char.textBoxConfig?.borderColor || char.color || '#ef4444',
+                        borderColor: isFramed ? (char.textBoxConfig?.borderColor || char.color || '#ef4444') : 'transparent',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
                         filter: playerFxFilter,
                         imageRendering: isPixelate ? 'pixelated' : undefined,
                       }}
-                      className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                      className={
+                        isFramed
+                          ? "h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                          : "h-[65cqh] max-h-[72cqh] w-auto object-contain border-0 shadow-none rounded-none aspect-auto"
+                      }
                     />
                     {isSpeaking && (
                       <span className="mt-1 text-[10px] font-mono uppercase bg-black/85 border px-2 py-0.5 rounded shadow" style={{ borderColor: char.color || '#ef4444', color: char.color || '#ef4444' }}>
@@ -564,6 +574,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 const isSpeaking = currentSpeaker?.id === charId;
                 const avatar = getCharacterAvatar(char, isSpeaking ? activeEmotion : data.emotion);
                 if (!avatar) return null;
+                const isFramed = char.textBoxConfig?.avatarFramed ?? char.avatarFramed ?? story.textBoxConfig?.avatarFramed ?? true;
                 return (
                   <div
                     key={charId}
@@ -578,13 +589,17 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                       crossOrigin="anonymous"
                       alt={char.name}
                       style={{
-                        borderColor: char.textBoxConfig?.borderColor || char.color || '#a855f7',
+                        borderColor: isFramed ? (char.textBoxConfig?.borderColor || char.color || '#a855f7') : 'transparent',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
                         filter: playerFxFilter,
                         imageRendering: isPixelate ? 'pixelated' : undefined,
                       }}
-                      className="h-[56cqh] max-h-[58cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
+                      className={
+                        isFramed
+                          ? "h-[56cqh] max-h-[58cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
+                          : "h-[65cqh] max-h-[72cqh] w-auto object-contain border-0 shadow-none rounded-none aspect-auto"
+                      }
                     />
                     {isSpeaking && (
                       <span className="mt-1 text-[10px] font-mono uppercase bg-black/85 border px-2 py-0.5 rounded shadow" style={{ borderColor: char.color || '#a855f7', color: char.color || '#a855f7' }}>
@@ -606,6 +621,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                 const isSpeaking = currentSpeaker?.id === charId;
                 const avatar = getCharacterAvatar(char, isSpeaking ? activeEmotion : data.emotion);
                 if (!avatar) return null;
+                const isFramed = char.textBoxConfig?.avatarFramed ?? char.avatarFramed ?? story.textBoxConfig?.avatarFramed ?? true;
                 return (
                   <div
                     key={charId}
@@ -620,13 +636,17 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
                       crossOrigin="anonymous"
                       alt={char.name}
                       style={{
-                        borderColor: char.textBoxConfig?.borderColor || char.color || '#0284c7',
+                        borderColor: isFramed ? (char.textBoxConfig?.borderColor || char.color || '#0284c7') : 'transparent',
                         transform: char.defaultScale ? `scale(${char.defaultScale})` : undefined,
                         transformOrigin: '50% 100%',
                         filter: playerFxFilter,
                         imageRendering: isPixelate ? 'pixelated' : undefined,
                       }}
-                      className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                      className={
+                        isFramed
+                          ? "h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                          : "h-[65cqh] max-h-[72cqh] w-auto object-contain border-0 shadow-none rounded-none aspect-auto"
+                      }
                     />
                     {isSpeaking && (
                       <span className="mt-1 text-[10px] font-mono uppercase bg-black/85 border px-2 py-0.5 rounded shadow" style={{ borderColor: char.color || '#0284c7', color: char.color || '#0284c7' }}>
@@ -891,37 +911,44 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
 
       {/* 7. TEXT BOX ENGINE */}
       {isPlayerTextBoxRendered && (
-        <div className={`absolute inset-x-[2cqw] z-30 animate-fade-in ${story.textBoxConfig.position === 'middle' ? 'top-1/2 -translate-y-1/2' : 'bottom-[2cqh]'}`}>
+        <div className={`absolute inset-x-[2cqw] z-30 animate-fade-in ${story.textBoxConfig.position === 'middle' ? 'top-1/2 -translate-y-1/2' : 'bottom-[max(0.5rem,env(safe-area-inset-bottom,0.5rem))] sm:bottom-[2cqh]'}`}>
           {/* Docked Character Avatar pinned flush to top border of Dialogue Box */}
-          {!isPlayerCustomPlaced && activeAvatarUrl && (story.textBoxConfig.showAvatar !== false) && (
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 'calc(100% - 2px)',
-                left: playerSlot === 'left' ? '0px' : playerSlot === 'right' ? 'auto' : '50%',
-                right: playerSlot === 'right' ? '0px' : 'auto',
-                transform: `${playerSlot === 'center' ? 'translateX(-50%) ' : ''}rotate(${currentEvent?.characterRotation ?? 0}deg) scale(${
-                  currentEvent?.characterScale ?? currentSpeaker?.defaultScale ?? 1
-                })`,
-                transformOrigin: playerSlot === 'left' ? '0% 100%' : playerSlot === 'right' ? '100% 100%' : '50% 100%',
-                zIndex: 32,
-              }}
-              className="pointer-events-none select-none"
-            >
-              <img
-                src={getProxiedImageUrl(activeAvatarUrl)}
-                crossOrigin="anonymous"
-                alt={currentSpeaker?.name || 'Character'}
+          {!isPlayerCustomPlaced && activeAvatarUrl && (story.textBoxConfig.showAvatar !== false) && (() => {
+            const isFramed = currentEvent?.characterFramed ?? currentSpeaker?.textBoxConfig?.avatarFramed ?? currentSpeaker?.avatarFramed ?? story.textBoxConfig?.avatarFramed ?? true;
+            return (
+              <div
                 style={{
-                  borderColor: activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444',
-                  transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
-                  filter: playerFxFilter,
-                  imageRendering: isPixelate ? 'pixelated' : undefined,
+                  position: 'absolute',
+                  bottom: 'calc(100% - 2px)',
+                  left: playerSlot === 'left' ? '0px' : playerSlot === 'right' ? 'auto' : '50%',
+                  right: playerSlot === 'right' ? '0px' : 'auto',
+                  transform: `${playerSlot === 'center' ? 'translateX(-50%) ' : ''}rotate(${currentEvent?.characterRotation ?? 0}deg) scale(${
+                    currentEvent?.characterScale ?? currentSpeaker?.defaultScale ?? 1
+                  })`,
+                  transformOrigin: playerSlot === 'left' ? '0% 100%' : playerSlot === 'right' ? '100% 100%' : '50% 100%',
+                  zIndex: 32,
                 }}
-                className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
-              />
-            </div>
-          )}
+                className="pointer-events-none select-none"
+              >
+                <img
+                  src={getProxiedImageUrl(activeAvatarUrl)}
+                  crossOrigin="anonymous"
+                  alt={currentSpeaker?.name || 'Character'}
+                  style={{
+                    borderColor: isFramed ? (activeInspection?.speakerColor || currentSpeaker?.textBoxConfig?.borderColor || currentSpeaker?.color || story.textBoxConfig.borderColor || '#ef4444') : 'transparent',
+                    transform: currentEvent?.characterFlipX ? 'scaleX(-1)' : undefined,
+                    filter: playerFxFilter,
+                    imageRendering: isPixelate ? 'pixelated' : undefined,
+                  }}
+                  className={
+                    isFramed
+                      ? "h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-[0_0_35px_rgba(0,0,0,0.5)]"
+                      : "h-[65cqh] max-h-[72cqh] w-auto object-contain border-0 shadow-none rounded-none aspect-auto"
+                  }
+                />
+              </div>
+            );
+          })()}
 
           {/* Active Modular Text Box Skin */}
           {(() => {
@@ -971,7 +998,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
 
             <div
               onClick={(e) => e.stopPropagation()}
-              className="mt-2 pt-1.5 border-t border-gray-900/60 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500"
+              className="mt-2 pt-1.5 pb-[max(0.25rem,env(safe-area-inset-bottom,0px))] border-t border-gray-900/60 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500"
             >
               <div className="flex items-center gap-2">
                 <button

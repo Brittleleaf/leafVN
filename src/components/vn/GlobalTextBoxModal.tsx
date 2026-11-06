@@ -458,6 +458,19 @@ export default function GlobalTextBoxModal({
                     className="accent-[var(--accent)] cursor-pointer w-4 h-4"
                   />
                 </label>
+
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <span className="text-[11px] font-semibold text-[var(--text)] block">Framed Dossier Card:</span>
+                    <span className="text-[9px] text-[var(--muted)] block">When disabled, renders transparent full-body sprite</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={tb.avatarFramed ?? true}
+                    onChange={(e) => updateConfig({ avatarFramed: e.target.checked })}
+                    className="accent-[var(--accent)] cursor-pointer w-4 h-4"
+                  />
+                </label>
               </div>
             </div>
           </div>

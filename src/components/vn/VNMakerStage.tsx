@@ -235,6 +235,7 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
   const charFlipX = currentLine?.characterFlipX ?? false;
   const charLocked = currentLine?.characterLocked ?? false;
   const charDisableSnap = currentLine?.characterDisableSnap ?? false;
+  const isFramed = currentLine?.characterFramed ?? currentSpeaker?.textBoxConfig?.avatarFramed ?? currentSpeaker?.avatarFramed ?? ctx.story?.textBoxConfig?.avatarFramed ?? true;
   const isDocked = !isCustomPlaced && showCanvasTextbox && (ctx.story?.textBoxConfig?.showAvatar !== false);
 
   const handleTransformCharacter = (patch: Partial<VNTransformableTarget>) => {
@@ -404,12 +405,16 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
           alt={currentSpeaker?.name || 'avatar'}
           draggable={false}
           style={{
-            borderColor: activeBorderColor,
+            borderColor: isFramed ? activeBorderColor : 'transparent',
             transform: charFlipX ? 'scaleX(-1)' : undefined,
             filter: stageFxFilter,
             imageRendering: isStagePixelate ? 'pixelated' : undefined,
           }}
-          className="h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-2xl pointer-events-none"
+          className={
+            isFramed
+              ? "h-[54cqh] max-h-[56cqh] aspect-[3/4] w-auto object-cover rounded-t-2xl border-2 shadow-2xl pointer-events-none"
+              : "h-[65cqh] max-h-[72cqh] w-auto object-contain border-0 shadow-none rounded-none aspect-auto pointer-events-none"
+          }
         />
 
         {/* Universal Transform Gizmo attached to Character Sprite when selected */}

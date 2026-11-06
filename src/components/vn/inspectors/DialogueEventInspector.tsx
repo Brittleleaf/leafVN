@@ -175,6 +175,25 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
             <span>{currentLine.characterLocked ? 'Locked' : 'Lock'}</span>
           </button>
 
+          {/* Sprite Style Toggle: Framed Card vs Full-Body */}
+          <button
+            type="button"
+            onClick={() => {
+              const currentFramed = currentLine.characterFramed ?? currentSpeaker?.textBoxConfig?.avatarFramed ?? currentSpeaker?.avatarFramed ?? true;
+              const next = !currentFramed;
+              onUpdateCurrentLine('characterFramed', next);
+              playSfx('/assets/sfx/click intro.mp3', false, 0.2);
+            }}
+            className={`px-2 py-1.5 rounded-lg border text-xs font-bold cursor-pointer transition-all flex items-center gap-1 shrink-0 ${
+              (currentLine.characterFramed ?? currentSpeaker?.textBoxConfig?.avatarFramed ?? currentSpeaker?.avatarFramed ?? true)
+                ? 'bg-[var(--card-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
+                : 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-sm'
+            }`}
+            title="Toggle between Framed Dossier Card (3:4 box with border) and Transparent Full-Body Sprite"
+          >
+            <span>{(currentLine.characterFramed ?? currentSpeaker?.textBoxConfig?.avatarFramed ?? currentSpeaker?.avatarFramed ?? true) ? 'Card [3:4]' : 'Full-Body'}</span>
+          </button>
+
           {/* Reset custom staging button */}
           {currentLine.characterXPercent !== undefined && (
             <button

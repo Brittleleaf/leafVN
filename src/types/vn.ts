@@ -77,6 +77,7 @@ export interface VNCharacter {
   fontFamily?: string; // Custom font for this character's dialogues (e.g. 'cinzel', 'caveat', 'barlow')
   textBoxConfig?: Partial<VNTextBoxConfig>; // Custom per-character textbox styling!
   defaultScale?: number; // Universal default scale for this character
+  avatarFramed?: boolean; // When true (default), renders framed 3:4 card with border; when false, renders transparent full-body sprite
 }
 
 export type VNHotspotStyle = 'arrow' | 'door' | 'terminal' | 'button' | 'radar' | 'inspect';
@@ -230,6 +231,7 @@ export interface VNEvent {
   characterFlipX?: boolean;
   characterLocked?: boolean;
   characterDisableSnap?: boolean; // When true, character does not magnetically snap to guides or siblings
+  characterFramed?: boolean; // When false, renders transparent full-body sprite instead of 3:4 card
   fontFamily?: string; // Custom font override for this specific dialogue event
   sfx?: string;
 
@@ -570,6 +572,7 @@ export interface VNTextBoxConfig {
   typewriterSpeedMs: number; // 15 to 60 ms
   autoSpeedMs?: number; // 1000 to 5000 ms (default 2000)
   showAvatar: boolean;
+  avatarFramed?: boolean; // When true (default), renders framed 3:4 card; when false, renders transparent full-body sprite
   soundBlipEnabled: boolean;
   position: 'bottom' | 'middle';
   backgroundColor?: string;
