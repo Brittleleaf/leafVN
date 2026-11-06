@@ -4,6 +4,7 @@ import { VNCinematicTransitionType } from '@/types/vn';
 import {
   CINEMATIC_TRANSITIONS_CATALOG,
   TransitionBowtieIcon,
+  TransitionThumbnailPreview,
 } from '../cinematicTransitions';
 import { playUiSound } from '@/lib/audioSettings';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
@@ -20,6 +21,7 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [search, setSearch] = useState<string>('');
   const [transitionDuration, setTransitionDuration] = useState<number>(0.5);
+  const [hoveredTransId, setHoveredTransId] = useState<string | null>(null);
 
   const categories = ['All', 'Basic', 'Slides', '3D & Zoom', 'Creative'];
 
@@ -94,46 +96,57 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
 
       {/* Grid of Transition Cards */}
       <div className="flex-1 overflow-y-auto p-3 grid grid-cols-2 sm:grid-cols-3 gap-2.5 custom-scrollbar">
-        {filtered.map((trans) => (
-          <div
-            key={trans.id}
-            onClick={() => handleApply(trans.id)}
-            className="group relative rounded-lg border border-[var(--border)] bg-[var(--well-bg)] hover:border-cyan-400 hover:bg-[var(--surface-strong)] p-2 flex flex-col justify-between transition-all cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-          >
-            {/* Visual Animated Thumbnail Preview */}
-            <div className="w-full aspect-video rounded bg-black/60 border border-[var(--border2)] relative overflow-hidden flex items-center justify-center mb-1.5 group-hover:border-cyan-500/50">
-              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-950/40 via-purple-950/30 to-black/60" />
-              
-              {/* Miniature transition simulation graphic */}
-              <div className="relative z-10 flex items-center justify-center gap-1 text-center">
-                <TransitionBowtieIcon className="w-6 h-6 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] group-hover:scale-110 transition-transform" />
-              </div>
+        {filtered.map((trans) => {
+          const isHovered = hoveredTransId === trans.id;
 
-              {/* Category pill on thumbnail */}
-              <span className="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-mono uppercase font-bold bg-black/75 text-gray-300 border border-white/10">
-                {trans.category}
-              </span>
-            </div>
-
-            {/* Label & Description */}
-            <div className="space-y-0.5">
-              <div className="text-[11px] font-bold text-[var(--text)] group-hover:text-cyan-300 truncate">
-                {trans.name}
-              </div>
-              <div className="text-[9px] text-[var(--muted)] line-clamp-1 leading-tight font-mono">
-                {trans.description}
-              </div>
-            </div>
-
-            {/* Action pill */}
-            <button
-              type="button"
-              className="mt-2 w-full py-1 rounded bg-[var(--surface)] group-hover:bg-cyan-500 group-hover:text-black border border-[var(--border)] group-hover:border-cyan-400 text-[9px] font-bold uppercase tracking-wider text-[var(--text)] transition-all cursor-pointer flex items-center justify-center gap-1"
+          return (
+            <div
+              key={trans.id}
+              onClick={() => handleApply(trans.id)}
+              onMouseEnter={() => setHoveredTransId(trans.id)}
+              onMouseLeave={() => setHoveredTransId(null)}
+              className={`group relative rounded-lg border p-2 flex flex-col justify-between transition-all cursor-pointer shadow-sm ${
+                isHovered
+                  ? 'border-cyan-400 bg-[var(--surface-strong)] shadow-[0_0_18px_rgba(34,211,238,0.25)] scale-[1.02]'
+                  : 'border-[var(--border)] bg-[var(--well-bg)] hover:border-cyan-500/60'
+              }`}
             >
-              <span>Apply</span>
-            </button>
-          </div>
-        ))}
+              {/* Visual Animated Thumbnail Preview */}
+              <div className="w-full relative mb-1.5 rounded overflow-hidden border border-[var(--border2)] group-hover:border-cyan-500/50">
+                <TransitionThumbnailPreview
+                  transitionType={trans.id}
+                  isHovered={isHovered}
+                  className="w-full"
+                />
+
+                {/* Category pill on thumbnail */}
+                <span className="absolute top-1 right-1 px-1.5 py-0.5 rounded text-[8px] font-mono uppercase font-bold bg-black/80 text-gray-200 border border-white/10 shadow pointer-events-none">
+                  {trans.category}
+                </span>
+              </div>
+
+              {/* Label & Description */}
+              <div className="space-y-0.5 min-w-0">
+                <div className="text-[11px] font-bold text-[var(--text)] group-hover:text-cyan-300 truncate flex items-center justify-between">
+                  <span>{trans.name}</span>
+                  {isHovered && <span className="text-[8px] text-cyan-400 font-mono">PREVIEW</span>}
+                </div>
+                <div className="text-[9px] text-[var(--muted)] line-clamp-1 leading-tight font-mono">
+                  {trans.description}
+                </div>
+              </div>
+
+              {/* Action pill */}
+              <button
+                type="button"
+                className="mt-2 w-full py-1 rounded bg-[var(--surface)] group-hover:bg-cyan-500 group-hover:text-black border border-[var(--border)] group-hover:border-cyan-400 text-[9px] font-bold uppercase tracking-wider text-[var(--text)] transition-all cursor-pointer flex items-center justify-center gap-1 shadow-xs"
+              >
+                <TransitionBowtieIcon className="w-3 h-3 text-cyan-400 group-hover:text-black transition-colors" />
+                <span>Apply</span>
+              </button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

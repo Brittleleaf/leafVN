@@ -46,6 +46,8 @@ interface CinematicMediaLibraryProps {
   onToggleCollapse?: () => void;
   onOpenAssetStudio?: (filterType?: VNAssetType) => void;
   previewBackgroundUrl?: string;
+  activeTab?: MediaTabType;
+  onTabChange?: (tab: MediaTabType) => void;
 }
 
 export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
@@ -60,11 +62,18 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
   onToggleCollapse,
   onOpenAssetStudio,
   previewBackgroundUrl,
+  activeTab: controlledActiveTab,
+  onTabChange,
 }) => {
   // Shared project assets from the central catalog
   const { allAssets } = useProjectAssets(story);
 
-  const [activeTab, setActiveTab] = useState<MediaTabType>('characters');
+  const [internalActiveTab, setInternalActiveTab] = useState<MediaTabType>('characters');
+  const activeTab = controlledActiveTab !== undefined ? controlledActiveTab : internalActiveTab;
+  const setActiveTab = (tab: MediaTabType) => {
+    setInternalActiveTab(tab);
+    if (onTabChange) onTabChange(tab);
+  };
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(null);
 

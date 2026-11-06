@@ -12,6 +12,7 @@ import {
 import { playSfx, playUiSound, stopAudioPreview } from '@/lib/audioSettings';
 import CinematicPlayerView, { DEFAULT_CINEMATIC_CONFIG } from './CinematicPlayerView';
 import { CinematicMediaLibrary } from './cinematic/CinematicMediaLibrary';
+import { MediaTabType } from './cinematic/medialibrary';
 import { CinematicMultitrackTimeline } from './cinematic/CinematicMultitrackTimeline';
 import { CinematicClipInspector } from './cinematic/CinematicClipInspector';
 import { CinematicTransportBar } from './cinematic/CinematicTransportBar';
@@ -55,6 +56,7 @@ export default function CinematicSequencerStudio({
   const [selectedClipId, setSelectedClipId] = useState<string | null>(null);
   const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
   const [isLibraryCollapsed, setIsLibraryCollapsed] = useState<boolean>(false);
+  const [mediaLibraryTab, setMediaLibraryTab] = useState<MediaTabType>('characters');
   const [timelineHeight, setTimelineHeight] = useState<number>(260);
 
   // Context Menu and Clipboard state (Cut / Copy / Paste / Duplicate)
@@ -630,6 +632,8 @@ export default function CinematicSequencerStudio({
           }}
           isCollapsed={isLibraryCollapsed}
           onToggleCollapse={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
+          activeTab={mediaLibraryTab}
+          onTabChange={setMediaLibraryTab}
           onOpenAssetStudio={(filterType) => {
             setAssetPickerConfig({
               filterType,
@@ -816,6 +820,10 @@ export default function CinematicSequencerStudio({
         onUndo={handleUndo}
         onRedo={handleRedo}
         onScrubbingChange={setIsScrubbing}
+        onOpenTransitionsTab={() => {
+          setMediaLibraryTab('transitions');
+          setIsLibraryCollapsed(false);
+        }}
         notify={(msg) => {
           setSaveSuccessMsg(msg);
           setTimeout(() => setSaveSuccessMsg(null), 3000);

@@ -45,6 +45,7 @@ interface CinematicMultitrackTimelineProps {
   onRedo?: () => void;
   onScrubbingChange?: (isScrubbing: boolean) => void;
   notify?: (msg: string) => void;
+  onOpenTransitionsTab?: () => void;
 }
 
 export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelineProps> = ({
@@ -71,6 +72,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
   onRedo,
   onScrubbingChange,
   notify,
+  onOpenTransitionsTab,
 }) => {
   const rulerScrollRef = useRef<HTMLDivElement>(null);
   const timelineScrollRef = useRef<HTMLDivElement>(null);
@@ -875,12 +877,16 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                       e.stopPropagation();
                                       onSelectClip(clip.id);
                                       onSelectTrack(track.id);
+                                      if (onOpenTransitionsTab) onOpenTransitionsTab();
                                       playUiSound('select', 0.2);
                                     }}
                                     className="absolute left-1 top-1/2 -translate-y-1/2 z-30 px-1 py-0.5 rounded bg-black/90 border border-white hover:border-cyan-400 text-white hover:text-cyan-300 shadow-[0_0_8px_rgba(0,0,0,0.8)] cursor-pointer hover:scale-110 transition-transform flex items-center justify-center gap-0.5"
                                     title={`Transition: ${clip.transition} (${clip.transitionDuration ?? 0.5}s) - Click to edit`}
                                   >
-                                    <TransitionBowtieIcon className="w-2.5 h-2.5" />
+                                    <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400" />
+                                    <span className="text-[8px] font-mono font-bold uppercase hidden md:inline text-cyan-200">
+                                      {clip.transition}
+                                    </span>
                                   </div>
                                 )}
 

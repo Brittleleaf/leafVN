@@ -3,6 +3,7 @@ import React from 'react';
 import { VNCinematicClip } from '@/types/vn';
 import { VNTextEffectRenderer } from '@/lib/vn/textEffects';
 import { VNUniversalTransformGizmo } from '../../transform';
+import { calculateCinematicClipFx } from '../cinematicTransitions';
 
 interface ActiveTextClipItem {
   clip: VNCinematicClip;
@@ -48,6 +49,9 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
           ? Math.max(0, Math.min(1, elapsed / (totalSpan * 0.75)))
           : undefined;
 
+        // Real-time animation, transitions, fade in and fade out
+        const fx = calculateCinematicClipFx(clip, currentTimeSec);
+
         // Check if this is an authentic VN Dialogue (has speaker, avatar, or classic_vn style)
         const isClassicDialogue =
           clip.dialogueStyle === 'classic_vn' || Boolean(clip.speaker) || Boolean(clip.speakerAvatar);
@@ -56,7 +60,17 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
           const speakerColor = clip.speakerColor || '#ef4444';
 
           return (
-            <div key={clip.id} style={{ zIndex }} className="absolute inset-0 pointer-events-none">
+            <div
+              key={clip.id}
+              style={{
+                zIndex,
+                opacity: fx.opacity,
+                transform: `translate(${fx.translateX}, ${fx.translateY}) rotateY(${fx.rotateYDeg}deg)`,
+                filter: fx.filter || undefined,
+                clipPath: fx.clipPath,
+              }}
+              className="absolute inset-0 pointer-events-none transition-opacity duration-75"
+            >
               {/* 1. Character Portrait ("con la foto al fondo") */}
               {clip.speakerAvatar && (
                 <div
@@ -225,10 +239,15 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
               left: `${xPct}%`,
               top: `${yPct}%`,
               transformOrigin: `${pivotX}% ${pivotY}%`,
-              transform: `translate(-${pivotX}%, -${pivotY}%) rotate(${rotation}deg) ${
-                clip.isPerspective3D ? `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)` : ''
-              } scale(${scale * scaleX * (clip.flipX ? -1 : 1)}, ${scale * scaleY * (clip.flipY ? -1 : 1)})`,
+              transform: `translate(-${pivotX}%, -${pivotY}%) translate(${fx.translateX}, ${fx.translateY}) rotate(${rotation}deg) rotateY(${rotateY + fx.rotateYDeg}deg) rotateX(${rotateX + fx.rotateXDeg}deg) ${
+                clip.isPerspective3D || fx.rotateYDeg !== 0 || fx.rotateXDeg !== 0
+                  ? `perspective(1000px) rotateX(${rotateX + fx.rotateXDeg}deg) rotateY(${rotateY + fx.rotateYDeg}deg)`
+                  : ''
+              } scale(${scale * scaleX * fx.scaleMultiplier * (clip.flipX ? -1 : 1)}, ${scale * scaleY * fx.scaleMultiplier * (clip.flipY ? -1 : 1)})`,
               zIndex: isSelected ? 60 : zIndex,
+              opacity: fx.opacity,
+              filter: fx.filter || undefined,
+              clipPath: fx.clipPath || (clip.crop ? `inset(${clip.crop.top}% ${clip.crop.right}% ${clip.crop.bottom}% ${clip.crop.left}%)` : undefined),
             }}
             className={`pointer-events-auto select-none ${
               !isSelected && isEditor ? 'cursor-pointer hover:opacity-90' : ''
