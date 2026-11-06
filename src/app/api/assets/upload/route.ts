@@ -32,9 +32,22 @@ export async function POST(req: NextRequest) {
       fs.mkdirSync(targetDir, { recursive: true });
     }
 
-    // 3. Sanitizar el nombre del archivo preservando su extensión
+    // 3. Sanitizar y validar la extensión del archivo contra lista blanca
     const originalName = file.name || 'asset';
-    const ext = path.extname(originalName) || '';
+    const ext = (path.extname(originalName) || '').toLowerCase();
+    const ALLOWED_EXTENSIONS = new Set([
+      '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg',
+      '.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac',
+      '.woff', '.woff2', '.ttf', '.otf',
+    ]);
+
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
+      return NextResponse.json(
+        { error: `File type "${ext || 'unknown'}" is not allowed. Only safe images, audio, and font files are supported.` },
+        { status: 400 }
+      );
+    }
+
     const baseName = path
       .basename(originalName, ext)
       .toLowerCase()

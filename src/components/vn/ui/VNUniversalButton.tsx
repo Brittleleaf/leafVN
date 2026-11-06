@@ -62,7 +62,7 @@ export function getUniversalButtonStyleClass(
   if (hideContainer) {
     return disabled
       ? 'bg-transparent border-transparent text-gray-500 cursor-not-allowed opacity-40 shadow-none'
-      : 'bg-transparent border-transparent hover:bg-transparent hover:border-transparent text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] shadow-none';
+      : 'bg-transparent border-transparent hover:bg-transparent hover:border-transparent text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] hover:drop-shadow-[0_0_16px_rgba(255,255,255,0.85)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400/80 shadow-none hover:brightness-125';
   }
 
   if (disabled) {

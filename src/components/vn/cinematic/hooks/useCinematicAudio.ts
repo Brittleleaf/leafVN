@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { VNCinematicTrack, VNCinematicClip } from '@/types/vn';
-import { stopAudioPreview } from '@/lib/audioSettings';
+import { stopAudioPreview, getAudioSettings } from '@/lib/audioSettings';
 
 interface UseCinematicAudioProps {
   tracks: VNCinematicTrack[];
@@ -192,7 +192,10 @@ export function useCinematicAudio({
 
     // 3. Play or update audio instances for active clips
     activeAudioClips.forEach(({ clip, isMuted }) => {
-      const baseVolume = isMuted ? 0 : Math.max(0, Math.min(1, Number.isFinite(clip.volume) ? (clip.volume as number) : 0.8));
+      const { muteAll, volume: masterVolInt } = getAudioSettings();
+      const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, masterVolInt / 100));
+      const rawVol = isMuted ? 0 : Math.max(0, Math.min(1, Number.isFinite(clip.volume) ? (clip.volume as number) : 0.8));
+      const baseVolume = rawVol * masterVol;
       const clipDuration = Math.max(0.05, clip.endSec - clip.startSec);
       const elapsedInClip = Math.max(0, currentTimeSec - clip.startSec);
 

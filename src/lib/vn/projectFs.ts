@@ -912,6 +912,9 @@ export async function unpackProjectBundle(bundleBuffer: Buffer, targetProjectId?
     if (!safeRel || safeRel.includes('..') || safeRel.endsWith('/') || zipEntry.dir) continue;
 
     const destPath = path.join(/*turbopackIgnore: true*/ projDir, safeRel);
+    const resolvedDest = path.resolve(destPath);
+    if (!resolvedDest.startsWith(path.resolve(projDir))) continue;
+
     const destDir = path.dirname(destPath);
     if (!fs.existsSync(destDir)) {
       fs.mkdirSync(destDir, { recursive: true });
