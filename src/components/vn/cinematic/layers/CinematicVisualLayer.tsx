@@ -10,6 +10,7 @@ export interface VisualClipWithIndex {
   clip: VNCinematicClip;
   zIndex: number;
   isBackground?: boolean;
+  incomingClip?: VNCinematicClip;
 }
 
 interface CinematicVisualLayerProps {
@@ -158,7 +159,7 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
 }) => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {activeClips.map(({ clip, zIndex, isBackground }) => {
+      {activeClips.map(({ clip, zIndex, isBackground, incomingClip }) => {
         const isSelected = isEditor && selectedClipId === clip.id;
         const isCover =
           Boolean(isBackground) ||
@@ -166,7 +167,7 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
           clip.fit === 'cover';
 
         const isVideo = isVideoMedia(clip.mediaUrl, clip.mediaType);
-        const fx = calculateCinematicClipFx(clip, currentTimeSec);
+        const fx = calculateCinematicClipFx(clip, currentTimeSec, incomingClip);
 
         if (isCover) {
           const bgScale = Number.isFinite(clip.scale) ? (clip.scale as number) : 1;

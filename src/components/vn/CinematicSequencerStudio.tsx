@@ -412,12 +412,36 @@ export default function CinematicSequencerStudio({
           handleDuplicateClip(selectedClip);
           return;
         }
+        if (e.code === 'KeyT' && selectedClip) {
+          e.preventDefault();
+          handleUpdateClip(selectedClip.id, { transition: 'dissolve', transitionDuration: 0.5 });
+          setMediaLibraryTab('transitions');
+          setIsLibraryCollapsed(false);
+          setSaveSuccessMsg('Applied default Dissolve transition (0.5s)');
+          setTimeout(() => setSaveSuccessMsg(null), 2500);
+          return;
+        }
+        if (e.code === 'KeyF' && selectedClip) {
+          e.preventDefault();
+          const hasFade = (selectedClip.fadeInSec ?? 0) > 0 || (selectedClip.fadeOutSec ?? 0) > 0;
+          handleUpdateClip(selectedClip.id, {
+            fadeInSec: hasFade ? 0 : 0.5,
+            fadeOutSec: hasFade ? 0 : 0.5,
+          });
+          setSaveSuccessMsg(hasFade ? 'Fades removed' : 'Applied 0.5s Fade In & Fade Out');
+          setTimeout(() => setSaveSuccessMsg(null), 2500);
+          return;
+        }
       }
 
       if (e.code === 'Space') {
         e.preventDefault();
         handleTogglePlay();
         playUiSound('click', 0.25);
+      } else if (e.code === 'KeyT') {
+        e.preventDefault();
+        setMediaLibraryTab('transitions');
+        setIsLibraryCollapsed(false);
       } else if (e.code === 'KeyS' || e.code === 'KeyC') {
         if (selectedClip && currentTimeSec > selectedClip.startSec && currentTimeSec < selectedClip.endSec) {
           e.preventDefault();

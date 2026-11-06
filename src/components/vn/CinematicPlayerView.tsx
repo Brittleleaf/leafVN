@@ -266,7 +266,7 @@ export default function CinematicPlayerView({
   // 1. Collect active background clips (base layer: z-index 1..9)
   // Supports dual-buffer transition cross-holding: keeps outgoing clip alive underneath during incoming transition
   const bgTracks = tracks.filter((t) => t.section === 'background' && t.visible !== false);
-  const activeBgClips: { clip: VNCinematicClip; zIndex: number; isBackground: boolean }[] = [];
+  const activeBgClips: { clip: VNCinematicClip; zIndex: number; isBackground: boolean; incomingClip?: VNCinematicClip }[] = [];
   bgTracks.forEach((track, idx) => {
     track.clips.forEach((clip) => {
       // Look for an adjacent incoming clip that starts when this clip ends and has a transition
@@ -284,6 +284,7 @@ export default function CinematicPlayerView({
           clip,
           zIndex: (1 + idx) * 10 + (isHoldPhase ? 0 : 2),
           isBackground: true,
+          incomingClip: isHoldPhase ? nextIncoming : undefined,
         });
       }
     });
@@ -297,8 +298,8 @@ export default function CinematicPlayerView({
       t.section !== 'audio' &&
       t.visible !== false
   );
-  const activeMediaClips: { clip: VNCinematicClip; zIndex: number; isBackground: boolean }[] = [];
-  const activeTextClips: { clip: VNCinematicClip; zIndex: number }[] = [];
+  const activeMediaClips: { clip: VNCinematicClip; zIndex: number; isBackground: boolean; incomingClip?: VNCinematicClip }[] = [];
+  const activeTextClips: { clip: VNCinematicClip; zIndex: number; incomingClip?: VNCinematicClip }[] = [];
 
   mediaTracks.forEach((track, tIdx) => {
     const baseTrackZIndex = 20 + (mediaTracks.length - tIdx) * 10;
@@ -316,10 +317,19 @@ export default function CinematicPlayerView({
         const clipZ = baseTrackZIndex + (isHoldPhase ? 0 : 2);
 
         if (clip.mediaUrl) {
-          activeMediaClips.push({ clip, zIndex: clipZ, isBackground: false });
+          activeMediaClips.push({
+            clip,
+            zIndex: clipZ,
+            isBackground: false,
+            incomingClip: isHoldPhase ? nextIncoming : undefined,
+          });
         }
         if (clip.text) {
-          activeTextClips.push({ clip, zIndex: clipZ + 5 });
+          activeTextClips.push({
+            clip,
+            zIndex: clipZ + 5,
+            incomingClip: isHoldPhase ? nextIncoming : undefined,
+          });
         }
       }
     });

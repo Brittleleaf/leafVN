@@ -110,7 +110,8 @@ export interface CinematicRenderTransform {
  */
 export function calculateCinematicClipFx(
   clip: VNCinematicClip,
-  currentTimeSec?: number
+  currentTimeSec?: number,
+  incomingClip?: VNCinematicClip
 ): CinematicRenderTransform {
   const baseOpacity = Number.isFinite(clip.opacity) ? Math.max(0, Math.min(1, clip.opacity!)) : 1;
 
@@ -133,6 +134,86 @@ export function calculateCinematicClipFx(
   const endSec = Number.isFinite(clip.endSec) ? clip.endSec : startSec + 1;
   const elapsed = currentTimeSec - startSec;
   const remaining = endSec - currentTimeSec;
+
+  // 0. DUAL-BUFFER OUTGOING HOLD & PUSH (when this clip has ended, but incoming clip is transitioning in)
+  if (incomingClip && currentTimeSec >= endSec) {
+    const holdElapsed = currentTimeSec - endSec;
+    const incomingTrans = (incomingClip.transition || 'fade') as VNCinematicTransitionType;
+    const incomingDuration = Math.max(0.08, Number.isFinite(incomingClip.transitionDuration) ? incomingClip.transitionDuration! : 0.5);
+
+    if (holdElapsed >= 0 && holdElapsed < incomingDuration && incomingTrans !== 'cut') {
+      const rawP = Math.min(1, Math.max(0, holdElapsed / incomingDuration));
+      const cubicP = easeOutCubic(rawP);
+      const smoothP = smoothstep(rawP);
+
+      switch (incomingTrans) {
+        case 'slide_left':
+          // Camera push: outgoing scene sweeps left as new scene sweeps in from right
+          result.translateX = `${-cubicP * 100}%`;
+          result.opacity *= Math.max(0, 1 - smoothP * 0.6);
+          break;
+
+        case 'slide_right':
+          result.translateX = `${cubicP * 100}%`;
+          result.opacity *= Math.max(0, 1 - smoothP * 0.6);
+          break;
+
+        case 'slide_up':
+          result.translateY = `${-cubicP * 100}%`;
+          result.opacity *= Math.max(0, 1 - smoothP * 0.6);
+          break;
+
+        case 'slide_down':
+          result.translateY = `${cubicP * 100}%`;
+          result.opacity *= Math.max(0, 1 - smoothP * 0.6);
+          break;
+
+        case 'zoom_in':
+          // Outgoing scene zooms past camera like an optical warp into incoming scene
+          result.scaleMultiplier *= 1 + cubicP * 0.7;
+          result.opacity *= Math.max(0, 1 - smoothP);
+          break;
+
+        case 'zoom_out':
+          result.scaleMultiplier *= Math.max(0.01, 1 - cubicP * 0.5);
+          result.opacity *= Math.max(0, 1 - smoothP);
+          break;
+
+        case 'flip':
+          // 3D card flip: outgoing card flips from 0 to -90 deg
+          result.rotateYDeg -= easeInOutCubic(rawP) * 90;
+          result.opacity *= Math.max(0, 1 - rawP * 2);
+          break;
+
+        case 'fade':
+        case 'dissolve':
+          result.opacity *= (1 - smoothP);
+          break;
+
+        case 'fade_black':
+          result.opacity *= Math.max(0, 1 - smoothP * 2);
+          result.filter += ` brightness(${Math.max(0, 1 - smoothP * 2.5)})`;
+          break;
+
+        case 'fade_white':
+          result.filter += ` brightness(${1 + smoothP * 3})`;
+          result.opacity *= Math.max(0, 1 - smoothP);
+          break;
+
+        case 'glitch':
+          result.filter += ` hue-rotate(${rawP * 180}deg) blur(${rawP * 4}px)`;
+          result.translateX = `${Math.sin(rawP * 30) * rawP * 14}px`;
+          result.opacity *= Math.max(0, 1 - smoothP);
+          break;
+
+        default:
+          result.opacity *= (1 - smoothP);
+          break;
+      }
+
+      return result;
+    }
+  }
 
   const transitionType = (clip.transition || 'fade') as VNCinematicTransitionType;
   const transDuration = Math.max(0.08, Number.isFinite(clip.transitionDuration) ? clip.transitionDuration! : 0.5);

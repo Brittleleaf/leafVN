@@ -19,7 +19,8 @@ import { AudioWaveformVisualizer } from './AudioWaveformVisualizer';
 import { useTimelineDrag } from './hooks/useTimelineDrag';
 import { getAudioDuration } from './hooks/useCinematicAudio';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
-import { TransitionBowtieIcon } from './cinematicTransitions';
+import { TransitionBowtieIcon, CINEMATIC_TRANSITIONS_CATALOG } from './cinematicTransitions';
+import { playTransitionSfx } from '@/lib/vn/transitionSfx';
 
 interface CinematicMultitrackTimelineProps {
   tracks: VNCinematicTrack[];
@@ -101,6 +102,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
 
   // Track reorder drag state
   const [draggedTrackId, setDraggedTrackId] = useState<string | null>(null);
+  const [activeSeamPopoverClipId, setActiveSeamPopoverClipId] = useState<string | null>(null);
 
   // Sections ordered list
   const sectionsList: VNCinematicSection[] = ['media', 'audio', 'background'];
@@ -974,7 +976,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   e.stopPropagation();
                                   onSelectClip(c.id);
                                   onSelectTrack(track.id);
-                                  if (onOpenTransitionsTab) onOpenTransitionsTab();
+                                  setActiveSeamPopoverClipId(activeSeamPopoverClipId === c.id ? null : c.id);
                                   playUiSound('select', 0.2);
                                 }}
                                 className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-35 group/seam cursor-pointer transition-all ${
@@ -982,14 +984,14 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                 }`}
                                 title={
                                   hasTransition
-                                    ? `Cut Transition: ${c.transition} (${(c.transitionDuration ?? 0.5).toFixed(1)}s) - Click to edit in Library`
+                                    ? `Cut Transition: ${c.transition} (${(c.transitionDuration ?? 0.5).toFixed(1)}s) - Click for Quick Edit`
                                     : 'Add Cut Transition between clips'
                                 }
                               >
                                 <div
                                   className={`w-4 h-6 rounded-[3px] flex flex-col items-center justify-between py-0.5 border shadow-[0_0_8px_rgba(0,0,0,0.9)] transition-all ${
                                     hasTransition
-                                      ? isSelectedTransition
+                                      ? isSelectedTransition || activeSeamPopoverClipId === c.id
                                         ? 'bg-black border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.7)]'
                                         : 'bg-black/95 border-white text-white hover:border-cyan-400 hover:text-cyan-300'
                                       : 'bg-black/80 border-white/60 text-white/70 hover:border-cyan-400 hover:text-cyan-300'
@@ -1000,10 +1002,137 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   <span className="w-1 h-0.5 bg-white/40 rounded-full" />
                                 </div>
 
-                                {/* Floating Transition Name Pill on Hover */}
-                                {hasTransition && (
+                                {/* Floating Transition Name Pill on Hover (when popover not open) */}
+                                {hasTransition && activeSeamPopoverClipId !== c.id && (
                                   <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 opacity-0 group-hover/seam:opacity-100 transition-opacity pointer-events-none px-1.5 py-0.5 rounded bg-black/95 border border-cyan-400 text-cyan-300 text-[8px] font-mono font-bold whitespace-nowrap shadow-xl">
                                     {c.transition} ({(c.transitionDuration ?? 0.5).toFixed(1)}s)
+                                  </div>
+                                )}
+
+                                {/* QUICK INLINE TIMELINE TRANSITION POPOVER */}
+                                {activeSeamPopoverClipId === c.id && (
+                                  <div
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 z-50 p-2 rounded-lg bg-black/95 border border-cyan-400 shadow-[0_0_25px_rgba(0,0,0,0.95)] flex items-center gap-2 whitespace-nowrap animate-fade-in text-[10px]"
+                                  >
+                                    <div className="flex items-center gap-1 text-cyan-400 font-bold">
+                                      <TransitionBowtieIcon className="w-3 h-3" />
+                                    </div>
+
+                                    {/* Transition Selector */}
+                                    <select
+                                      value={c.transition || 'dissolve'}
+                                      onChange={(e) => {
+                                        const newTrans = e.target.value as any;
+                                        const updated = tracks.map((t) =>
+                                          t.id === track.id
+                                            ? {
+                                                ...t,
+                                                clips: t.clips.map((clip) =>
+                                                  clip.id === c.id ? { ...clip, transition: newTrans } : clip
+                                                ),
+                                              }
+                                            : t
+                                        );
+                                        onUpdateTracks(updated);
+                                        playTransitionSfx(newTrans, 0.35);
+                                      }}
+                                      className="px-1.5 py-0.5 rounded bg-[var(--surface)] text-cyan-300 border border-[var(--border)] font-bold text-[10px] outline-none cursor-pointer"
+                                    >
+                                      {CINEMATIC_TRANSITIONS_CATALOG.map((t) => (
+                                        <option key={t.id} value={t.id}>
+                                          {t.name}
+                                        </option>
+                                      ))}
+                                    </select>
+
+                                    {/* Duration Stepper */}
+                                    <div className="flex items-center gap-1 bg-black/80 px-1 py-0.5 rounded border border-white/20 font-mono text-[9px]">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const cur = c.transitionDuration ?? 0.5;
+                                          const nextDur = Math.max(0.1, Number((cur - 0.1).toFixed(1)));
+                                          const updated = tracks.map((t) =>
+                                            t.id === track.id
+                                              ? {
+                                                  ...t,
+                                                  clips: t.clips.map((clip) =>
+                                                    clip.id === c.id ? { ...clip, transitionDuration: nextDur } : clip
+                                                  ),
+                                                }
+                                              : t
+                                          );
+                                          onUpdateTracks(updated);
+                                        }}
+                                        className="w-4 h-4 rounded hover:bg-white/20 text-gray-300 font-bold flex items-center justify-center cursor-pointer"
+                                        title="Decrease duration by 0.1s"
+                                      >
+                                        -
+                                      </button>
+                                      <span className="text-cyan-400 font-bold min-w-[28px] text-center">
+                                        {(c.transitionDuration ?? 0.5).toFixed(1)}s
+                                      </span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const cur = c.transitionDuration ?? 0.5;
+                                          const nextDur = Math.min(3.0, Number((cur + 0.1).toFixed(1)));
+                                          const updated = tracks.map((t) =>
+                                            t.id === track.id
+                                              ? {
+                                                  ...t,
+                                                  clips: t.clips.map((clip) =>
+                                                    clip.id === c.id ? { ...clip, transitionDuration: nextDur } : clip
+                                                  ),
+                                                }
+                                              : t
+                                          );
+                                          onUpdateTracks(updated);
+                                        }}
+                                        className="w-4 h-4 rounded hover:bg-white/20 text-gray-300 font-bold flex items-center justify-center cursor-pointer"
+                                        title="Increase duration by 0.1s"
+                                      >
+                                        +
+                                      </button>
+                                    </div>
+
+                                    {/* Direct Cut / Remove button */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = tracks.map((t) =>
+                                          t.id === track.id
+                                            ? {
+                                                ...t,
+                                                clips: t.clips.map((clip) =>
+                                                  clip.id === c.id ? { ...clip, transition: 'cut' } : clip
+                                                ),
+                                              }
+                                            : t
+                                        );
+                                        onUpdateTracks(updated);
+                                        setActiveSeamPopoverClipId(null);
+                                        playUiSound('delete', 0.2);
+                                      }}
+                                      className="p-1 rounded hover:bg-red-950/60 text-red-400 hover:text-red-300 border border-transparent hover:border-red-500/40 cursor-pointer"
+                                      title="Remove transition (Direct Cut)"
+                                    >
+                                      <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+                                    </button>
+
+                                    {/* Open full Transitions Library */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (onOpenTransitionsTab) onOpenTransitionsTab();
+                                        setActiveSeamPopoverClipId(null);
+                                      }}
+                                      className="px-1.5 py-0.5 rounded bg-cyan-500 text-black font-bold text-[9px] hover:bg-cyan-400 cursor-pointer"
+                                      title="Open full Transitions Library panel"
+                                    >
+                                      More...
+                                    </button>
                                   </div>
                                 )}
                               </div>

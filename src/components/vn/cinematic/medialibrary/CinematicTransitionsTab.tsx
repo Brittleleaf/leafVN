@@ -8,6 +8,11 @@ import {
 } from '../cinematicTransitions';
 import { playUiSound } from '@/lib/audioSettings';
 import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
+import {
+  playTransitionSfx,
+  isTransitionSfxEnabled,
+  setTransitionSfxEnabled,
+} from '@/lib/vn/transitionSfx';
 
 interface CinematicTransitionsTabProps {
   onApplyTransition?: (transitionType: VNCinematicTransitionType, durationSec: number) => void;
@@ -24,6 +29,7 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
   const [search, setSearch] = useState<string>('');
   const [transitionDuration, setTransitionDuration] = useState<number>(0.5);
   const [hoveredTransId, setHoveredTransId] = useState<string | null>(null);
+  const [sfxMuted, setSfxMuted] = useState<boolean>(!isTransitionSfxEnabled());
 
   const categories = ['All', 'Basic', 'Slides', '3D & Zoom', 'Creative'];
 
@@ -36,7 +42,8 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
   const handleApply = (transId: VNCinematicTransitionType) => {
     if (onApplyTransition) {
       onApplyTransition(transId, transitionDuration);
-      playUiSound('select', 0.35);
+      playTransitionSfx(transId, 0.4);
+      playUiSound('select', 0.25);
     }
   };
 
@@ -44,7 +51,8 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
     if (e) e.stopPropagation();
     if (onApplyToAll) {
       onApplyToAll(transId, transitionDuration);
-      playUiSound('select', 0.4);
+      playTransitionSfx(transId, 0.45);
+      playUiSound('select', 0.3);
     }
   };
 
@@ -73,20 +81,41 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
             ))}
           </div>
 
-          {/* Quick Duration Control */}
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-[var(--muted)] shrink-0">
-            <span>Duration:</span>
-            <span className="font-bold text-cyan-400">{transitionDuration.toFixed(1)}s</span>
-            <input
-              type="range"
-              min={0.1}
-              max={2.5}
-              step={0.1}
-              value={transitionDuration}
-              onChange={(e) => setTransitionDuration(parseFloat(e.target.value))}
-              className="w-16 h-1 accent-cyan-400 cursor-pointer"
-              title="Transition duration in seconds"
-            />
+          {/* Quick Duration & Procedural SFX Control */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                const nextVal = !sfxMuted;
+                setSfxMuted(nextVal);
+                setTransitionSfxEnabled(!nextVal);
+                if (!nextVal) playTransitionSfx('slide_left', 0.35);
+              }}
+              className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold flex items-center gap-1 border transition-all cursor-pointer ${
+                !sfxMuted
+                  ? 'bg-cyan-950/40 border-cyan-500/50 text-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.2)]'
+                  : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)]'
+              }`}
+              title={!sfxMuted ? 'Procedural Transition SFX Enabled (Whoosh/Glitch/Snap)' : 'Transition SFX Muted'}
+            >
+              <GuiIconRenderer icon={!sfxMuted ? GUI_ICONS.general.sound : GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+              <span>SFX {!sfxMuted ? 'ON' : 'OFF'}</span>
+            </button>
+
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-[var(--muted)]">
+              <span>Duration:</span>
+              <span className="font-bold text-cyan-400">{transitionDuration.toFixed(1)}s</span>
+              <input
+                type="range"
+                min={0.1}
+                max={2.5}
+                step={0.1}
+                value={transitionDuration}
+                onChange={(e) => setTransitionDuration(parseFloat(e.target.value))}
+                className="w-14 h-1 accent-cyan-400 cursor-pointer"
+                title="Transition duration in seconds"
+              />
+            </div>
           </div>
         </div>
 
@@ -115,7 +144,10 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
             <div
               key={trans.id}
               onClick={() => handleApply(trans.id)}
-              onMouseEnter={() => setHoveredTransId(trans.id)}
+              onMouseEnter={() => {
+                setHoveredTransId(trans.id);
+                playTransitionSfx(trans.id, 0.2);
+              }}
               onMouseLeave={() => setHoveredTransId(null)}
               className={`group relative rounded-lg border p-2 flex flex-col justify-between transition-all cursor-pointer shadow-sm ${
                 isHovered

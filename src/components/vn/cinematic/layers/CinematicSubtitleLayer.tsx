@@ -8,6 +8,7 @@ import { calculateCinematicClipFx } from '../cinematicTransitions';
 interface ActiveTextClipItem {
   clip: VNCinematicClip;
   zIndex?: number;
+  incomingClip?: VNCinematicClip;
 }
 
 interface CinematicSubtitleLayerProps {
@@ -50,7 +51,8 @@ export const CinematicSubtitleLayer: React.FC<CinematicSubtitleLayerProps> = ({
           : undefined;
 
         // Real-time animation, transitions, fade in and fade out
-        const fx = calculateCinematicClipFx(clip, currentTimeSec);
+        const incomingClip = 'incomingClip' in item ? item.incomingClip : undefined;
+        const fx = calculateCinematicClipFx(clip, currentTimeSec, incomingClip);
 
         // Check if this is an authentic VN Dialogue (has speaker, avatar, or classic_vn style)
         const isClassicDialogue =
