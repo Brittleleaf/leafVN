@@ -23,6 +23,12 @@ export function getAudioSettings() {
   };
 }
 
+export function notifyAudioSettingsChanged() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('vn_audio_settings_changed'));
+  }
+}
+
 export const UI_SFX = {
   CLICK: '/assets/ui-sfx/Click.mp3',
   SELECT: '/assets/ui-sfx/Select.mp3',

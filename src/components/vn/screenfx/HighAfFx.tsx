@@ -361,6 +361,11 @@ export const HighAfComponent: React.FC<ScreenFxProps> = ({
     return () => {
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
+      if (quadBuffer) gl.deleteBuffer(quadBuffer);
+      if (vert) gl.deleteShader(vert);
+      if (frag) gl.deleteShader(frag);
+      if (program) gl.deleteProgram(program);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [fractalOpacity, fractalZoom, morphSpeed, colorSpeed]);
 

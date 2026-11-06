@@ -376,6 +376,7 @@ export const RainyScreen2Component: React.FC<ScreenFxProps> = ({
       gl.deleteProgram(program);
       gl.deleteShader(vert);
       gl.deleteShader(frag);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [dist, blurSize, zoom, effectiveSpeed, customTextureUrl, tintColorHex, tintOpacity]);
 

@@ -255,7 +255,7 @@ export function useVNMakerState(
     if (pastStoriesRef.current.length === 0) return;
     const previous = pastStoriesRef.current.pop()!;
     try {
-      futureStoriesRef.current.push(JSON.parse(JSON.stringify(story)));
+      futureStoriesRef.current = [...futureStoriesRef.current.slice(-29), JSON.parse(JSON.stringify(story))];
     } catch (e) {}
     setStory(previous);
     saveActiveStory(previous);
@@ -296,7 +296,7 @@ export function useVNMakerState(
     if (futureStoriesRef.current.length === 0) return;
     const next = futureStoriesRef.current.pop()!;
     try {
-      pastStoriesRef.current.push(JSON.parse(JSON.stringify(story)));
+      pastStoriesRef.current = [...pastStoriesRef.current.slice(-29), JSON.parse(JSON.stringify(story))];
     } catch (e) {}
     setStory(next);
     saveActiveStory(next);

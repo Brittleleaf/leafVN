@@ -259,6 +259,9 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
   const historyBottomRef = useRef<HTMLDivElement>(null);
   const bgmAudioRef = useRef<HTMLAudioElement | null>(null);
   const fxLoopAudioRef = useRef<HTMLAudioElement | null>(null);
+  const currentBgmRawVolumeRef = useRef<number>(0.5);
+  const currentFxRawVolumeRef = useRef<number>(0.6);
+  const currentDialogueAudioRef = useRef<HTMLAudioElement | null>(null);
   const fxFadeOutTimerRef = useRef<NodeJS.Timeout | null>(null);
   const fxFadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const shakeTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -633,6 +636,10 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       clearInterval(typingTimerRef.current);
       typingTimerRef.current = null;
     }
+    if (currentDialogueAudioRef.current) {
+      try { currentDialogueAudioRef.current.pause(); } catch {}
+      currentDialogueAudioRef.current = null;
+    }
     if (autoTimerRef.current) {
       clearTimeout(autoTimerRef.current);
       autoTimerRef.current = null;
@@ -707,6 +714,11 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
 
     let urlToPlay: string | undefined = explicitUrl || undefined;
     let volToPlay = explicitVol ?? 0.5;
+    currentBgmRawVolumeRef.current = volToPlay;
+
+    const { muteAll, volume } = getAudioSettings();
+    const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
+    const effectiveVol = volToPlay * masterVol;
 
     if (!urlToPlay && targetScene.timeline) {
       for (let i = targetIndex; i >= 0; i--) {
@@ -731,7 +743,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
           bgmAudioRef.current.src.endsWith(urlToPlay));
 
       if (isAlreadyPlaying && bgmAudioRef.current) {
-        bgmAudioRef.current.volume = volToPlay;
+        bgmAudioRef.current.volume = effectiveVol;
         return;
       }
       if (bgmAudioRef.current) {
@@ -741,7 +753,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       try {
         const audio = new Audio(urlToPlay);
         audio.loop = true;
-        audio.volume = volToPlay;
+        audio.volume = effectiveVol;
         audio.play().catch(() => {});
         bgmAudioRef.current = audio;
       } catch {}
@@ -751,6 +763,27 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
         bgmAudioRef.current = null;
       }
     }
+  }, []);
+
+  // Sincronización reactiva en tiempo real del volumen y mute de BGM y FX Loop
+  useEffect(() => {
+    const syncActiveVolumes = () => {
+      const { muteAll, volume } = getAudioSettings();
+      const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
+      if (bgmAudioRef.current) {
+        bgmAudioRef.current.volume = currentBgmRawVolumeRef.current * masterVol;
+      }
+      if (fxLoopAudioRef.current) {
+        fxLoopAudioRef.current.volume = currentFxRawVolumeRef.current * masterVol;
+      }
+    };
+
+    window.addEventListener('vn_audio_settings_changed', syncActiveVolumes);
+    window.addEventListener('storage', syncActiveVolumes);
+    return () => {
+      window.removeEventListener('vn_audio_settings_changed', syncActiveVolumes);
+      window.removeEventListener('storage', syncActiveVolumes);
+    };
   }, []);
 
   // Audio al entrar a la escena y BGM
@@ -787,6 +820,10 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       if (autoTimerRef.current) {
         clearTimeout(autoTimerRef.current);
         autoTimerRef.current = null;
+      }
+      if (currentDialogueAudioRef.current) {
+        try { currentDialogueAudioRef.current.pause(); } catch {}
+        currentDialogueAudioRef.current = null;
       }
       if (bgmAudioRef.current) {
         try {
@@ -1148,8 +1185,12 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
       autoTimerRef.current = null;
     }
     setPendingReaction({ reaction, onComplete });
+    if (currentDialogueAudioRef.current) {
+      try { currentDialogueAudioRef.current.pause(); } catch {}
+      currentDialogueAudioRef.current = null;
+    }
     if (reaction.sfx && !skipModeRef.current) {
-      playSfx(reaction.sfx);
+      currentDialogueAudioRef.current = playSfx(reaction.sfx) || null;
     }
     const fullText = interpolateText(reaction.text, variablesState);
     let charIndex = 0;
@@ -1243,8 +1284,12 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
         setDisplayedText('');
         setIsTyping(true);
 
+        if (currentDialogueAudioRef.current) {
+          try { currentDialogueAudioRef.current.pause(); } catch {}
+          currentDialogueAudioRef.current = null;
+        }
         if (currentEvent.sfx && !skipModeRef.current) {
-          playSfx(currentEvent.sfx);
+          currentDialogueAudioRef.current = playSfx(currentEvent.sfx) || null;
         }
 
         const speakerName = interpolateText(currentEvent.customSpeakerName || currentSpeaker?.name || 'Narrator', variablesState);
@@ -1346,8 +1391,14 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
             (decodeURIComponent(bgmAudioRef.current.src).includes(decodeURIComponent(currentEvent.audioUrl)) ||
               bgmAudioRef.current.src.endsWith(currentEvent.audioUrl));
 
+          const rawVol = currentEvent.audioVolume ?? 0.5;
+          currentBgmRawVolumeRef.current = rawVol;
+          const { muteAll, volume } = getAudioSettings();
+          const masterVol = muteAll ? 0 : Math.max(0, Math.min(1, volume / 100));
+          const effectiveVol = rawVol * masterVol;
+
           if (isSameTrack && bgmAudioRef.current) {
-            bgmAudioRef.current.volume = currentEvent.audioVolume ?? 0.5;
+            bgmAudioRef.current.volume = effectiveVol;
           } else {
             if (bgmAudioRef.current) {
               bgmAudioRef.current.pause();
@@ -1356,7 +1407,7 @@ export function useVNPlayer({ story, initialSaveState, onExit }: UseVNPlayerProp
             try {
               const audio = new Audio(currentEvent.audioUrl);
               audio.loop = true;
-              audio.volume = currentEvent.audioVolume ?? 0.5;
+              audio.volume = effectiveVol;
               audio.play().catch(() => {});
               bgmAudioRef.current = audio;
             } catch {}

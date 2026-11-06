@@ -220,15 +220,19 @@ export const FlashlightComponent: React.FC<ScreenFxProps> = ({
         style={{
           background: isDark
             ? 'rgba(0, 0, 0, 0.98)'
-            : `radial-gradient(circle at ${cx}px ${cy}px, transparent 0px, transparent ${Math.round(
-                radius * 0.42
-              )}px, rgba(0, 0, 0, ${0.12 * (1 / lightOpacity)}) ${Math.round(
-                radius * 0.62
-              )}px, rgba(0, 0, 0, ${0.45 * (1 / lightOpacity)}) ${Math.round(
-                radius * 0.88
-              )}px, rgba(0, 0, 0, ${0.82 * (1 / lightOpacity)}) ${Math.round(
-                radius * 1.18
-              )}px, rgba(0, 0, 0, 0.98) ${Math.round(radius * 1.6)}px)`,
+            : `radial-gradient(circle at ${cx}px ${cy}px, rgba(0,0,0,0) 0px, rgba(0,0,0,0) ${Math.round(
+                radius * 0.35
+              )}px, rgba(0, 0, 0, ${Math.min(0.98, 0.05 * (1 / lightOpacity))}) ${Math.round(
+                radius * 0.52
+              )}px, rgba(0, 0, 0, ${Math.min(0.98, 0.16 * (1 / lightOpacity))}) ${Math.round(
+                radius * 0.72
+              )}px, rgba(0, 0, 0, ${Math.min(0.98, 0.38 * (1 / lightOpacity))}) ${Math.round(
+                radius * 0.95
+              )}px, rgba(0, 0, 0, ${Math.min(0.98, 0.68 * (1 / lightOpacity))}) ${Math.round(
+                radius * 1.22
+              )}px, rgba(0, 0, 0, ${Math.min(0.98, 0.88 * (1 / lightOpacity))}) ${Math.round(
+                radius * 1.50
+              )}px, rgba(0, 0, 0, 0.98) ${Math.round(radius * 1.85)}px)`,
         }}
       />
 

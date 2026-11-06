@@ -114,6 +114,10 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
   const [activeTransition, setActiveTransition] = useState<string | null>(null);
 
   useEffect(() => {
+    if (skipMode) {
+      setActiveTransition(null);
+      return;
+    }
     if (currentEvent?.transition && currentEvent.transition !== 'instant') {
       setActiveTransition(currentEvent.transition);
       const timer = setTimeout(() => {
@@ -121,7 +125,7 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
       }, 850);
       return () => clearTimeout(timer);
     }
-  }, [currentEvent?.id, currentScene?.id, currentEvent?.transition]);
+  }, [currentEvent?.id, currentScene?.id, currentEvent?.transition, skipMode]);
 
   // Computed character staging & docking in player
   const isPlayerCustomPlaced =
@@ -690,9 +694,9 @@ export default function VNPlayer({ story, initialSaveState, onExit, onOpenEditor
           <button
             onClick={() => {
               if (document.fullscreenElement) {
-                document.exitFullscreen();
+                document.exitFullscreen?.().catch(() => {});
               } else {
-                playerContainerRef.current?.requestFullscreen?.() || document.documentElement.requestFullscreen();
+                (playerContainerRef.current?.requestFullscreen?.() || document.documentElement.requestFullscreen?.())?.catch?.(() => {});
               }
             }}
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}

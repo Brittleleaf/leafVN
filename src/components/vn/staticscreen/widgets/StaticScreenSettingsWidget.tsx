@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { GUI_ICONS, GuiIconRenderer } from '@/lib/vn/guiIcons';
-import { getAudioSettings, AUDIO_KEYS, playSfx, playUiSound } from '@/lib/audioSettings';
+import { getAudioSettings, AUDIO_KEYS, playSfx, playUiSound, notifyAudioSettingsChanged } from '@/lib/audioSettings';
 
 interface StaticScreenSettingsWidgetProps {
   isInteractive?: boolean;
@@ -45,6 +45,7 @@ export function StaticScreenSettingsWidget({
     setMasterVolume(val);
     if (typeof window !== 'undefined') {
       localStorage.setItem(AUDIO_KEYS.VOLUME, String(val));
+      notifyAudioSettingsChanged();
     }
   };
 
@@ -53,6 +54,7 @@ export function StaticScreenSettingsWidget({
     setIsMuted(next);
     if (typeof window !== 'undefined') {
       localStorage.setItem(AUDIO_KEYS.MUTE_ALL, next ? 'true' : 'false');
+      notifyAudioSettingsChanged();
     }
     playUiSound(next ? 'open' : 'select', 0.4);
   };
