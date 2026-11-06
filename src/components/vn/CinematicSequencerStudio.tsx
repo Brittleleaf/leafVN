@@ -701,6 +701,10 @@ export default function CinematicSequencerStudio({
           ref={centerContainerRef}
           className="flex-1 min-h-0 relative flex flex-col items-center justify-between p-2 md:p-3 bg-[var(--well-bg)] overflow-hidden"
         >
+          {/* CapCut Ambient Glow Projector from Transitions Sidebar towards Canvas */}
+          {mediaLibraryTab === 'transitions' && !isLibraryCollapsed && (
+            <div className="absolute top-0 bottom-0 left-0 w-80 pointer-events-none z-10 bg-gradient-to-r from-emerald-500/20 via-cyan-500/8 to-transparent blur-3xl animate-in fade-in duration-500" />
+          )}
           {/* Strictly 16:9 Aspect Ratio Canvas Stage Container with Dedicated Outside Dock */}
           <div
             onClick={(e) => {

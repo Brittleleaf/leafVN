@@ -328,35 +328,58 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
         </div>
 
         {/* TABS (6 SECTIONS INCL. CAPCUT TRANSITIONS) */}
-        <div className="grid grid-cols-6 gap-1 p-1 bg-[var(--well-bg)] rounded-md border border-[var(--border)] text-[10px] font-bold">
-          {[
-            { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.group, isBowtie: false },
-            { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.general.screenFx, isBowtie: false },
-            { id: 'media', label: 'Media', icon: GUI_ICONS.general.gallery, isBowtie: false },
-            { id: 'text', label: 'Titles', icon: GUI_ICONS.general.texts, isBowtie: false },
-            { id: 'audio', label: 'Audio', icon: GUI_ICONS.general.sound, isBowtie: false },
-            { id: 'transitions', label: 'Transitions', icon: '', isBowtie: true },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id as MediaTabType);
-                playUiSound('click', 0.15);
-              }}
-              className={`py-1.5 rounded-lg flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
-                activeTab === tab.id
-                  ? 'bg-[var(--accent)] text-white shadow-sm font-black'
-                  : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
-              }`}
-            >
-              {tab.isBowtie ? (
-                <TransitionBowtieIcon className="w-3.5 h-3.5" />
-              ) : (
-                <GuiIconRenderer icon={tab.icon} className="w-3.5 h-3.5" />
-              )}
-              <span className="truncate max-w-full text-[9px]">{tab.label}</span>
-            </button>
-          ))}
+        <div className="relative">
+          <div className="grid grid-cols-6 gap-1 p-1 bg-[var(--well-bg)] rounded-md border border-[var(--border)] text-[10px] font-bold">
+            {[
+              { id: 'characters', label: 'Characters', icon: GUI_ICONS.general.group, isBowtie: false },
+              { id: 'fx', label: 'Screen FX', icon: GUI_ICONS.general.screenFx, isBowtie: false },
+              { id: 'media', label: 'Media', icon: GUI_ICONS.general.gallery, isBowtie: false },
+              { id: 'text', label: 'Titles', icon: GUI_ICONS.general.texts, isBowtie: false },
+              { id: 'audio', label: 'Audio', icon: GUI_ICONS.general.sound, isBowtie: false },
+              { id: 'transitions', label: 'Transitions', icon: '', isBowtie: true },
+            ].map((tab) => {
+              const isSelected = activeTab === tab.id;
+              const isTransitions = tab.id === 'transitions';
+
+              let btnClass = 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]';
+              if (isSelected) {
+                if (isTransitions) {
+                  btnClass = 'bg-gradient-to-b from-[#0f2e27] to-[#0a1e19] text-cyan-300 border border-emerald-400/80 shadow-[0_0_15px_rgba(16,185,129,0.45)] font-black';
+                } else {
+                  btnClass = 'bg-[var(--accent)] text-white shadow-sm font-black';
+                }
+              }
+
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id as MediaTabType);
+                    playUiSound('click', 0.15);
+                  }}
+                  className={`relative py-1.5 rounded-lg flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${btnClass}`}
+                >
+                  {isTransitions && isSelected && (
+                    <span className="absolute -top-1 -right-0.5 flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 border border-black" />
+                    </span>
+                  )}
+                  {tab.isBowtie ? (
+                    <TransitionBowtieIcon className={`w-3.5 h-3.5 ${isSelected && isTransitions ? 'text-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.9)]' : ''}`} />
+                  ) : (
+                    <GuiIconRenderer icon={tab.icon} className="w-3.5 h-3.5" />
+                  )}
+                  <span className="truncate max-w-full text-[9px]">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Ambient light projector beam beneath tab bar when Transitions is active */}
+          {activeTab === 'transitions' && (
+            <div className="absolute -bottom-3 inset-x-0 h-6 pointer-events-none bg-gradient-to-b from-emerald-500/25 via-cyan-500/10 to-transparent blur-sm z-10" />
+          )}
         </div>
       </div>
 

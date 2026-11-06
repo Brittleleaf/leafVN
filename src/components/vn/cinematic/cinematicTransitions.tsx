@@ -377,71 +377,129 @@ export const TransitionThumbnailPreview: React.FC<{
 }> = ({ transitionType, isHovered = false, className = '' }) => {
   return (
     <div
-      className={`relative w-full aspect-video rounded overflow-hidden select-none bg-slate-900 ${className}`}
-      style={{ perspective: '600px' }}
+      className={`relative w-full aspect-[16/10] rounded-md overflow-hidden select-none bg-[#0c0d12] border border-white/10 shadow-inner group-hover:border-cyan-400/80 transition-colors ${className}`}
+      style={{ perspective: '700px' }}
     >
-      {/* SCENE A (Base: Golden Windmill Landscape) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-amber-200 to-amber-600 flex flex-col justify-between p-1.5 overflow-hidden">
-        {/* Sky Clouds */}
-        <div className="flex justify-between items-center opacity-80">
-          <div className="w-5 h-2 bg-white/70 rounded-full blur-[0.5px]" />
-          <div className="w-7 h-2.5 bg-white/60 rounded-full blur-[0.5px]" />
-        </div>
+      {/* SCENE A (Base: Golden Windmill Countryside - Makoto Shinkai Style) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#38bdf8] via-[#fed7aa] to-[#d97706] flex flex-col justify-between overflow-hidden">
+        {/* Soft Sun Glow in upper corner */}
+        <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full bg-amber-100/40 blur-md pointer-events-none" />
 
-        {/* Center Windmill Tower Graphic */}
-        <div className="relative mx-auto flex flex-col items-center">
-          <div className="relative w-4 h-4">
-            {/* Spinning blades */}
-            <div className="absolute inset-0 flex items-center justify-center animate-[spin_8s_linear_infinite]">
-              <div className="w-4 h-0.5 bg-stone-800" />
-              <div className="w-0.5 h-4 bg-stone-800 absolute" />
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-900 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        {/* Fluffy Anime Clouds */}
+        <div className="relative px-2 pt-1.5 flex justify-between items-center opacity-85 pointer-events-none">
+          <div className="flex items-center -space-x-1">
+            <div className="w-4 h-2 bg-white/90 rounded-full blur-[0.5px]" />
+            <div className="w-5 h-3 bg-white/95 rounded-full shadow-xs" />
+            <div className="w-3 h-1.5 bg-white/80 rounded-full" />
           </div>
-          {/* Windmill tower body */}
-          <div className="w-3 h-5 bg-stone-200 border-x border-stone-400 rounded-t-sm" />
+          <div className="flex items-center -space-x-1 opacity-70">
+            <div className="w-4 h-2.5 bg-white/90 rounded-full" />
+            <div className="w-2.5 h-1.5 bg-white/80 rounded-full" />
+          </div>
         </div>
 
-        {/* Ground grass hill */}
-        <div className="w-full h-3 bg-amber-700/80 rounded-t-full" />
+        {/* Distant Hills Layer */}
+        <div className="absolute bottom-5 inset-x-0 h-4 bg-amber-700/50 rounded-t-[100%] pointer-events-none" />
+
+        {/* Iconic Windmill Graphic (CapCut Inspired) */}
+        <div className="relative z-10 mx-auto flex flex-col items-center mt-auto mb-1">
+          {/* Rotating lattice windmill sails */}
+          <div className="relative w-7 h-7 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center animate-[spin_10s_linear_infinite]">
+              {/* Blade 1 & 2 */}
+              <div className="w-7 h-0.5 bg-stone-900 shadow-xs relative flex justify-between items-center">
+                <div className="w-2.5 h-1 bg-amber-100/90 border border-stone-800 -mt-0.5" />
+                <div className="w-2.5 h-1 bg-amber-100/90 border border-stone-800 -mb-0.5" />
+              </div>
+              {/* Blade 3 & 4 */}
+              <div className="w-0.5 h-7 bg-stone-900 shadow-xs absolute flex flex-col justify-between items-center">
+                <div className="w-1 h-2.5 bg-amber-100/90 border border-stone-800 -ml-0.5" />
+                <div className="w-1 h-2.5 bg-amber-100/90 border border-stone-800 -mr-0.5" />
+              </div>
+            </div>
+            {/* Center rotor hub */}
+            <div className="w-2 h-2 rounded-full bg-amber-950 border border-amber-400/80 shadow-md z-10" />
+          </div>
+
+          {/* Windmill stone tower body */}
+          <div className="relative w-4 h-5 -mt-1 bg-gradient-to-b from-stone-100 to-stone-300 border-x border-stone-500 rounded-t-xs flex flex-col items-center justify-between p-0.5 shadow-md">
+            {/* Red roof cap */}
+            <div className="absolute -top-1 inset-x-0 h-1 bg-amber-800 rounded-t-xs" />
+            <div className="w-1.5 h-1.5 bg-amber-950 rounded-xs mt-1 border border-stone-700" />
+            <div className="w-2 h-2.5 bg-stone-800 rounded-t-xs mt-auto border-t border-stone-900" />
+          </div>
+        </div>
+
+        {/* Foreground Layer: Golden Wheat Field */}
+        <div className="relative z-10 w-full h-4 bg-gradient-to-t from-amber-900 via-amber-700 to-amber-600 border-t border-amber-400/50 flex items-center justify-around px-1">
+          <div className="w-1 h-1.5 bg-amber-300/80 rounded-t-full" />
+          <div className="w-0.5 h-2 bg-amber-200/90 rounded-t-full" />
+          <div className="w-1 h-1.5 bg-amber-300/80 rounded-t-full" />
+        </div>
       </div>
 
-      {/* SCENE B (Incoming: Cyan/Purple Twilight) */}
+      {/* SCENE B (Incoming: Cyberpunk Starry Twilight Metropolis) */}
       <div
-        className={`absolute inset-0 bg-gradient-to-tr from-indigo-900 via-purple-800 to-cyan-500 flex flex-col justify-between p-1.5 overflow-hidden transition-all duration-700 ease-out`}
+        className="absolute inset-0 bg-gradient-to-tr from-[#020617] via-[#3b0764] to-[#0284c7] flex flex-col justify-between p-1.5 overflow-hidden transition-all duration-700 ease-out"
         style={{
           transformOrigin: 'center center',
           ...(getTransitionPreviewStyle(transitionType, isHovered)),
         }}
       >
-        {/* Stars / Moon */}
-        <div className="flex justify-between items-center">
-          <div className="w-3 h-3 rounded-full bg-cyan-200 shadow-[0_0_8px_cyan]" />
-          <div className="flex gap-1 opacity-70">
-            <div className="w-1 h-1 bg-white rounded-full animate-ping" />
+        {/* Celestial Sky: Glowing Moon & Starfield */}
+        <div className="flex justify-between items-center relative z-10">
+          <div className="relative">
+            <div className="w-3.5 h-3.5 rounded-full bg-cyan-100 shadow-[0_0_10px_#22d3ee] flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#3b0764] -mr-1 -mt-0.5" />
+            </div>
+          </div>
+          <div className="flex gap-1.5 opacity-80">
+            <div className="w-1 h-1 bg-cyan-300 rounded-full animate-ping" />
             <div className="w-0.5 h-0.5 bg-white rounded-full" />
+            <div className="w-1 h-1 bg-pink-300 rounded-full" />
           </div>
         </div>
 
-        {/* Cyber Neon Skyline */}
-        <div className="flex items-end justify-center gap-1 opacity-90">
-          <div className="w-2 h-6 bg-cyan-950 border-t border-cyan-400" />
-          <div className="w-3 h-9 bg-purple-950 border-t border-pink-400" />
-          <div className="w-2.5 h-7 bg-indigo-950 border-t border-cyan-400" />
-          <div className="w-2 h-4 bg-purple-900" />
+        {/* Cyberpunk Skyscraper Skyline */}
+        <div className="relative z-10 flex items-end justify-center gap-1 mt-auto">
+          {/* Tower 1 */}
+          <div className="w-3 h-8 bg-slate-900/95 border-t border-x border-cyan-400/60 flex flex-col justify-around py-0.5 items-center shadow-lg">
+            <div className="w-1.5 h-0.5 bg-cyan-400/80 rounded-xs" />
+            <div className="w-1.5 h-0.5 bg-cyan-400/80 rounded-xs" />
+            <div className="w-1.5 h-0.5 bg-cyan-400/80 rounded-xs" />
+          </div>
+          {/* Tower 2 (Tall Center) */}
+          <div className="w-4 h-12 bg-purple-950/95 border-t-2 border-x border-pink-400/80 flex flex-col justify-around py-1 items-center shadow-xl relative">
+            {/* Blinking Red Beacon Light on top */}
+            <div className="absolute -top-1 w-1 h-1 bg-red-500 rounded-full animate-pulse shadow-[0_0_6px_red]" />
+            <div className="w-2 h-0.5 bg-pink-300/80 rounded-xs" />
+            <div className="w-2 h-0.5 bg-cyan-300/80 rounded-xs" />
+            <div className="w-2 h-0.5 bg-pink-300/80 rounded-xs" />
+          </div>
+          {/* Tower 3 */}
+          <div className="w-3.5 h-10 bg-indigo-950/95 border-t border-x border-cyan-400/70 flex flex-col justify-around py-0.5 items-center shadow-lg">
+            <div className="w-2 h-0.5 bg-cyan-300/90 rounded-xs" />
+            <div className="w-2 h-0.5 bg-cyan-300/90 rounded-xs" />
+          </div>
+          {/* Tower 4 */}
+          <div className="w-2.5 h-6 bg-slate-900/90 border-t border-pink-400/60" />
         </div>
 
-        {/* Bottom Horizon Glow */}
-        <div className="w-full h-2 bg-pink-500/30 blur-xs" />
+        {/* Water Canal Horizon Reflection */}
+        <div className="relative z-10 w-full h-2.5 bg-gradient-to-r from-cyan-900/80 via-purple-900/90 to-pink-900/80 border-t border-cyan-400/40 blur-[0.3px]" />
       </div>
+
+      {/* Glossy Specular Glass Reflection Sheen */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12] z-20" />
 
       {/* Bowtie Overlay Badge on Hover */}
       <div
-        className={`absolute bottom-1 right-1 z-20 px-1 py-0.5 rounded bg-black/80 backdrop-blur-xs border border-white/20 text-cyan-400 transition-opacity duration-200 flex items-center gap-0.5 ${
-          isHovered ? 'opacity-100' : 'opacity-0'
+        className={`absolute bottom-1.5 right-1.5 z-30 px-1.5 py-0.5 rounded bg-black/85 backdrop-blur-md border border-cyan-400/50 text-cyan-300 transition-all duration-200 flex items-center gap-1 shadow-lg ${
+          isHovered ? 'opacity-100 scale-105' : 'opacity-0 scale-95'
         }`}
       >
-        <TransitionBowtieIcon className="w-2.5 h-2.5" />
+        <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
+        <span className="text-[8px] font-mono font-bold tracking-wider uppercase text-cyan-200">Play</span>
       </div>
     </div>
   );

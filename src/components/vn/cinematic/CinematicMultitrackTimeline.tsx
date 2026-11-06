@@ -637,6 +637,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                 <div style={{ backgroundColor: theme.bg }} className="flex flex-col gap-[1px]">
                   {sectionTracks.map((track) => {
                     const isTrackActive = activeTrackId === track.id;
+                    const hasActivePopover = track.clips.some((c) => c.id === activeSeamPopoverClipId);
 
                     return (
                       <div
@@ -648,7 +649,9 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                         }}
                         className={`flex h-9 border-b border-black/20 text-xs transition-colors shrink-0 ${
                           draggedTrackId === track.id ? 'opacity-30' : ''
-                        } ${isTrackActive ? 'brightness-125' : 'hover:brightness-110'}`}
+                        } ${isTrackActive ? 'brightness-125' : 'hover:brightness-110'} ${
+                          hasActivePopover ? 'z-40 overflow-visible' : ''
+                        }`}
                       >
                         {/* Sticky Left Track Header - 100% solid background so clips sliding behind it never show through */}
                         <div
@@ -786,7 +789,9 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                             e.dataTransfer.dropEffect = 'copy';
                           }}
                           onDrop={(e) => handleDropAssetOnTrack(e, track)}
-                          className="h-full relative overflow-hidden transition-colors shrink-0"
+                          className={`h-full relative transition-colors shrink-0 group/lane ${
+                            hasActivePopover ? 'overflow-visible z-40' : 'overflow-hidden'
+                          }`}
                         >
                           {/* Clips on this track (Sequential, non-overlapping) */}
                           {track.clips.map((clip) => {
@@ -852,52 +857,74 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   />
                                 )}
 
-                                {/* FADE IN VISUAL SLOPE & INTERACTIVE HANDLE */}
+                                {/* FADE IN VISUAL CURVE & INTERACTIVE DIAMOND HANDLE */}
                                 {clip.fadeInSec && clip.fadeInSec > 0 && (
                                   <div
                                     style={{
                                       width: `${Math.min(100, (clip.fadeInSec / Math.max(0.01, clip.endSec - clip.startSec)) * 100)}%`,
                                     }}
-                                    className="absolute left-0 top-0 bottom-0 pointer-events-none bg-gradient-to-r from-emerald-500/30 to-transparent z-10 border-l border-emerald-400"
+                                    className="absolute left-0 top-0 bottom-0 pointer-events-none z-10 overflow-hidden"
                                     title={`Fade In: ${clip.fadeInSec}s`}
-                                  />
+                                  >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/40 via-emerald-500/15 to-transparent" />
+                                    <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+                                      <path d="M 0 0 Q 35 70, 100 100 L 0 100 Z" className="fill-emerald-400/20" />
+                                      <path d="M 0 0 Q 35 70, 100 100" fill="none" stroke="rgba(52, 211, 153, 0.95)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                                    </svg>
+                                  </div>
                                 )}
                                 <div
                                   onPointerDown={(e) => handleStartFadeClip(e, clip, track, 'fade-in')}
                                   style={{
                                     left: `${Math.min(100, Math.max(0, ((clip.fadeInSec ?? 0) / Math.max(0.01, clip.endSec - clip.startSec)) * 100))}%`,
                                   }}
-                                  className="absolute top-0.5 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-white shadow-md cursor-ew-resize opacity-0 group-hover/clip:opacity-100 hover:scale-150 transition-all z-20 flex items-center justify-center pointer-events-auto"
-                                  title={`Drag to adjust Fade In: ${(clip.fadeInSec ?? 0).toFixed(1)}s`}
+                                  className="absolute top-0.5 -translate-x-1/2 group/fadehandle z-25 cursor-ew-resize opacity-0 group-hover/clip:opacity-100 transition-opacity pointer-events-auto"
+                                  title={`Drag to adjust Fade In: ${(clip.fadeInSec ?? 0).toFixed(2)}s`}
                                 >
-                                  <div className="w-1 h-1 rounded-full bg-black/80" />
+                                  <div className="relative w-3.5 h-3.5 flex items-center justify-center">
+                                    <div className="w-2.5 h-2.5 rotate-45 bg-[#062419] border border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)] group-hover/fadehandle:scale-130 group-hover/fadehandle:border-white transition-transform flex items-center justify-center">
+                                      <div className="w-1 h-1 rounded-full bg-emerald-300 pointer-events-none" />
+                                    </div>
+                                  </div>
                                 </div>
 
-                                {/* FADE OUT VISUAL SLOPE & INTERACTIVE HANDLE */}
+                                {/* FADE OUT VISUAL CURVE & INTERACTIVE DIAMOND HANDLE */}
                                 {clip.fadeOutSec && clip.fadeOutSec > 0 && (
                                   <div
                                     style={{
                                       width: `${Math.min(100, (clip.fadeOutSec / Math.max(0.01, clip.endSec - clip.startSec)) * 100)}%`,
                                     }}
-                                    className="absolute right-0 top-0 bottom-0 pointer-events-none bg-gradient-to-l from-rose-500/30 to-transparent z-10 border-r border-rose-400"
+                                    className="absolute right-0 top-0 bottom-0 pointer-events-none z-10 overflow-hidden"
                                     title={`Fade Out: ${clip.fadeOutSec}s`}
-                                  />
+                                  >
+                                    <div className="absolute inset-0 bg-gradient-to-l from-rose-500/40 via-rose-500/15 to-transparent" />
+                                    <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+                                      <path d="M 100 0 Q 65 70, 0 100 L 100 100 Z" className="fill-rose-400/20" />
+                                      <path d="M 100 0 Q 65 70, 0 100" fill="none" stroke="rgba(251, 113, 133, 0.95)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+                                    </svg>
+                                  </div>
                                 )}
                                 <div
                                   onPointerDown={(e) => handleStartFadeClip(e, clip, track, 'fade-out')}
                                   style={{
                                     right: `${Math.min(100, Math.max(0, ((clip.fadeOutSec ?? 0) / Math.max(0.01, clip.endSec - clip.startSec)) * 100))}%`,
                                   }}
-                                  className="absolute top-0.5 translate-x-1/2 w-2.5 h-2.5 rounded-full bg-rose-400 border border-white shadow-md cursor-ew-resize opacity-0 group-hover/clip:opacity-100 hover:scale-150 transition-all z-20 flex items-center justify-center pointer-events-auto"
-                                  title={`Drag to adjust Fade Out: ${(clip.fadeOutSec ?? 0).toFixed(1)}s`}
+                                  className="absolute top-0.5 translate-x-1/2 group/fadehandle z-25 cursor-ew-resize opacity-0 group-hover/clip:opacity-100 transition-opacity pointer-events-auto"
+                                  title={`Drag to adjust Fade Out: ${(clip.fadeOutSec ?? 0).toFixed(2)}s`}
                                 >
-                                  <div className="w-1 h-1 rounded-full bg-black/80" />
+                                  <div className="relative w-3.5 h-3.5 flex items-center justify-center">
+                                    <div className="w-2.5 h-2.5 rotate-45 bg-[#2c0913] border border-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.9)] group-hover/fadehandle:scale-130 group-hover/fadehandle:border-white transition-transform flex items-center justify-center">
+                                      <div className="w-1 h-1 rounded-full bg-rose-300 pointer-events-none" />
+                                    </div>
+                                  </div>
                                 </div>
 
                                 {/* LIVE FADE TOOLTIP WHILE DRAGGING */}
                                 {activeFadeTooltip && activeFadeTooltip.clipId === clip.id && (
-                                  <div className="absolute top-[-24px] left-1/2 -translate-x-1/2 z-50 px-2 py-0.5 rounded bg-black/95 border border-cyan-400 text-white font-mono text-[9px] font-bold shadow-lg pointer-events-none whitespace-nowrap">
-                                    {activeFadeTooltip.type === 'in' ? 'Fade In' : 'Fade Out'}: {activeFadeTooltip.seconds.toFixed(2)}s
+                                  <div className="absolute top-[-26px] left-1/2 -translate-x-1/2 z-50 px-2 py-0.5 rounded-md bg-[#0a0c14]/95 border border-cyan-400 text-white font-mono text-[9px] font-bold shadow-[0_4px_12px_rgba(0,0,0,0.95)] pointer-events-none whitespace-nowrap flex items-center gap-1.5 backdrop-blur-md">
+                                    <div className={`w-1.5 h-1.5 rotate-45 ${activeFadeTooltip.type === 'in' ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                                    <span>{activeFadeTooltip.type === 'in' ? 'Fade In' : 'Fade Out'}:</span>
+                                    <span className="text-cyan-300 font-black">{activeFadeTooltip.seconds.toFixed(2)}s</span>
                                   </div>
                                 )}
 
@@ -911,10 +938,10 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                       if (onOpenTransitionsTab) onOpenTransitionsTab();
                                       playUiSound('select', 0.2);
                                     }}
-                                    className="absolute left-1 top-1/2 -translate-y-1/2 z-30 px-1 py-0.5 rounded bg-black/90 border border-white hover:border-cyan-400 text-white hover:text-cyan-300 shadow-[0_0_8px_rgba(0,0,0,0.8)] cursor-pointer hover:scale-110 transition-transform flex items-center justify-center gap-0.5"
+                                    className="absolute left-1 top-1/2 -translate-y-1/2 z-30 px-1.5 py-0.5 rounded-md bg-black/90 border border-white/80 hover:border-cyan-400 text-white hover:text-cyan-300 shadow-[0_2px_8px_rgba(0,0,0,0.9)] cursor-pointer hover:scale-105 transition-all flex items-center justify-center gap-1 backdrop-blur-xs"
                                     title={`Transition: ${clip.transition} (${clip.transitionDuration ?? 0.5}s) - Click to edit`}
                                   >
-                                    <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400" />
+                                    <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400 drop-shadow-[0_0_4px_rgba(34,211,238,0.7)]" />
                                     <span className="text-[8px] font-mono font-bold uppercase hidden md:inline text-cyan-200">
                                       {clip.transition}
                                     </span>
@@ -967,6 +994,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
 
                             const cutLeftPct = (c.startSec / totalDuration) * 100;
                             const isSelectedTransition = selectedClipId === c.id;
+                            const isOpen = activeSeamPopoverClipId === c.id;
 
                             return (
                               <div
@@ -976,11 +1004,16 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   e.stopPropagation();
                                   onSelectClip(c.id);
                                   onSelectTrack(track.id);
-                                  setActiveSeamPopoverClipId(activeSeamPopoverClipId === c.id ? null : c.id);
+                                  setActiveSeamPopoverClipId(isOpen ? null : c.id);
                                   playUiSound('select', 0.2);
+                                  if (hasTransition && c.transition) {
+                                    playTransitionSfx(c.transition as any, 0.35);
+                                  }
                                 }}
                                 className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-35 group/seam cursor-pointer transition-all ${
-                                  hasTransition ? 'hover:scale-115' : 'opacity-0 hover:opacity-100 hover:scale-110'
+                                  hasTransition
+                                    ? 'scale-100 hover:scale-115'
+                                    : 'opacity-0 group-hover/lane:opacity-85 hover:!opacity-100 hover:scale-110'
                                 }`}
                                 title={
                                   hasTransition
@@ -988,38 +1021,59 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                     : 'Add Cut Transition between clips'
                                 }
                               >
+                                {/* Physical Film-Splice Tab Badge (CapCut Authentic) */}
                                 <div
-                                  className={`w-4 h-6 rounded-[3px] flex flex-col items-center justify-between py-0.5 border shadow-[0_0_8px_rgba(0,0,0,0.9)] transition-all ${
+                                  className={`relative w-4.5 h-7.5 rounded-[4px] flex flex-col items-center justify-between py-1 border-2 transition-all select-none ${
                                     hasTransition
-                                      ? isSelectedTransition || activeSeamPopoverClipId === c.id
-                                        ? 'bg-black border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.7)]'
-                                        : 'bg-black/95 border-white text-white hover:border-cyan-400 hover:text-cyan-300'
-                                      : 'bg-black/80 border-white/60 text-white/70 hover:border-cyan-400 hover:text-cyan-300'
+                                      ? isSelectedTransition || isOpen
+                                        ? 'bg-[#08090d] border-cyan-400 text-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.85)] scale-105'
+                                        : 'bg-[#0c0d12] border-white text-white hover:border-cyan-400 hover:text-cyan-300 shadow-[0_2px_8px_rgba(0,0,0,0.9)]'
+                                      : 'bg-[#10121a]/90 border-white/60 text-white/75 hover:border-cyan-400 hover:text-cyan-300 shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
                                   }`}
                                 >
-                                  <span className="w-1 h-0.5 bg-white/40 rounded-full" />
-                                  <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400" />
-                                  <span className="w-1 h-0.5 bg-white/40 rounded-full" />
+                                  {/* Top Film Notch */}
+                                  <div className="w-1.5 h-0.5 bg-white/40 rounded-full" />
+
+                                  {/* Center Iconic Bowtie / Hourglass Icon */}
+                                  <TransitionBowtieIcon
+                                    className={`w-2.5 h-2.5 transition-colors ${
+                                      hasTransition ? 'text-cyan-400 drop-shadow-[0_0_4px_rgba(34,211,238,0.8)]' : 'text-white/70'
+                                    }`}
+                                  />
+
+                                  {/* Bottom Film Notch */}
+                                  <div className="w-1.5 h-0.5 bg-white/40 rounded-full" />
+
+                                  {/* Micro Sprocket Ridge Lines on left & right edge */}
+                                  <div className="absolute left-[-2px] top-1/2 -translate-y-1/2 w-[1px] h-3 bg-white/30 rounded-full pointer-events-none" />
+                                  <div className="absolute right-[-2px] top-1/2 -translate-y-1/2 w-[1px] h-3 bg-white/30 rounded-full pointer-events-none" />
                                 </div>
 
                                 {/* Floating Transition Name Pill on Hover (when popover not open) */}
-                                {hasTransition && activeSeamPopoverClipId !== c.id && (
-                                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 opacity-0 group-hover/seam:opacity-100 transition-opacity pointer-events-none px-1.5 py-0.5 rounded bg-black/95 border border-cyan-400 text-cyan-300 text-[8px] font-mono font-bold whitespace-nowrap shadow-xl">
-                                    {c.transition} ({(c.transitionDuration ?? 0.5).toFixed(1)}s)
+                                {hasTransition && !isOpen && (
+                                  <div className="absolute bottom-[calc(100%+6px)] left-1/2 -translate-x-1/2 opacity-0 group-hover/seam:opacity-100 transition-all pointer-events-none px-2 py-0.5 rounded-md bg-[#0a0c14]/95 border border-cyan-400/80 text-cyan-300 text-[9px] font-mono font-bold whitespace-nowrap shadow-xl flex items-center gap-1 backdrop-blur-md">
+                                    <TransitionBowtieIcon className="w-2 h-2 text-cyan-400" />
+                                    <span>{c.transition}</span>
+                                    <span className="text-gray-400 text-[8px]">({(c.transitionDuration ?? 0.5).toFixed(1)}s)</span>
                                   </div>
                                 )}
 
                                 {/* QUICK INLINE TIMELINE TRANSITION POPOVER */}
-                                {activeSeamPopoverClipId === c.id && (
+                                {isOpen && (
                                   <div
                                     onClick={(e) => e.stopPropagation()}
-                                    className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 z-50 p-2 rounded-lg bg-black/95 border border-cyan-400 shadow-[0_0_25px_rgba(0,0,0,0.95)] flex items-center gap-2 whitespace-nowrap animate-fade-in text-[10px]"
+                                    className="absolute bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2 z-50 p-2.5 rounded-xl bg-[#0c0d16]/95 backdrop-blur-xl border border-cyan-400/60 shadow-[0_16px_36px_rgba(0,0,0,0.95)] flex items-center gap-2.5 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150 text-[10px]"
                                   >
-                                    <div className="flex items-center gap-1 text-cyan-400 font-bold">
-                                      <TransitionBowtieIcon className="w-3 h-3" />
+                                    {/* Downward Anchor Arrow pointing directly at seam badge */}
+                                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-[#0c0d16] border-r border-b border-cyan-400/60 pointer-events-none" />
+
+                                    {/* Left Mini Badge with Bowtie Icon */}
+                                    <div className="flex items-center gap-1.5 px-1.5 py-1 rounded-md bg-cyan-950/50 border border-cyan-500/40 text-cyan-300 font-bold">
+                                      <TransitionBowtieIcon className="w-3.5 h-3.5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
+                                      <span className="text-[9px] font-mono uppercase tracking-wider hidden sm:inline">Cut</span>
                                     </div>
 
-                                    {/* Transition Selector */}
+                                    {/* Transition Selector Dropdown */}
                                     <select
                                       value={c.transition || 'dissolve'}
                                       onChange={(e) => {
@@ -1037,17 +1091,17 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                         onUpdateTracks(updated);
                                         playTransitionSfx(newTrans, 0.35);
                                       }}
-                                      className="px-1.5 py-0.5 rounded bg-[var(--surface)] text-cyan-300 border border-[var(--border)] font-bold text-[10px] outline-none cursor-pointer"
+                                      className="px-2 py-1 rounded-lg bg-black/80 text-cyan-300 border border-cyan-500/30 hover:border-cyan-400 font-bold text-[10px] outline-none cursor-pointer transition-colors shadow-inner"
                                     >
                                       {CINEMATIC_TRANSITIONS_CATALOG.map((t) => (
-                                        <option key={t.id} value={t.id}>
+                                        <option key={t.id} value={t.id} className="bg-[#10121b] text-gray-200">
                                           {t.name}
                                         </option>
                                       ))}
                                     </select>
 
-                                    {/* Duration Stepper */}
-                                    <div className="flex items-center gap-1 bg-black/80 px-1 py-0.5 rounded border border-white/20 font-mono text-[9px]">
+                                    {/* Duration Stepper Controls */}
+                                    <div className="flex items-center gap-1 bg-black/80 px-1.5 py-0.5 rounded-lg border border-white/15 font-mono text-[9px]">
                                       <button
                                         type="button"
                                         onClick={() => {
@@ -1065,12 +1119,12 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                           );
                                           onUpdateTracks(updated);
                                         }}
-                                        className="w-4 h-4 rounded hover:bg-white/20 text-gray-300 font-bold flex items-center justify-center cursor-pointer"
+                                        className="w-4.5 h-4.5 rounded hover:bg-white/15 text-gray-300 hover:text-white font-bold flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
                                         title="Decrease duration by 0.1s"
                                       >
                                         -
                                       </button>
-                                      <span className="text-cyan-400 font-bold min-w-[28px] text-center">
+                                      <span className="text-cyan-400 font-bold min-w-[30px] text-center">
                                         {(c.transitionDuration ?? 0.5).toFixed(1)}s
                                       </span>
                                       <button
@@ -1090,14 +1144,26 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                           );
                                           onUpdateTracks(updated);
                                         }}
-                                        className="w-4 h-4 rounded hover:bg-white/20 text-gray-300 font-bold flex items-center justify-center cursor-pointer"
+                                        className="w-4.5 h-4.5 rounded hover:bg-white/15 text-gray-300 hover:text-white font-bold flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
                                         title="Increase duration by 0.1s"
                                       >
                                         +
                                       </button>
                                     </div>
 
-                                    {/* Direct Cut / Remove button */}
+                                    {/* Sound Preview Button */}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (c.transition) playTransitionSfx(c.transition as any, 0.4);
+                                      }}
+                                      className="p-1.5 rounded-lg bg-black/60 hover:bg-cyan-950/60 border border-white/10 hover:border-cyan-400/50 text-gray-400 hover:text-cyan-300 cursor-pointer transition-colors"
+                                      title="Preview Transition Sound Effect"
+                                    >
+                                      <GuiIconRenderer icon={GUI_ICONS.general.sound} className="w-3 h-3" />
+                                    </button>
+
+                                    {/* Direct Cut / Remove Button */}
                                     <button
                                       type="button"
                                       onClick={() => {
@@ -1115,23 +1181,24 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                         setActiveSeamPopoverClipId(null);
                                         playUiSound('delete', 0.2);
                                       }}
-                                      className="p-1 rounded hover:bg-red-950/60 text-red-400 hover:text-red-300 border border-transparent hover:border-red-500/40 cursor-pointer"
+                                      className="p-1.5 rounded-lg hover:bg-red-950/70 text-red-400 hover:text-red-300 border border-transparent hover:border-red-500/50 cursor-pointer transition-colors"
                                       title="Remove transition (Direct Cut)"
                                     >
-                                      <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-2.5 h-2.5" />
+                                      <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
                                     </button>
 
-                                    {/* Open full Transitions Library */}
+                                    {/* Open full Transitions Library Button */}
                                     <button
                                       type="button"
                                       onClick={() => {
                                         if (onOpenTransitionsTab) onOpenTransitionsTab();
                                         setActiveSeamPopoverClipId(null);
                                       }}
-                                      className="px-1.5 py-0.5 rounded bg-cyan-500 text-black font-bold text-[9px] hover:bg-cyan-400 cursor-pointer"
+                                      className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-cyan-400 to-teal-400 text-black font-bold text-[9px] hover:brightness-110 cursor-pointer shadow-sm active:scale-95 transition-all flex items-center gap-1"
                                       title="Open full Transitions Library panel"
                                     >
-                                      More...
+                                      <TransitionBowtieIcon className="w-2.5 h-2.5" />
+                                      <span>More...</span>
                                     </button>
                                   </div>
                                 )}
