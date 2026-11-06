@@ -11,11 +11,13 @@ import { GuiIconRenderer, GUI_ICONS } from '@/lib/vn/guiIcons';
 
 interface CinematicTransitionsTabProps {
   onApplyTransition?: (transitionType: VNCinematicTransitionType, durationSec: number) => void;
+  onApplyToAll?: (transitionType: VNCinematicTransitionType, durationSec: number) => void;
   selectedClipId?: string | null;
 }
 
 export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = ({
   onApplyTransition,
+  onApplyToAll,
   selectedClipId,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -35,6 +37,14 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
     if (onApplyTransition) {
       onApplyTransition(transId, transitionDuration);
       playUiSound('select', 0.35);
+    }
+  };
+
+  const handleApplyAll = (transId: VNCinematicTransitionType, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (onApplyToAll) {
+      onApplyToAll(transId, transitionDuration);
+      playUiSound('select', 0.4);
     }
   };
 
@@ -80,18 +90,20 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
           </div>
         </div>
 
-        {/* Selected Clip Notice */}
-        {selectedClipId ? (
-          <div className="text-[10px] text-cyan-300 bg-cyan-950/30 border border-cyan-800/40 px-2 py-1 rounded flex items-center gap-1.5">
-            <TransitionBowtieIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-            <span>Click any transition below to apply directly to the selected clip.</span>
-          </div>
-        ) : (
-          <div className="text-[10px] text-amber-300 bg-amber-950/25 border border-amber-800/30 px-2 py-1 rounded flex items-center gap-1.5">
-            <GuiIconRenderer icon={GUI_ICONS.general.info} className="w-3 h-3 text-amber-400 shrink-0" />
-            <span>Select a visual or background clip in the timeline to apply transitions.</span>
-          </div>
-        )}
+        {/* Selected Clip Notice & Batch Controls */}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          {selectedClipId ? (
+            <div className="text-[10px] text-cyan-300 bg-cyan-950/30 border border-cyan-800/40 px-2 py-1 rounded flex items-center gap-1.5 flex-1 min-w-[180px]">
+              <TransitionBowtieIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span className="truncate">Selected clip ready. Click to apply transition.</span>
+            </div>
+          ) : (
+            <div className="text-[10px] text-amber-300 bg-amber-950/25 border border-amber-800/30 px-2 py-1 rounded flex items-center gap-1.5 flex-1 min-w-[180px]">
+              <GuiIconRenderer icon={GUI_ICONS.general.info} className="w-3 h-3 text-amber-400 shrink-0" />
+              <span className="truncate">Select a clip or use "All" on any card.</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Grid of Transition Cards */}
@@ -136,14 +148,31 @@ export const CinematicTransitionsTab: React.FC<CinematicTransitionsTabProps> = (
                 </div>
               </div>
 
-              {/* Action pill */}
-              <button
-                type="button"
-                className="mt-2 w-full py-1 rounded bg-[var(--surface)] group-hover:bg-cyan-500 group-hover:text-black border border-[var(--border)] group-hover:border-cyan-400 text-[9px] font-bold uppercase tracking-wider text-[var(--text)] transition-all cursor-pointer flex items-center justify-center gap-1 shadow-xs"
-              >
-                <TransitionBowtieIcon className="w-3 h-3 text-cyan-400 group-hover:text-black transition-colors" />
-                <span>Apply</span>
-              </button>
+              {/* Action buttons: Apply to selected vs Apply to All */}
+              <div className="mt-2 flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleApply(trans.id);
+                  }}
+                  className="flex-1 py-1 rounded bg-[var(--surface)] group-hover:bg-cyan-500 group-hover:text-black border border-[var(--border)] group-hover:border-cyan-400 text-[9px] font-bold uppercase tracking-wider text-[var(--text)] transition-all cursor-pointer flex items-center justify-center gap-1 shadow-xs"
+                  title="Apply to selected clip"
+                >
+                  <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400 group-hover:text-black transition-colors" />
+                  <span>Apply</span>
+                </button>
+                {onApplyToAll && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleApplyAll(trans.id, e)}
+                    className="px-2 py-1 rounded bg-[var(--well-bg)] hover:bg-cyan-400 hover:text-black border border-[var(--border)] hover:border-cyan-300 text-[9px] font-bold uppercase tracking-wider text-[var(--muted)] hover:text-black transition-all cursor-pointer flex items-center justify-center shadow-xs"
+                    title="Apply this transition to ALL visual clips in timeline (CapCut 1-Click)"
+                  >
+                    <span>All</span>
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}

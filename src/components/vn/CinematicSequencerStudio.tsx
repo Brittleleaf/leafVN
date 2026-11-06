@@ -630,6 +630,26 @@ export default function CinematicSequencerStudio({
               setTimeout(() => setSaveSuccessMsg(null), 3000);
             }
           }}
+          onApplyTransitionToAll={(transType, durationSec) => {
+            let count = 0;
+            const updatedTracks = tracks.map((track) => {
+              if (track.section === 'audio') return track;
+              return {
+                ...track,
+                clips: track.clips.map((clip) => {
+                  count++;
+                  return {
+                    ...clip,
+                    transition: transType,
+                    transitionDuration: durationSec,
+                  };
+                }),
+              };
+            });
+            handleUpdateTracks(updatedTracks);
+            setSaveSuccessMsg(`Applied "${transType}" (${durationSec}s) to ${count} visual clips!`);
+            setTimeout(() => setSaveSuccessMsg(null), 3500);
+          }}
           isCollapsed={isLibraryCollapsed}
           onToggleCollapse={() => setIsLibraryCollapsed(!isLibraryCollapsed)}
           activeTab={mediaLibraryTab}

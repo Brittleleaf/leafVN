@@ -41,6 +41,7 @@ interface CinematicMediaLibraryProps {
   onAddAudioClip: (asset: { url: string; name?: string; isBgm?: boolean }) => void;
   onAddFxClip: (fxType: string) => void;
   onApplyTransition?: (transitionType: VNCinematicTransitionType, durationSec: number) => void;
+  onApplyTransitionToAll?: (transitionType: VNCinematicTransitionType, durationSec: number) => void;
   selectedClipId?: string | null;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
@@ -57,6 +58,7 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
   onAddAudioClip,
   onAddFxClip,
   onApplyTransition,
+  onApplyTransitionToAll,
   selectedClipId,
   isCollapsed = false,
   onToggleCollapse,
@@ -404,6 +406,7 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
       {activeTab === 'transitions' && (
         <CinematicTransitionsTab
           onApplyTransition={onApplyTransition}
+          onApplyToAll={onApplyTransitionToAll}
           selectedClipId={selectedClipId}
         />
       )}

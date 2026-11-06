@@ -52,7 +52,7 @@ export function useTimelineDrag({
 
   // Clip drag ref with snapshot of initial state
   const dragRef = useRef<{
-    type: 'trim-left' | 'trim-right' | 'move-body';
+    type: 'trim-left' | 'trim-right' | 'move-body' | 'fade-in' | 'fade-out';
     clipId: string;
     sourceTrackId: string;
     currentTrackId: string;
@@ -62,7 +62,16 @@ export function useTimelineDrag({
     initialStartSec: number;
     initialEndSec: number;
     duration: number;
+    initialFadeInSec: number;
+    initialFadeOutSec: number;
     initialTracks: VNCinematicTrack[];
+  } | null>(null);
+
+  // Active live tooltip for fade dragging
+  const [activeFadeTooltip, setActiveFadeTooltip] = useState<{
+    clipId: string;
+    type: 'in' | 'out';
+    seconds: number;
   } | null>(null);
 
   // Calculate time from clientX with zoom
@@ -172,6 +181,8 @@ export function useTimelineDrag({
       initialStartSec: clip.startSec,
       initialEndSec: clip.endSec,
       duration: Number((clip.endSec - clip.startSec).toFixed(2)),
+      initialFadeInSec: Number.isFinite(clip.fadeInSec) ? (clip.fadeInSec as number) : 0,
+      initialFadeOutSec: Number.isFinite(clip.fadeOutSec) ? (clip.fadeOutSec as number) : 0,
       initialTracks: tracks,
     };
   };
@@ -198,8 +209,44 @@ export function useTimelineDrag({
       initialStartSec: clip.startSec,
       initialEndSec: clip.endSec,
       duration: Number((clip.endSec - clip.startSec).toFixed(2)),
+      initialFadeInSec: Number.isFinite(clip.fadeInSec) ? (clip.fadeInSec as number) : 0,
+      initialFadeOutSec: Number.isFinite(clip.fadeOutSec) ? (clip.fadeOutSec as number) : 0,
       initialTracks: tracks,
     };
+  };
+
+  // Start Fade In / Fade Out drag handle
+  const handleStartFadeClip = (
+    e: React.PointerEvent,
+    clip: VNCinematicClip,
+    track: VNCinematicTrack,
+    type: 'fade-in' | 'fade-out'
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onSelectClip(clip.id);
+    document.body.style.cursor = 'ew-resize';
+    document.body.style.userSelect = 'none';
+    dragRef.current = {
+      type,
+      clipId: clip.id,
+      sourceTrackId: track.id,
+      currentTrackId: track.id,
+      section: track.section,
+      initialMouseX: e.clientX,
+      initialMouseY: e.clientY,
+      initialStartSec: clip.startSec,
+      initialEndSec: clip.endSec,
+      duration: Number((clip.endSec - clip.startSec).toFixed(2)),
+      initialFadeInSec: Number.isFinite(clip.fadeInSec) ? (clip.fadeInSec as number) : 0,
+      initialFadeOutSec: Number.isFinite(clip.fadeOutSec) ? (clip.fadeOutSec as number) : 0,
+      initialTracks: tracks,
+    };
+    setActiveFadeTooltip({
+      clipId: clip.id,
+      type: type === 'fade-in' ? 'in' : 'out',
+      seconds: type === 'fade-in' ? (clip.fadeInSec ?? 0) : (clip.fadeOutSec ?? 0),
+    });
   };
 
   // Pointer Move & Up listeners
@@ -245,8 +292,46 @@ export function useTimelineDrag({
         initialStartSec,
         initialEndSec,
         duration,
+        initialFadeInSec,
+        initialFadeOutSec,
         initialTracks,
       } = dragRef.current;
+
+      if (type === 'fade-in') {
+        const clipSpan = Math.max(0.1, initialEndSec - initialStartSec);
+        const newFadeIn = Math.max(0, Math.min(clipSpan, Number((initialFadeInSec + deltaSec).toFixed(2))));
+        setActiveFadeTooltip({ clipId, type: 'in', seconds: newFadeIn });
+        const updated = initialTracks.map((t) =>
+          t.id === currentTrackId
+            ? {
+                ...t,
+                clips: t.clips.map((c) =>
+                  c.id === clipId ? { ...c, fadeInSec: newFadeIn } : c
+                ),
+              }
+            : t
+        );
+        onUpdateTracks(updated);
+        return;
+      }
+
+      if (type === 'fade-out') {
+        const clipSpan = Math.max(0.1, initialEndSec - initialStartSec);
+        const newFadeOut = Math.max(0, Math.min(clipSpan, Number((initialFadeOutSec - deltaSec).toFixed(2))));
+        setActiveFadeTooltip({ clipId, type: 'out', seconds: newFadeOut });
+        const updated = initialTracks.map((t) =>
+          t.id === currentTrackId
+            ? {
+                ...t,
+                clips: t.clips.map((c) =>
+                  c.id === clipId ? { ...c, fadeOutSec: newFadeOut } : c
+                ),
+              }
+            : t
+        );
+        onUpdateTracks(updated);
+        return;
+      }
 
       if (type === 'trim-left') {
         const rawNewStart = initialStartSec + deltaSec;
@@ -316,6 +401,7 @@ export function useTimelineDrag({
       isResizingHeaderRef.current = false;
       dragRef.current = null;
       setSnapLineSec(null);
+      setActiveFadeTooltip(null);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     };
@@ -350,5 +436,7 @@ export function useTimelineDrag({
     handleStartHeightResize,
     handleStartTrimClip,
     handleStartMoveClip,
+    handleStartFadeClip,
+    activeFadeTooltip,
   };
 }

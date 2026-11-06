@@ -264,17 +264,33 @@ export default function CinematicPlayerView({
   };
 
   // 1. Collect active background clips (base layer: z-index 1..9)
+  // Supports dual-buffer transition cross-holding: keeps outgoing clip alive underneath during incoming transition
   const bgTracks = tracks.filter((t) => t.section === 'background' && t.visible !== false);
   const activeBgClips: { clip: VNCinematicClip; zIndex: number; isBackground: boolean }[] = [];
   bgTracks.forEach((track, idx) => {
     track.clips.forEach((clip) => {
-      if (currentTimeSec >= clip.startSec && currentTimeSec < clip.endSec && clip.mediaUrl) {
-        activeBgClips.push({ clip, zIndex: 1 + idx, isBackground: true });
+      // Look for an adjacent incoming clip that starts when this clip ends and has a transition
+      const nextIncoming = track.clips.find(
+        (c) => c.id !== clip.id && Math.abs(c.startSec - clip.endSec) < 0.2 && c.transition && c.transition !== 'cut'
+      );
+      const transHoldSec = nextIncoming
+        ? Math.max(0.1, Number.isFinite(nextIncoming.transitionDuration) ? nextIncoming.transitionDuration! : 0.5)
+        : 0;
+      const effectiveEndSec = clip.endSec + transHoldSec;
+
+      if (currentTimeSec >= clip.startSec && currentTimeSec < effectiveEndSec && clip.mediaUrl) {
+        const isHoldPhase = currentTimeSec >= clip.endSec;
+        activeBgClips.push({
+          clip,
+          zIndex: (1 + idx) * 10 + (isHoldPhase ? 0 : 2),
+          isBackground: true,
+        });
       }
     });
   });
 
   // 2. Collect active Media clips (overlays, sprites, dialogues, text, FX)
+  // Supports dual-buffer transition cross-holding for seamless cuts
   const mediaTracks = tracks.filter(
     (t) => (t.section === 'media' || t.kind === 'visual' || t.section === 'dialog' || t.kind === 'text') &&
       t.section !== 'background' &&
@@ -285,14 +301,25 @@ export default function CinematicPlayerView({
   const activeTextClips: { clip: VNCinematicClip; zIndex: number }[] = [];
 
   mediaTracks.forEach((track, tIdx) => {
-    const trackZIndex = 10 + (mediaTracks.length - tIdx) * 5;
+    const baseTrackZIndex = 20 + (mediaTracks.length - tIdx) * 10;
     track.clips.forEach((clip) => {
-      if (currentTimeSec >= clip.startSec && currentTimeSec < clip.endSec) {
+      const nextIncoming = track.clips.find(
+        (c) => c.id !== clip.id && Math.abs(c.startSec - clip.endSec) < 0.2 && c.transition && c.transition !== 'cut'
+      );
+      const transHoldSec = nextIncoming
+        ? Math.max(0.1, Number.isFinite(nextIncoming.transitionDuration) ? nextIncoming.transitionDuration! : 0.5)
+        : 0;
+      const effectiveEndSec = clip.endSec + transHoldSec;
+
+      if (currentTimeSec >= clip.startSec && currentTimeSec < effectiveEndSec) {
+        const isHoldPhase = currentTimeSec >= clip.endSec;
+        const clipZ = baseTrackZIndex + (isHoldPhase ? 0 : 2);
+
         if (clip.mediaUrl) {
-          activeMediaClips.push({ clip, zIndex: trackZIndex, isBackground: false });
+          activeMediaClips.push({ clip, zIndex: clipZ, isBackground: false });
         }
         if (clip.text) {
-          activeTextClips.push({ clip, zIndex: trackZIndex + 2 });
+          activeTextClips.push({ clip, zIndex: clipZ + 5 });
         }
       }
     });

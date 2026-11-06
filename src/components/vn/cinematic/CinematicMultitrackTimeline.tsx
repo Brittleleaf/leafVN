@@ -131,6 +131,8 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
     handleStartHeightResize,
     handleStartTrimClip,
     handleStartMoveClip,
+    handleStartFadeClip,
+    activeFadeTooltip,
   } = useTimelineDrag({
     tracks,
     totalDuration,
@@ -848,7 +850,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                   />
                                 )}
 
-                                {/* FADE IN VISUAL SLOPE */}
+                                {/* FADE IN VISUAL SLOPE & INTERACTIVE HANDLE */}
                                 {clip.fadeInSec && clip.fadeInSec > 0 && (
                                   <div
                                     style={{
@@ -858,8 +860,18 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                     title={`Fade In: ${clip.fadeInSec}s`}
                                   />
                                 )}
+                                <div
+                                  onPointerDown={(e) => handleStartFadeClip(e, clip, track, 'fade-in')}
+                                  style={{
+                                    left: `${Math.min(100, Math.max(0, ((clip.fadeInSec ?? 0) / Math.max(0.01, clip.endSec - clip.startSec)) * 100))}%`,
+                                  }}
+                                  className="absolute top-0.5 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-white shadow-md cursor-ew-resize opacity-0 group-hover/clip:opacity-100 hover:scale-150 transition-all z-20 flex items-center justify-center pointer-events-auto"
+                                  title={`Drag to adjust Fade In: ${(clip.fadeInSec ?? 0).toFixed(1)}s`}
+                                >
+                                  <div className="w-1 h-1 rounded-full bg-black/80" />
+                                </div>
 
-                                {/* FADE OUT VISUAL SLOPE */}
+                                {/* FADE OUT VISUAL SLOPE & INTERACTIVE HANDLE */}
                                 {clip.fadeOutSec && clip.fadeOutSec > 0 && (
                                   <div
                                     style={{
@@ -868,6 +880,23 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                     className="absolute right-0 top-0 bottom-0 pointer-events-none bg-gradient-to-l from-rose-500/30 to-transparent z-10 border-r border-rose-400"
                                     title={`Fade Out: ${clip.fadeOutSec}s`}
                                   />
+                                )}
+                                <div
+                                  onPointerDown={(e) => handleStartFadeClip(e, clip, track, 'fade-out')}
+                                  style={{
+                                    right: `${Math.min(100, Math.max(0, ((clip.fadeOutSec ?? 0) / Math.max(0.01, clip.endSec - clip.startSec)) * 100))}%`,
+                                  }}
+                                  className="absolute top-0.5 translate-x-1/2 w-2.5 h-2.5 rounded-full bg-rose-400 border border-white shadow-md cursor-ew-resize opacity-0 group-hover/clip:opacity-100 hover:scale-150 transition-all z-20 flex items-center justify-center pointer-events-auto"
+                                  title={`Drag to adjust Fade Out: ${(clip.fadeOutSec ?? 0).toFixed(1)}s`}
+                                >
+                                  <div className="w-1 h-1 rounded-full bg-black/80" />
+                                </div>
+
+                                {/* LIVE FADE TOOLTIP WHILE DRAGGING */}
+                                {activeFadeTooltip && activeFadeTooltip.clipId === clip.id && (
+                                  <div className="absolute top-[-24px] left-1/2 -translate-x-1/2 z-50 px-2 py-0.5 rounded bg-black/95 border border-cyan-400 text-white font-mono text-[9px] font-bold shadow-lg pointer-events-none whitespace-nowrap">
+                                    {activeFadeTooltip.type === 'in' ? 'Fade In' : 'Fade Out'}: {activeFadeTooltip.seconds.toFixed(2)}s
+                                  </div>
                                 )}
 
                                 {/* CAPCUT TRANSITION BADGE */}
@@ -922,6 +951,61 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
                                 >
                                   â‹®
                                 </div>
+                              </div>
+                            );
+                          })}
+
+                          {/* AUTHENTIC CAPCUT SEAM BADGES (CENTERED ON CUT POINTS) */}
+                          {track.clips.map((c, cIdx) => {
+                            const prevClip = cIdx > 0 ? track.clips[cIdx - 1] : null;
+                            const isAdjacent = prevClip && Math.abs(c.startSec - prevClip.endSec) < 0.25;
+                            const hasTransition = c.transition && c.transition !== 'cut';
+
+                            if (!hasTransition && !isAdjacent) return null;
+
+                            const cutLeftPct = (c.startSec / totalDuration) * 100;
+                            const isSelectedTransition = selectedClipId === c.id;
+
+                            return (
+                              <div
+                                key={`seam-trans-${c.id}`}
+                                style={{ left: `${cutLeftPct}%` }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onSelectClip(c.id);
+                                  onSelectTrack(track.id);
+                                  if (onOpenTransitionsTab) onOpenTransitionsTab();
+                                  playUiSound('select', 0.2);
+                                }}
+                                className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-35 group/seam cursor-pointer transition-all ${
+                                  hasTransition ? 'hover:scale-115' : 'opacity-0 hover:opacity-100 hover:scale-110'
+                                }`}
+                                title={
+                                  hasTransition
+                                    ? `Cut Transition: ${c.transition} (${(c.transitionDuration ?? 0.5).toFixed(1)}s) - Click to edit in Library`
+                                    : 'Add Cut Transition between clips'
+                                }
+                              >
+                                <div
+                                  className={`w-4 h-6 rounded-[3px] flex flex-col items-center justify-between py-0.5 border shadow-[0_0_8px_rgba(0,0,0,0.9)] transition-all ${
+                                    hasTransition
+                                      ? isSelectedTransition
+                                        ? 'bg-black border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.7)]'
+                                        : 'bg-black/95 border-white text-white hover:border-cyan-400 hover:text-cyan-300'
+                                      : 'bg-black/80 border-white/60 text-white/70 hover:border-cyan-400 hover:text-cyan-300'
+                                  }`}
+                                >
+                                  <span className="w-1 h-0.5 bg-white/40 rounded-full" />
+                                  <TransitionBowtieIcon className="w-2.5 h-2.5 text-cyan-400" />
+                                  <span className="w-1 h-0.5 bg-white/40 rounded-full" />
+                                </div>
+
+                                {/* Floating Transition Name Pill on Hover */}
+                                {hasTransition && (
+                                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 opacity-0 group-hover/seam:opacity-100 transition-opacity pointer-events-none px-1.5 py-0.5 rounded bg-black/95 border border-cyan-400 text-cyan-300 text-[8px] font-mono font-bold whitespace-nowrap shadow-xl">
+                                    {c.transition} ({(c.transitionDuration ?? 0.5).toFixed(1)}s)
+                                  </div>
+                                )}
                               </div>
                             );
                           })}
