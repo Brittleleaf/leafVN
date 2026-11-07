@@ -123,7 +123,7 @@ export const CinematicScreenFxTab: React.FC<CinematicScreenFxTabProps> = ({
                             }}
                             className={`px-2 py-0.5 rounded text-[9px] font-mono uppercase font-bold transition-all cursor-pointer ${
                               currentIntensity === lvl
-                                ? 'bg-[var(--accent)] text-white shadow'
+                                ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow'
                                 : 'bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
                             }`}
                           >
@@ -159,7 +159,7 @@ export const CinematicScreenFxTab: React.FC<CinematicScreenFxTabProps> = ({
                         onAddFxClip(fx.id);
                         playUiSound('open', 0.35);
                       }}
-                      className="w-full py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md active:scale-95"
+                      className="w-full py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md active:scale-95"
                     >
                       <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
                       <span>Add to Media</span>

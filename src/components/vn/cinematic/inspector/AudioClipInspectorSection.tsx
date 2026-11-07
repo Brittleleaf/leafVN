@@ -58,7 +58,7 @@ export const AudioClipInspectorSection: React.FC<AudioClipInspectorSectionProps>
                   onUpdateClip(clip.id, { audioUrl: url, name: name || clip.name })
                 )
               }
-              className="px-2 py-1 rounded bg-[var(--accent)] text-white font-bold text-[10px] shrink-0 hover:opacity-90 transition-opacity"
+              className="px-2 py-1 rounded bg-[var(--accent)] text-[var(--accent-contrast)] font-bold text-[10px] shrink-0 hover:opacity-90 transition-opacity"
             >
               Gallery
             </button>

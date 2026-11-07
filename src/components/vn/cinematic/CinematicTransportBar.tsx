@@ -59,7 +59,7 @@ export const CinematicTransportBar: React.FC<CinematicTransportBarProps> = ({
         className={`px-4 py-1.5 rounded-full font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-md ${
           isPlaying
             ? 'bg-amber-600 hover:bg-amber-500 text-white'
-            : 'bg-[var(--accent)] hover:opacity-90 text-white'
+            : 'bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)]'
         }`}
         title="Space to Play/Pause"
       >

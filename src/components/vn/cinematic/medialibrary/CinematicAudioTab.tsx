@@ -53,7 +53,7 @@ export const CinematicAudioTab: React.FC<CinematicAudioTabProps> = ({
             onClick={() => setAudioCategory(cat.id as any)}
             className={`px-3 py-1 rounded-full text-[10px] font-bold transition-all cursor-pointer shrink-0 border ${
               audioCategory === cat.id
-                ? 'bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm'
+                ? 'bg-[var(--accent)] border-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                 : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)]'
             }`}
           >
@@ -70,7 +70,7 @@ export const CinematicAudioTab: React.FC<CinematicAudioTabProps> = ({
             <button
               type="button"
               onClick={() => onOpenAssetStudio('sfx')}
-              className="px-3 py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-bold text-xs cursor-pointer shadow"
+              className="px-3 py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-bold text-xs cursor-pointer shadow"
             >
               Upload New Audio
             </button>
@@ -134,7 +134,7 @@ export const CinematicAudioTab: React.FC<CinematicAudioTabProps> = ({
                     onClick={() => playAudioPreview(aud.url, 0.75)}
                     className={`px-3 py-1 rounded-md text-[10px] font-bold flex items-center gap-1.5 cursor-pointer transition-all ${
                       isPlayingThis
-                        ? 'bg-[var(--accent)] text-white shadow-[0_0_12px_rgba(209,123,248,0.35)] animate-pulse'
+                        ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-[0_0_12px_rgba(209,123,248,0.35)] animate-pulse'
                         : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)]'
                     }`}
                     title={isPlayingThis ? 'Stop audition' : 'Audition sound'}
@@ -152,7 +152,7 @@ export const CinematicAudioTab: React.FC<CinematicAudioTabProps> = ({
                       onAddAudioClip({ url: aud.url, name: aud.name, isBgm });
                       playUiSound('open', 0.35);
                     }}
-                    className="px-3.5 py-1 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
+                    className="px-3.5 py-1 rounded-md bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-extrabold text-[10px] flex items-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
                     title="Add clip to audio track at playhead"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />

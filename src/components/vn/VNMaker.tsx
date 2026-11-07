@@ -180,15 +180,15 @@ export default function VNMaker({ initialStory, onPlayStory, onExit, onSaveStory
                     <span>HOW TO EDIT YOUR STORY?</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="bg-[var(--accent)] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">1</span>
+                    <span className="bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">1</span>
                     <span>Click directly in the on-screen <b>text box</b> to write.</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="bg-[var(--accent)] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
+                    <span className="bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">2</span>
                     <span>Click the <b>character avatar</b> to change who speaks or their emotion.</span>
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="bg-[var(--accent)] text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">3</span>
+                    <span className="bg-[var(--accent)] text-[var(--accent-contrast)] rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">3</span>
                     <span>Click <b>'PLAY LINE'</b> below to see live animation.</span>
                   </span>
                 </div>

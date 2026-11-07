@@ -201,7 +201,7 @@ export default function VNMakerSceneTabs() {
                     ? 'border-amber-500 bg-amber-600 text-white shadow-md'
                     : 'border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300'
                   : isActive
-                  ? 'border-[var(--accent)] bg-[var(--accent)] text-white shadow-md'
+                  ? 'border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-contrast)] shadow-md'
                   : 'border-[var(--border)] bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] text-[var(--text)]'
               } ${isDragOver ? 'ring-2 ring-amber-400 scale-105' : ''} ${
                 isBeingDragged ? 'opacity-40' : ''
@@ -301,7 +301,7 @@ export default function VNMakerSceneTabs() {
         <div className="relative" ref={newSceneDropdownRef}>
           <button
             onClick={() => setIsNewSceneOpen(!isNewSceneOpen)}
-            className="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer shrink-0 flex items-center gap-1.5 bg-[var(--accent)] hover:opacity-90 text-white transition-all shadow-xs active:scale-95"
+            className="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer shrink-0 flex items-center gap-1.5 bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] transition-all shadow-xs active:scale-95"
             title="Create a new scenario, static screen or cinematic event"
           >
             <span>+ New Scene</span>

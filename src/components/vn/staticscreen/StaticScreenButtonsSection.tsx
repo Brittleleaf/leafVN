@@ -74,7 +74,7 @@ export function StaticScreenButtonsSection({
             }}
             className={`px-2 py-1.5 rounded-md text-[10px] font-bold text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border ${
               config.buttonsLayout !== 'free'
-                ? 'bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm'
+                ? 'bg-[var(--accent)] border-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                 : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-strong)]'
             }`}
             title="Standard vertical centered layout"

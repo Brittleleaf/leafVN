@@ -1849,7 +1849,7 @@ export default function ChapterStudioModal({
                               />
                               <div className="absolute inset-0 bg-black/25" />
                               {isStart && (
-                                <span className="absolute top-1.5 left-1.5 bg-[var(--accent)] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow flex items-center gap-1">
+                                <span className="absolute top-1.5 left-1.5 bg-[var(--accent)] text-[var(--accent-contrast)] text-[9px] font-bold px-2 py-0.5 rounded-full shadow flex items-center gap-1">
                                   <GuiIconRenderer icon={GUI_ICONS.action.target} className="w-2.5 h-2.5" />
                                   <span>START</span>
                                 </span>
@@ -1897,7 +1897,7 @@ export default function ChapterStudioModal({
                                   playSfx('/assets/sfx/start after click intro.mp3', false, 0.3);
                                   notify(`Opening scenario "${sc.name}"`);
                                 }}
-                                className="text-[10px] px-2.5 py-1 bg-[var(--accent-surface)] hover:bg-[var(--accent)] text-[var(--accent)] hover:text-white border border-[var(--border2)] rounded-lg font-bold cursor-pointer transition-colors"
+                                className="text-[10px] px-2.5 py-1 bg-[var(--accent-surface)] hover:bg-[var(--accent)] text-[var(--accent)] hover:text-[var(--accent-contrast)] border border-[var(--border2)] rounded-lg font-bold cursor-pointer transition-colors"
                               >
                                 Edit on Canvas
                               </button>

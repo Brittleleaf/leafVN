@@ -192,7 +192,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
                   }
                   className={`px-2 py-1 rounded text-[10px] font-bold capitalize transition-all cursor-pointer ${
                     (clip.emotion || 'neutral') === emoKey
-                      ? 'bg-[var(--accent)] text-white shadow-md'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-md'
                       : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
                   }`}
                 >
@@ -534,7 +534,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             onClick={() => onUpdateClip(clip.id, { yPercent: 82, textPosition: 'bottom' })}
             className={`flex-1 py-1 rounded border text-[10px] font-bold transition-all cursor-pointer ${
               (clip.yPercent ?? 82) >= 70
-                ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                ? 'bg-[var(--accent)] text-[var(--accent-contrast)] border-[var(--accent)]'
                 : 'bg-[var(--surface)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
@@ -545,7 +545,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             onClick={() => onUpdateClip(clip.id, { yPercent: 50, textPosition: 'center' })}
             className={`flex-1 py-1 rounded border text-[10px] font-bold transition-all cursor-pointer ${
               (clip.yPercent ?? 82) > 30 && (clip.yPercent ?? 82) < 70
-                ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                ? 'bg-[var(--accent)] text-[var(--accent-contrast)] border-[var(--accent)]'
                 : 'bg-[var(--surface)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
@@ -556,7 +556,7 @@ export const TextClipInspectorSection: React.FC<TextClipInspectorSectionProps> =
             onClick={() => onUpdateClip(clip.id, { yPercent: 20, textPosition: 'top' })}
             className={`flex-1 py-1 rounded border text-[10px] font-bold transition-all cursor-pointer ${
               (clip.yPercent ?? 82) <= 30
-                ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                ? 'bg-[var(--accent)] text-[var(--accent-contrast)] border-[var(--accent)]'
                 : 'bg-[var(--surface)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >

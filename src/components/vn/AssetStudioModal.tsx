@@ -539,7 +539,7 @@ export default function AssetStudioModal({
                             className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-bold transition-transform shadow-lg cursor-pointer ${
                               isPlaying
                                 ? 'bg-amber-500 text-black scale-110 shadow-[0_0_20px_rgba(245,158,11,0.6)] animate-pulse'
-                                : 'bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-white border border-[var(--border)] hover:scale-105'
+                                : 'bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] border border-[var(--border)] hover:scale-105'
                             }`}
                             title={isPlaying ? 'Pause audio' : 'Play audio'}
                           >

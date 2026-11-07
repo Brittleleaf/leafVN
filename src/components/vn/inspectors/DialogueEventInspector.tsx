@@ -125,7 +125,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                     }}
                     className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer border text-center ${
                       isSlotActive
-                        ? 'bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm'
+                        ? 'bg-[var(--accent)] text-[var(--accent-contrast)] border-[var(--accent)] shadow-sm'
                         : 'bg-[var(--card-bg)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:border-[var(--border2)]'
                     }`}
                     title={`Preset ${label}: Snap character to ${pos} dialogue edge`}
@@ -262,7 +262,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                   onClick={() => onPatchCurrentLine({ characterScale: s })}
                   className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border transition-colors cursor-pointer ${
                     currentEffectiveScale === s
-                      ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] border-[var(--accent)]'
                       : 'bg-[var(--card-bg)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)]'
                   }`}
                 >
@@ -301,7 +301,7 @@ export const DialogueEventInspector: React.FC<EventInspectorSubProps> = ({
                     context.handleApplyScaleToAllDialogues(currentSpeaker.id, currentEffectiveScale);
                   }
                 }}
-                className="px-2.5 py-1 rounded-lg border border-[var(--accent)] bg-[var(--accent)] hover:opacity-90 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                className="px-2.5 py-1 rounded-lg border border-[var(--accent)] bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
                 title={`Apply ${currentEffectiveScale}x to all dialogues of ${currentSpeaker.name} across the story`}
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.files} className="w-3.5 h-3.5" />

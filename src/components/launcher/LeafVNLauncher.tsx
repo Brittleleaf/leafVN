@@ -1362,7 +1362,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       An empty canvas with a single initial scene to structure your story from scratch.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-[var(--accent-contrast)] rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] group-hover:border-[var(--accent)] rounded-lg text-xs font-medium transition-all border border-[var(--border)] cursor-pointer shadow-xs active:scale-[0.99]">
                     Use Template
                   </button>
                 </div>
@@ -1386,7 +1386,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       Includes pre-configured characters, emotions, screen effects, background music, and decision branches.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-[var(--accent-contrast)] rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] group-hover:border-[var(--accent)] rounded-lg text-xs font-medium transition-all border border-[var(--border)] cursor-pointer shadow-xs active:scale-[0.99]">
                     Use Template
                   </button>
                 </div>
@@ -1410,7 +1410,7 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
                       Focused on background video tracks, animated subtitles, and synchronized audio transitions.
                     </p>
                   </div>
-                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] group-hover:bg-[var(--accent)] text-[var(--text)] group-hover:text-[var(--accent-contrast)] rounded-lg text-xs font-medium transition-colors border border-[var(--border)] cursor-pointer">
+                  <button className="mt-5 w-full py-2 bg-[var(--btn-bg)] hover:bg-[var(--accent)] text-[var(--text)] hover:text-[var(--accent-contrast)] group-hover:border-[var(--accent)] rounded-lg text-xs font-medium transition-all border border-[var(--border)] cursor-pointer shadow-xs active:scale-[0.99]">
                     Use Template
                   </button>
                 </div>

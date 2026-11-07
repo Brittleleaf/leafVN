@@ -58,7 +58,7 @@ export const CinematicMediaTab: React.FC<CinematicMediaTabProps> = ({
             onClick={() => setMediaCategory(cat.id as any)}
             className={`px-3 py-1 rounded-full text-[10px] font-bold transition-all cursor-pointer shrink-0 border ${
               mediaCategory === cat.id
-                ? 'bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm'
+                ? 'bg-[var(--accent)] border-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                 : 'bg-[var(--btn-bg)] border-[var(--border)] text-[var(--muted)] hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)]'
             }`}
           >
@@ -75,7 +75,7 @@ export const CinematicMediaTab: React.FC<CinematicMediaTabProps> = ({
             <button
               type="button"
               onClick={() => onOpenAssetStudio('background')}
-              className="px-3 py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-bold text-xs cursor-pointer shadow"
+              className="px-3 py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-bold text-xs cursor-pointer shadow"
             >
               Upload New Asset
             </button>
@@ -157,7 +157,7 @@ export const CinematicMediaTab: React.FC<CinematicMediaTabProps> = ({
                           onAddMediaClip({ url: item.url, name: item.name, type: 'image', section: 'media' });
                           playUiSound('open', 0.35);
                         }}
-                        className="flex-1 py-1 rounded-lg bg-[var(--accent)] hover:opacity-90 text-white font-bold text-[10px] flex items-center justify-center gap-1 transition-all cursor-pointer shadow active:scale-95"
+                        className="flex-1 py-1 rounded-lg bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-bold text-[10px] flex items-center justify-center gap-1 transition-all cursor-pointer shadow active:scale-95"
                         title="Add as overlay clip to Media track"
                       >
                         <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
@@ -171,7 +171,7 @@ export const CinematicMediaTab: React.FC<CinematicMediaTabProps> = ({
                         onAddMediaClip({ url: item.url, name: item.name, type: 'image', section: 'media' });
                         playUiSound('open', 0.35);
                       }}
-                      className="w-full py-1 rounded-lg bg-[var(--accent)] hover:opacity-90 text-white font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow active:scale-95"
+                      className="w-full py-1 rounded-lg bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow active:scale-95"
                     >
                       <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
                       <span>+ Add to Media</span>

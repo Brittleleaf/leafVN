@@ -301,7 +301,7 @@ export default function ProjectStudioModal({
               <p className="text-[var(--muted)] text-sm font-bold">No projects found on the server.</p>
               <button
                 onClick={() => setShowCreateForm(true)}
-                className="px-3 py-1 bg-[var(--accent)] text-white rounded-lg text-xs font-bold"
+                className="px-3 py-1 bg-[var(--accent)] text-[var(--accent-contrast)] rounded-lg text-xs font-bold"
               >
                 Create First Project
               </button>
@@ -390,7 +390,7 @@ export default function ProjectStudioModal({
                         <button
                           type="button"
                           onClick={() => handleLoadProject(proj.id)}
-                          className="px-3 py-1 bg-[var(--accent)] hover:brightness-110 text-white rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow flex items-center gap-1.5"
+                          className="px-3 py-1 bg-[var(--accent)] hover:brightness-110 text-[var(--accent-contrast)] rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors shadow flex items-center gap-1.5"
                         >
                           <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3 h-3" />
                           <span>Load Project</span>

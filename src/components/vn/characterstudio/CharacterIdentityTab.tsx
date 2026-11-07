@@ -232,7 +232,7 @@ export const CharacterIdentityTab: React.FC<CharacterIdentityTabProps> = ({
                   onClick={() => handleUpdateChar(activeChar.id, { defaultScale: preset })}
                   className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold border transition-colors cursor-pointer ${
                     isCurrent
-                      ? 'bg-[var(--accent)] text-white border-[var(--accent)] shadow-sm'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] border-[var(--accent)] shadow-sm'
                       : 'bg-[var(--well-bg)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
                   }`}
                 >

@@ -106,7 +106,7 @@ export const CinematicTitlesTab: React.FC<CinematicTitlesTabProps> = ({
                   onAddTextClip(tmpl.preset);
                   playUiSound('open', 0.35);
                 }}
-                className="w-full py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
+                className="w-full py-1.5 rounded-md bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
               >
                 <GuiIconRenderer icon={GUI_ICONS.general.plus} className="w-2.5 h-2.5" />
                 <span>Add to Media</span>

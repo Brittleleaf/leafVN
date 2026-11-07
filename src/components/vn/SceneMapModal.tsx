@@ -935,7 +935,7 @@ export default function SceneMapModal({
                       playSfx('/assets/sfx/click intro.mp3', false, 0.4);
                       notify(`Editing scene: ${sc.name}`);
                     }}
-                    className="flex-1 py-1 bg-[var(--accent)] hover:brightness-110 text-white rounded-lg text-[11px] font-bold border border-transparent transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm"
+                    className="flex-1 py-1 bg-[var(--accent)] hover:brightness-110 text-[var(--accent-contrast)] rounded-lg text-[11px] font-bold border border-transparent transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm"
                   >
                     <GuiIconRenderer icon={GUI_ICONS.general.pencil} size={11} />
                     <span>Edit</span>
@@ -1125,7 +1125,7 @@ export default function SceneMapModal({
                   </div>
                   <button
                     type="button"
-                    className="px-3 py-1 bg-[var(--accent)] hover:brightness-110 text-white rounded-lg text-xs font-bold uppercase transition-colors shrink-0 shadow-sm"
+                    className="px-3 py-1 bg-[var(--accent)] hover:brightness-110 text-[var(--accent-contrast)] rounded-lg text-xs font-bold uppercase transition-colors shrink-0 shadow-sm"
                   >
                     + Insert
                   </button>

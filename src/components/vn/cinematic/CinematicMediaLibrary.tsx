@@ -285,7 +285,7 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
                 onClick={() => setPanelWidth(w)}
                 className={`px-1.5 py-0.5 rounded text-[9px] font-mono font-bold transition-all cursor-pointer ${
                   panelWidth === w
-                    ? 'bg-[var(--accent)] text-white shadow-sm'
+                    ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                     : 'bg-[var(--btn-bg)] border border-[var(--border)] text-[var(--muted)] hover:bg-[var(--btn-hover-bg)] hover:text-[var(--text)]'
                 }`}
                 title={`Set width to ${w}px`}
@@ -346,7 +346,7 @@ export const CinematicMediaLibrary: React.FC<CinematicMediaLibraryProps> = ({
                 if (isTransitions) {
                   btnClass = 'bg-gradient-to-b from-[#0f2e27] to-[#0a1e19] text-cyan-300 border border-emerald-400/80 shadow-[0_0_15px_rgba(16,185,129,0.45)] font-black';
                 } else {
-                  btnClass = 'bg-[var(--accent)] text-white shadow-sm font-black';
+                  btnClass = 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-sm font-black';
                 }
               }
 

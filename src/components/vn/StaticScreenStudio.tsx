@@ -467,7 +467,7 @@ export default function StaticScreenStudio({
               }}
               className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                 activeTab === 'visual'
-                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                   : 'text-[var(--muted)] hover:text-[var(--text)]'
               }`}
             >
@@ -482,7 +482,7 @@ export default function StaticScreenStudio({
               }}
               className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                 activeTab === 'typography'
-                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                   : 'text-[var(--muted)] hover:text-[var(--text)]'
               }`}
             >
@@ -497,7 +497,7 @@ export default function StaticScreenStudio({
               }}
               className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                 activeTab === 'buttons'
-                  ? 'bg-[var(--accent)] text-white shadow-sm'
+                  ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-sm'
                   : 'text-[var(--muted)] hover:text-[var(--text)]'
               }`}
             >
