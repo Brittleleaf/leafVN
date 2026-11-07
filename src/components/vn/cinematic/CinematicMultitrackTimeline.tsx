@@ -236,7 +236,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
       dialog: 'Media',
     };
     const newTrack: VNCinematicTrack = {
-      id: `track-${targetSec}-${Date.now()}`,
+      id: `track-${targetSec}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       section: targetSec,
       index: nextIndex,
       name: `${sectionNameMap[targetSec]} ${nextIndex}`,
@@ -354,7 +354,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
 
       if (payload.type === 'character_dialogue') {
         newClip = {
-          id: `clip-txt-${Date.now()}`,
+          id: `clip-txt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           trackId: track.id,
           name: `${payload.speaker || 'Character'}: ${payload.text?.slice(0, 15)}...`,
           speaker: payload.speaker,
@@ -374,7 +374,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
         };
       } else if (payload.type === 'media') {
         newClip = {
-          id: `clip-vis-${Date.now()}`,
+          id: `clip-vis-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           trackId: track.id,
           name: payload.name || 'Image',
           startSec: dropSec,
@@ -390,7 +390,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
         };
       } else if (payload.type === 'text') {
         newClip = {
-          id: `clip-txt-${Date.now()}`,
+          id: `clip-txt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           trackId: track.id,
           name: payload.text?.slice(0, 15) || 'Text',
           startSec: dropSec,
@@ -406,7 +406,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
         };
       } else if (payload.type === 'audio') {
         newClip = {
-          id: `clip-aud-${Date.now()}`,
+          id: `clip-aud-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           trackId: track.id,
           name: payload.name || 'Audio',
           startSec: dropSec,
@@ -418,7 +418,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
         };
       } else if (payload.type === 'fx') {
         newClip = {
-          id: `clip-fx-${Date.now()}`,
+          id: `clip-fx-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           trackId: track.id,
           name: payload.name || 'FX',
           startSec: dropSec,

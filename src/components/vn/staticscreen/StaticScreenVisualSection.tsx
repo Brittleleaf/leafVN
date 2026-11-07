@@ -121,7 +121,7 @@ export function StaticScreenVisualSection({
                 className={`py-1.5 px-2 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer border ${
                   (config.galleryTab || 'cinematics') === tab
                     ? 'bg-amber-500 text-black border-amber-300 shadow-sm font-bold'
-                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white'
+                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
                 }`}
               >
                 {tab === 'cinematics' ? 'Cinematics' : tab === 'scenarios' ? 'Scenarios' : 'Characters'}
@@ -554,7 +554,7 @@ export function StaticScreenVisualSection({
                 className={`p-2 rounded-md border text-left transition-all cursor-pointer flex flex-col items-center justify-center gap-1 shadow-sm ${
                   isSelected
                     ? 'border-cyan-400 bg-cyan-950/40 text-cyan-200 ring-1 ring-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.25)]'
-                    : 'border-[var(--border)] bg-[var(--surface)] hover:border-white/20 text-gray-300 hover:text-white'
+                    : 'border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-strong)] text-[var(--muted)] hover:text-[var(--text)]'
                 }`}
                 title={cur.description}
               >

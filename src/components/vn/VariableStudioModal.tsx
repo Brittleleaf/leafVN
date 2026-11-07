@@ -538,7 +538,10 @@ export default function VariableStudioModal({
                       <input
                         type="number"
                         value={typeof formDefaultVal === 'number' ? formDefaultVal : 0}
-                        onChange={(e) => setFormDefaultVal(Number(e.target.value))}
+                        onChange={(e) => {
+                          const v = parseFloat(e.target.value);
+                          setFormDefaultVal(Number.isFinite(v) ? v : 0);
+                        }}
                         className="w-full bg-[var(--well-bg)] border border-[var(--border)] focus:border-[var(--accent)] rounded-md p-2.5 text-xs text-[var(--accent)] font-mono outline-none transition-colors"
                       />
                     ) : (

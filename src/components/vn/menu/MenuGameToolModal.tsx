@@ -463,8 +463,8 @@ export default function MenuGameToolModal({
     }
 
     // 6. Play start scene (first scene of chapter 1 if not set)
-    if (!resolvedRoleScenes.play && story.chapters[0]?.scenes[0]) {
-      newConfig.playStartSceneId = story.chapters[0].startSceneId || story.chapters[0].scenes[0].id;
+    if (!resolvedRoleScenes.play && story.chapters[0]?.scenes?.[0]) {
+      newConfig.playStartSceneId = story.chapters[0].startSceneId || story.chapters[0].scenes[0]?.id || '';
     }
 
     newConfig.enabled = true;

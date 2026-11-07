@@ -1225,7 +1225,7 @@ export default function SceneStudioModal({
                                       <button
                                         type="button"
                                         onClick={() => playSfx(hs.sfxUrl!, false, 0.6)}
-                                        className="text-xs text-[var(--accent)] hover:text-white px-2 py-0.5 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] cursor-pointer flex items-center justify-center"
+                                        className="text-xs text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--accent-contrast)] px-2 py-0.5 rounded-lg bg-[var(--well-bg)] border border-[var(--border)] cursor-pointer flex items-center justify-center transition-colors"
                                       >
                                         <GuiIconRenderer icon={GUI_ICONS.media.play} size={10} />
                                       </button>

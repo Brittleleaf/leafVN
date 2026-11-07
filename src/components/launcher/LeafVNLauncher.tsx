@@ -473,7 +473,13 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
 
       if (!sourceStory) {
         const local = localStorage.getItem(`leafvn_project_${id}`);
-        if (local) sourceStory = JSON.parse(local);
+        if (local) {
+          try {
+            sourceStory = JSON.parse(local);
+          } catch (e) {
+            console.warn('Corrupted local project data:', e);
+          }
+        }
       }
 
       if (!sourceStory && (id === 'el-renacer-del-pintor' || id === SAMPLE_STORY.id)) {
@@ -578,7 +584,13 @@ export default function LeafVNLauncher({ initialTab = 'home' }: LeafVNLauncherPr
 
       if (!storyToBackup) {
         const local = localStorage.getItem(`leafvn_project_${id}`);
-        if (local) storyToBackup = JSON.parse(local);
+        if (local) {
+          try {
+            storyToBackup = JSON.parse(local);
+          } catch (e) {
+            console.warn('Corrupted local backup data:', e);
+          }
+        }
       }
 
       if (!storyToBackup && (id === 'el-renacer-del-pintor' || id === SAMPLE_STORY.id)) {

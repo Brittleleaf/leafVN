@@ -165,7 +165,7 @@ export function CursorShowcaseTab({
                     className={`w-full py-1.5 px-2.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 border ${
                       isAuditioning
                         ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200'
-                        : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-gray-300 hover:text-white'
+                        : 'bg-[var(--btn-bg)] hover:bg-[var(--btn-hover-bg)] border-[var(--border)] text-[var(--text)]'
                     }`}
                   >
                     {isAuditioning ? (

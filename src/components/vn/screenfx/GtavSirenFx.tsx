@@ -293,7 +293,7 @@ export const GtavSirenInspector: React.FC<ScreenFxInspectorProps> = ({
                 className={`flex flex-col items-start p-2 rounded-lg border text-left transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-red-500/20 border-red-400 text-red-200 shadow-sm shadow-red-500/20'
-                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white hover:border-[var(--muted2)]'
+                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--muted2)]'
                 }`}
               >
                 <div className="flex items-center gap-1.5 w-full">

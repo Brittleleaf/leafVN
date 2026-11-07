@@ -29,13 +29,13 @@ function compressImageToDataUrl(file: File, maxWidth = 1920, maxHeight = 1080, q
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        let width = img.width;
-        let height = img.height;
+        let width = Math.max(1, Number.isFinite(img.width) ? img.width : 1);
+        let height = Math.max(1, Number.isFinite(img.height) ? img.height : 1);
 
         if (width > maxWidth || height > maxHeight) {
           const ratio = Math.min(maxWidth / width, maxHeight / height);
-          width = Math.round(width * ratio);
-          height = Math.round(height * ratio);
+          width = Math.max(1, Math.round(width * ratio));
+          height = Math.max(1, Math.round(height * ratio));
         }
 
         const canvas = document.createElement('canvas');

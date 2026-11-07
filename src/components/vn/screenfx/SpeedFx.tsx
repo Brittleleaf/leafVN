@@ -129,7 +129,8 @@ export const SpeedComponent: React.FC<ScreenFxProps> = ({
           continue;
         }
 
-        const size = Math.max(0.6, (1 - star.z / width) * 3.5);
+        const safeWidth = Math.max(1, width);
+        const size = Math.max(0.6, (1 - star.z / safeWidth) * 3.5);
 
         if (isWarp) {
           // WARP SPEED MODE: Stretched light hyperdrive streaks
@@ -141,7 +142,7 @@ export const SpeedComponent: React.FC<ScreenFxProps> = ({
           ctx.moveTo(prevX, prevY);
           ctx.lineTo(px, py);
           ctx.strokeStyle = starColor;
-          ctx.globalAlpha = star.o * Math.min(1.0, (1 - star.z / width) * 1.2);
+          ctx.globalAlpha = Math.max(0, star.o * Math.min(1.0, (1 - star.z / safeWidth) * 1.2));
           ctx.lineWidth = size * 0.9;
           ctx.lineCap = 'round';
           ctx.stroke();
@@ -150,7 +151,7 @@ export const SpeedComponent: React.FC<ScreenFxProps> = ({
           ctx.beginPath();
           ctx.arc(px, py, size * 0.8, 0, Math.PI * 2);
           ctx.fillStyle = starColor;
-          ctx.globalAlpha = star.o * Math.min(1.0, (1 - star.z / width) * 1.4);
+          ctx.globalAlpha = Math.max(0, star.o * Math.min(1.0, (1 - star.z / safeWidth) * 1.4));
           ctx.fill();
         }
       }

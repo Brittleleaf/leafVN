@@ -375,7 +375,7 @@ export const SnowyInspector: React.FC<ScreenFxInspectorProps> = ({
                 className={`flex flex-col items-start p-2 rounded-lg border text-left transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-sky-500/20 border-sky-400 text-sky-200 shadow-sm shadow-sky-500/20'
-                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white hover:border-[var(--muted2)]'
+                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)] hover:border-[var(--muted2)]'
                 }`}
               >
                 <div className="flex items-center gap-1.5 w-full">
@@ -540,7 +540,7 @@ export const SnowyInspector: React.FC<ScreenFxInspectorProps> = ({
                 className={`flex-1 py-1 px-1.5 rounded text-[9px] font-mono border transition-all cursor-pointer flex items-center justify-center gap-1 ${
                   currentColor.toLowerCase() === c.hex.toLowerCase()
                     ? 'bg-sky-500/20 border-sky-400 text-sky-200 shadow-sm'
-                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-white'
+                    : 'bg-[var(--well-bg)] border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--btn-hover-bg)]'
                 }`}
               >
                 <span className="w-2 h-2 rounded-full border border-white/30" style={{ backgroundColor: c.hex }} />

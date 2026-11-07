@@ -251,7 +251,7 @@ export const CinematicClipInspector: React.FC<CinematicClipInspectorProps> = ({
               {onClose && (
                 <button
                   onClick={onClose}
-                  className="p-1 rounded hover:bg-[var(--btn-bg)] text-[var(--muted)] hover:text-white cursor-pointer"
+                  className="p-1 rounded hover:bg-[var(--btn-hover-bg)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
                   title="Close inspector"
                 >
                   <GuiIconRenderer icon={GUI_ICONS.general.cancel} className="w-3 h-3" />
