@@ -187,10 +187,10 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               <div className="pt-5">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] border border-emerald-500/25 group-hover:border-emerald-500/50 hover:bg-emerald-950/40 text-[var(--text)] hover:text-emerald-300 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
                 >
                   <span>Open Menu Designer</span>
-                  <span className="group-hover:translate-x-1 transition-transform text-[11px] text-emerald-400">➜</span>
+                  <span className="group-hover:translate-x-1 transition-transform text-[11px] text-[var(--muted)]">➜</span>
                 </button>
               </div>
             </div>
@@ -242,11 +242,11 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     playSfx('/assets/sfx/open folder.mp3', false, 0.4);
                     setActiveGlobalModal('chapter');
                   }}
-                  className="flex-1 py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] border border-purple-500/25 group-hover:border-purple-500/50 hover:bg-purple-950/40 text-[var(--text)] hover:text-purple-300 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
+                  className="flex-1 py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
                 >
-                  <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-purple-400" />
+                  <GuiIconRenderer icon={GUI_ICONS.general.folder} className="w-3.5 h-3.5 text-[var(--muted)]" />
                   <span>Select Episode & Settings</span>
-                  <span className="group-hover:translate-x-1 transition-transform text-[11px] text-purple-400">➜</span>
+                  <span className="group-hover:translate-x-1 transition-transform text-[11px] text-[var(--muted)]">➜</span>
                 </button>
 
                 <button
@@ -256,12 +256,12 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
                     playSfx('/assets/sfx/click intro.mp3', false, 0.25);
                     setCurrentWorkspace('story_tool');
                   }}
-                  className="py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] hover:bg-purple-950/40 border border-purple-500/25 hover:border-purple-500/50 text-[var(--text)] hover:text-purple-300 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs active:scale-[0.99]"
+                  className="py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs active:scale-[0.99]"
                   title="Directly open and edit the current active scenario on stage"
                 >
-                  <GuiIconRenderer icon={GUI_ICONS.general.pencil} className="w-3.5 h-3.5 text-purple-400" />
+                  <GuiIconRenderer icon={GUI_ICONS.general.pencil} className="w-3.5 h-3.5 text-[var(--muted)]" />
                   <span className="hidden xl:inline">Edit Scenario</span>
-                  <span className="text-[11px] text-purple-400">➜</span>
+                  <span className="text-[11px] text-[var(--muted)]">➜</span>
                 </button>
               </div>
             </div>
@@ -305,11 +305,11 @@ export default function ProjectHubView({ onPlayStory, onExit }: ProjectHubViewPr
               <div className="pt-5">
                 <button
                   type="button"
-                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] border border-amber-500/25 group-hover:border-amber-500/50 hover:bg-amber-950/40 text-[var(--text)] hover:text-amber-300 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
+                  className="w-full py-2.5 px-3.5 rounded-xl bg-[var(--well-bg)] hover:bg-[var(--btn-hover-bg)] border border-[var(--border)] text-[var(--text)] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
                 >
-                  <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-amber-400" />
+                  <GuiIconRenderer icon={GUI_ICONS.general.gallery} className="w-3.5 h-3.5 text-[var(--muted)]" />
                   <span>Explore Gallery & Assets</span>
-                  <span className="group-hover:translate-x-1 transition-transform text-[11px] text-amber-400">➜</span>
+                  <span className="group-hover:translate-x-1 transition-transform text-[11px] text-[var(--muted)]">➜</span>
                 </button>
               </div>
             </div>
