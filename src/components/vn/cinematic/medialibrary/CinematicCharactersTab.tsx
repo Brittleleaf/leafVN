@@ -48,8 +48,16 @@ export const CinematicCharactersTab: React.FC<CinematicCharactersTabProps> = ({
       </div>
 
       {characters.length === 0 ? (
-        <div className="py-8 text-center text-[var(--muted)] text-xs">
-          No characters registered in this project.
+        <div className="py-10 px-4 text-center rounded-xl border border-dashed border-[var(--border)] bg-[var(--well-bg)]/60 flex flex-col items-center justify-center gap-3 my-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#E21345]/10 border border-[#E21345]/30 flex items-center justify-center text-[#E21345] shadow-inner">
+            <GuiIconRenderer icon={GUI_ICONS.general.userCircle} className="w-6 h-6" />
+          </div>
+          <div className="space-y-1">
+            <h4 className="text-xs font-bold text-[var(--text)]">No Characters in Project</h4>
+            <p className="text-[11px] text-[var(--muted)] max-w-[230px] leading-relaxed mx-auto">
+              Register cast members in the Gallery & Assets hub to compose dialogue stamps and animated expressions.
+            </p>
+          </div>
         </div>
       ) : (
         <div className="space-y-3">

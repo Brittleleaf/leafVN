@@ -261,7 +261,7 @@ export default function VNMakerSceneTabs() {
                     <span className="truncate flex items-center gap-1.5">
                       <GuiIconRenderer
                         icon={isViewingGlobal ? GUI_ICONS.general.folder : GUI_ICONS.general.scenario}
-                        className={`w-3 h-3 ${isViewingGlobal ? (isActive ? 'text-white' : 'text-amber-400') : 'text-gray-400'} shrink-0`}
+                        className={`w-3 h-3 ${isActive ? 'text-[var(--accent-contrast)]' : isViewingGlobal ? 'text-amber-400' : 'text-gray-400'} shrink-0`}
                       />
                       <span>{sc.name}</span>
                     </span>

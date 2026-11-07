@@ -221,13 +221,17 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
                     isCover={true}
                     className="w-full h-full object-cover"
                   />
-                ) : (
+                ) : clip.mediaUrl ? (
                   <div
                     style={{
-                      backgroundImage: clip.mediaUrl ? `url("${getProxiedImageUrl(clip.mediaUrl).replace(/"/g, '\\"')}")` : 'none',
+                      backgroundImage: `url("${getProxiedImageUrl(clip.mediaUrl).replace(/"/g, '\\"')}")`,
                     }}
                     className="w-full h-full bg-cover bg-center"
                   />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-neutral-900 via-neutral-950 to-black flex items-center justify-center border border-white/10">
+                    <span className="text-white/30 font-mono text-xs uppercase tracking-widest">[ Empty Background Track ]</span>
+                  </div>
                 )}
 
                 {/* Universal Transform Gizmo for Background Panning & Zooming */}
@@ -353,14 +357,22 @@ export const CinematicVisualLayer: React.FC<CinematicVisualLayerProps> = ({
                     isPlaying={isPlaying}
                     className="max-w-[260px] md:max-w-[340px] max-h-[300px] object-contain pointer-events-none rounded"
                   />
-                ) : (
+                ) : clip.mediaUrl ? (
                   <img
                     src={getProxiedImageUrl(clip.mediaUrl)}
                     crossOrigin="anonymous"
                     alt={clip.name || 'Visual Media'}
                     className="max-w-[260px] md:max-w-[340px] max-h-[300px] object-contain pointer-events-none rounded"
                     draggable={false}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLElement).style.opacity = '0.3';
+                    }}
                   />
+                ) : (
+                  <div className="w-32 h-28 rounded-lg border border-dashed border-white/20 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center p-2 text-center text-white/50 select-none">
+                    <GuiIconRenderer icon={GUI_ICONS.general.image} className="w-6 h-6 mb-1 opacity-50" />
+                    <span className="text-[10px] truncate max-w-full font-mono text-white/60">{clip.name || 'No Media'}</span>
+                  </div>
                 )}
               </div>
 

@@ -992,7 +992,7 @@ export const CinematicMultitrackTimeline: React.FC<CinematicMultitrackTimelinePr
 
                             if (!hasTransition && !isAdjacent) return null;
 
-                            const cutLeftPct = (c.startSec / totalDuration) * 100;
+                            const cutLeftPct = (c.startSec / safeTotalDuration) * 100;
                             const isSelectedTransition = selectedClipId === c.id;
                             const isOpen = activeSeamPopoverClipId === c.id;
 

@@ -471,19 +471,32 @@ export default function VNMakerStage(props: VNMakerStageProps = {}) {
     <div className="space-y-4">
       <div className="flex items-center justify-between text-xs border-b border-[var(--border)] pb-2 shrink-0">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-[var(--accent)] uppercase tracking-widest">
-            [ INTERACTIVE CANVAS // LINE #{selectedLineIndex + 1} ]
-          </span>
-          <span className="text-[var(--muted2)] text-[11px]">(Click on any element to edit it)</span>
+          {currentLine ? (
+            <>
+              <span className="font-bold text-[var(--accent)] uppercase tracking-widest">
+                [ INTERACTIVE CANVAS // LINE #{selectedLineIndex + 1} ]
+              </span>
+              <span className="text-[var(--muted2)] text-[11px]">(Click on any element to edit it)</span>
+            </>
+          ) : (
+            <>
+              <span className="font-bold text-[var(--muted)] uppercase tracking-widest">
+                [ INTERACTIVE CANVAS // EMPTY SCENE ]
+              </span>
+              <span className="text-[var(--muted2)] text-[11px]">(Add an event in the timeline below to stage this scene)</span>
+            </>
+          )}
         </div>
 
-        <button
-          onClick={handleDeleteCurrentLine}
-          className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-semibold text-xs cursor-pointer flex items-center gap-1 transition-colors"
-        >
-          <GuiIconRenderer icon={GUI_ICONS.general.trash} className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
-          <span>Delete this line</span>
-        </button>
+        {currentLine && (
+          <button
+            onClick={handleDeleteCurrentLine}
+            className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-semibold text-xs cursor-pointer flex items-center gap-1 transition-colors"
+          >
+            <GuiIconRenderer icon={GUI_ICONS.general.trash} className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
+            <span>Delete this line</span>
+          </button>
+        )}
       </div>
 
       <StageStudioActionBar

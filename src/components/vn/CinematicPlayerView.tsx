@@ -383,6 +383,21 @@ export default function CinematicPlayerView({
           onContextMenuClip={onContextMenuClip}
         />
 
+        {/* EMPTY SEQUENCE STUDIO WATERMARK (Editor Onboarding State) */}
+        {isEditor && tracks.every((t) => t.clips.length === 0) && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 p-6 text-center select-none bg-black/40 backdrop-blur-[2px]">
+            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-3 text-white/40 shadow-inner">
+              <GuiIconRenderer icon={GUI_ICONS.general.clapperboard} className="w-8 h-8 opacity-60" />
+            </div>
+            <h3 className="text-sm font-bold tracking-wider uppercase text-white/80 mb-1">
+              Empty Cinematic Sequence
+            </h3>
+            <p className="text-xs text-white/50 max-w-sm leading-relaxed">
+              Drag background images, character sprites, or typography clips from the Media Library into the timeline below to begin animating.
+            </p>
+          </div>
+        )}
+
         {/* 2. AUTHENTIC VN DIALOGUE & FLOATING SUBTITLE LAYER */}
         <CinematicSubtitleLayer
           activeTextClips={activeTextClips}

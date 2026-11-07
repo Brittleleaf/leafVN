@@ -339,7 +339,7 @@ export default function VNMakerTimeline(props: VNMakerTimelineProps) {
             {!draggedTimelineItem && (
               <button
                 onClick={() => setShowAddActionModal(true)}
-                className="px-3.5 py-1.5 bg-[var(--accent)] hover:opacity-90 text-[var(--accent-fg,#000)] rounded-xl text-xs uppercase font-extrabold cursor-pointer transition-all shadow-sm"
+                className="px-3.5 py-1.5 bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] rounded-xl text-xs uppercase font-extrabold cursor-pointer transition-all shadow-sm"
               >
                 + Add First Event
               </button>
